@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeSync } from "node:fs";
-import { approve } from "./approval.ts";
+import { approvalRefusal, approve, withholdApprovalCode } from "./approval.ts";
 import { approveBatch, approvePending, applyPreset, pendingReview } from "./approval-command.ts";
 import { enforcementOf } from "./enforcement.ts";
 import { init } from "./init.ts";
@@ -85,7 +85,7 @@ const USAGE = `usage:
   pregate pack disable <ns/methodology> | remove <ns> | update <ns> [--preview|--yes]
   pregate pack update --all [--preview|--yes]
   pregate install [--git-hook] [--ci github]
-  pregate setup | update [--version <v> | --engine <v>] | uninstall [--purge] | doctor
+  pregate setup | update [--version <v> | --engine <v>] | uninstall [--purge] [--yes] | doctor
   pregate update --project [--preview|--yes]
   pregate update --projects <path...> [--preview|--yes [--no-commit]]
   pregate --version | --help | -h`;
@@ -93,7 +93,8 @@ const BAD: Result = { code: 1, text: USAGE };
 
 export async function run(argv: string[]): Promise<number> {
   const r = await command(argv);
-  if (r.text !== "") writeSync(1, Buffer.from(`${r.text}\n`, "utf8"));
+  const text = withholdApprovalCode(r.text);
+  if (text !== "") writeSync(1, Buffer.from(`${text}\n`, "utf8"));
   return r.code;
 }
 
@@ -107,7 +108,7 @@ async function command([cmd, ...args]: string[]): Promise<Result> {
       if (args.length > 1 || (args.length === 1 && args[0] !== "--yes")) return BAD;
       const root = here();
       if (root === null) return noPreset(process.cwd());
-      if (!await approve(`${cmd === "enable" ? "Enable protection" : "Revoke local consent and stop protection"} for worktree ${root}.`, cmd === "disable", args.includes("--yes"))) return { code: 1, text: `pregate ${cmd} is a human-only command: approval unavailable or rejected; use --yes for human automation.` };
+      if (!await approve(`${cmd === "enable" ? "Enable protection" : "Revoke local consent and stop protection"} for worktree ${root}.`, cmd === "disable", args.includes("--yes"))) return { code: 1, text: `pregate ${cmd} is a human-only command: ${approvalRefusal()}` };
       if (cmd === "enable") enable(root); else disable(root);
       return { code: 0, text: statusText(protectionStatus(root)) };
     }
@@ -132,7 +133,13 @@ async function command([cmd, ...args]: string[]): Promise<Result> {
     case "install": return installCommand(args);
     case "setup": return args.length === 0 ? setup() : BAD;
     case "update": return updateCommand(args);
-    case "uninstall": return args.length === 0 || (args.length === 1 && args[0] === "--purge") ? uninstall(args.length === 1) : BAD;
+    case "uninstall": {
+      // Removing the hooks ends protection for every project: the same human confirmation as disable.
+      const purge = args.includes("--purge"), yes = args.includes("--yes");
+      if (args.some((a) => a !== "--purge" && a !== "--yes") || args.length > 2) return BAD;
+      if (!await approve(`Remove the pregate hooks, launcher and engines from this machine${purge ? " and its state" : ""}. Every project loses protection until setup runs again.`, true, yes)) return { code: 1, text: `pregate uninstall is a human-only command: ${approvalRefusal()}` };
+      return uninstall(purge);
+    }
     case "doctor": return args.length === 0 ? doctor() : BAD;
     case "--help": case "-h": return args.length === 0 ? { code: 0, text: USAGE } : BAD;
     case "--version": return args.length === 0 ? { code: 0, text: `pregate ${VERSIONS.engine} (core ${VERSIONS.core})` } : BAD;

@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, expect, setDefaultTimeout, test } from "bun:test";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -112,6 +112,8 @@ const commit = (r: Repo, message: string, ...flags: string[]): Out => git(r, "co
 const said = (o: Out): string => o.stdout + o.stderr;
 // The CLI on PATH, as a human or the pre-commit runs it.
 const cli = (r: Repo, ...args: string[]): Out => run(["pregate", ...args], r.dir, r.env);
+// Approval codes are omitted unless stdout is a terminal or this test hook is set.
+const revealed = (r: Repo, ...args: string[]): Out => run(["pregate", ...args], r.dir, { ...r.env, PREGATE_TESTING: "1" });
 
 // ── Repositories ─────────────────────────────────────────────────────────────────────────
 
@@ -544,7 +546,7 @@ test("D29: headless edits queue validated changes; only the human command applie
   expect(agent.write(".pregate/preset.json", "{}").code).toBe(2);
   expect(cli(r, "approve").stdout).toContain("No pending");
   expect(denied(agent.write(".pregate/preset.json", content))).toContain("inside your harness with `pregate approve --preview`");
-  const preview = cli(r, "approve", "--preview");
+  const preview = revealed(r, "approve", "--preview");
   expect(preview.code).toBe(0);
   expect(preview.stdout).toMatch(/! pregate approve [0-9a-f]{12}$/m);
   expect(preview.stdout).toContain("WARNING");
@@ -601,7 +603,7 @@ test("compiled issue reporting offers an offline review and sends only the appro
   const r = repo({ ".": "backend-clean-ddd" }), a = claude(r);
   const content = 'export function tooMany(a: number, b: number, c: number, d: number, e: number): number { return 0; }\n';
   expect(denied(a.write("src/domain/report.ts", content))).toContain("pregate issue draft --last");
-  const draft = ok(cli(r, "issue", "draft", "--last", "--note", "This finding needs investigation."), "issue draft");
+  const draft = ok(revealed(r, "issue", "draft", "--last", "--note", "This finding needs investigation."), "issue draft");
   const id = /^Digest: ([0-9a-f]{64})$/m.exec(draft.stdout)![1]!;
   expect(draft.stdout).not.toContain(content.trim());
   expect(draft.stdout).toContain(`Engine: ${pkg.version}`);
@@ -1156,3 +1158,185 @@ test("install run twice writes the same settings", () => {
   ok(run([BIN, "install", "--git-hook"], r.dir, r.env), "install");
   expect(read(r, ".claude/settings.json")).toBe(text);
 });
+
+// Fresh session and tool ids: no SessionStart, so the session has not registered a root.
+// The hook still runs with the project's cwd, which is what an agent tool call looks like.
+test("hook pre denies interpreter, script, Makefile and harness-settings bypasses", () => {
+  const r = repo({ ".": "backend-clean-ddd" });
+  const a = claude(r);
+  const home = r.env.HOME!;
+  const settings = join(home, ".claude/settings.json");
+  const beforeSettings = readFileSync(settings, "utf8");
+  const launcher = join(home, ".local/bin/pregate");
+  const beforeLauncher = readFileSync(launcher, "utf8");
+  const harness = [
+    settings,
+    join(home, ".claude/settings.local.json"),
+    join(r.env.CODEX_HOME!, "hooks.json"),
+    join(r.env.CODEX_HOME!, "config.toml"),
+    join(r.env.GROK_HOME!, "config.toml"),
+    join(home, ".cursor/hooks.json"),
+    join(home, ".cursor/cli-config.json"),
+    join(home, ".gemini/config/config.json"),
+    join(home, ".gemini/config/hooks.json"),
+    launcher,
+    join(r.env.XDG_DATA_HOME!, "pregate/bin/pregate"),
+  ];
+  for (const path of harness) {
+    expect(denied(a.write(path, "{}\n")), path).toContain("protected-path");
+    expect(denied(hook(a.session, "PreToolUse", tool("Edit", {
+      file_path: path, old_string: "hooks", new_string: "disabled",
+    }))), path).toContain("protected-path");
+  }
+  expect(readFileSync(settings, "utf8")).toBe(beforeSettings);
+  expect(readFileSync(launcher, "utf8")).toBe(beforeLauncher);
+
+  const inline = [
+    `python3 -c "subprocess.run(['pregate','approve','x'])"`,
+    `python3 -c "subprocess.run(['pregate','disable'])"`,
+    `python3 -c "subprocess.run(['pregate','uninstall'])"`,
+    `node -e "execSync('pregate approve x')"`,
+    `perl -e 'system("pregate","approve","x")'`,
+    `ruby -e 'system("pregate","disable")'`,
+    `php -r 'system("pregate uninstall");'`,
+  ];
+  for (const command of inline) expect(denied(a.bash(command)), command).toMatch(/shell-admin|hook-switch/);
+
+  expect(denied(a.write("run.sh", "#!/bin/sh\npregate approve x\n"))).toContain("shell-admin");
+  expect(existsSync(at(r, "run.sh"))).toBe(false);
+  expect(denied(a.write("Makefile", "approve:\n\tpregate approve x\n"))).toContain("shell-admin");
+  expect(existsSync(at(r, "Makefile"))).toBe(false);
+
+  writeFileSync(at(r, "run.sh"), "#!/bin/sh\npregate approve x\n");
+  writeFileSync(at(r, "Makefile"), "approve:\n\tpregate approve x\nall:\n\techo ok\n");
+  expect(denied(a.bash("bash ./run.sh"))).toContain("shell-admin");
+  expect(denied(a.bash("./run.sh"))).toContain("shell-admin");
+  expect(denied(a.bash("make approve"))).toContain("shell-admin");
+  expect(denied(a.bash("make -f Makefile approve"))).toContain("shell-admin");
+
+  writeFileSync(at(r, "run-ok.sh"), "#!/bin/sh\necho hello\n");
+  writeFileSync(at(r, "Makefile"), "all:\n\techo ok\n");
+  silent(a.bash("bash ./run-ok.sh"));
+  silent(a.bash("make all"));
+  silent(a.bash(`python3 -c "print(1 + 1)"`));
+  silent(a.bash(`node -e "console.log(1)"`));
+  silent(a.bash(`perl -e 'print 1'`));
+  silent(a.bash("pregate status"));
+  silent(a.bash("pregate guide --preview"));
+  silent(a.write("src/domain/note.ts", "export const note = 1;\n"));
+
+  const shadow = JSON.stringify({ ...JSON.parse(read(r, ".pregate/preset.json")), enforcement: "shadow" });
+  expect(a.write(".pregate/preset.json", shadow).code).toBe(2);
+  for (const args of [["approve", "--preview"], ["guide", "--preview"], ["status", "--json"]]) {
+    const hidden = run(["pregate", ...args], r.dir, { ...r.env, CI: "" });
+    expect(hidden.code, args.join(" ")).toBe(0);
+    expect(hidden.stdout, args.join(" ")).not.toMatch(/Digest: [0-9a-f]{64}/);
+    expect(hidden.stdout, args.join(" ")).not.toMatch(/pregate approve [0-9a-f]{12,64}/);
+    expect(hidden.stdout, args.join(" ")).not.toMatch(/"pendingApproval": "[0-9a-f]{12,64}"/);
+  }
+  const shown = revealed(r, "approve", "--preview");
+  expect(shown.stdout).toMatch(/Digest: [0-9a-f]{64}/);
+  expect(shown.stdout).toMatch(/pregate approve [0-9a-f]{12}/);
+  expect(run(["pregate", "approve", "--preview"], r.dir, { ...r.env, CI: "" }).stdout).toContain("withheld");
+});
+
+test("a recomputed digest cannot approve without a terminal, and a human TTY confirmation can", () => {
+  const r = repo({ ".": "backend-clean-ddd" });
+  const a = claude(r);
+  const before = read(r, ".pregate/pregate.lock.json");
+  const shadow = JSON.stringify({ ...JSON.parse(read(r, ".pregate/preset.json")), enforcement: "shadow" });
+  expect(a.write(".pregate/preset.json", shadow).code).toBe(2);
+  const proposals = join(DATA, "pregate/proposals");
+  const file = readdirSync(proposals).map((name) => join(proposals, name)).find((path) => {
+    try { return JSON.parse(readFileSync(path, "utf8")).root === r.dir; } catch { return false; }
+  });
+  if (file === undefined) throw new Error("pending proposal was not written");
+  const digest = createHash("sha256").update(readFileSync(file)).digest("hex");
+  const agent = { ...r.env, CI: "", PREGATE_TESTING: "" };
+  for (const args of [["approve", "--yes", "--digest", digest], ["approve", digest]]) {
+    const piped = run(["pregate", ...args], r.dir, agent, "y\n");
+    expect(piped.code, args.join(" ")).toBe(1);
+    expect(piped.stdout + piped.stderr, args.join(" ")).toContain("interactive stdin");
+    expect(read(r, ".pregate/pregate.lock.json")).toBe(before);
+  }
+  const declined = ptyRun(["pregate", "approve", digest], r.dir, agent, "n");
+  expect(declined.code, declined.stdout + declined.stderr).toBe(1);
+  expect(read(r, ".pregate/pregate.lock.json")).toBe(before);
+  const human = ptyRun(["pregate", "approve", digest], r.dir, agent, "y");
+  expect(human.code, human.stdout + human.stderr).toBe(0);
+  expect(read(r, ".pregate/pregate.lock.json")).not.toBe(before);
+  expect(JSON.parse(read(r, ".pregate/pregate.lock.json")).enforcement).toBe("shadow");
+
+  // Reads are not hooked (MH-22): the digest is in the proposal file, and knowing it is not approval.
+  const matcher = JSON.parse(readFileSync(join(r.env.HOME!, ".claude/settings.json"), "utf8")) as {
+    hooks: { PreToolUse: { matcher: string }[] };
+  };
+  expect(matcher.hooks.PreToolUse[0]!.matcher).not.toMatch(/\b(Read|Grep|Glob)\b/);
+});
+
+// A real terminal: stdin is a pty, and the confirmation is typed on that pty's /dev/tty.
+function ptyRun(cmd: string[], cwd: string, env: Env, answer: string): Out {
+  const py = `
+import os, pty, select, sys, time
+answer = os.environ["PREGATE_PTY_ANSWER"].encode() + b"\\n"
+cwd = os.environ["PREGATE_PTY_CWD"]
+cmd = sys.argv[1:]
+pid, fd = pty.fork()
+if pid == 0:
+    os.chdir(cwd)
+    os.execvpe(cmd[0], cmd, os.environ)
+buf = b""
+sent = False
+status = None
+start = time.time()
+while time.time() - start < 45:
+    try:
+        ready, _, _ = select.select([fd], [], [], 0.2)
+    except InterruptedError:
+        continue
+    if ready:
+        try:
+            chunk = os.read(fd, 1 << 16)
+        except OSError:
+            chunk = b""
+        if not chunk:
+            break
+        buf += chunk
+        if not sent and b"Approve?" in buf:
+            os.write(fd, answer)
+            sent = True
+    try:
+        wpid, st = os.waitpid(pid, os.WNOHANG)
+    except ChildProcessError:
+        break
+    if wpid:
+        status = st
+        break
+else:
+    os.kill(pid, 9)
+    _, status = os.waitpid(pid, 0)
+while True:
+    try:
+        ready, _, _ = select.select([fd], [], [], 0.05)
+    except InterruptedError:
+        continue
+    if not ready:
+        break
+    try:
+        chunk = os.read(fd, 1 << 16)
+    except OSError:
+        break
+    if not chunk:
+        break
+    buf += chunk
+if status is None:
+    _, status = os.waitpid(pid, 0)
+sys.stdout.buffer.write(buf)
+raise SystemExit(os.waitstatus_to_exitcode(status))
+`;
+  const t = performance.now();
+  const r = Bun.spawnSync(["python3", "-c", py, ...cmd], {
+    cwd, env: { ...env, PREGATE_PTY_ANSWER: answer, PREGATE_PTY_CWD: cwd }, stdout: "pipe", stderr: "pipe",
+  });
+  return { code: r.exitCode ?? -1, stdout: r.stdout.toString(), stderr: r.stderr.toString(), ms: performance.now() - t };
+}

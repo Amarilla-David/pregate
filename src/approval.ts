@@ -16,10 +16,34 @@ export { PENDING_MS, proposeContract, readProposal, discardProposal, type Propos
 declare const PREGATE_TEST_BUILD: boolean;
 const TEST_BUILD = typeof PREGATE_TEST_BUILD !== "undefined" && PREGATE_TEST_BUILD;
 
+// The approval code is a secret the human types. An agent tool captures stdout, so it is not a
+// terminal. `PREGATE_TESTING=1` is the test hook; the shell guard rejects an agent setting it.
+export function approvalCodeVisible(): boolean {
+  if (process.stdout.isTTY) return true;
+  if (process.env.PREGATE_TESTING === "1") return true;
+  // CI jobs and this repo's tests export CI. An agent shell that assigns CI in the
+  // command is denied; a process that already has CI set still sees the code.
+  return Boolean(process.env.CI);
+}
+
+// Keep the review text. Remove only the code an approval command would accept.
+export function withholdApprovalCode(text: string): string {
+  if (approvalCodeVisible()) return text;
+  const hidden = "withheld until this preview runs in a human terminal";
+  return text
+    .replace(/Digest: [0-9a-f]{64}/g, `Digest: ${hidden}`)
+    .replace(/pregate approve [0-9a-f]{12,64}/g, "pregate approve <withheld>")
+    .replace(/pregate (session rebase \S+ --digest|feedback apply|storage apply|issue submit) [0-9a-f]{64}/g, "pregate $1 <withheld>")
+    .replace(/("pendingApproval": )"[0-9a-f]{12,64}"/g, "$1null");
+}
+
+// The command applies only where stdin is a terminal and the human can type on /dev/tty (CONIN$ on
+// Windows). A harness `!` line qualifies only when that harness gives it an interactive stdin;
+// otherwise the human opens a terminal of their own.
 export function humanApprovalInstructions(command: string): string[] {
-  return [`After reviewing, type inside Claude Code, Codex, Grok or agy: ! ${command}`,
-    `Cursor requires a separate human terminal: ${command}`,
-    "The agent must not run the approval command."];
+  return [`After reviewing, the human runs in a terminal: ${command}`,
+    "Inside Claude Code, Codex, Grok or agy, the ! prefix works only when that harness gives the command an interactive stdin; Cursor needs a separate terminal. The command then asks for y on the terminal.",
+    "The agent must not run the approval command. --yes skips the question only when CI is already set in the environment."];
 }
 
 // The launcher arms a separate deadline before validating a contract proposal.
@@ -61,14 +85,31 @@ export function hasTerminal(): boolean {
   return true;
 }
 
-export async function approve(summary: string, warning: boolean, yes = false): Promise<boolean> {
-  const text = Buffer.from(approvalText(summary, warning, !yes), "utf8");
-  const answer = testAnswer();
-  if (yes || answer !== undefined) {
-    writeSync(1, text);
-    return yes || /^(y|yes)$/i.test(answer!.trim());
+// Why a caller was not allowed to apply. CI and the test hook are the only non-terminal
+// exceptions; an agent tool pipes stdin and cannot type on /dev/tty.
+export function approvalRefusal(): string {
+  if (!process.env.CI && testAnswer() === undefined && !process.stdin.isTTY) {
+    return "Human approval requires an interactive stdin and a confirmation typed on the terminal (/dev/tty or CONIN$). An agent tool call cannot supply that. Nothing applied.";
   }
-  const fd = tty();
+  return "Human approval unavailable or rejected; nothing applied.";
+}
+
+export async function approve(summary: string, warning: boolean, yes = false): Promise<boolean> {
+  const answer = testAnswer();
+  // CI jobs pass --yes without a person at the keyboard. A digest alone is not that channel.
+  const prompting = answer !== undefined ? !yes : !(process.env.CI && yes);
+  const text = Buffer.from(approvalText(summary, warning, prompting), "utf8");
+  if (answer !== undefined) {
+    writeSync(1, text);
+    return /^(y|yes)$/i.test(answer.trim());
+  }
+  if (process.env.CI && yes) {
+    writeSync(1, text);
+    return true;
+  }
+  // The caller's stdin must be a terminal. A pipe that contains "y" is the agent, not the human.
+  if (!process.stdin.isTTY) return false;
+  const fd = openTerminal();
   if (fd === null) return false;
   const input = new (terminalIo().ReadStream)(fd);
   const terminal = prompts().createInterface({ input });
