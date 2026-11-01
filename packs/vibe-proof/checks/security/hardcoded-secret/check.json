@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/security/hardcoded-secret",
+  "version": "1.0.1",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "security.hardcoded-secret",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "credential-literal"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} embeds a secret or a credentialed URL. Read it from the environment."
+  }
+}

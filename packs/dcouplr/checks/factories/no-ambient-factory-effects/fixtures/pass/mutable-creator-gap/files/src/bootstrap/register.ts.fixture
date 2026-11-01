@@ -1,0 +1,1 @@
+let creator = () => Date.now(); stage.addFactoryMethod(creator);

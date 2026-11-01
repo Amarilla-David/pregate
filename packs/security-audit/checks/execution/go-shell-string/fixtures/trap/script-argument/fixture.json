@@ -1,0 +1,20 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "internal/tools/run.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 11
+      }
+    ]
+  },
+  "trap": {
+    "family": "positional-shell-argument",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "Passing the value as a positional parameter after a literal script keeps it out of shell parsing."
+  }
+}

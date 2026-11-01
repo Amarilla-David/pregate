@@ -1,0 +1,92 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/deserialization/py-yaml-unsafe-load",
+  "version": "1.0.0",
+  "area": "deserialization",
+  "cardinality": "singleton",
+  "dimension": "security-audit.deserialization.python-yaml-loader",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "yaml-load-without-safe-loader",
+          "utils": {
+            "unsafe-loader": {
+              "regex": "^(?:yaml\\.)?C?(?:Unsafe|Full)?Loader$"
+            }
+          },
+          "rule": {
+            "kind": "call",
+            "has": {
+              "field": "function",
+              "kind": "attribute",
+              "regex": "^yaml\\.load(?:_all)?$"
+            },
+            "not": {
+              "has": {
+                "field": "arguments",
+                "has": {
+                  "any": [
+                    {
+                      "kind": "keyword_argument",
+                      "has": {
+                        "field": "name",
+                        "regex": "^Loader$"
+                      },
+                      "not": {
+                        "has": {
+                          "field": "value",
+                          "matches": "unsafe-loader"
+                        }
+                      }
+                    },
+                    {
+                      "nthChild": 2,
+                      "not": {
+                        "any": [
+                          {
+                            "kind": "keyword_argument"
+                          },
+                          {
+                            "matches": "unsafe-loader"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "x-note": "No Loader argument, or one of PyYAML's object-constructing loaders by name. A Loader held in a variable is treated as reviewed."
+        },
+        {
+          "id": "yaml-unsafe-shortcut",
+          "rule": {
+            "kind": "call",
+            "has": {
+              "field": "function",
+              "kind": "attribute",
+              "regex": "^yaml\\.(?:unsafe|full)_load(?:_all)?$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} parses YAML with a loader that can construct arbitrary Python objects. Use yaml.safe_load or Loader=yaml.SafeLoader."
+  }
+}

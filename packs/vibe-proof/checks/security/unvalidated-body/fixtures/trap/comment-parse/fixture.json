@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/http/post-comment.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-validation",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A comment is not a parser. The handler still trusts the JSON."
+  }
+}

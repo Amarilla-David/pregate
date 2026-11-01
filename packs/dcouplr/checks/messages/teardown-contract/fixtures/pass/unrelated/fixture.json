@@ -1,0 +1,13 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/subscriptions.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "pass"
+  }
+}

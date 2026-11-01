@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function latest(email: string) {
+  return prisma.user.findFirstOrThrow({ where: { email }, orderBy: { createdAt: "desc" } });
+}

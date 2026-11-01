@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/client/no-service-role-in-client",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "supabase.service-role-in-client",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "service-role-client",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "createClient"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Rr][Oo][Ll][Ee]"
+                }
+              }
+            ]
+          },
+          "files": [
+            "app/**",
+            "components/**",
+            "pages/**",
+            "src/app/**",
+            "src/components/**",
+            "src/pages/**"
+          ],
+          "ignores": [
+            "**/server/**",
+            "**/*.server.*"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds a Supabase client with a service_role key in client-reachable code. Use the anon key in the browser; service_role stays server-side."
+  }
+}

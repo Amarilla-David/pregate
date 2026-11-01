@@ -1,0 +1,9 @@
+export function pairs(items: readonly number[]) {
+  for (const a of items) {
+    if (a > 0) {
+      for (const b of items) {
+        console.log(a, b);
+      }
+    }
+  }
+}

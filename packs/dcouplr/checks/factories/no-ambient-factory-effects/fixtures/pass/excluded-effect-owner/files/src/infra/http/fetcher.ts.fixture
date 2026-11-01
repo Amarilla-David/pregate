@@ -1,0 +1,6 @@
+export function registerHttpFetcher(kernel: Kernel) {
+  kernel.addFactoryMethod((_input, dKernel) => {
+    const realFetch: typeof fetch = globalThis.fetch.bind(globalThis);
+    return { get: (url: string) => realFetch(url) };
+  });
+}

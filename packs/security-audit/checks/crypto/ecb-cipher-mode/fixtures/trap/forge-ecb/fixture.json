@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/crypto/legacy.js",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "library-cipher",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "node-forge names ECB in its algorithm string, uppercase, through a nested member call."
+  }
+}

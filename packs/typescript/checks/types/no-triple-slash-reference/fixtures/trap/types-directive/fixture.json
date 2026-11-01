@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/legacy/refs-node.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "types-directive",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A types directive is the same legacy directive mechanism as a path reference; both must become imports."
+  }
+}

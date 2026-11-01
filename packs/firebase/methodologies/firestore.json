@@ -1,0 +1,99 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "firebase/firestore",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "FB-READ-001",
+      "check": "firebase/firestore/no-getdocs-without-limit",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Firebase Firestore documentation, order and limit data",
+        "locator": "query cursors and limit()",
+        "paraphrase": "Bound every read with limit() or a where() filter so one call cannot download the whole collection."
+      },
+      "why": "An unbounded getDocs scales cost and latency with the collection, not the screen. One careless call on a large collection bills thousands of reads.",
+      "fixHint": "Wrap the source in query() with limit(n) or where(field, op, value). Pick the page size the caller chose.",
+      "avoid": "query(col) with no constraint still reads everything. A limit applied in a different statement does not bound this call.",
+      "examples": {
+        "pass": "pass/limited-query",
+        "fail": "fail/unbounded-collection"
+      }
+    },
+    {
+      "id": "FB-WRITE-001",
+      "check": "firebase/firestore/no-unsafe-setdoc-merge",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Firebase Firestore documentation, set a document",
+        "locator": "SetOptions merge",
+        "paraphrase": "setDoc without merge intentionally creates or replaces a document. Pass merge only when the write is partial."
+      },
+      "why": "A partial overwrite can remove fields, but replacing an entire document is also a documented operation. The syntax cannot distinguish intent.",
+      "fixHint": "Pass { merge: true } as the third argument, or use updateDoc for a partial write to an existing document.",
+      "avoid": "An empty options object carries no merge flag. A data field named merge does not count as the option.",
+      "examples": {
+        "pass": "pass/merge-true",
+        "fail": "fail/bare-overwrite"
+      }
+    },
+    {
+      "id": "FB-QUERY-001",
+      "check": "firebase/firestore/no-collection-string-concat",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Firebase Firestore documentation, document and collection references",
+        "locator": "path segments as arguments",
+        "paraphrase": "Build references from separate path segments. Concatenated strings defeat Security Rules path matching."
+      },
+      "why": "A concatenated path is opaque text at review time. Rules match on segments, so a joined string can slip past the rule the author intended.",
+      "fixHint": "Pass each segment as its own argument: doc(db, \"orders\", id) instead of doc(db, \"orders/\" + id).",
+      "avoid": "Template literals are the same concatenation in backticks. Joining segments in a helper still hides the shape.",
+      "examples": {
+        "pass": "pass/segment-args",
+        "fail": "fail/plus-concat"
+      }
+    },
+    {
+      "id": "FB-BATCH-001",
+      "check": "firebase/firestore/no-writebatch-without-commit",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Firebase Firestore documentation, batched writes",
+        "locator": "commit()",
+        "paraphrase": "A write batch does nothing until commit() runs. Never leave a batch uncommitted."
+      },
+      "why": "A batch needs a commit before its lifecycle ends. A per-statement pattern cannot prove whether a later statement commits it.",
+      "fixHint": "Chain commit onto the writeBatch statement so the batch cannot be created without being sent.",
+      "avoid": "commit in a later statement is invisible to this rule and to hurried readers. Awaiting the batch object itself commits nothing.",
+      "examples": {
+        "pass": "pass/chained-commit",
+        "fail": "fail/assigned-no-commit"
+      }
+    },
+    {
+      "id": "FB-TX-ORDER-001",
+      "check": "firebase/firestore/no-tx-read-after-write",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloud Firestore documentation, Transactions and batched writes (firebase.google.com)",
+        "locator": "https://firebase.google.com/docs/firestore/manage-data/transactions#transaction_limitations",
+        "paraphrase": "In a Firestore transaction, all read operations must come before any write operations; calling transaction.get() after set, update, or delete fails at runtime."
+      },
+      "why": "Firestore rejects any transaction.get() executed after a transaction write with 'Firestore transactions require all reads to be executed before all writes'.",
+      "fixHint": "Move all transaction.get() calls to the top of the runTransaction callback before any transaction.set, transaction.update, or transaction.delete calls.",
+      "avoid": "Matches transaction callbacks where the parameter is named tx, transaction, or t and a get() statement follows a set/update/delete statement in the same block.",
+      "examples": {
+        "pass": "pass/reads-before-writes",
+        "fail": "fail/get-after-update"
+      }
+    }
+  ]
+}

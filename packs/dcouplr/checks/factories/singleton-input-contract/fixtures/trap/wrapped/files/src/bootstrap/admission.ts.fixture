@@ -1,0 +1,1 @@
+(admission['addFactoryMethod'](creator) as Stage)?.['registerSingleton']?.(/* ignored */ (false satisfies boolean));

@@ -1,0 +1,4 @@
+export const addTax = (subtotal: number, rate: number): number => {
+  subtotal += subtotal * rate;
+  return subtotal;
+};

@@ -1,0 +1,1 @@
+select order_id, sum(cents) as total from order_lines group by order_id;

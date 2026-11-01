@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/capture.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-idempotency",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A comment claiming the wrapper adds the key does not put a key on this call. The retry still posts a second capture."
+  }
+}

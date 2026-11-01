@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/returning-trap.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "drizzle-delete-returning-no-where",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Chaining .returning() onto db.delete(table) without .where() still deletes every row in the table."
+  }
+}

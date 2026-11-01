@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/pg/sslmode-disable-url.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "sslmode-url",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "TLS off in the URL is TLS off. ?sslmode=disable in the connection string opens the same cleartext-or-MITM link as ssl: false."
+  }
+}

@@ -1,0 +1,6 @@
+
+it("posts the invoice total", () => {
+  expect(total).toBe(1200);
+});
+
+const total = 1200;

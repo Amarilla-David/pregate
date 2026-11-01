@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/reads/all.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-query",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Wrapping the ref in query() with no constraint still reads the whole collection. The call looks bounded but carries no limit or where."
+  }
+}

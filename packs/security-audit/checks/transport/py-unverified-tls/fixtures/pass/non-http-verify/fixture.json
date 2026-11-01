@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/tokens.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

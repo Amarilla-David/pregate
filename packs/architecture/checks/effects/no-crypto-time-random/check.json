@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/effects/no-crypto-time-random",
+  "version": "1.0.0",
+  "area": "effects",
+  "cardinality": "singleton",
+  "dimension": "architecture.domain-crypto-time",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "crypto-time-random-domain",
+          "files": [
+            "**/domain/**",
+            "**/entities/**",
+            "**/use-cases/**"
+          ],
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^((globalThis|window)\\.)?(crypto\\.(randomUUID|getRandomValues)|performance\\.now)$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} invokes non-deterministic Web Crypto randomness or high-resolution timing inside a domain, entity, or use-case module. Inject an ID generator or clock port instead."
+  }
+}

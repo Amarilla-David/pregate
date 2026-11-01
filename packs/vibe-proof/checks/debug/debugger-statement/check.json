@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/debug/debugger-statement",
+  "version": "1.0.0",
+  "area": "debug",
+  "cardinality": "singleton",
+  "dimension": "debug.debugger",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "debugger",
+          "rule": {
+            "kind": "debugger_statement"
+          },
+          "ignores": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            "**/*.test.tsx",
+            "**/*.spec.tsx",
+            "**/__tests__/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} has a debugger statement."
+  }
+}

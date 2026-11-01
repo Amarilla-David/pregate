@@ -1,0 +1,9 @@
+import { Prisma } from "@prisma/client";
+import { prisma } from "~/server/db";
+
+const SORTABLE = { name: "name", created: "created_at" } as const;
+
+export async function sorted(key: keyof typeof SORTABLE) {
+  const column = SORTABLE[key];
+  return prisma.$queryRaw`SELECT id, name FROM "User" ORDER BY ${Prisma.raw(column)}`;
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/config/merge.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "generic-constraint",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A constraint is a type position too. T extends Object admits every primitive; the non-primitive constraint is object."
+  }
+}

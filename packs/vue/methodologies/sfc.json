@@ -1,0 +1,99 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vue/sfc",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VUE-OPT-001",
+      "check": "vue/sfc/no-options-api",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Vue guide, Introduction",
+        "locator": "API Styles",
+        "paraphrase": "Vue supports both Options API and Composition API. Either style can cover common use cases."
+      },
+      "why": "An Options API component is supported and may be appropriate; its syntax does not establish a defect.",
+      "fixHint": "Choose the component style that fits the project; migrate only when the team adopts that convention.",
+      "avoid": "Adding a setup key does not make an Options component invalid. This blanket style check remains off.",
+      "examples": {
+        "pass": "pass/name-only",
+        "fail": "fail/data-method"
+      }
+    },
+    {
+      "id": "VUE-PROP-001",
+      "check": "vue/components/no-prop-mutation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Vue documentation, props",
+        "locator": "one-way data flow for props",
+        "paraphrase": "Props flow one way down. A child assigns to its own copy or emits; it never writes the prop."
+      },
+      "why": "A child that writes a prop fights the parent on the next render, and the value snaps back without warning.",
+      "fixHint": "Emit an update event such as update:title and let the parent change the value. Keep a local copy in a ref when the child needs to edit.",
+      "avoid": "Reading props is fine. The rule only fires on writes: assignment and augmented assignment to props, dot or bracket.",
+      "examples": {
+        "pass": "pass/emit-update",
+        "fail": "fail/assign-title"
+      }
+    },
+    {
+      "id": "VUE-THIS-001",
+      "check": "vue/sfc/no-this-in-composable",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Vue documentation, composables",
+        "locator": "composables have no component instance",
+        "paraphrase": "Composition functions run with no instance. this is undefined there; state arrives through arguments."
+      },
+      "why": "A composable that reads this only works when something binds an instance, so it breaks the moment it is reused elsewhere.",
+      "fixHint": "Take state as an argument or close over a module-level reactive object. Composables receive everything through parameters.",
+      "avoid": "A bare this as a value (const self = this) is the same instance grab. Bracket access this[\"x\"] is also covered.",
+      "examples": {
+        "pass": "pass/state-access",
+        "fail": "fail/push-item"
+      }
+    },
+    {
+      "id": "VUE-V2-001",
+      "check": "vue/app/no-vue2-global-api",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Vue 3 migration guide, Global API (https://v3-migration.vuejs.org/breaking-changes/global-api.html)",
+        "locator": "A New Global API: createApp; 2.x Global API table",
+        "paraphrase": "Vue 3 has no Vue constructor. Vue.config, component, directive, mixin, use and prototype move to the app from createApp; Vue.extend is removed."
+      },
+      "why": "On Vue 3 these calls fail at runtime or register nothing, so plugins, components and config silently never reach the app.",
+      "fixHint": "Create the app with createApp(App) and call app.use, app.component, app.directive and app.config on it. Put shared globals on app.config.globalProperties; type components with defineComponent.",
+      "avoid": "Vue.extend is not a typing helper on Vue 3; use defineComponent. The CDN global build's Vue.createApp, Vue.ref and Vue.nextTick are valid and are not matched. A Vue 2.7 project can turn this rule off.",
+      "examples": {
+        "pass": "pass/create-app",
+        "fail": "fail/new-vue"
+      }
+    },
+    {
+      "id": "VUE-DOM-001",
+      "check": "vue/components/no-dom-query-in-setup",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Vue documentation, Template Refs (https://vuejs.org/guide/essentials/template-refs.html)",
+        "locator": "Accessing the Refs",
+        "paraphrase": "Use template refs (useTemplateRef or ref) to obtain direct references to DOM elements owned by a component after mount instead of querying the global document."
+      },
+      "why": "Global document queries fail during SSR, match elements from sibling component instances, and run before Vue mounts the template when called during setup.",
+      "fixHint": "Bind a ref attribute in the template and read it with useTemplateRef('name') or ref(null) inside onMounted.",
+      "avoid": "Direct calls on document, window.document, and globalThis.document for getElementById, querySelector, querySelectorAll, getElementsByClassName, and getElementsByTagName are matched. Queries on local Element or XMLDocument receivers pass.",
+      "examples": {
+        "pass": "pass/template-ref",
+        "fail": "fail/direct-getelement"
+      }
+    }
+  ]
+}

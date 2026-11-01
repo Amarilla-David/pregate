@@ -1,0 +1,13 @@
+package client
+
+import (
+	"crypto/tls"
+	"crypto/x509"
+)
+
+func Config(pool *x509.CertPool) *tls.Config {
+	return &tls.Config{
+		RootCAs:            pool,
+		InsecureSkipVerify: false,
+	}
+}

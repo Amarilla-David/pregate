@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/messages",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-MESSAGE-SUB-001",
+      "check": "dcouplr/messages/subscription-contract",
+      "defaults": {
+        "paths": [
+          "src/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published public declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IMessageGate, lines 629–670; dist/index.mjs MessageGate.registerHandler, lines 1727–1775",
+        "paraphrase": "MessageGate.registerHandler takes handler first, an optional string peer second, and an optional string handlerId third."
+      },
+      "why": "The handler is invoked at delivery. A peer in the first slot can be registered as a noncallable handler; the peer and handler IDs occupy separate string slots.",
+      "fixHint": "Call kernel.message.registerHandler(handler, peer, handlerId). Omit peer when the intended contract is an anonymous address.",
+      "avoid": "Reserved event/message member policy in selected paths, not receiver-type inference. Direct dot, unescaped literal bracket/template and optional calls, comments and transparent parentheses/as/satisfies/non-null values are covered. Known literal argument failures and missing required slots are checked. Low-level eventBus/messageBus and unrelated receivers remain valid. Named gate/function aliases, dynamic/computed/escaped members, spreads, unknown expression types, callback return types and cross-call ownership are unresolved. Review narrower paths for an unrelated API with the same member names.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "DCP-MESSAGE-TEARDOWN-001",
+      "check": "dcouplr/messages/teardown-contract",
+      "defaults": {
+        "paths": [
+          "src/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published public declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IMessageGate, lines 647–670; dist/index.mjs MessageGate.unregisterHandler/unregisterHandlerBySubscriptionId, lines 1776–1794",
+        "paraphrase": "MessageGate teardown uses a string peer or the returned subscription ID, never the handler function."
+      },
+      "why": "The gate indexes peers and subscription IDs. Passing a handler function can silently leave its registration active.",
+      "fixHint": "Use kernel.message.unregisterHandler(peer), or kernel.message.unregisterHandlerBySubscriptionId(subscriptionId).",
+      "avoid": "Reserved event/message member policy in selected paths, not receiver-type inference. Direct dot, unescaped literal bracket/template and optional calls, comments and transparent parentheses/as/satisfies/non-null values are covered. Known literal argument failures and missing required slots are checked. Low-level eventBus/messageBus and unrelated receivers remain valid. Named gate/function aliases, dynamic/computed/escaped members, spreads, unknown expression types, callback return types and cross-call ownership are unresolved. Review narrower paths for an unrelated API with the same member names.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    }
+  ]
+}

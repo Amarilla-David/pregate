@@ -1,0 +1,9 @@
+import jwt
+
+UNVERIFIED = {
+    'verify_signature': False,
+}
+
+
+def peek(token: str) -> dict:
+    return jwt.decode(token, options=UNVERIFIED)

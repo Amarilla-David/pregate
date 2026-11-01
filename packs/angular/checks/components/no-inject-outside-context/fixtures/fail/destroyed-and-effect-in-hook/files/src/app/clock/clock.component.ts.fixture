@@ -1,0 +1,14 @@
+import { AfterViewInit, Component, effect, input } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { interval } from "rxjs";
+
+@Component({ selector: "app-clock", template: "{{ ticks }}" })
+export class ClockComponent implements AfterViewInit {
+  readonly label = input("");
+  ticks = 0;
+
+  ngAfterViewInit(): void {
+    interval(1000).pipe(takeUntilDestroyed()).subscribe(() => this.ticks++);
+    effect(() => console.log(this.label()));
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/factory-runtime/requirement-001",
+  "version": "1.0.0",
+  "area": "factory-runtime",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.factory-runtime.r001",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DCP-FACTORY-RUNTIME-001"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DCP-FACTORY-RUNTIME-001 requires current passing project factory-runtime verification: {symbol}."
+  }
+}

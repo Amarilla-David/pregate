@@ -1,0 +1,9 @@
+import { pool } from "./pool";
+
+export async function listProducts(sort: string, limit: number) {
+  const res = await pool.query(
+    `SELECT id, name, price FROM products ORDER BY $1 LIMIT $2`,
+    [sort, limit],
+  );
+  return res.rows;
+}

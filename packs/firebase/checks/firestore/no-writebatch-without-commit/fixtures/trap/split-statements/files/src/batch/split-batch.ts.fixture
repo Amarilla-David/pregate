@@ -1,0 +1,5 @@
+import { writeBatch } from "firebase/firestore";
+
+const b = writeBatch(db);
+b.set(ref, data);
+await b.commit();

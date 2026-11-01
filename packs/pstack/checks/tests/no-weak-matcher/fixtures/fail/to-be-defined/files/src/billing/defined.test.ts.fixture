@@ -1,0 +1,6 @@
+
+it("loads an invoice", () => {
+  expect(invoice).toBeDefined();
+});
+
+const invoice = { id: "inv_1" };

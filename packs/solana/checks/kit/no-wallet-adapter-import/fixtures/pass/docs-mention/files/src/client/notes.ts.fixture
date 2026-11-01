@@ -1,0 +1,2 @@
+const note = "remove @solana/wallet-adapter-react first";
+export { note };

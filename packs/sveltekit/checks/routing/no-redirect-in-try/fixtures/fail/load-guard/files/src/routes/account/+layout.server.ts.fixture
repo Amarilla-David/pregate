@@ -1,0 +1,13 @@
+import { error, redirect } from "@sveltejs/kit";
+import { getUser } from "$lib/server/session";
+import type { LayoutServerLoad } from "./$types";
+
+export const load: LayoutServerLoad = async ({ cookies }) => {
+  try {
+    const user = await getUser(cookies.get("session"));
+    if (!user) redirect(307, "/login");
+    return { user };
+  } catch {
+    error(500, "Could not load the account");
+  }
+};

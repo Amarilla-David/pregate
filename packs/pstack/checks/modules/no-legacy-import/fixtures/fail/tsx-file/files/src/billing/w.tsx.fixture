@@ -1,0 +1,5 @@
+import x from "@/lib/legacy/thing";
+export default function A() {
+  const t = useTranslations("estimateTemplates.legacy");
+  return <div>{x}{t("a")}</div>;
+}

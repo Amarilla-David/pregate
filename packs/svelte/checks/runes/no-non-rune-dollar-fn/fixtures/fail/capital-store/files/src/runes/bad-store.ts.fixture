@@ -1,0 +1,7 @@
+declare const current: string;
+
+const locale = $Store(current);
+
+export function value(): string {
+  return locale;
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/api/legacy/route.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "require-client-auth",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Requiring instead of importing the client module is the same layer error in server code."
+  }
+}

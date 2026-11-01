@@ -1,0 +1,3 @@
+export function openOrder(navigation: { navigate: (r: string, p: object) => void }, id: string): void {
+  navigation.navigate("Order", { id });
+}

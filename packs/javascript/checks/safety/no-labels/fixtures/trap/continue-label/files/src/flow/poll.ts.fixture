@@ -1,0 +1,5 @@
+export function poll(ready) {
+  retry: while (!ready()) {
+    continue retry;
+  }
+}

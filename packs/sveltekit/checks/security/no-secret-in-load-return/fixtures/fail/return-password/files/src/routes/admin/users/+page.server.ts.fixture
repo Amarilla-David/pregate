@@ -1,0 +1,4 @@
+export async function load({ locals }) {
+	const record = locals.record;
+	return { email: record.email, password: record.hash };
+}

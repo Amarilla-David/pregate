@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/receiver.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "partial-check",
+    "note": "Testing whether the page itself is framed says nothing about who sent the message.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

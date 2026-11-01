@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "mixed-compat-side-effect",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The visible calls are modular, so the file looks migrated, but the bare side-effect import still loads the compat Firestore library."
+  }
+}

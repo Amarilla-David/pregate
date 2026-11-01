@@ -1,0 +1,56 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/modules/no-shared-imports-business",
+  "version": "1.0.0",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "modules.shared-imports-business",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "shared-edge",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "(^|/)(modules|features)/",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "**/shared/**",
+            "**/common/**",
+            "**/shared-kernel/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a business module from shared code. The shared kernel must remain free of business domain dependencies."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "python/errors/no-raise-notimplemented",
+  "version": "1.0.0",
+  "area": "errors",
+  "cardinality": "singleton",
+  "dimension": "python.errors.raise-notimplemented",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "raise-notimplemented",
+          "rule": {
+            "kind": "raise_statement",
+            "has": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "regex": "^NotImplemented$"
+                },
+                {
+                  "kind": "call",
+                  "has": {
+                    "field": "function",
+                    "regex": "^NotImplemented$"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: raise NotImplemented raises a constant, not an exception. Use raise NotImplementedError() instead."
+  }
+}

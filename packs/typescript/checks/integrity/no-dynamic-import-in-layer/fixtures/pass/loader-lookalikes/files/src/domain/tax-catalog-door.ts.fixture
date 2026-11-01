@@ -1,0 +1,31 @@
+import { taxCatalogMigration } from "./migration-probe";
+
+export class MigrationProbe {
+  constructor(private readonly table: string) {}
+
+  async require(): Promise<void> {
+    if (!this.table) throw new Error("tax catalog migration missing");
+  }
+
+  async ready(): Promise<void> {
+    await this.require();
+  }
+}
+
+export async function assertTaxCatalogReady(): Promise<void> {
+  await taxCatalogMigration.require();
+  await taxCatalogMigration?.require();
+}
+
+export const workerOptions = { eval: true, require: false };
+
+export const evaluator = {
+  eval(expression: string): number {
+    return expression.length;
+  },
+};
+
+export function probeOf(migrations: { require(): Promise<void> }): () => Promise<void> {
+  const { require: ensure } = migrations;
+  return ensure;
+}

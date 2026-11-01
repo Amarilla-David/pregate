@@ -1,0 +1,10 @@
+declare function doSomething(): void;
+
+export function run(): void {
+  try {
+    doSomething();
+  } catch (err) {
+    console.error("Failed to run", err);
+    throw err;
+  }
+}

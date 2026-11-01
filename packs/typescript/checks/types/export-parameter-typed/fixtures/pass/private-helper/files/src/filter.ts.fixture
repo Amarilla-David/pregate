@@ -1,0 +1,4 @@
+export function double(value: number): number {
+  function helper(inner: number) { return [inner].map((item) => item * 2)[0]!; }
+  return helper(value);
+}

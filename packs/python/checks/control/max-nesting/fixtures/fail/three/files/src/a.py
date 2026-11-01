@@ -1,0 +1,5 @@
+def f():
+    if ready:
+        if ready:
+            if ready:
+                pass

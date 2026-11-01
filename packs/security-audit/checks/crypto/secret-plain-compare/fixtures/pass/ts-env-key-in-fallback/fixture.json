@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/theme.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

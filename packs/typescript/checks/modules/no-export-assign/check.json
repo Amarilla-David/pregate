@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/modules/no-export-assign",
+  "version": "1.0.0",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "typescript.export-assign",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "export-assign",
+          "rule": {
+            "kind": "export_statement",
+            "regex": "^\\s*export\\s*="
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses export = for CommonJS interop. Export the bindings by name instead."
+  }
+}

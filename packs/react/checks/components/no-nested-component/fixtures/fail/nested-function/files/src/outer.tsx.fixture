@@ -1,0 +1,6 @@
+export function Outer() {
+  function Inner() {
+    return <span>inner</span>;
+  }
+  return <Inner />;
+}

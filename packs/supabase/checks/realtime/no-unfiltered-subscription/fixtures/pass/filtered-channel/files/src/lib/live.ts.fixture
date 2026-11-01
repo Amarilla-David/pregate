@@ -1,0 +1,3 @@
+export function watch(h: unknown): void {
+  supabase.channel("o").on("postgres_changes", { event: "*", schema: "public", table: "orders" }, h).subscribe();
+}

@@ -1,0 +1,9 @@
+type Invoice = { id: string };
+
+export function invoiceFrom(row: string[]): Invoice {
+  return <Invoice><unknown>row;
+}
+
+export function invoicesFrom(rows: string[][]): Invoice[] {
+  return rows as any as Invoice[];
+}

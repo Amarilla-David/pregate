@@ -1,0 +1,9 @@
+export function useTheme() {
+  const theme = useState("theme", () => "light");
+  if (process.server) {
+    return theme;
+  }
+  const debug = process.dev;
+  if (debug) console.info("theme", theme.value);
+  return theme;
+}

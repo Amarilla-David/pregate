@@ -1,0 +1,8 @@
+export function average(values) {
+  let total = NaN;
+  if (values.length > 0) {
+    total = values.reduce((sum, v) => sum + v, 0) / values.length;
+  }
+  const unset = total !== total;
+  return { total, unset, missing: Number.isNaN(total), fallback: Number.NaN };
+}

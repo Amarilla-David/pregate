@@ -1,0 +1,4 @@
+
+export function place(orderId: string): void {
+  console.log(orderId);
+}

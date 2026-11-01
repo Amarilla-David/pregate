@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react/components/no-javascript-url",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "react.javascript-url",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "javascript-url",
+          "utils": {
+            "javascript-literal": {
+              "any": [{ "kind": "string" }, { "kind": "template_string" }],
+              "has": {
+                "kind": "string_fragment",
+                "nthChild": 1,
+                "regex": "(?i)^\\s*javascript:"
+              }
+            }
+          },
+          "rule": {
+            "regex": "^(href|src)\\s*=",
+            "all": [
+              { "has": { "kind": "property_identifier", "regex": "^(href|src)$" } },
+              {
+                "has": {
+                  "any": [
+                    { "matches": "javascript-literal" },
+                    { "regex": "^\\{", "has": { "matches": "javascript-literal" } }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} sets a javascript: URL on href or src. React blocks these URLs; use a button with an onClick handler or a real URL." }
+}

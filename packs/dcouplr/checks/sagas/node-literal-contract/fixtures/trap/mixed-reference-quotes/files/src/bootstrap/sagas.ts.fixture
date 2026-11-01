@@ -1,0 +1,3 @@
+saga.registerNode({kind: 'join', stepId: 'join', mode: 'any', expectedStepIds: ['one', "one"]});
+saga.registerNode({kind: 'join', stepId: 'join', mode: 'every', expectedStepIds: ['one', `one`]});
+saga.registerNode({kind: 'join', stepId: 'join', mode: 'any', expectedStepIds: ["one", `one`]});

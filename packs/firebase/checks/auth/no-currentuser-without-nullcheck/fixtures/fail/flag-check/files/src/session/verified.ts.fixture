@@ -1,0 +1,3 @@
+export function isVerified(auth: Auth): boolean {
+  return auth.currentUser.emailVerified;
+}

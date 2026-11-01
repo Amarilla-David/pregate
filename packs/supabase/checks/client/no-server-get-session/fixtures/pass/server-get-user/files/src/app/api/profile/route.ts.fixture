@@ -1,0 +1,5 @@
+declare const supabase: { auth: { getUser(): Promise<{ data: { user: unknown } }> } };
+export async function GET(): Promise<unknown> {
+  const { data } = await supabase.auth.getUser();
+  return data.user;
+}

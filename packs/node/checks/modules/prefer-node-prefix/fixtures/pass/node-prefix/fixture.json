@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mod/node-prefix.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

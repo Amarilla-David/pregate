@@ -1,0 +1,4 @@
+declare function createError(input: { statusCode: number }): Error;
+export function requireAuth(token: string | null) {
+  return createError({ statusCode: 401 });
+}

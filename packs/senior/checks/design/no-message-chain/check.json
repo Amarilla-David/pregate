@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/design/no-message-chain",
+  "version": "1.0.0",
+  "area": "design",
+  "cardinality": "singleton",
+  "dimension": "design.message-chain",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "message-chain",
+          "rule": {
+            "kind": "member_expression",
+            "any": [
+              {
+                "has": {
+                  "field": "object",
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "object",
+                    "any": [
+                      {
+                        "kind": "member_expression"
+                      },
+                      {
+                        "kind": "call_expression"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "object",
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "member_expression",
+                    "has": {
+                      "field": "object",
+                      "any": [
+                        {
+                          "kind": "member_expression"
+                        },
+                        {
+                          "kind": "call_expression"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} chains three member or call hops. Ask the object for what you need."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/effects/payment-create-has-idempotency-key",
+  "version": "1.0.0",
+  "area": "effects",
+  "cardinality": "singleton",
+  "dimension": "effects.idempotency-key",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "payment-create",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "\\.(charges|paymentIntents|transfers|refunds|payouts)\\.(create|capture|confirm)$"
+            },
+            "not": {
+              "regex": "idempotency"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} creates or captures a payment without an idempotency key. A retry would send a second charge."
+  }
+}

@@ -1,0 +1,4 @@
+declare function initializeApp(cfg: Record<string, string>): unknown;
+export function connectFirebase(cfg: Record<string, string>): unknown {
+  return initializeApp(cfg);
+}

@@ -1,0 +1,8 @@
+import { z } from "zod";
+import { Money } from "./money";
+
+export const OrderId = z.string().uuid();
+
+export class Order {
+  constructor(readonly id: string, readonly total: Money) {}
+}

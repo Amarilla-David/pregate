@@ -1,0 +1,6 @@
+
+export function fail(error: Error, logger: Logger): void {
+  logger.error(error.stack);
+}
+
+interface Logger { error(value: unknown): void }

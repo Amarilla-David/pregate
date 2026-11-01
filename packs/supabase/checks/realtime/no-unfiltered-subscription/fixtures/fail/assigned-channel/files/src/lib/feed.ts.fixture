@@ -1,0 +1,4 @@
+export function feed(): unknown {
+  const ch = supabase.channel("orders").subscribe();
+  return ch;
+}

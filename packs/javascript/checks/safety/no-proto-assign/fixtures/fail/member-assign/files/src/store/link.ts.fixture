@@ -1,0 +1,4 @@
+const o = {};
+o.__proto__ = null;
+
+export const store = o;

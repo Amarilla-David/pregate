@@ -1,0 +1,6 @@
+
+import { price } from "../billing/internal/pricing";
+
+export function sync(): string {
+  return price.name;
+}

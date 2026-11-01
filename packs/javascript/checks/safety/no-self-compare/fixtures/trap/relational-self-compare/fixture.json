@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/relational.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "member-relational-self-compare",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Comparing the same member expression with < or > is always false and indicates a copy-paste typo between old and new state."
+  }
+}

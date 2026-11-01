@@ -1,0 +1,8 @@
+export class FormState {
+  touched = false;
+  value: string;
+
+  constructor(public label: string) {
+    this.value = "";
+  }
+}

@@ -1,0 +1,7 @@
+interface Value { readonly name: string }
+type Factory = Readonly<{
+  cloneWithUsing(
+    node: Value,
+    using: ,
+  ): Value
+}>

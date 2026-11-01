@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/client/no-deprecated-auth-helpers",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "supabase.auth-helpers",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "deprecated-auth-helpers-import",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^@supabase/auth-helpers-(nextjs|react|remix|sveltekit|shared)(/|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "^require$"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a deprecated @supabase/auth-helpers package. Create clients with createBrowserClient and createServerClient from @supabase/ssr."
+  }
+}

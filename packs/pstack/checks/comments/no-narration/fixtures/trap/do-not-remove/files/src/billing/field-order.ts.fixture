@@ -1,0 +1,5 @@
+
+// do not remove: the adapter depends on this field order
+export function fields(): string[] {
+  return ["id", "total"];
+}

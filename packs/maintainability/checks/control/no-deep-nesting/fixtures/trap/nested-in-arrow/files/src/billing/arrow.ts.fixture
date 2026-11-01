@@ -1,0 +1,10 @@
+export const verify = (a: boolean, b: boolean, c: boolean): boolean => {
+  if (a) {
+    if (b) {
+      if (c) {
+        return true;
+      }
+    }
+  }
+  return false;
+};

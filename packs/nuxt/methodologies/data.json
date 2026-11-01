@@ -1,0 +1,135 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "nuxt/data",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "NUXT-FETCH-001",
+      "check": "nuxt/data/no-bare-fetch-in-app",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt data fetching composables",
+        "locator": "useFetch and useAsyncData SSR dedupe",
+        "paraphrase": "useFetch and useAsyncData run once on the server and replay on the client. A bare fetch runs twice and can disagree."
+      },
+      "why": "A bare fetch in pages, components, or composables double-fires across SSR and hydration and skips the shared payload cache.",
+      "fixHint": "Replace fetch with useFetch or useAsyncData with a stable key so the server result replays on the client.",
+      "avoid": "Calling fetch through globalThis does not change the call. The receiver is not the rule; the fetch is.",
+      "examples": {
+        "pass": "pass/use-fetch",
+        "fail": "fail/bare-fetch"
+      }
+    },
+    {
+      "id": "NUXT-ENV-001",
+      "check": "nuxt/config/no-process-env-in-app",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt runtime config",
+        "locator": "useRuntimeConfig public and private values",
+        "paraphrase": "Runtime config separates private server values from public client values. process.env has no such split in app code."
+      },
+      "why": "Reading process.env in app code either inlines secrets into the client bundle or silently yields undefined where the build did not inject it.",
+      "fixHint": "Expose the value through runtimeConfig and read it with useRuntimeConfig in app code.",
+      "avoid": "Subscript access does not hide the read. process.env[\"X\"] is the same environment read as process.env.X.",
+      "examples": {
+        "pass": "pass/runtime-config",
+        "fail": "fail/direct-read"
+      }
+    },
+    {
+      "id": "NUXT-STATE-001",
+      "check": "nuxt/state/no-unkeyed-usestate",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt useState keyed shared state",
+        "locator": "useState key argument",
+        "paraphrase": "useState without a key returns one shared ref for every caller. The key is what separates independent state."
+      },
+      "why": "An unkeyed useState merges every component instance into one slot, so one cart, counter, or form overwrites another.",
+      "fixHint": "Pass a unique string key and an initializer: useState(\"cart\", () => []).",
+      "avoid": "Type arguments do not key the state. useState<string>() without a key still shares one slot.",
+      "examples": {
+        "pass": "pass/keyed-state",
+        "fail": "fail/empty-call"
+      }
+    },
+    {
+      "id": "NUXT-HYDR-001",
+      "check": "nuxt/hydration/no-random-in-setup",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Vue SSR hydration matching",
+        "locator": "server-rendered versus client values",
+        "paraphrase": "Setup code runs on both server and client and must produce the same tree. Nondeterministic values render twice and mismatch."
+      },
+      "why": "Math.random and Date.now in setup code produce one value on the server and another on the client, so hydration patches or warns on every load.",
+      "fixHint": "Generate the value on the server and pass it down, or generate it after mount where only the client renders it.",
+      "avoid": "A lazy initializer does not defer past setup. useState(\"k\", () => Date.now()) still stamps during SSR.",
+      "examples": {
+        "pass": "pass/static-id",
+        "fail": "fail/math-random"
+      }
+    },
+    {
+      "id": "NUXT-NAV-001",
+      "check": "nuxt/routing/no-floating-navigateto",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt navigateTo and route middleware (https://nuxt.com/docs/4.x/api/utils/navigate-to)",
+        "locator": "navigateTo usage note; Within route middleware; middleware return values",
+        "paraphrase": "Always await or return the result of navigateTo. In route middleware a redirect or cancellation happens only when navigateTo or abortNavigation is returned."
+      },
+      "why": "A discarded navigateTo in middleware lets the original navigation continue, so the guarded page renders for a user who should have been redirected.",
+      "fixHint": "Write return navigateTo(\"/login\") or return abortNavigation() in middleware, and await navigateTo(...) in handlers and composables.",
+      "avoid": "Putting the call on one arm of an if does not return it. An arrow with an expression body already returns its value and is not matched.",
+      "examples": {
+        "pass": "pass/returned-in-middleware",
+        "fail": "fail/middleware-bare"
+      }
+    },
+    {
+      "id": "NUXT-ASYNC-001",
+      "check": "nuxt/data/no-empty-asyncdata-handler",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt useAsyncData (https://nuxt.com/docs/4.x/api/composables/use-async-data)",
+        "locator": "Parameters, handler",
+        "paraphrase": "The handler must return a truthy value, not undefined or null, or the request may be duplicated on the client."
+      },
+      "why": "A handler that only fills a store or ref resolves to undefined, so the payload carries nothing and the client fetches the same data again during hydration.",
+      "fixHint": "Return the fetched data. When the handler only fills a store, return true after the store action.",
+      "avoid": "A return inside a nested callback, or a bare return, does not give the handler a value. Named handler references and expression-bodied arrows are not matched.",
+      "examples": {
+        "pass": "pass/returns-data",
+        "fail": "fail/no-return"
+      }
+    },
+    {
+      "id": "NUXT-META-001",
+      "check": "nuxt/config/no-process-runtime-flags",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Nuxt import.meta (https://nuxt.com/docs/4.x/api/advanced/import-meta)",
+        "locator": "Runtime (App) Properties",
+        "paraphrase": "process.browser, process.client, process.dev, process.server and process.test are soft-deprecated since Nuxt 3.12. Prefer the matching import.meta flags."
+      },
+      "why": "The process flags only exist through a compatibility define; newer Nuxt drops their types, so the branch stops type-checking and confuses server and client builds.",
+      "fixHint": "Replace process.client with import.meta.client, process.server with import.meta.server and process.dev with import.meta.dev.",
+      "avoid": "process.browser is the same deprecated flag under its Nuxt 2 name. process.env is a separate rule (NUXT-ENV-001).",
+      "examples": {
+        "pass": "pass/import-meta-plugin",
+        "fail": "fail/process-client"
+      }
+    }
+  ]
+}

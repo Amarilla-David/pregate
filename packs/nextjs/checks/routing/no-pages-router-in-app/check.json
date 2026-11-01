@@ -1,0 +1,127 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/routing/no-pages-router-in-app",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-pages-router-in-app",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "pages-router-import",
+          "files": [
+            "app/**/*",
+            "src/app/**/*"
+          ],
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^next/router$",
+            "inside": {
+              "kind": "string",
+              "any": [
+                {
+                  "inside": {
+                    "field": "source",
+                    "kind": "import_statement",
+                    "all": [
+                      {
+                        "not": {
+                          "regex": "^import\\s+type\\b"
+                        }
+                      },
+                      {
+                        "any": [
+                          {
+                            "not": {
+                              "has": {
+                                "kind": "import_clause"
+                              }
+                            }
+                          },
+                          {
+                            "has": {
+                              "kind": "import_clause",
+                              "has": {
+                                "any": [
+                                  {
+                                    "kind": "identifier"
+                                  },
+                                  {
+                                    "kind": "namespace_import"
+                                  },
+                                  {
+                                    "kind": "named_imports",
+                                    "has": {
+                                      "kind": "import_specifier",
+                                      "not": {
+                                        "regex": "^type\\s"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "inside": {
+                    "field": "source",
+                    "kind": "export_statement",
+                    "not": {
+                      "regex": "^export\\s+type\\b"
+                    }
+                  }
+                },
+                {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  },
+                  "inside": {
+                    "kind": "arguments",
+                    "inside": {
+                      "kind": "call_expression",
+                      "has": {
+                        "field": "function",
+                        "any": [
+                          {
+                            "kind": "import"
+                          },
+                          {
+                            "kind": "identifier",
+                            "regex": "^require$"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports next/router from an App Router file. Import useRouter, usePathname or useSearchParams from next/navigation instead."
+  }
+}

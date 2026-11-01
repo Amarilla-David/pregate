@@ -1,0 +1,4 @@
+declare const PublicKey: { createProgramAddressSync(seeds: Uint8Array[], programId: unknown): unknown };
+export function buildVault(seeds: Uint8Array[], programId: unknown): unknown {
+  return PublicKey.createProgramAddressSync(seeds, programId);
+}

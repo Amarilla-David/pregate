@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/host.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "partial-check",
+    "note": "Comparing event.source with a frame is not an origin check, and a listener inside a React effect is still a window listener.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

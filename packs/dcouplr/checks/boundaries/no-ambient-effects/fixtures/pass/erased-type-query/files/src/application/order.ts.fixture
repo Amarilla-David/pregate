@@ -1,0 +1,6 @@
+admission.addFactoryMethod(() => {
+  type Fetch = typeof fetch;
+  type Random = typeof Math.random;
+  const capture: Fetch = injected;
+  return { capture };
+});

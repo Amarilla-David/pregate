@@ -1,0 +1,4 @@
+import type { Col } from "./db";
+export async function list(col: Col): Promise<void> {
+  await col.find({}).limit(50).toArray();
+}

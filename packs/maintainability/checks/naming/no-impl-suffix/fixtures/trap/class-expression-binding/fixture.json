@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/session/session-store.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "class-expression",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Binding an anonymous class expression to a const named *Impl keeps the pattern name without a class declaration."
+  }
+}

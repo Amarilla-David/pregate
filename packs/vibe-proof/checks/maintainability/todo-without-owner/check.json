@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/maintainability/todo-without-owner",
+  "version": "1.0.0",
+  "area": "maintainability",
+  "cardinality": "singleton",
+  "dimension": "maintainability.todo-owner",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "todo-owner",
+          "rule": {
+            "kind": "comment",
+            "regex": "(?i)\\b(TODO|FIXME|HACK|XXX)\\b",
+            "not": {
+              "regex": "(?i)\\b(TODO|FIXME|HACK|XXX)\\([A-Za-z0-9][A-Za-z0-9._-]{1,}\\)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is a TODO, FIXME, HACK, or XXX without an owner in parentheses."
+  }
+}

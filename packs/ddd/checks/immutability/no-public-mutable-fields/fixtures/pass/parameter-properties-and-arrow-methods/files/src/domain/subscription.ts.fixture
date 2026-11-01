@@ -1,0 +1,23 @@
+export class Subscription {
+  private cancelledOn: string | null = null;
+
+  constructor(
+    readonly id: string,
+    public readonly plan: string,
+    private owner: string,
+    protected readonly region?: string,
+  ) {}
+
+  cancel = (on: string): void => {
+    if (this.cancelledOn !== null) return;
+    this.cancelledOn = on;
+  };
+
+  describe = function (this: Subscription): string {
+    return `${this.plan} for ${this.owner}`;
+  };
+
+  renew(trial: number, discount?: number): number {
+    return trial + (discount ?? 0);
+  }
+}

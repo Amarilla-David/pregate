@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function announceOrder(order: unknown): Promise<void> {
+  await redis.publish("updates", JSON.stringify(order));
+}

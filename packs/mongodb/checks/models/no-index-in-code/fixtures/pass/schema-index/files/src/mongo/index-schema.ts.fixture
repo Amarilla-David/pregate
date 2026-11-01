@@ -1,0 +1,5 @@
+import { Schema } from "mongoose";
+export function build(): void {
+  const s = new Schema({ email: String });
+  s.index({ email: 1 });
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/runes/no-component-rune-in-module",
+  "version": "1.0.0",
+  "area": "runes",
+  "cardinality": "singleton",
+  "dimension": "svelte.component-rune-in-module",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "component-rune-in-module",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^\\$(props|props\\.id|bindable|host)$"
+            }
+          },
+          "files": [
+            "**/*.svelte.*"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls a component-only rune in a .svelte.js/.svelte.ts module. $props, $bindable and $host belong in a component's script; pass values to module functions as arguments."
+  }
+}

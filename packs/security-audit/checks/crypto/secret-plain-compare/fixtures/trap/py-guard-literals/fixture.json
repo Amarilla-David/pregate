@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/webhooks.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "null-and-literal-guard",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "None, empty-string and literal comparisons and identity checks with is pass; comparing two secret operands fails."
+  }
+}

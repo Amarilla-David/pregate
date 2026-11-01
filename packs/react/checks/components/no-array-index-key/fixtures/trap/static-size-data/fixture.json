@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/placeholders.tsx",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 2 }] },
+  "trap": { "family": "index-key", "origin": "forge", "discovered": "2026-10-08", "note": "A constant number of data-bearing rows does not establish stable positional identity." }
+}

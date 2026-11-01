@@ -1,0 +1,27 @@
+{
+  "id": "pstack/principles/ps-15",
+  "version": "1.0.0",
+  "area": "principles",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-15",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-15"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-15 requires current passing project verification: {symbol}."
+  }
+}

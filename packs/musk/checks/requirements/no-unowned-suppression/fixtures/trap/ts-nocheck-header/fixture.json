@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/nocheck.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "file-directive",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A file-level @ts-nocheck disables type checking for the whole file without attribution."
+  }
+}

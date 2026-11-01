@@ -1,0 +1,5 @@
+export const callbacks = {
+  jwt({ token, user }: { token: Record<string, unknown>; user?: { password: string } }) {
+    return { ...token, password: user?.password };
+  },
+};

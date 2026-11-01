@@ -1,0 +1,2 @@
+// builder.declareIntent('ORDER').register()
+const example = 'builder.addMandatoryInputFields({}).register()';

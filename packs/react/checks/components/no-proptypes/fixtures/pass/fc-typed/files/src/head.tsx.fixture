@@ -1,0 +1,5 @@
+import type { FC } from "react";
+interface Props {
+  title: string;
+}
+export const Head: FC<Props> = (props) => <h1>{props.title}</h1>;

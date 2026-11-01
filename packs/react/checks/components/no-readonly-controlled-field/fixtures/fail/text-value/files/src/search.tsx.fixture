@@ -1,0 +1,3 @@
+export function Search(props: { query: string }) {
+  return <input type="search" value={props.query} />;
+}

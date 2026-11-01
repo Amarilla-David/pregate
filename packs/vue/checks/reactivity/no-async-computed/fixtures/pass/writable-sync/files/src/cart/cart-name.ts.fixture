@@ -1,0 +1,12 @@
+import { computed, ref } from "vue";
+
+declare function saveName(name: string): Promise<void>;
+const first = ref("Ada");
+
+export const name = computed({
+  get: () => first.value,
+  set: async (next: string) => {
+    first.value = next;
+    await saveName(next);
+  },
+});

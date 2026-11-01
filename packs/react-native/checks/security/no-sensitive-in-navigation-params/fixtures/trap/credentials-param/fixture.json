@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/credentials-param.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "credentials-word",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "credentials reads as a neutral bundle, but it carries the same secret material as a token or password."
+  }
+}

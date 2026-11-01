@@ -1,0 +1,2 @@
+const restore = Keypair.fromSecretKey;
+const kp = restore(Uint8Array.from([1, 2, 3]));

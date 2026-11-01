@@ -1,0 +1,10 @@
+export function drainBatches(batches: { ready: boolean; remaining: number }[]): number {
+  for (const batch of batches) {
+    if (batch.ready) {
+      while (batch.remaining > 0) {
+        batch.remaining -= 1;
+      }
+    }
+  }
+  return batches.length;
+}

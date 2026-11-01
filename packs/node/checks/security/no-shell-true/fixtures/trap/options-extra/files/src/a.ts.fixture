@@ -1,0 +1,1 @@
+child_process.spawn(command, args, { cwd: root, shell: true });

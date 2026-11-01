@@ -1,0 +1,5 @@
+import { writeBatch } from "firebase/firestore";
+
+export async function saveBoth(db: Firestore, ref: DocRef, data: Data): Promise<void> {
+  await writeBatch(db).set(ref, data).commit();
+}

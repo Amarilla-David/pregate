@@ -1,0 +1,2 @@
+export const options = { ignoreExpiration: false, algorithms: ["ES256"], clockTolerance: 5 };
+export const label = { algorithms: "none of these" };

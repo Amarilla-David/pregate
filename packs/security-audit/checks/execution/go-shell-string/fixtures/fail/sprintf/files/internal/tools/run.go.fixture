@@ -1,0 +1,10 @@
+package tools
+
+import (
+	"fmt"
+	"os/exec"
+)
+
+func Archive(name string) error {
+	return exec.Command("sh", "-c", fmt.Sprintf("tar czf %s.tgz build", name)).Run()
+}

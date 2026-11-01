@@ -1,0 +1,20 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "internal/client/http.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 10
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-tls-config",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "A tls.Config literal nested inside an http.Transport literal still disables verification."
+  }
+}

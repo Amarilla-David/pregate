@@ -1,0 +1,7 @@
+import { Prisma } from "@prisma/client";
+import { prisma } from "~/server/db";
+
+export async function search(sort: string) {
+  const order = Prisma.raw("ORDER BY " + sort);
+  return prisma.$queryRaw`SELECT id, title FROM posts ${order} LIMIT 50`;
+}

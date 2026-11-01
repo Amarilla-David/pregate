@@ -1,0 +1,2 @@
+stage.addValidationPolicy(async () => true);
+stage.addVerificationPolicy(async () => {});

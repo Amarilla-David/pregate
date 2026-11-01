@@ -1,0 +1,11 @@
+type Settings = { locale: string; pageSize: number };
+
+const DEFAULTS = { locale: "en", pageSize: 20 } satisfies Settings;
+
+function isSettings(value: unknown): value is Settings {
+  return typeof value === "object" && value !== null && "locale" in value && "pageSize" in value;
+}
+
+export function settingsFrom(value: unknown): Settings {
+  return isSettings(value) ? value : DEFAULTS;
+}

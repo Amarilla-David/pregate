@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/trpc/guard.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "unreturned-await-next-in-branch",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Awaiting next({ ctx }) inside an if branch without returning its value still resolves the middleware to undefined."
+  }
+}

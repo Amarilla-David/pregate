@@ -1,0 +1,5 @@
+
+export function zero(total: number): boolean {
+  // both sides are numbers
+  return total == 0;
+}

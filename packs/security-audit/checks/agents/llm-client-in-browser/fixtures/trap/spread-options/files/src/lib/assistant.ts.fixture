@@ -1,0 +1,4 @@
+const browserOptions = { "dangerouslyAllowBrowser": true };
+export const client = new OpenAI({ ...browserOptions, apiKey: key });
+declare const OpenAI: new (o: object) => unknown;
+declare const key: string;

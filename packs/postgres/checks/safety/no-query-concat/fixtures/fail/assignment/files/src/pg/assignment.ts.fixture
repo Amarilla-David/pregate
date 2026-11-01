@@ -1,0 +1,8 @@
+
+export async function byId(id: string, pool: Pool): Promise<unknown> {
+  let sql = "SELECT * FROM users WHERE id = ";
+  await pool.query(sql += id);
+  return pool.query(sql = "SELECT * FROM users WHERE id = " + id);
+}
+
+interface Pool { query(sql: string): Promise<unknown> }

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/db/signup.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "commit-without-release",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "COMMIT and ROLLBACK finish the transaction, so the work looks complete, but the client stays checked out. Only release returns it to the pool."
+  }
+}

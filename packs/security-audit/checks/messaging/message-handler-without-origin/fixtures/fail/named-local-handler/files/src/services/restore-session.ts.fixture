@@ -1,0 +1,9 @@
+export function restoreSession(onSuccess: () => void) {
+  const handlePostMessage = (event: MessageEvent) => {
+    if (event.data.type === "session-restored") {
+      window.removeEventListener("message", handlePostMessage);
+      onSuccess();
+    }
+  };
+  window.addEventListener("message", handlePostMessage, false);
+}

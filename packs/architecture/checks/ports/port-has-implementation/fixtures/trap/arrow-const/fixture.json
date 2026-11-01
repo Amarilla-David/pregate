@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/ports/save-order-arrow.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "const-arrow",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "An exported arrow is still a function body living in the port module."
+  }
+}

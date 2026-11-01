@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "tailwind/classes/no-arbitrary-hex",
+  "version": "1.0.0",
+  "area": "classes",
+  "cardinality": "singleton",
+  "dimension": "tailwind.no-arbitrary-hex",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "arbitrary-hex",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "#[0-9a-fA-F]{3,8}\\b",
+            "inside": {
+              "any": [
+                { "kind": "string" },
+                { "kind": "template_string" }
+              ],
+              "inside": {
+                "stopBy": "end",
+                "any": [
+                  {
+                    "regex": "^(className|class)\\s*=",
+                    "has": {
+                      "kind": "property_identifier",
+                      "regex": "^(className|class)$"
+                    }
+                  },
+                  {
+                    "kind": "call_expression",
+                    "has": {
+                      "field": "function",
+                      "kind": "identifier",
+                      "regex": "^(clsx|cn|cx|classnames|classNames|twMerge|twJoin|cva|tv)$"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} hardcodes a hex color in an arbitrary class value. Use a theme token instead."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/sagas",
+  "version": "1.1.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "defaults": {
+        "paths": [
+          "src/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations and runtime; bounded PREGATE public-contract policy",
+        "locator": "dist/index.d.mts IStructuredSagaStep, IStructuredSagaJoinStep and DStructuredSaga, lines 263–321; dist/index.mjs DStructuredSaga constructor/registerNode, lines 3689–3725",
+        "paraphrase": "Structured saga construction requires a nonempty sagaType and sagaId and the injected IDKernel."
+      },
+      "id": "DCP-SAGA-CTOR-001",
+      "check": "dcouplr/sagas/constructor-literal-contract",
+      "why": "Empty identities reject construction before subscriptions or work can start. Primitive kernel values cannot supply the runtime gates.",
+      "fixHint": "Use the public DStructuredSaga constructor with both stable nonempty IDs and the factory's injected kernel. The API is deprecated but remains valid in the pinned release; do not replace its DSL with a dependency lookup that has no registered provider.",
+      "avoid": "Reserved DStructuredSaga constructor-name policy in reviewed paths, not import/type identity inference. Covers direct identifier, dot/literal-bracket constructor names and transparent wrappers; missing required arguments, directly blank string IDs and known invalid literal ID/kernel types. Explicit invalid arguments before the first spread remain checked; leading spreads leave later positions unresolved. Dynamic values, escaped blank IDs, aliases and actual kernel shape/ownership are unresolved. Bare undefined uses a direct-value policy; lexical shadow resolution is not proved. Does not certify persistence, queue overrides, graph/lifecycle or correlation. Required DSL construction is not itself a collaborator bypass; review managed-path scope instead of banning a public library construction.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/empty-id"
+      }
+    },
+    {
+      "defaults": {
+        "paths": [
+          "src/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations and runtime; bounded PREGATE public-contract policy",
+        "locator": "dist/index.d.mts IStructuredSagaStep, IStructuredSagaJoinStep and DStructuredSaga, lines 263–321; dist/index.mjs DStructuredSaga registerNode/validate, lines 3697–3780",
+        "paraphrase": "Steps require stepId, on and a Promise-compatible handler; joins require stepId, any/every mode and a nonempty expectedStepIds collection with unique references."
+      },
+      "id": "DCP-SAGA-NODE-001",
+      "check": "dcouplr/sagas/node-literal-contract",
+      "why": "Missing fields reject registration; truthy noncallable handlers fail only during delivery. Awaiting a generator object does not run its body. Duplicate join references reject start because a join must track each expected step once. Public kind/callback/boolean contracts are stricter than this runtime's truthiness checks.",
+      "fixHint": "Declare one valid step or join with a stable nonempty stepId. Use a callable handler that returns a Promise; use any/every and nonempty unique string step references for joins. Keep start/stop, duplicate IDs, reference existence, matching saga context, compensation and queue persistence under a project graph/runtime verifier.",
+      "avoid": "Reserved registerNode method-name policy in reviewed paths, not receiver type inference. Direct dot/literal-bracket/optional calls, transparent wrappers and plain inline objects are covered. Later literal/shorthand keys win. Primitive DTOs, missing fields, known invalid literal field types, unknown literal kinds/modes, blank IDs/events and generator handlers are rejected. A trailing argument spread cannot replace an explicit first node; leading argument spreads remain unresolved. Bare undefined uses a direct-value policy; lexical shadow resolution is not proved. Dynamic fields/kinds, named callback types, Promise/return-flow correctness, escaped strings/keys, spreads, computed keys, getters, methods and prototypes are unresolved. Blank branchId is valid: upstream defaults it. Identical unescaped literal references with the same quote form are checked within one array, including explicit duplicates beside an argument/element spread. Mixed quote forms, escapes, interpolated templates and dynamic value equality remain unresolved. Duplicate/cross-call node IDs, reference existence, lifecycle, cancellation/checkpoint and persistence are not proved by syntax. No general same-named API ownership or complete saga compliance is inferred.",
+      "examples": {
+        "pass": "pass/step",
+        "fail": "fail/missing-handler"
+      }
+    }
+  ]
+}

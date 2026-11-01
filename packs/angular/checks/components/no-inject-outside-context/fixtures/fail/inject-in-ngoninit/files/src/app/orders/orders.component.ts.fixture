@@ -1,0 +1,12 @@
+import { Component, OnInit, inject } from "@angular/core";
+import { OrdersService } from "./orders.service";
+
+@Component({ selector: "app-orders", templateUrl: "./orders.component.html" })
+export class OrdersComponent implements OnInit {
+  orders: string[] = [];
+
+  ngOnInit(): void {
+    const service = inject(OrdersService);
+    this.orders = service.list();
+  }
+}

@@ -1,0 +1,3 @@
+type Refs = { timer: { current: number | null } };
+function start(refs: Refs) { refs.timer.current = setInterval(tick, 100); }
+function stop(refs: Refs) { clearInterval(refs.timer.current); }

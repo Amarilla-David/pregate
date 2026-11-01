@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/router/no-missing-output-validator",
+  "version": "1.0.0",
+  "area": "router",
+  "cardinality": "singleton",
+  "dimension": "trpc.output-validator",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "mutation-without-output",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "^publicProcedure[\\s\\S]*\\.mutation\\s*\\(",
+            "not": {
+              "regex": "\\.output\\s*\\([\\s\\S]*\\.mutation\\s*\\("
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} runs a mutation with no .output contract before .mutation. Declare .output so callers get a typed result for the state change."
+  }
+}

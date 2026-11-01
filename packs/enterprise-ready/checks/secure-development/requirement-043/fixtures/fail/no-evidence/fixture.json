@@ -1,0 +1,26 @@
+{
+  "language": "typescript",
+  "params": {
+    "verifier": "ENTERPRISE-043"
+  },
+  "context": {
+    "fitness": {
+      "contractHash": "reviewed-contract-v1",
+      "inputHash": "current-code-tree",
+      "command": [
+        "fixture-verifier"
+      ],
+      "receipt": null
+    }
+  },
+  "target": ".pregate/preset.json",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  }
+}

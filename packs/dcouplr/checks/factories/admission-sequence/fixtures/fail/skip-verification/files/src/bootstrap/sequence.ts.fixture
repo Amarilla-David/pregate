@@ -1,0 +1,1 @@
+app.dependencyAdmission.declareIntent('ORDER').addMandatoryInputFields({}).addValidationPolicy().addFactoryMethod(() => ({ ready: true })).register();

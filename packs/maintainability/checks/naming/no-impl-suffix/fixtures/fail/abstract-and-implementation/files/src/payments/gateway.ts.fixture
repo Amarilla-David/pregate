@@ -1,0 +1,9 @@
+export abstract class BaseGatewayImpl {
+  abstract charge(cents: number): Promise<string>;
+}
+
+export class PaymentGatewayImplementation extends BaseGatewayImpl {
+  async charge(cents: number): Promise<string> {
+    return `charged-${cents}`;
+  }
+}

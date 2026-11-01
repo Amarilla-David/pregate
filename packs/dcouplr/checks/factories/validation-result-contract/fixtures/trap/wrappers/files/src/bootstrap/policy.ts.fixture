@@ -1,0 +1,3 @@
+stage?.['addValidationPolicy']?.(/* policy */ (() => (1 as any)) as Policy);
+stage.addValidationPolicy(() => { if (input) return ({ valid: true, 'valid': 0 }); return true; });
+stage.addValidationPolicy(() => ({ valid: 'false' }), ...extras);

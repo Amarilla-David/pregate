@@ -1,0 +1,5 @@
+import { readText } from "../shared/io";
+
+export function loadRules(path: string): string[] {
+  return readText(path, "utf8").split("\n").filter((line) => line.trim() !== "");
+}

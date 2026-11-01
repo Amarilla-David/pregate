@@ -1,0 +1,8 @@
+
+export async function purge(id: string, pool: Pool): Promise<boolean> {
+  void pool.query<Row>("DELETE FROM sessions WHERE user_id = " + id);
+  return !await pool.query<Row>(`DELETE FROM users WHERE id = ${id}`);
+}
+
+interface Row { id: string }
+interface Pool { query<T>(sql: string): Promise<{ rows: T[] }> }

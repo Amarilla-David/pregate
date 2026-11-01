@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/safety/no-identifier-placeholder",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "postgres.identifier-placeholder",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "identifier-placeholder",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\.query$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "any": [
+                    {
+                      "regex": "(?i)\\b(INSERT\\s+INTO|UPDATE|JOIN|TABLE|ORDER\\s+BY|GROUP\\s+BY)\\s+\\$\\d"
+                    },
+                    {
+                      "regex": "(?i)\\bFROM\\s+\\$\\d+\\s*([\"'`;,]|\\s(WHERE|AS|ORDER|GROUP|LIMIT|OFFSET|JOIN|LEFT|RIGHT|INNER|CROSS|RETURNING)\\b)"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} puts a $n placeholder where PostgreSQL expects a table or column name. Parameters only carry values; pick identifiers from a fixed allowlist or escape them with pg-format."
+  }
+}

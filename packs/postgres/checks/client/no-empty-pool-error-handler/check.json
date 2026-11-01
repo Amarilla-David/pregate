@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/client/no-empty-pool-error-handler",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "postgres.empty-pool-error-handler",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "empty-error-handler",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.on\\s*\\(\\s*[\"']error[\"']\\s*,\\s*(function\\s*\\(\\s*\\)\\s*\\{\\s*\\}|\\(\\s*\\)\\s*=>\\s*\\{\\s*\\})"
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} registers an empty pool error handler. Log or report the error."
+  }
+}

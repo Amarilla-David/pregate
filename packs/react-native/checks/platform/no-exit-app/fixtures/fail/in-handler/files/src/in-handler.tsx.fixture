@@ -1,0 +1,8 @@
+import { BackHandler } from "react-native";
+
+export function watch(): void {
+  BackHandler.addEventListener("hardwareBackPress", () => {
+    BackHandler.exitApp();
+    return true;
+  });
+}

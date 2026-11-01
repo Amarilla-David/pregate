@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/fetch-headers.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "headers-not-deadline",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Headers do not bound the wait. The call still has no signal or timeout."
+  }
+}

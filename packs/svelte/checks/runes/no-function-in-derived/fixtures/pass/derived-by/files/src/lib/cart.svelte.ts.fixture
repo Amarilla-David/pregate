@@ -1,0 +1,9 @@
+export function createCart() {
+  let items = $state<{ price: number }[]>([]);
+  const total = $derived.by(() => {
+    let sum = 0;
+    for (const item of items) sum += item.price;
+    return sum;
+  });
+  return { get total() { return total; } };
+}

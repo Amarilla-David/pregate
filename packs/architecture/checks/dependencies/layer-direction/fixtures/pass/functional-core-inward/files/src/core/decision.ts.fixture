@@ -1,0 +1,2 @@
+import type { Decision } from "./types";
+export const decide = (now: number): Decision => ({ at: now });

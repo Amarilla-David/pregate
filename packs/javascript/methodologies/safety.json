@@ -1,0 +1,225 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "javascript/safety",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "JS-PROTO-001",
+      "check": "javascript/safety/no-proto-assign",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs, Object.prototype.__proto__",
+        "locator": "prototype mutation",
+        "paraphrase": "The __proto__ property exposes the prototype chain. Reading or writing it reaches past the object's own properties into shared behavior."
+      },
+      "why": "Writing the prototype changes behavior for every object that shares it, and reading it mistakes shared behavior for own data.",
+      "fixHint": "Create the object with a null prototype, or change the prototype once with the named helper at construction.",
+      "avoid": "Destructuring __proto__ still reads the prototype. A quoted key with the same name is the same property.",
+      "examples": {
+        "pass": "pass/null-prototype",
+        "fail": "fail/member-assign"
+      }
+    },
+    {
+      "id": "JS-EVAL-001",
+      "check": "javascript/safety/no-eval-call",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs, eval and Function",
+        "locator": "dynamic code execution",
+        "paraphrase": "eval and the Function constructor compile a string into code at runtime. The compiled string runs with the caller's privileges."
+      },
+      "why": "A string that reaches eval becomes code with full access, so any injection in the string is an injection in the program.",
+      "fixHint": "Parse the value with the parser for its format, or call the named function instead of compiling its name.",
+      "avoid": "Calling eval through another object still compiles the string. A renamed local holding the same builtin is still this call.",
+      "examples": {
+        "pass": "pass/json-parse",
+        "fail": "fail/bare-eval"
+      }
+    },
+    {
+      "id": "JS-ASYNC-001",
+      "check": "javascript/safety/no-async-executor",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs, Promise constructor",
+        "locator": "executor function",
+        "paraphrase": "The Promise executor runs synchronously and reports through resolve and reject. An async executor returns a second promise the constructor never observes."
+      },
+      "why": "A rejection inside an async executor settles the invisible promise, so the constructed promise never settles and the error is lost.",
+      "fixHint": "Make the executor synchronous and call resolve or reject, or move the awaits into the task the executor starts.",
+      "avoid": "An async function declaration as the executor has the same lost promise. Awaiting inside a synchronous executor body is fine.",
+      "examples": {
+        "pass": "pass/sync-executor",
+        "fail": "fail/arrow-executor"
+      }
+    },
+    {
+      "id": "JS-AWAIT-001",
+      "check": "javascript/safety/no-await-in-loop",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Node.js documentation, event loop and concurrency",
+        "locator": "serial awaits",
+        "paraphrase": "Awaiting each item inside a loop serializes work that could run together. The loop pays the full latency of every item in turn."
+      },
+      "why": "Serial awaits cost latency when tasks are independent, but can be necessary for ordering, rate limits, or backpressure.",
+      "fixHint": "Confirm whether ordering, rate limits, backpressure or benchmark measurement require sequential work. Parallelize only independent tasks with an explicit concurrency budget; preserve deliberate serial behavior with a reviewed project policy.",
+      "avoid": "This advisory check follows awaits only within the current function. Awaiting inside a nested callback is not an await by the enclosing loop. Unbounded Promise.all can change ordering, error and capacity behavior.",
+      "examples": {
+        "pass": "pass/collect-all",
+        "fail": "fail/for-of-await"
+      }
+    },
+    {
+      "id": "JS-THROW-001",
+      "check": "javascript/safety/no-throw-literal",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs, throw statement",
+        "locator": "thrown value",
+        "paraphrase": "throw accepts any value, but catch branches on the value's shape. A literal carries no stack and no name the caller can match."
+      },
+      "why": "A thrown literal gives the catcher no stack and no type, so every catch falls back to comparing raw values.",
+      "fixHint": "Throw an error object built for the failure, and keep the message next to the condition that raised it.",
+      "avoid": "Quoting the literal differently does not make it an error. Wrapping it in parentheses does not add a stack.",
+      "examples": {
+        "pass": "pass/error-object",
+        "fail": "fail/string-literal"
+      }
+    },
+    {
+      "id": "JS-WRAP-001",
+      "check": "javascript/safety/no-new-wrappers",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs, primitive wrapper objects",
+        "locator": "new String, Number, Boolean",
+        "paraphrase": "Calling String, Number, or Boolean as functions converts the value. Calling them with new wraps it in an object instead."
+      },
+      "why": "A wrapper object is always truthy and never equals its primitive, so equality checks and branches silently change meaning.",
+      "fixHint": "Call the converter as a function with no new, and keep the result a primitive.",
+      "avoid": "The Boolean wrapper is always truthy, even when it wraps false. Wrapping a different primitive has the same defect.",
+      "examples": {
+        "pass": "pass/call-coerce",
+        "fail": "fail/string-object"
+      }
+    },
+    {
+      "id": "JS-NAN-001",
+      "check": "javascript/safety/no-nan-compare",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs, NaN",
+        "locator": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN#testing_against_nan",
+        "paraphrase": "NaN compares unequal to every value, including NaN itself, with ==, !=, === and !==. Use Number.isNaN to test for it."
+      },
+      "why": "x === NaN is always false and x !== NaN is always true, so the guard never fires and an invalid number flows on.",
+      "fixHint": "Replace the comparison with Number.isNaN(value), or !Number.isNaN(value) for the inverse.",
+      "avoid": "Number.NaN is the same value. Putting NaN on the left does not change the result. The global isNaN coerces its argument first; Number.isNaN does not.",
+      "examples": {
+        "pass": "pass/is-nan",
+        "fail": "fail/strict-equal"
+      }
+    },
+    {
+      "id": "JS-TYPEOF-001",
+      "check": "javascript/safety/valid-typeof",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs, typeof",
+        "locator": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#description",
+        "paraphrase": "typeof returns one of undefined, object, boolean, number, bigint, string, symbol or function."
+      },
+      "why": "Comparing typeof with any other string is always false, so the branch is dead and the value the check was meant to stop gets through.",
+      "fixHint": "Compare with one of the eight typeof results. Use value === null for null and Array.isArray(value) for arrays.",
+      "avoid": "typeof never returns null, array, date or integer. Swapping the operands or writing the string as a template literal is the same comparison. Comparing with a variable is not checked.",
+      "examples": {
+        "pass": "pass/known-types",
+        "fail": "fail/misspelled"
+      }
+    },
+    {
+      "id": "JS-FOREACH-001",
+      "check": "javascript/safety/no-async-foreach",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "MDN Web Docs, Array.prototype.forEach",
+        "locator": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#description",
+        "paraphrase": "forEach expects a synchronous function and does not wait for promises an async callback returns."
+      },
+      "why": "The caller continues before any callback finishes, and a rejected callback becomes an unhandled rejection instead of an error the caller sees.",
+      "fixHint": "Use await Promise.all(items.map(async (item) => ...)) for independent work, or for...of with await when order matters.",
+      "avoid": "A function expression instead of an arrow, or optional chaining on the receiver, is the same call. A sync callback that starts a promise is outside this rule. Only a forEach call used as a bare statement is reported; an awaited stream forEach is allowed. for...of with await is serial, which JS-AWAIT-001 advises on.",
+      "examples": {
+        "pass": "pass/promise-all",
+        "fail": "fail/arrow-callback"
+      }
+    },
+    {
+      "id": "JS-FINALLY-001",
+      "check": "javascript/safety/no-return-in-finally",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "MDN Web Docs, try...catch",
+        "locator": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch#the_finally_block",
+        "paraphrase": "A return in the finally block becomes the result of the whole try statement, regardless of returns in try or catch, including when catch throws."
+      },
+      "why": "A return in finally discards the try block's result and swallows any thrown error, so a failure looks like success.",
+      "fixHint": "Keep finally for cleanup. Return from try or catch, or after the whole try statement.",
+      "avoid": "A return inside a nested try or catch within finally still completes the finally. A return inside a callback defined in finally is a different function and is not reported.",
+      "examples": {
+        "pass": "pass/return-after-try",
+        "fail": "fail/return-null"
+      }
+    },
+    {
+      "id": "JS-SELF-001",
+      "check": "javascript/safety/no-self-compare",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "ESLint Recommended Rules",
+        "locator": "no-self-compare",
+        "paraphrase": "Comparing a variable against itself is usually an error, either a typo or an incorrect check for NaN."
+      },
+      "why": "Comparing an identifier or member expression to itself is tautological (or always false for inequality), and indicates a typo or broken logic. Use Number.isNaN() for NaN checks.",
+      "fixHint": "Compare against the intended target variable, or use Number.isNaN(x) if testing for NaN.",
+      "avoid": "Do not compare x === x or x !== x to test for NaN; use Number.isNaN().",
+      "examples": {
+        "pass": "pass/distinct-comparison",
+        "fail": "fail/triple-equal-self"
+      }
+    },
+    {
+      "id": "JS-NEG-001",
+      "check": "javascript/safety/no-unsafe-negation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "ESLint Recommended Rules",
+        "locator": "no-unsafe-negation",
+        "paraphrase": "Negating the left operand of in or instanceof is almost always a mistake because operator precedence binds ! first."
+      },
+      "why": "In JavaScript, !key in obj parses as (!key) in obj, evaluating key to a boolean and checking if 'true' or 'false' exists on obj.",
+      "fixHint": "Wrap the expression in parentheses: !(key in obj) or !(obj instanceof Cls).",
+      "avoid": "Do not rely on implicit precedence when negating binary relational operators.",
+      "examples": {
+        "pass": "pass/parenthesized-negation",
+        "fail": "fail/negated-in"
+      }
+    }
+  ]
+}

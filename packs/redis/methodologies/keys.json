@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "redis/keys",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "REDIS-KEY-001",
+      "check": "redis/keys/no-unprefixed-key",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Redis documentation, key naming and keyspace patterns",
+        "locator": "data types and key expiry guidance",
+        "paraphrase": "Give every key a namespaced name such as domain:id so keyspace scans, evictions, and deletes stay scoped to one owner."
+      },
+      "why": "A bare global key collides with every other feature sharing the database, and a delete or expiry can take down unrelated data.",
+      "fixHint": "Name keys as <domain>:<id>, for example session:abc123. Keep the domain next to the module that owns it.",
+      "avoid": "Backticks do not add a namespace. A template literal without a colon is still a global key.",
+      "examples": {
+        "pass": "pass/namespaced-get",
+        "fail": "fail/bare-get"
+      }
+    },
+    {
+      "id": "REDIS-TTL-001",
+      "check": "redis/keys/no-set-without-ttl",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Redis documentation, SET command options",
+        "locator": "EX PX EXAT PXAT and KEEPTTL options",
+        "paraphrase": "SET without expiry persists until deletion; persistence is a valid choice for many keys, while sessions and caches may need expiry."
+      },
+      "why": "The syntax does not distinguish durable state from sessions. This matcher also treats NX/XX as if they were expiry, which they are not.",
+      "fixHint": "Pass { EX: seconds } (or PX/EXAT/PXAT) on every set, or call setEx. NX/XX alone do not bound lifetime.",
+      "avoid": "An options object with no expiry field still leaves the key immortal. The expiry must be visible in the call.",
+      "examples": {
+        "pass": "pass/with-expiry",
+        "fail": "fail/bare-set"
+      }
+    },
+    {
+      "id": "REDIS-NAMESPACE-001",
+      "check": "redis/pubsub/no-publish-without-channel-ns",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Redis documentation, Pub/Sub channels",
+        "locator": "channel naming and pattern subscriptions",
+        "paraphrase": "Channel names share one global bus, so publishers should namespace channels as domain:event to keep subscribers scoped."
+      },
+      "why": "A bare channel name collides across features, and a pattern subscriber on updates receives events from every domain that publishes there.",
+      "fixHint": "Publish to <domain>:<event>, for example orders:updates. Keep the channel next to the event type it carries.",
+      "avoid": "Backticks do not add a namespace. A template channel without a colon collides on the same global bus.",
+      "examples": {
+        "pass": "pass/orders-channel",
+        "fail": "fail/bare-channel"
+      }
+    },
+    {
+      "id": "REDIS-SCAN-001",
+      "check": "redis/keys/no-keys-command",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Redis documentation, KEYS command",
+        "locator": "warning on KEYS in production",
+        "paraphrase": "KEYS scans the whole keyspace in one blocking call. Production iteration should use SCAN cursors instead."
+      },
+      "why": "A KEYS call blocks the single-threaded server while it walks every key, stalling all other clients until it returns.",
+      "fixHint": "Iterate with scanIterator (optionally with a MATCH pattern) instead of calling keys.",
+      "avoid": "A narrow prefix does not make KEYS cheap. Scope does not change the blocking scan; use SCAN.",
+      "examples": {
+        "pass": "pass/scan-iterator",
+        "fail": "fail/star-keys"
+      }
+    },
+    {
+      "id": "REDIS-DANGER-001",
+      "check": "redis/keys/no-flush-in-app",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Redis documentation, FLUSHALL and server commands",
+        "locator": "data loss warning on flush commands",
+        "paraphrase": "FLUSHALL, FLUSHDB, CONFIG, and DEBUG reshape or wipe the server. They belong in ops tooling, never in application request paths."
+      },
+      "why": "A flush in app code wipes every key for every feature, and a config rewrite from a request handler persists past the deploy that ran it.",
+      "fixHint": "Remove the call from app code. Keep flush and config changes in runbooks, migrations, or admin tooling with review.",
+      "avoid": "Casing does not make the wipe safe. ioredis spells it flushdb and node-redis flushDb; both are covered.",
+      "examples": {
+        "pass": "pass/ping",
+        "fail": "fail/flush-all"
+      }
+    },
+    {
+      "id": "REDIS-MGET-LOOP-001",
+      "check": "redis/keys/no-get-in-loop",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Redis documentation, Redis pipelining (redis.io)",
+        "locator": "https://redis.io/docs/latest/develop/use/pipelining/",
+        "paraphrase": "Issuing individual commands sequentially in a loop pays a full TCP round-trip latency per command; batch multi-key reads with MGET or a pipeline."
+      },
+      "why": "Sequential await redis.get(k) calls inside a loop turn a 1 ms cache lookup into N serial network round-trips under load.",
+      "fixHint": "Replace the loop with a single await redis.mget(...keys) (or redis.mGet(keys) in node-redis) or queue commands on a pipeline.",
+      "avoid": "Matches await redis.get / client.get / cache.get inside for, for-in, for-of, while, and do loops. Map.prototype.get is synchronous and not awaited.",
+      "examples": {
+        "pass": "pass/mget-batch",
+        "fail": "fail/for-of-await-get"
+      }
+    }
+  ]
+}

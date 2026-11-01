@@ -1,0 +1,350 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/messaging/message-handler-without-origin",
+  "version": "1.0.0",
+  "area": "messaging",
+  "cardinality": "singleton",
+  "dimension": "security-audit.messaging.message-origin-check",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "message-handler-without-origin",
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "regex": "^(?:(?:window|globalThis)\\.)?addEventListener$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "all": [
+                        {
+                          "has": {
+                            "nthChild": 1,
+                            "regex": "^[\"'`]message[\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "nthChild": 2,
+                            "any": [
+                              {
+                                "matches": "handler-reads-data-not-origin"
+                              },
+                              {
+                                "kind": "identifier",
+                                "pattern": "$H",
+                                "inside": {
+                                  "stopBy": "end",
+                                  "any": [
+                                    {
+                                      "kind": "statement_block"
+                                    },
+                                    {
+                                      "kind": "program"
+                                    }
+                                  ],
+                                  "has": {
+                                    "any": [
+                                      {
+                                        "any": [
+                                          {
+                                            "any": [
+                                              {
+                                                "kind": "lexical_declaration"
+                                              },
+                                              {
+                                                "kind": "variable_declaration"
+                                              }
+                                            ],
+                                            "has": {
+                                              "kind": "variable_declarator",
+                                              "all": [
+                                                {
+                                                  "has": {
+                                                    "field": "name",
+                                                    "pattern": "$H"
+                                                  }
+                                                },
+                                                {
+                                                  "has": {
+                                                    "field": "value",
+                                                    "matches": "handler-reads-data-not-origin"
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "kind": "function_declaration",
+                                            "all": [
+                                              {
+                                                "has": {
+                                                  "field": "name",
+                                                  "pattern": "$H"
+                                                }
+                                              },
+                                              {
+                                                "matches": "handler-reads-data-not-origin"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "kind": "export_statement",
+                                        "has": {
+                                          "any": [
+                                            {
+                                              "any": [
+                                                {
+                                                  "kind": "lexical_declaration"
+                                                },
+                                                {
+                                                  "kind": "variable_declaration"
+                                                }
+                                              ],
+                                              "has": {
+                                                "kind": "variable_declarator",
+                                                "all": [
+                                                  {
+                                                    "has": {
+                                                      "field": "name",
+                                                      "pattern": "$H"
+                                                    }
+                                                  },
+                                                  {
+                                                    "has": {
+                                                      "field": "value",
+                                                      "matches": "handler-reads-data-not-origin"
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "kind": "function_declaration",
+                                              "all": [
+                                                {
+                                                  "has": {
+                                                    "field": "name",
+                                                    "pattern": "$H"
+                                                  }
+                                                },
+                                                {
+                                                  "matches": "handler-reads-data-not-origin"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "assignment_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "left",
+                      "regex": "^(?:window|globalThis)\\.onmessage$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "right",
+                      "matches": "handler-reads-data-not-origin"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "utils": {
+            "handler-reads-data-not-origin": {
+              "any": [
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "function_declaration"
+                }
+              ],
+              "all": [
+                {
+                  "has": {
+                    "stopBy": "end",
+                    "any": [
+                      {
+                        "kind": "member_expression",
+                        "has": {
+                          "field": "property",
+                          "regex": "^data$"
+                        }
+                      },
+                      {
+                        "kind": "shorthand_property_identifier_pattern",
+                        "regex": "^data$"
+                      },
+                      {
+                        "kind": "pair_pattern",
+                        "has": {
+                          "field": "key",
+                          "regex": "^[\"']?data[\"']?$"
+                        }
+                      },
+                      {
+                        "kind": "subscript_expression",
+                        "has": {
+                          "field": "index",
+                          "regex": "^[\"'`]data[\"'`]$"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "not": {
+                    "has": {
+                      "stopBy": "end",
+                      "any": [
+                        {
+                          "kind": "member_expression",
+                          "has": {
+                            "field": "property",
+                            "regex": "^origin$"
+                          },
+                          "not": {
+                            "has": {
+                              "field": "object",
+                              "regex": "(?:^|\\.)data$"
+                            }
+                          }
+                        },
+                        {
+                          "kind": "binary_expression",
+                          "has": {
+                            "kind": "identifier",
+                            "regex": "^(?:window|self|globalThis)$"
+                          },
+                          "regex": "[!=]=",
+                          "not": {
+                            "has": {
+                              "kind": "member_expression",
+                              "regex": "^(?:window|self|globalThis)\\??\\."
+                            }
+                          }
+                        },
+                        {
+                          "kind": "subscript_expression",
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\"'`]origin[\"'`]$"
+                          }
+                        },
+                        {
+                          "kind": "shorthand_property_identifier_pattern",
+                          "regex": "^origin$",
+                          "not": {
+                            "inside": {
+                              "stopBy": "end",
+                              "any": [
+                                {
+                                  "kind": "pair_pattern",
+                                  "has": {
+                                    "field": "key",
+                                    "regex": "^[\"']?data[\"']?$"
+                                  }
+                                },
+                                {
+                                  "kind": "variable_declarator",
+                                  "has": {
+                                    "field": "value",
+                                    "regex": "(?:^|\\.)data$"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "kind": "pair_pattern",
+                          "has": {
+                            "field": "key",
+                            "regex": "^[\"']?origin[\"']?$"
+                          },
+                          "not": {
+                            "inside": {
+                              "stopBy": "end",
+                              "any": [
+                                {
+                                  "kind": "pair_pattern",
+                                  "has": {
+                                    "field": "key",
+                                    "regex": "^[\"']?data[\"']?$"
+                                  }
+                                },
+                                {
+                                  "kind": "variable_declarator",
+                                  "has": {
+                                    "field": "value",
+                                    "regex": "(?:^|\\.)data$"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "ignores": [
+            "**/*worker.*",
+            "**/workers/**",
+            "**/worker/**",
+            "**/sw.*",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} handles window messages without reading event.origin. Compare the origin with an exact allowlist before using the data."
+  }
+}

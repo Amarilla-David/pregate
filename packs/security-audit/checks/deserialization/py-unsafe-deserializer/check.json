@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/deserialization/py-unsafe-deserializer",
+  "version": "1.0.0",
+  "area": "deserialization",
+  "cardinality": "singleton",
+  "dimension": "security-audit.deserialization.python-object-deserializer",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "unsafe-deserializer-call",
+          "rule": {
+            "kind": "call",
+            "has": {
+              "field": "function",
+              "kind": "attribute",
+              "regex": "^(?:pickle|cPickle|_pickle|dill|cloudpickle)\\.(?:loads?|Unpickler)$|^marshal\\.loads?$|^shelve\\.open$"
+            }
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/test/**",
+            "**/__tests__/**",
+            "**/test_*.py",
+            "**/*_test.py",
+            "**/conftest.py",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "**/*.spec.ts",
+            "**/*.spec.tsx",
+            "**/*.test.js",
+            "**/*.spec.js",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} deserializes with a format that can run code while loading. Confirm the bytes come only from a trusted source, or use a data-only format such as JSON."
+  }
+}

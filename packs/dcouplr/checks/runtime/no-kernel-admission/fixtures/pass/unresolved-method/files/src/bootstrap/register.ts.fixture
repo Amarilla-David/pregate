@@ -1,0 +1,1 @@
+app.dependencyAdmission['declare' + 'Intent']('DKERNEL').addFactoryMethod(factory).register();

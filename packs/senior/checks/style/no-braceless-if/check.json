@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/style/no-braceless-if",
+  "version": "1.0.0",
+  "area": "style",
+  "cardinality": "singleton",
+  "dimension": "style.braceless-if",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "braceless-if",
+          "rule": {
+            "kind": "if_statement",
+            "any": [
+              {
+                "has": {
+                  "field": "consequence",
+                  "not": {
+                    "kind": "statement_block"
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "alternative",
+                  "kind": "else_clause",
+                  "not": {
+                    "has": {
+                      "any": [
+                        {
+                          "kind": "statement_block"
+                        },
+                        {
+                          "kind": "if_statement"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} has a branch without braces. Put the branch in a block."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "consumer-saas/legal-and-product-rules/requirement-037",
+  "version": "1.0.0",
+  "area": "legal-and-product-rules",
+  "cardinality": "singleton",
+  "dimension": "consumer-saas.r037",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CONSUMER-037"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CONSUMER-037 requires current passing project verification: {symbol}."
+  }
+}

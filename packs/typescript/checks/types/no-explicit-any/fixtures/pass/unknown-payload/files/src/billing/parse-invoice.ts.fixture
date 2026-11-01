@@ -1,0 +1,4 @@
+
+export function readInvoice(raw: string): unknown {
+  return JSON.parse(raw);
+}

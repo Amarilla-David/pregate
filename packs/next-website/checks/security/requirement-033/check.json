@@ -1,0 +1,27 @@
+{
+  "id": "next-website/security/requirement-033",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "next-website.r033",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "NEXT-WEBSITE-033"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "NEXT-WEBSITE-033 requires current passing project verification: {symbol}."
+  }
+}

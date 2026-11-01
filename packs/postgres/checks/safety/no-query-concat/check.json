@@ -1,0 +1,204 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/safety/no-query-concat",
+  "version": "1.1.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "postgres.query-concat",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "query-concat",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "matches": "query-callee"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "function",
+                      "matches": "call-prefix",
+                      "has": {
+                        "matches": "query-callee",
+                        "stopBy": {
+                          "not": {
+                            "matches": "call-prefix"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "kind": "arguments",
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "sql-arg"
+                  }
+                }
+              }
+            ]
+          },
+          "utils": {
+            "query-callee": {
+              "kind": "member_expression",
+              "has": {
+                "field": "property",
+                "regex": "^query$"
+              }
+            },
+            "call-prefix": {
+              "any": [
+                {
+                  "kind": "await_expression"
+                },
+                {
+                  "kind": "unary_expression"
+                }
+              ]
+            },
+            "spliced": {
+              "any": [
+                {
+                  "kind": "binary_expression",
+                  "has": {
+                    "field": "operator",
+                    "regex": "^\\+$"
+                  }
+                },
+                {
+                  "kind": "augmented_assignment_expression",
+                  "has": {
+                    "field": "operator",
+                    "regex": "^\\+=$"
+                  }
+                },
+                {
+                  "kind": "template_string",
+                  "has": {
+                    "kind": "template_substitution"
+                  }
+                }
+              ]
+            },
+            "sql-arg": {
+              "any": [
+                {
+                  "matches": "spliced"
+                },
+                {
+                  "kind": "object",
+                  "has": {
+                    "kind": "pair",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "key",
+                          "regex": "^[\"']?text[\"']?$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "field": "value",
+                          "matches": "sql-arg"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "matches": "sql-arg"
+                  }
+                },
+                {
+                  "kind": "ternary_expression",
+                  "any": [
+                    {
+                      "has": {
+                        "field": "consequence",
+                        "matches": "sql-arg"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "alternative",
+                        "matches": "sql-arg"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "binary_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "operator",
+                        "regex": "^(\\?\\?|\\|\\||&&)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "matches": "sql-arg"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "assignment_expression",
+                  "has": {
+                    "field": "right",
+                    "matches": "sql-arg"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds SQL with string concat or interpolation. Use $1 placeholders with a params array."
+  }
+}

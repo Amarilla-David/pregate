@@ -1,0 +1,7 @@
+
+export function copy(order: Order): Order {
+  const source = order;
+  return { amount: source.amount, tax: source.tax };
+}
+
+interface Order { amount: number; tax: number }

@@ -1,0 +1,5 @@
+import { Decimal } from "@prisma/client/runtime/library";
+
+export class Money {
+  constructor(readonly amount: Decimal, readonly currency: string) {}
+}

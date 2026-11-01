@@ -1,0 +1,1 @@
+builder.register(app.dependencyAdmission.declareIntent('DKERNEL'));

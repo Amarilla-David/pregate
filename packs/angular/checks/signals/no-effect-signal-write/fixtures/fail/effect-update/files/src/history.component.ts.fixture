@@ -1,0 +1,10 @@
+declare function effect(fn: () => void): void;
+export class HistoryComponent {
+  count = () => 1;
+  history = { update: (_fn: (xs: number[]) => number[]) => {} };
+  init() {
+    effect(() => {
+      this.history.update((xs) => [...xs, this.count()]);
+    });
+  }
+}

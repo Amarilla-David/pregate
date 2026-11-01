@@ -1,0 +1,8 @@
+const documents = [{ id: "one", tenant: "alpha", owner: "alice", content: "private" }];
+function admitted(tenant, user, id) {
+  const row = documents.find((item) => item.id === id);
+  if (!row || row.tenant !== tenant || row.owner !== user) throw new Error("Denied");
+  return row;
+}
+exports.read = (tenant, user, id) => ({ ...admitted(tenant, user, id) });
+exports.write = (tenant, user, id, content) => { admitted(tenant, user, id).content = content; };

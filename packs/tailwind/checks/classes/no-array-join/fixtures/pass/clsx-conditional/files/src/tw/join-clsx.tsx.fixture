@@ -1,0 +1,4 @@
+import { clsx } from "clsx";
+export function Card({ active }: { active: boolean }) {
+  return <div className={clsx("p-4", active && "bg-blue-500")} />;
+}

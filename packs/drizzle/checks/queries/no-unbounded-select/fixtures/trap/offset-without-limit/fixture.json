@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/queries/offset-page.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "offset-without-limit",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "offset paginates within the result but does not bound it. Without limit the page still grows with the table."
+  }
+}

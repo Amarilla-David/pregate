@@ -1,0 +1,4 @@
+function check() { return true; }
+const alias = check;
+stage.addValidationPolicy(alias);
+stage.addVerificationPolicy(alias);

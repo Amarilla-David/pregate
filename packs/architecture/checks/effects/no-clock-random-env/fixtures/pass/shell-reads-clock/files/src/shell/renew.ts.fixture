@@ -1,0 +1,5 @@
+import { isExpired, type Membership } from "../core/membership";
+
+export function needsRenewal(membership: Membership): boolean {
+  return isExpired(membership, Date.now()) || process.env.FORCE_RENEWAL === "1";
+}

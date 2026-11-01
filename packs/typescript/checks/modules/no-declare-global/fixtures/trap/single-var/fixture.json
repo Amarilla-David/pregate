@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/legacy/globals-var.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "single-var-global",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A single var inside declare global is still a global augmentation; declare module is the ambient shape that must keep passing."
+  }
+}

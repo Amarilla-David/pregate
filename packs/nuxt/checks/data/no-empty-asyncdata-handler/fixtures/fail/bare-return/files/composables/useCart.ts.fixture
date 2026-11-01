@@ -1,0 +1,8 @@
+export function useCart(cartId: Ref<string | null>) {
+  const cart = ref<string[]>([]);
+  useAsyncData(`cart-${cartId.value}`, async () => {
+    if (!cartId.value) return;
+    cart.value = await $fetch<string[]>(`/api/cart/${cartId.value}`);
+  });
+  return { cart };
+}

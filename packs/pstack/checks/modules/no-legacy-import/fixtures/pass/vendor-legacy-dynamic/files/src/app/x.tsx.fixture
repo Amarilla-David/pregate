@@ -1,0 +1,4 @@
+export async function L() {
+  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  return pdfjs;
+}

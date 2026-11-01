@@ -1,0 +1,6 @@
+import { ObjectId } from "mongodb";
+export async function get(req: Req): Promise<void> {
+  const oid = new ObjectId(req.query["id"]);
+}
+
+interface Req { query: { id: string } }

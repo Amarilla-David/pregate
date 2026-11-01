@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/orders/+page.server.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-leak",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Interpolating err.message into a template still hands the raw internal message to the client. Log it server-side and throw a static message."
+  }
+}

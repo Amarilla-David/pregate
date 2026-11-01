@@ -1,0 +1,4 @@
+import jwt from "jsonwebtoken";
+export function readSession(token: string, key: string) {
+  return jwt.verify(token, key, { algorithms: ["HS256"], audience: "api", issuer: "auth" });
+}

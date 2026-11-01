@@ -1,0 +1,4 @@
+export function List({ rows }: { rows: string[] }) {
+  const renderRow = (row: string) => <span key={row}>{row}</span>;
+  return <div>{rows.map(renderRow)}</div>;
+}

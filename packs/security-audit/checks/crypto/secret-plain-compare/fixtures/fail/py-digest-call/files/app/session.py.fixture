@@ -1,0 +1,7 @@
+from app.signing import hmac
+
+
+def check(session, user, channel, token):
+    if session.get("hash") != hmac(user.password):
+        return False
+    return channel.make_token() == token

@@ -1,0 +1,9 @@
+declare function doStepAsync(): Promise<void>;
+
+export async function executeAsync(): Promise<void> {
+  try {
+    await doStepAsync();
+  } catch (e) {
+    throw e;
+  }
+}

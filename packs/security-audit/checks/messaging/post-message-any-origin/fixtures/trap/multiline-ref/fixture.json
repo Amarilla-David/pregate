@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/host.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "split-arguments",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "Optional chaining through a ref and a template-literal wildcard on its own line still send to any origin."
+  }
+}

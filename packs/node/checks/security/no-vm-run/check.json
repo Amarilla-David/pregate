@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/security/no-vm-run",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "node.no-vm-run",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "vm-run",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^vm\\.(runInNewContext|runInThisContext|runInContext|compileFunction)$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} evaluates code in a vm context. Avoid dynamic code evaluation."
+  }
+}

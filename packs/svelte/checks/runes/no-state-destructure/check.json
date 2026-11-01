@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/runes/no-state-destructure",
+  "version": "1.0.0",
+  "area": "runes",
+  "cardinality": "singleton",
+  "dimension": "svelte.state-destructure",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "state-destructure",
+          "rule": {
+            "kind": "variable_declarator",
+            "all": [
+              {
+                "has": {
+                  "field": "name",
+                  "kind": "object_pattern"
+                }
+              },
+              {
+                "has": {
+                  "field": "value",
+                  "regex": "^\\$state(\\.raw)?\\s*\\("
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} destructures $state. Keep the state object whole and read its properties."
+  }
+}

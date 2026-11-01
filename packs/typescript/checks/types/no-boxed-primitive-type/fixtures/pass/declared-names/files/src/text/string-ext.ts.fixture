@@ -1,0 +1,12 @@
+import type * as Wire from "./wire";
+import { Schema } from "effect";
+
+declare global {
+  interface String {
+    toSlug(): string;
+  }
+}
+
+export type Payload = Wire.Object;
+export const Name = Schema.String;
+export type NameCodec = typeof Schema.String;

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "max": 2 },
+  "target": "src/billing/arrow.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-in-arrow",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Wrapping deep nesting inside an arrow function still violates control depth."
+  }
+}

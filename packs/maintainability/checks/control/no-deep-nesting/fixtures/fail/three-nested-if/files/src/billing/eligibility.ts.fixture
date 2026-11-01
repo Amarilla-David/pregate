@@ -1,0 +1,10 @@
+export function verifyEligibility(age: number, country: string, consent: boolean): boolean {
+  if (age >= 18) {
+    if (country === "US") {
+      if (consent) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

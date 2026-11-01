@@ -1,0 +1,9 @@
+declare function effect(fn: () => void): void;
+export class CounterComponent {
+  count = () => 1;
+  init() {
+    effect(() => {
+      console.info(this.count());
+    });
+  }
+}

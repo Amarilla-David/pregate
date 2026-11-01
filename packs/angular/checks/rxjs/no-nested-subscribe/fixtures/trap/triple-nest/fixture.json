@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shop/triple-nest.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      },
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-callback",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Three levels of subscribe still match once per inner callback. Each nested subscribe is its own violation."
+  }
+}

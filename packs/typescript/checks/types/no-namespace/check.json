@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/no-namespace",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.namespace",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "namespace-decl",
+          "rule": {
+            "kind": "internal_module",
+            "regex": "^\\s*namespace\\b"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} declares a namespace. Use a module."
+  }
+}

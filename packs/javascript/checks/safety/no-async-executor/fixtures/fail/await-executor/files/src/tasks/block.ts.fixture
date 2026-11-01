@@ -1,0 +1,5 @@
+const p = new Promise(async (res) => {
+  res(1);
+});
+
+export const ready = p;

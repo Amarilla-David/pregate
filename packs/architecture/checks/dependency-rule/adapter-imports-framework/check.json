@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/dependency-rule/adapter-imports-framework",
+  "version": "1.0.0",
+  "area": "dependency-rule",
+  "cardinality": "singleton",
+  "dimension": "dependency-rule.adapter-outer",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "import-edge",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "(^|/)(frameworks|frameworks-and-drivers)(/|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "**/interface-adapters/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports the frameworks and drivers ring from an interface adapter. Dependencies point inward only."
+  }
+}

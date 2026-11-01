@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/composables/useCart.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "generic-without-key",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Type arguments do not key the state. useState<Array<string>>() still shares one slot across instances; only a string key separates them."
+  }
+}

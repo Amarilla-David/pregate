@@ -1,0 +1,4 @@
+exports.shutdown = async logger => {
+  await logger.flush?.();
+  return { closed: true };
+};

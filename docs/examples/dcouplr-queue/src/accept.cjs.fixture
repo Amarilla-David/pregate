@@ -1,0 +1,5 @@
+exports.accept = async (queue, item) => {
+  const accepted = await queue.enqueue(item);
+  if (!accepted) throw new Error('Queue did not admit work');
+  return { accepted: true, item };
+};

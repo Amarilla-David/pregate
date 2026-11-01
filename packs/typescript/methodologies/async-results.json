@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "typescript/async-results",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "TS-FLOAT-001",
+      "check": "typescript/async/no-floating-promise",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript ESLint, no-floating-promises",
+        "locator": "floating promises",
+        "paraphrase": "A promise that is not awaited, returned, or explicitly ignored can reject with nobody handling it."
+      },
+      "why": "A floating promise rejects into an unhandled rejection. The caller continues as if the work had been scheduled with a result.",
+      "fixHint": "Await the call, return the promise, or prefix it with void when the fire-and-forget is intentional.",
+      "avoid": "Adding .catch that ignores the error still leaves the promise floating. void is the explicit discard. fetch without an Async name is a timeout rule in the vibe-proof pack, not this one.",
+      "examples": {
+        "pass": "pass/awaited",
+        "fail": "fail/bare-call"
+      }
+    },
+    {
+      "id": "TS-THROW-001",
+      "relations": [
+        {
+          "with": "trpc/TRPC-ERR-001",
+          "kind": "contradicts",
+          "why": "TRPC-ERR-001 tells procedures to throw a TRPCError, and TS-THROW-001 denies every throw inside an exported function; routers are exported, so following one fix violates the other.",
+          "settle": "Exclude router files from TS-THROW-001 (for example **/routers/** or **/server/api/**): tRPC turns a thrown TRPCError into the typed failure the client branches on."
+        },
+        {
+          "with": "sveltekit/SK-FORM-001",
+          "kind": "contradicts",
+          "why": "SK-FORM-001 tells form actions to throw error() for unexpected failures, and TS-THROW-001 denies that throw inside the exported actions object.",
+          "settle": "On SvelteKit 2 call error(...) without the throw keyword: it throws itself and no throw statement remains. On SvelteKit 1, exclude **/+page.server.ts and **/+server.ts from TS-THROW-001."
+        },
+        {
+          "with": "sveltekit/SK-ERROR-001",
+          "kind": "contradicts",
+          "why": "SK-ERROR-001 tells load functions to throw error(500, ...) with a static message, and TS-THROW-001 denies that throw inside the exported load.",
+          "settle": "On SvelteKit 2 call error(...) without the throw keyword: it throws itself and no throw statement remains. On SvelteKit 1, exclude the **/+page.server.ts, **/+layout.server.ts and **/+server.ts route files from TS-THROW-001."
+        },
+        {
+          "with": "nestjs/NEST-CODE-001",
+          "kind": "contradicts",
+          "why": "NEST-CODE-001 directs error responses to a thrown HttpException, and TS-THROW-001 denies throws inside methods of an exported controller class.",
+          "settle": "Exclude **/*.controller.ts from TS-THROW-001: Nest maps a thrown HttpException to the response. Keep TS-THROW-001 on services and domain code."
+        }
+      ],
+      "check": "typescript/errors/no-throw-in-export",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Functional error handling, typed results",
+        "locator": "return a result instead of throwing across a boundary",
+        "paraphrase": "Expected failures are values. Reserve throw for defects. An exported function lists its failures in its return type."
+      },
+      "why": "A throw on the exported boundary forces every caller into try/catch and loses the typed failure the caller could have handled.",
+      "fixHint": "Return a result object such as { ok: true, value } or { ok: false, error } and let the caller branch.",
+      "avoid": "Throwing from an exported arrow is the same boundary. A private function that is not inside the export may throw; the export should translate that into a result.",
+      "examples": {
+        "pass": "pass/returns-result",
+        "fail": "fail/exported-throw"
+      }
+    }
+  ]
+}

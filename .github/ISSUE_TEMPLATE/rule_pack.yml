@@ -1,0 +1,35 @@
+name: New Check or Methodology Proposal
+description: Propose a new static check, architectural rule, or language methodology pack
+title: "[rule-proposal]: "
+labels: ["enhancement", "rules"]
+body:
+  - type: input
+    id: check_id
+    attributes:
+      label: Proposed Check / Methodology Name
+      placeholder: "errors/no-unhandled-promise"
+    validations:
+      required: true
+  - type: checkboxes
+    id: languages
+    attributes:
+      label: Target Languages
+      options:
+        - label: TypeScript / JavaScript / Vue / Svelte
+        - label: Python
+        - label: Go
+        - label: Rust
+  - type: textarea
+    id: problem
+    attributes:
+      label: What AI agent failure mode or architectural smell does this prevent?
+      description: Describe the defect pattern and why catching it pre-execution matters.
+    validations:
+      required: true
+  - type: textarea
+    id: examples
+    attributes:
+      label: Pass & Fail Examples
+      description: Provide concrete code examples that should fail and pass the proposed check.
+    validations:
+      required: true

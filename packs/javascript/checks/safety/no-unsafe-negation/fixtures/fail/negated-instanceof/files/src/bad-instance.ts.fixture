@@ -1,0 +1,3 @@
+export function notError(err: unknown): boolean {
+  return !err instanceof Error;
+}

@@ -1,0 +1,17 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/webhooks/verify.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      },
+      {
+        "line": 6
+      }
+    ]
+  }
+}

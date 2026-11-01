@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/layered",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "LAYER-CLOSE-001",
+      "check": "architecture/layers/no-presentation-to-persistence",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Pattern-Oriented Software Architecture Vol 1 (Buschmann et al., 1996); Microsoft Application Architecture Guide (2009)",
+        "locator": "Layered Architecture (Closed Layers)",
+        "paraphrase": "In strict (closed) layers, a layer may only call the layer immediately below it; presentation calls business/application logic, never persistence or the database directly."
+      },
+      "why": "Presentation code that directly imports persistence bypasses domain invariants and couples the UI/API to the database schema.",
+      "fixHint": "Call the service or use-case in the application/business layer instead of importing the repository directly.",
+      "avoid": "Using dynamic import(), type-only re-exports or path aliases to reach the persistence folder directly from a controller.",
+      "examples": {
+        "pass": "pass/controller-calls-service",
+        "fail": "fail/controller-imports-repository"
+      }
+    },
+    {
+      "id": "LAYER-TX-001",
+      "check": "architecture/layers/no-transaction-in-presentation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Patterns of Enterprise Application Architecture (M. Fowler, 2002)",
+        "locator": "Unit of Work / Transaction Script in Service Layer",
+        "paraphrase": "Transaction boundaries belong to business operations in the application or domain service layer, not to HTTP controllers or UI presentation."
+      },
+      "why": "Opening or committing database transactions in presentation code leaks infrastructure lifecycle into the UI layer.",
+      "fixHint": "Demarcate transaction boundaries in the service or use-case layer.",
+      "avoid": "Calling $transaction, beginTransaction, commit, or rollback directly within controllers or routes.",
+      "examples": {
+        "pass": "pass/controller-delegates-to-service",
+        "fail": "fail/controller-starts-transaction"
+      }
+    }
+  ]
+}

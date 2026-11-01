@@ -1,0 +1,1 @@
+export function quote(order: Order, gateway: Gateway) { return gateway.quote(order); }

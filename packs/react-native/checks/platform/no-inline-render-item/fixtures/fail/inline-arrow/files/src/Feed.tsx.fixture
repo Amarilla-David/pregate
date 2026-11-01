@@ -1,0 +1,4 @@
+import { FlatList, Text } from "react-native";
+export function Feed({ items }: { items: { id: string; title: string }[] }) {
+  return <FlatList data={items} keyExtractor={(i) => i.id} renderItem={({ item }) => <Text>{item.title}</Text>} />;
+}

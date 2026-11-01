@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "redis/keys/no-keys-command",
+  "version": "1.0.0",
+  "area": "keys",
+  "cardinality": "singleton",
+  "dimension": "redis.scan-instead-of-keys",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "keys-call",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.keys\\s*\\("
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls KEYS, which blocks the server. Iterate with SCAN instead."
+  }
+}

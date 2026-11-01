@@ -1,0 +1,27 @@
+{
+  "id": "maintainability/engineering/se-36",
+  "version": "1.0.0",
+  "area": "engineering",
+  "cardinality": "singleton",
+  "dimension": "maintainability.se-36",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "SE-36"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "SE-36 requires current passing project verification: {symbol}."
+  }
+}

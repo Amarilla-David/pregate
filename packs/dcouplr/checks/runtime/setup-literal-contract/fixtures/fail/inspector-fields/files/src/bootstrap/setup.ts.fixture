@@ -1,0 +1,1 @@
+startDcouplrInspector(app, {captureOnStart: 'false', port: '4777', instanceId: false});

@@ -1,0 +1,14 @@
+import type { Cache } from "./cache";
+
+export function evict(cache: Cache, key: string): void {
+  try {
+    cache.delete(key);
+  } catch (error) {
+    {
+    }
+  }
+}
+
+export function evictLater(cache: Cache, key: string): Promise<void> {
+  return cache.deleteAsync(key).catch(() => undefined);
+}

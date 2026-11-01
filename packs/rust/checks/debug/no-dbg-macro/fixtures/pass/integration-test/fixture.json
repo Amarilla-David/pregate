@@ -1,0 +1,9 @@
+{
+  "language": "rust",
+  "params": {},
+  "target": "tests/orders.rs",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "trpc/client",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "TRPC-BATCH-001",
+      "check": "trpc/router/no-http-batch-abuse",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "tRPC documentation, httpBatchLink",
+        "locator": "batch link URL length",
+        "paraphrase": "maxURLLength is a configurable safeguard for URL limits, not a required option on every httpBatchLink."
+      },
+      "why": "Whether a batch can exceed the deployed server's URL limits depends on its inputs and transport configuration.",
+      "fixHint": "Pass maxURLLength (for example 2083) to httpBatchLink so oversized batches split before they hit the URL limit.",
+      "avoid": "A transformer or custom headers do not bound URL length. The non-batched httpLink is out of scope for this rule.",
+      "examples": {
+        "pass": "pass/batch-with-length",
+        "fail": "fail/batch-no-length"
+      }
+    },
+    {
+      "id": "TRPC-ERR-001",
+      "relations": [
+        {
+          "with": "typescript/TS-THROW-001",
+          "kind": "contradicts",
+          "why": "TRPC-ERR-001 tells procedures to throw a TRPCError, and TS-THROW-001 denies every throw inside an exported function; routers are exported, so following one fix violates the other.",
+          "settle": "Exclude router files from TS-THROW-001 (for example **/routers/** or **/server/api/**): tRPC turns a thrown TRPCError into the typed failure the client branches on."
+        }
+      ],
+      "check": "trpc/server/no-throw-in-procedure",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "tRPC documentation, error handling with TRPCError",
+        "locator": "throwing typed errors",
+        "paraphrase": "Procedures throw TRPCError with a code, never a plain Error, so the client receives a typed failure it can match on."
+      },
+      "why": "A plain Error crosses the boundary as an untyped internal failure. The client cannot tell NOT_FOUND from a bug.",
+      "fixHint": "Throw new TRPCError({ code: 'NOT_FOUND' }) (or the code the caller should handle) instead of new Error.",
+      "avoid": "This rule sees throw statements in router files only. AggregateError and other built-ins are still untyped throws.",
+      "examples": {
+        "pass": "pass/trpc-error",
+        "fail": "fail/plain-error"
+      }
+    },
+    {
+      "id": "TRPC-CTX-001",
+      "check": "trpc/middleware/no-next-without-ctx",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "tRPC documentation, middleware and context",
+        "locator": "calling next with narrowed context",
+        "paraphrase": "Middleware may call next() to forward the existing context, or next({ ctx }) to extend or narrow it."
+      },
+      "why": "A bare next() is correct for middleware that only observes or authorizes against the existing context.",
+      "fixHint": "Return next({ ctx: { ...ctx, user: ctx.user } }) so the narrowed context reaches the procedure.",
+      "avoid": "The rule matches a .use chain whose middleware calls bare next(). Middleware that only observes and changes nothing still needs to forward ctx explicitly.",
+      "examples": {
+        "pass": "pass/next-with-ctx",
+        "fail": "fail/bare-next"
+      }
+    },
+    {
+      "id": "TRPC-CALLER-001",
+      "check": "trpc/router/no-unvalidated-subscription",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "tRPC documentation, subscriptions",
+        "locator": "subscription return contract",
+        "paraphrase": "A subscription resolves to an observable or an async generator, so the subscribing caller gets a stream it can iterate and unsubscribe from."
+      },
+      "why": "A subscription returning a static value or a bare emitter gives the caller no stream contract: no iteration, no cleanup, no backpressure.",
+      "fixHint": "Wrap the event source in observable() from @trpc/server/observable, or make the resolver an async generator that yields values.",
+      "avoid": "Returning emitter.on(...) directly still fails: the caller needs the observable wrapper. Queries and mutations are out of scope for this rule.",
+      "examples": {
+        "pass": "pass/observable-subscription",
+        "fail": "fail/static-subscription"
+      }
+    },
+    {
+      "id": "TRPC-DEV-001",
+      "check": "trpc/server/no-forced-dev-mode",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "tRPC documentation, routers, runtime configuration",
+        "locator": "https://trpc.io/docs/server/routers#runtime-configuration",
+        "paraphrase": "isDev decides whether the API returns stack traces; it defaults to process.env.NODE_ENV !== 'production'."
+      },
+      "why": "isDev: true sends server stack traces to every client in production too, exposing file paths and internals.",
+      "fixHint": "Remove isDev so tRPC uses the NODE_ENV default, or derive it from an environment check.",
+      "avoid": "A quoted key, a context or meta chain before .create, and other options next to it do not change the setting. Test files are not checked. A value read from a variable is not seen.",
+      "examples": {
+        "pass": "pass/default-dev",
+        "fail": "fail/literal-true"
+      }
+    }
+  ]
+}

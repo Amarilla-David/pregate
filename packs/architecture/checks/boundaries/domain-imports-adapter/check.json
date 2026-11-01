@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/boundaries/domain-imports-adapter",
+  "version": "1.0.0",
+  "area": "boundaries",
+  "cardinality": "singleton",
+  "dimension": "boundaries.domain-adapter",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "import-edge",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "(^|/)(adapters|infra|frameworks)(/|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "**/domain/**",
+            "**/application/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} names an adapter, infra, or framework module from domain or application code."
+  }
+}

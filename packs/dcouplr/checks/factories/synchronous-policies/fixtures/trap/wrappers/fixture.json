@@ -1,0 +1,30 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/policy.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 2
+      },
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "policy-contract-wrappers",
+    "origin": "forge",
+    "discovered": "2026-10-04",
+    "note": "Comments and transparent wrappers must not hide a broken inline policy contract."
+  }
+}

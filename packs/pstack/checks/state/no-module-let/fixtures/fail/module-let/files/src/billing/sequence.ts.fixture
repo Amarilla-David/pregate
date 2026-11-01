@@ -1,0 +1,7 @@
+
+let nextNumber = 1000;
+
+export function issue(): number {
+  nextNumber += 1;
+  return nextNumber;
+}

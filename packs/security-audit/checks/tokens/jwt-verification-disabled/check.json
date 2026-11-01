@@ -1,0 +1,138 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/tokens/jwt-verification-disabled",
+  "version": "1.0.0",
+  "area": "tokens",
+  "cardinality": "singleton",
+  "dimension": "security-audit.tokens.jwt-verification",
+  "minSeverity": null,
+  "languages": [
+    "typescript",
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "jwt-verification-disabled",
+          "rule": {
+            "kind": "pair",
+            "any": [
+              {
+                "regex": "^[\"']?ignoreExpiration[\"']?\\s*:\\s*true$"
+              },
+              {
+                "all": [
+                  {
+                    "has": {
+                      "field": "key",
+                      "regex": "^[\"']?algorithms[\"']?$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "value",
+                      "kind": "array",
+                      "has": {
+                        "regex": "(?i)^[\"'`]none[\"'`]$"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "python": [
+        {
+          "id": "jwt-verification-disabled",
+          "rule": {
+            "any": [
+              {
+                "kind": "pair",
+                "all": [
+                  {
+                    "has": {
+                      "field": "key",
+                      "regex": "^[\"']verify_(?:signature|exp)[\"']$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "value",
+                      "kind": "false"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "keyword_argument",
+                "all": [
+                  {
+                    "has": {
+                      "field": "name",
+                      "regex": "^algorithms$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "value",
+                      "has": {
+                        "regex": "(?i)^[\"']none[\"']$"
+                      },
+                      "any": [
+                        {
+                          "kind": "list"
+                        },
+                        {
+                          "kind": "tuple"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "keyword_argument",
+                "all": [
+                  {
+                    "has": {
+                      "field": "name",
+                      "regex": "^verify_(?:signature|exp)$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "value",
+                      "kind": "false"
+                    }
+                  }
+                ],
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "call",
+                  "has": {
+                    "field": "function",
+                    "regex": "(?:^|\\.)dict$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} switches off part of JWT verification. Verify the signature and expiry with an algorithm pinned on the server."
+  }
+}

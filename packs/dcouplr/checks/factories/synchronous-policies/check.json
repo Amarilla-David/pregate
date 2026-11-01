@@ -1,0 +1,785 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/factories/synchronous-policies",
+  "version": "1.2.0",
+  "area": "factories",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.synchronous-policy",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "direct-policy-contract",
+          "utils": {
+            "policy-member": {
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^(addValidationPolicy|addVerificationPolicy)$"
+                  }
+                },
+                {
+                  "kind": "subscript_expression",
+                  "has": {
+                    "field": "index",
+                    "regex": "^[\"'`](addValidationPolicy|addVerificationPolicy)[\"'`]$"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "policy-member"
+                  }
+                }
+              ]
+            },
+            "invalid-policy": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "generator_function"
+                    },
+                    {
+                      "kind": "function_declaration"
+                    },
+                    {
+                      "kind": "generator_function_declaration"
+                    }
+                  ],
+                  "regex": "^async\\b"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "generator_function"
+                    },
+                    {
+                      "kind": "generator_function_declaration"
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-policy"
+                  }
+                }
+              ]
+            },
+            "ownership-scope": {
+              "any": [
+                {
+                  "kind": "program"
+                },
+                {
+                  "kind": "statement_block"
+                },
+                {
+                  "kind": "switch_body"
+                },
+                {
+                  "kind": "for_statement"
+                },
+                {
+                  "kind": "for_in_statement"
+                },
+                {
+                  "kind": "catch_clause"
+                },
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "kind": "generator_function_declaration"
+                },
+                {
+                  "kind": "method_definition"
+                },
+                {
+                  "kind": "with_statement"
+                }
+              ]
+            },
+            "named-first-argument": {
+              "all": [
+                {
+                  "kind": "identifier",
+                  "pattern": "$CREATOR"
+                },
+                {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  }
+                },
+                {
+                  "inside": {
+                    "any": [
+                      {
+                        "matches": "factory-arguments"
+                      },
+                      {
+                        "matches": "factory-wrapper"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "named-creator": {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "generator_function"
+                    }
+                  ]
+                },
+                {
+                  "inside": {
+                    "field": "value",
+                    "stopBy": {
+                      "not": {
+                        "any": [
+                          {
+                            "kind": "parenthesized_expression"
+                          },
+                          {
+                            "kind": "as_expression"
+                          },
+                          {
+                            "kind": "satisfies_expression"
+                          },
+                          {
+                            "kind": "non_null_expression"
+                          }
+                        ]
+                      }
+                    },
+                    "kind": "variable_declarator",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "name",
+                          "kind": "identifier",
+                          "pattern": "$CREATOR"
+                        }
+                      },
+                      {
+                        "any": [
+                          {
+                            "precedes": {
+                              "stopBy": "end",
+                              "has": {
+                                "stopBy": {
+                                  "matches": "ownership-scope"
+                                },
+                                "matches": "policy-reference"
+                              }
+                            }
+                          },
+                          {
+                            "inside": {
+                              "kind": "lexical_declaration",
+                              "has": {
+                                "regex": "^const$"
+                              },
+                              "precedes": {
+                                "stopBy": "end",
+                                "has": {
+                                  "stopBy": {
+                                    "matches": "ownership-scope"
+                                  },
+                                  "matches": "policy-reference"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "inside": {
+                              "kind": "lexical_declaration",
+                              "has": {
+                                "regex": "^const$"
+                              },
+                              "inside": {
+                                "field": "declaration",
+                                "kind": "export_statement",
+                                "precedes": {
+                                  "stopBy": "end",
+                                  "has": {
+                                    "stopBy": {
+                                      "matches": "ownership-scope"
+                                    },
+                                    "matches": "policy-reference"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "inside": {
+                      "kind": "lexical_declaration",
+                      "has": {
+                        "regex": "^const$"
+                      }
+                    }
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": {
+                      "matches": "ownership-scope"
+                    },
+                    "matches": "ownership-scope",
+                    "has": {
+                      "stopBy": {
+                        "matches": "ownership-scope"
+                      },
+                      "matches": "policy-reference"
+                    }
+                  }
+                }
+              ]
+            },
+            "declared-creator": {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "kind": "function_declaration"
+                    },
+                    {
+                      "kind": "generator_function_declaration"
+                    }
+                  ]
+                },
+                {
+                  "has": {
+                    "field": "name",
+                    "kind": "identifier",
+                    "pattern": "$CREATOR"
+                  }
+                },
+                {
+                  "not": {
+                    "any": [
+                      {
+                        "precedes": {
+                          "stopBy": "end",
+                          "any": [
+                            {
+                              "matches": "creator-declaration"
+                            },
+                            {
+                              "has": {
+                                "stopBy": {
+                                  "matches": "ownership-scope"
+                                },
+                                "matches": "creator-declaration"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "follows": {
+                          "stopBy": "end",
+                          "any": [
+                            {
+                              "matches": "creator-declaration"
+                            },
+                            {
+                              "has": {
+                                "stopBy": {
+                                  "matches": "ownership-scope"
+                                },
+                                "matches": "creator-declaration"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "inside": {
+                          "kind": "export_statement",
+                          "any": [
+                            {
+                              "precedes": {
+                                "stopBy": "end",
+                                "any": [
+                                  {
+                                    "matches": "creator-declaration"
+                                  },
+                                  {
+                                    "has": {
+                                      "stopBy": {
+                                        "matches": "ownership-scope"
+                                      },
+                                      "matches": "creator-declaration"
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "follows": {
+                                "stopBy": "end",
+                                "any": [
+                                  {
+                                    "matches": "creator-declaration"
+                                  },
+                                  {
+                                    "has": {
+                                      "stopBy": {
+                                        "matches": "ownership-scope"
+                                      },
+                                      "matches": "creator-declaration"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": {
+                      "matches": "ownership-scope"
+                    },
+                    "matches": "ownership-scope",
+                    "all": [
+                      {
+                        "has": {
+                          "stopBy": {
+                            "matches": "ownership-scope"
+                          },
+                          "matches": "policy-reference"
+                        }
+                      },
+                      {
+                        "not": {
+                          "has": {
+                            "stopBy": "end",
+                            "matches": "creator-rebinding"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "creator-declaration": {
+              "has": {
+                "field": "name",
+                "pattern": "$CREATOR"
+              },
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "generator_function_declaration"
+                }
+              ]
+            },
+            "creator-rebinding": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "assignment_expression"
+                    },
+                    {
+                      "kind": "augmented_assignment_expression"
+                    },
+                    {
+                      "kind": "for_in_statement"
+                    }
+                  ],
+                  "has": {
+                    "field": "left",
+                    "matches": "creator-target"
+                  }
+                },
+                {
+                  "kind": "update_expression",
+                  "has": {
+                    "field": "argument",
+                    "matches": "creator-target"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "matches": "creator-target"
+                  }
+                }
+              ]
+            },
+            "creator-target": {
+              "any": [
+                {
+                  "pattern": "$CREATOR"
+                },
+                {
+                  "has": {
+                    "stopBy": "end",
+                    "pattern": "$CREATOR"
+                  }
+                }
+              ]
+            },
+            "factory-arguments": {
+              "kind": "arguments",
+              "inside": {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "creator-member"
+                }
+              }
+            },
+            "factory-wrapper": {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ]
+                },
+                {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  }
+                },
+                {
+                  "inside": {
+                    "any": [
+                      {
+                        "matches": "factory-arguments"
+                      },
+                      {
+                        "matches": "factory-wrapper"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "creator-member": {
+              "matches": "policy-member"
+            },
+            "alias-first-argument": {
+              "all": [
+                {
+                  "kind": "identifier",
+                  "pattern": "$ALIAS"
+                },
+                {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  }
+                },
+                {
+                  "inside": {
+                    "any": [
+                      {
+                        "matches": "factory-arguments"
+                      },
+                      {
+                        "matches": "factory-wrapper"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "alias-source-reference": {
+              "all": [
+                {
+                  "kind": "identifier",
+                  "pattern": "$CREATOR"
+                },
+                {
+                  "inside": {
+                    "field": "value",
+                    "stopBy": {
+                      "not": {
+                        "any": [
+                          {
+                            "kind": "parenthesized_expression"
+                          },
+                          {
+                            "kind": "as_expression"
+                          },
+                          {
+                            "kind": "satisfies_expression"
+                          },
+                          {
+                            "kind": "non_null_expression"
+                          }
+                        ]
+                      }
+                    },
+                    "kind": "variable_declarator",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "name",
+                          "kind": "identifier",
+                          "pattern": "$ALIAS"
+                        }
+                      },
+                      {
+                        "any": [
+                          {
+                            "precedes": {
+                              "stopBy": "end",
+                              "has": {
+                                "stopBy": {
+                                  "matches": "ownership-scope"
+                                },
+                                "matches": "alias-first-argument"
+                              }
+                            }
+                          },
+                          {
+                            "inside": {
+                              "kind": "lexical_declaration",
+                              "has": {
+                                "regex": "^const$"
+                              },
+                              "precedes": {
+                                "stopBy": "end",
+                                "has": {
+                                  "stopBy": {
+                                    "matches": "ownership-scope"
+                                  },
+                                  "matches": "alias-first-argument"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "inside": {
+                              "kind": "lexical_declaration",
+                              "has": {
+                                "regex": "^const$"
+                              },
+                              "inside": {
+                                "field": "declaration",
+                                "kind": "export_statement",
+                                "precedes": {
+                                  "stopBy": "end",
+                                  "has": {
+                                    "stopBy": {
+                                      "matches": "ownership-scope"
+                                    },
+                                    "matches": "alias-first-argument"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "inside": {
+                      "kind": "lexical_declaration",
+                      "has": {
+                        "regex": "^const$"
+                      }
+                    }
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": {
+                      "matches": "ownership-scope"
+                    },
+                    "matches": "ownership-scope",
+                    "has": {
+                      "stopBy": {
+                        "matches": "ownership-scope"
+                      },
+                      "matches": "alias-first-argument"
+                    }
+                  }
+                }
+              ]
+            },
+            "policy-reference": {
+              "any": [
+                {
+                  "matches": "named-first-argument"
+                },
+                {
+                  "matches": "alias-source-reference"
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "matches": "policy-member"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "kind": "arguments",
+                      "has": {
+                        "nthChild": {
+                          "position": 1,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "matches": "invalid-policy"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "matches": "invalid-policy"
+                  },
+                  {
+                    "any": [
+                      {
+                        "matches": "named-creator"
+                      },
+                      {
+                        "matches": "declared-creator"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Validation and verification must complete synchronously before factory creation returns; async and generator callbacks do not enforce that contract."
+  }
+}

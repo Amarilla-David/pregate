@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/rpc/no-untyped-rpc",
+  "version": "1.0.0",
+  "area": "rpc",
+  "cardinality": "singleton",
+  "dimension": "supabase.untyped-rpc",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "untyped-rpc",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.rpc\\s*\\(\\s*[\"'`][^\"'`]+[\"'`]\\s*\\)"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls rpc with only a function name and no arguments object. Pass the typed params object so the call carries its inputs."
+  }
+}

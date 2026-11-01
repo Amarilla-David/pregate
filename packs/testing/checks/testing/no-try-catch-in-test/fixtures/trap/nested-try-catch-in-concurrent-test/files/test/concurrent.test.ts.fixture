@@ -1,0 +1,11 @@
+import { expect, test } from "bun:test";
+
+test.concurrent("validates payload", () => {
+  if (true) {
+    try {
+      validatePayload(null);
+    } catch (e) {
+      expect(e).toBeTruthy();
+    }
+  }
+});

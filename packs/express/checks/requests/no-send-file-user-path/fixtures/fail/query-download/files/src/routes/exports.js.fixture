@@ -1,0 +1,7 @@
+import { Router } from "express";
+
+export const exportsRouter = Router();
+
+exportsRouter.get("/export", (req, res) => {
+  res.download(req.query.path, { maxAge: 0 });
+});

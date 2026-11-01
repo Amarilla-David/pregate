@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "upstreamVersion": "0.1.3-beta",
+  "requirements": [
+    {
+      "id": "DCP-UTILITY-RUNTIME-001",
+      "statement": "A domain boundary must validate the complete admitted value and its bounds. TypeCompatibilityCheck and DCast must not be treated as strict type, complete collection or domain validation.",
+      "when": "The product uses compatibility or conversion helpers to admit external or stored values.",
+      "verify": "Test actual strict types, every collection item, numeric precision and domain constraints. Own input depth and size budgets; recursive compatibility on a cyclic object can overflow the stack. Compatibility admits numeric strings, inspects only the first array element, and can match an object's keys without validating field values. Boolean conversion of the strings false and no returns true. Reject unsafe values before the domain decision.",
+      "apiReferences": [{ "type": "TypeCompatibilityCheck" }, { "type": "DCast" }, { "type": "DCastFunction" }, { "type": "tools", "members": ["TypeCompatibilityCheck", "DCast"] }],
+      "source": "dist/index.mjs:188-275,3245-3345",
+      "canaries": ["compatibility is coercion-compatible while false text converts to true", "array compatibility checks the first element instead of the full collection", "object compatibility matches keys without admitting field values", "bigint conversion to number can lose integer precision", "compatibility recursion requires an owned input depth budget"]
+    },
+    {
+      "id": "DCP-UTILITY-RUNTIME-002",
+      "statement": "A conversion caller must choose an explicit target order and verify the actual returned type and domain value. A TypeScript generic argument must not be treated as a runtime output guarantee.",
+      "when": "The product consumes a DCast result or supplies more than one conversion target.",
+      "verify": "Exercise the selected targets in their real order and assert the result before use. Verify the configured DCast replacement as well as the default. The first successful target wins; a generic can claim string while the selected number target returns a number. Include reversed-order and wrong-result-type controls.",
+      "apiReferences": [{ "type": "DCast" }, { "type": "DCastFunction" }, { "type": "DCastSemanticType" }, { "type": "DCastType" }, { "type": "ISystemDependencyFactories", "members": ["DCast"] }],
+      "source": "dist/index.mjs:3292-3345,3421-3423,3575; dist/index.d.mts:170-177,324",
+      "canaries": ["conversion target order chooses the first successful representation", "declared generic does not control the runtime cast target", "bigint target does not use general numeric coercion"]
+    },
+    {
+      "id": "DCP-UTILITY-RUNTIME-003",
+      "statement": "A conversion boundary must have an explicit policy for absent values, fallback values and exceptions. A fallback must satisfy the consumer's domain contract. A fallback must not be assumed to handle every conversion failure.",
+      "when": "DCast can receive nullish or invalid data or a caller supplies a fallback.",
+      "verify": "Test null, undefined, unsupported conversion, absent and explicit fallback, malformed target configuration and native conversion exceptions. The pinned runtime returns nullish input even for a different requested target, returns a supplied fallback without converting or copying it, and validates target shape before fallback. An invalid Date can throw despite a fallback.",
+      "apiReferences": [{ "type": "DCast" }, { "type": "DCastFunction" }, { "type": "DCastInputType" }],
+      "source": "dist/index.mjs:3292-3303,3330-3345",
+      "canaries": ["nullish cast input is returned even for a number target", "fallback is returned without conversion or ownership isolation", "invalid target configuration rejects before applying fallback", "undefined fallback does not suppress an unsupported conversion", "invalid Date can escape a date target or throw before string fallback"]
+    },
+    {
+      "id": "DCP-UTILITY-RUNTIME-004",
+      "statement": "A date boundary must name the admitted date format, calendar validity, time basis and mutation owner. A returned Date must be verified before use and must not be assumed to be a fresh immutable value.",
+      "when": "The product uses date or formatted-date DCast targets.",
+      "verify": "Exercise explicit ymd, dmy and mdy metadata on ambiguous input and reject invalid calendar dates. Assert the UTC representation where this contract requires it. The pinned runtime passes a Date through by identity, including an invalid Date for the date target; formatted output can fail. Copy or own mutable dates when they cross a sharing boundary.",
+      "apiReferences": [{ "type": "DCastSemanticType" }, { "type": "DCastInputMetaType" }, { "type": "DCastInputType" }, { "type": "DCast" }],
+      "source": "dist/index.mjs:3246-3291,3308-3324",
+      "canaries": ["explicit date metadata gives distinct UTC interpretations of ambiguous input", "explicit date parsing rejects an invalid calendar date", "explicit ymd metadata preserves a valid leap day and rejects an invalid one", "unknown date metadata silently uses mdy interpretation", "date conversion retains the mutable input Date by identity", "invalid Date can escape a date target or throw before string fallback"]
+    },
+    {
+      "id": "DCP-UTILITY-RUNTIME-005",
+      "statement": "An array passed to DCast must be an intentional value-and-format tuple. A caller must not use this argument as a whole-collection conversion. Tuple contents and metadata must be validated before use.",
+      "when": "The product passes array or tuple input to DCast.",
+      "verify": "Assert the actual value at index zero and format metadata at index one. Verify collections item by item through an owned bounded operation instead. The pinned runtime takes the first array item as the value, treats the second as metadata and ignores later items; an empty array becomes undefined.",
+      "apiReferences": [{ "type": "DCastInputType" }, { "type": "DCastInputMetaType" }, { "type": "DCast" }],
+      "source": "dist/index.mjs:3296-3303; dist/index.d.mts:175-177",
+      "canaries": ["cast array input converts only its first item", "empty array cast input becomes undefined", "unknown date metadata silently uses mdy interpretation"]
+    },
+    {
+      "id": "DCP-UTILITY-RUNTIME-006",
+      "statement": "A field-helper caller must distinguish absence, null and valid falsy values and must validate the actual output. Inherited fields, shared references and callback failures must have an explicit admission and ownership policy.",
+      "when": "The product uses withDefaultValue or straightValue on domain or configuration data.",
+      "verify": "Test missing, null, undefined, zero, false and empty text. The pinned withDefaultValue keeps nonnull falsy values but straightValue returns undefined for them. Both accept inherited fields; withDefaultValue does not perform its documented expected-type check and its callback exceptions propagate. Verify returned references and defaults independently of generic types.",
+      "apiReferences": [{ "type": "withDefaultValue" }, { "type": "straightValue" }, { "type": "tools", "members": ["withDefaultValue", "straightValue"] }],
+      "source": "dist/index.mjs:168-183; dist/index.d.mts:327-337",
+      "canaries": ["field helpers distinguish nullish defaults from valid falsy values differently", "field helpers admit inherited fields and retain object references", "field default helper does not check expected types and applies only its callback", "field callback failures propagate instead of returning the default", "straight field access rejects missing dictionaries or fields"]
+    },
+    {
+      "id": "DCP-UTILITY-RUNTIME-007",
+      "statement": "A product that needs a priority queue must select and verify an actual implementation. The IPriorityQueue declaration and QueuePriorities values must not be treated as an available queue instance or a tested scheduling policy.",
+      "when": "The product promises priority ordering or consumes an IPriorityQueue implementation.",
+      "verify": "Verify the selected adapter's ordering between and within priorities, capacity, starvation decision, peek and stream views, clearing and per-priority flush. Assert named DPriority inputs and any numeric-rank translation. The pinned package exports numeric ranks and a type-only interface, with no public priority-queue constructor; its built-in IQueue remains FIFO. Own configuration instead of trusting readonly types to freeze runtime values.",
+      "apiReferences": [{ "type": "IPriorityQueue" }, { "type": "DPriority" }, { "type": "DPriorityLevels" }, { "type": "QueuePriorities" }],
+      "source": "dist/index.mjs:2940-3004,3239-3244,4547-4574; dist/index.d.mts:66-88",
+      "canaries": ["priority ranks are numeric and runtime values are mutable", "published runtime has no priority-queue constructor or interface value", "built-in queue preserves FIFO regardless of payload priority"]
+    },
+    {
+      "id": "DCP-UTILITY-RUNTIME-008",
+      "statement": "A priority-queue producer must validate the named priority before admission, await enqueue and handle a false result with an explicit reject, retry or backpressure policy. Numeric QueuePriorities ranks must not be forwarded as DPriority names. IQueue must not be called with the IPriorityQueue argument order.",
+      "when": "The product submits work through an IPriorityQueue adapter or translates external priority data into queue calls.",
+      "verify": "Hold actual admission and verify that the producer does not report acceptance early. Reject invalid or numeric priorities before adapter use, handle false and propagate the owned failure policy. The priority interface expects name then item; the built-in IQueue expects only the item and stores a supplied priority string as work. Include missing-await, ignored-false, invalid-name and wrong-adapter controls.",
+      "apiReferences": [{ "type": "IPriorityQueue", "members": ["enqueue"] }, { "type": "DPriority" }, { "type": "QueuePriorities" }, { "type": "IQueue", "members": ["enqueue"] }],
+      "source": "dist/index.mjs:2940-2959,3239-3244; dist/index.d.mts:55-63,67-86",
+      "canaries": ["priority ranks are numeric and runtime values are mutable", "built-in queue stores the priority argument when called as a priority adapter"]
+    }
+  ]
+}

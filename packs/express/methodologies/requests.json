@@ -1,0 +1,171 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "express/requests",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "EX-BODY-001",
+      "check": "express/requests/no-req-body-spread",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "OWASP API Security Top 10",
+        "locator": "API8:2023 Unsafe consumption, mass assignment",
+        "paraphrase": "The request body is caller-controlled input. Copying it whole into a record or a DTO copies fields the caller was never offered, such as role or owner."
+      },
+      "why": "A spread or assign of req.body lets the caller set privileged fields that the form never showed, and the write persists them.",
+      "fixHint": "Destructure the named fields the handler needs from req.body, or validate the body against a schema and use the parsed output.",
+      "avoid": "Object.assign without a spread copies the same fields. A default object merged first does not stop the body from overriding it.",
+      "examples": {
+        "pass": "pass/destructure",
+        "fail": "fail/spread-body"
+      }
+    },
+    {
+      "id": "EX-QUERY-001",
+      "check": "express/requests/no-req-query-concat",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "OWASP Top 10",
+        "locator": "A01:2021 Broken access control, open redirect",
+        "paraphrase": "The query string and route params are caller-controlled. Sending the client to a URL taken from them lets an attacker bounce victims through your domain to a lookalike."
+      },
+      "why": "An open redirect turns the app's domain into a launchpad for phishing: the link looks internal until the browser lands elsewhere.",
+      "fixHint": "Redirect to a fixed path, or check the value against an allowlist of destinations before using it.",
+      "avoid": "A template literal around the query value is still the query value. Encoding it does not make it a destination you chose.",
+      "examples": {
+        "pass": "pass/static-home",
+        "fail": "fail/open-query"
+      }
+    },
+    {
+      "id": "EX-STATUS-001",
+      "check": "express/requests/no-status-without-send",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Express 5 API reference (expressjs.com)",
+        "locator": "res.status",
+        "paraphrase": "status only sets the code. The request stays open until something sends the body, so a bare status call leaves the client hanging."
+      },
+      "why": "A handler that sets a status and never sends holds the connection until the client times out, and the caller cannot tell an error from a slow success.",
+      "fixHint": "Chain a sender: res.status(201).json(order), .send, .end, or use res.sendStatus where no body is needed.",
+      "avoid": "Referencing .send without calling it sends nothing. Assigning res.statusCode directly has the same hang without a later send.",
+      "examples": {
+        "pass": "pass/chained-json",
+        "fail": "fail/lonely-status"
+      }
+    },
+    {
+      "id": "EX-NEXT-001",
+      "check": "express/requests/no-next-route-string",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Express 5 API reference (expressjs.com)",
+        "locator": "Router, next(route)",
+        "paraphrase": "Passing the string route or router to next skips the remaining stack by name. A typo in that string silently changes which handlers run."
+      },
+      "why": "String-skipping hides control flow in a magic value: readers cannot see which handlers are bypassed, and a misspelling changes routing without an error.",
+      "fixHint": "Call next() to continue or next(err) to fail. If a route must be skipped, restructure the middleware order instead.",
+      "avoid": "Quote style does not matter: next('route') skips exactly like next(\"route\"). Passing an error object is the legitimate sibling and stays allowed.",
+      "examples": {
+        "pass": "pass/bare-next",
+        "fail": "fail/next-route"
+      }
+    },
+    {
+      "id": "EX-CORS-001",
+      "check": "express/security/no-cors-open",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MDN Web Docs",
+        "locator": "Access-Control-Allow-Origin",
+        "paraphrase": "A wildcard allow-origin header tells browsers every site may read the response. With credentials it hands the user's session to any origin that asks."
+      },
+      "why": "Manual wildcard headers bypass the cors middleware's origin list and expose authenticated responses to any site the user visits.",
+      "fixHint": "Serve CORS through the cors middleware with an explicit origin list, or set the header to the one origin the client runs on.",
+      "avoid": "Lowercasing the header name changes nothing on the wire. Using res.header instead of res.set is the same policy.",
+      "examples": {
+        "pass": "pass/allowlist",
+        "fail": "fail/set-star"
+      }
+    },
+    {
+      "id": "EX-PATH-001",
+      "check": "express/requests/no-send-file-user-path",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Express 5 API reference (expressjs.com)",
+        "locator": "https://expressjs.com/en/5x/api.html#res.sendFile",
+        "paraphrase": "res.sendFile reads the running file system. If the path contains user input, either build it securely or set the root option so Express keeps the resolved path inside that directory."
+      },
+      "why": "A route parameter such as ..%2F..%2Fetc%2Fpasswd decodes to ../ segments, so path.join walks out of the intended folder and the server sends any readable file.",
+      "fixHint": "Pass the user-supplied name as the path with { root: dir }, or reduce it to path.basename(name) before joining it to a fixed directory.",
+      "avoid": "A variable named rootDir inside path.join is not the root option. res.download has the same file-system reach. A path destructured from req.params into a local name first is not seen.",
+      "examples": {
+        "pass": "pass/root-option",
+        "fail": "fail/join-params"
+      }
+    },
+    {
+      "id": "EX-V5-001",
+      "check": "express/requests/no-removed-v5-api",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Express documentation, Migrating to Express 5",
+        "locator": "https://expressjs.com/en/guide/migrating-5.html#removed-methods-and-properties",
+        "paraphrase": "Express 5 removed app.del, req.param(name), res.sendfile, the res.json(obj, status), res.send(body, status), res.send(status) and res.redirect(url, status) signatures, the back magic string and the singular req.accepts* names. Express 4 already deprecated them."
+      },
+      "why": "On Express 5 these calls throw, send the status number as the body, or redirect to a literal /back path. On Express 4 they log deprecation warnings.",
+      "fixHint": "Use app.delete, req.params/req.body/req.query, res.sendFile, res.sendStatus(code), res.status(code).json(body), res.redirect(status, url), req.get('Referrer') || '/' and req.acceptsLanguages.",
+      "avoid": "res.send('200') with a quoted number is a valid body. res.redirect(301, url) puts the status first and is allowed. del on a cache or Redis client is not an Express router.",
+      "examples": {
+        "pass": "pass/express5-forms",
+        "fail": "fail/app-del"
+      }
+    },
+    {
+      "id": "EX-COOKIE-001",
+      "check": "express/security/no-insecure-cookie-options",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Express Production Best Practices: Security (expressjs.com)",
+        "locator": "https://expressjs.com/en/advanced/best-practice-security.html#use-cookies-securely",
+        "paraphrase": "Cookies carrying session or identity state should set httpOnly and secure so client-side scripts cannot read them and plaintext connections cannot transmit them."
+      },
+      "why": "Explicitly setting httpOnly: false exposes cookies to document.cookie theft during XSS, and secure: false allows transmission over unencrypted HTTP.",
+      "fixHint": "Set { httpOnly: true, secure: true, sameSite: 'lax' } on res.cookie, or omit explicit false overrides.",
+      "avoid": "Only inline object literals passed to res.cookie or response.cookie with literal false for httpOnly or secure are matched. Options built in a separate variable are not tracked.",
+      "examples": {
+        "pass": "pass/secure-cookie",
+        "fail": "fail/httponly-false"
+      }
+    },
+    {
+      "id": "EX-SYNC-001",
+      "check": "express/requests/no-sync-in-handlers",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Express Production Best Practices: Performance and Reliability (expressjs.com)",
+        "locator": "https://expressjs.com/en/advanced/best-practice-performance.html#use-asynchronous-functions",
+        "paraphrase": "Synchronous functions tie up the single-threaded Node.js execution loop until they return, stalling every concurrent request."
+      },
+      "why": "A single readFileSync or writeFileSync inside a route callback blocks the entire Node process for the duration of disk I/O.",
+      "fixHint": "Use async fs/promises methods (await readFile, await writeFile) inside an async route handler, or load static files once at module startup.",
+      "avoid": "Synchronous calls at module top-level before app.listen are allowed. Sync calls hidden inside a helper function declared outside the app/router call are not followed.",
+      "examples": {
+        "pass": "pass/async-readfile",
+        "fail": "fail/handler-readfilesync"
+      }
+    }
+  ]
+}

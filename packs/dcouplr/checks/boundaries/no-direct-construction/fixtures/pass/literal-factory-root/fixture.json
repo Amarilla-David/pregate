@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "target": "src/services/order.ts",
+  "before": null,
+  "params": {},
+  "expect": {
+    "verdict": "pass"
+  }
+}

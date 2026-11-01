@@ -1,0 +1,8 @@
+
+export async function refund(stripe: Stripe, id: string, key: string): Promise<void> {
+  await stripe.refunds.create({ charge: id, idempotencyKey: key });
+}
+
+interface Stripe {
+  refunds: { create(body: object): Promise<void> };
+}

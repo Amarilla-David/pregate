@@ -1,0 +1,8 @@
+
+export function firstZero(lines: number[]): number {
+  const total = lines.reduce((sum, line) => sum + line, 0);
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i] === 0) return total;
+  }
+  return total;
+}

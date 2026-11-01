@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/report.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "extra-arguments",
+    "origin": "corpus",
+    "discovered": "2026-10-25",
+    "note": "A mode argument after the command does not change what the shell runs."
+  }
+}

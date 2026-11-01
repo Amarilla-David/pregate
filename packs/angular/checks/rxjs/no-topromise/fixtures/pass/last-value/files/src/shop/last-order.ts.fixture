@@ -1,0 +1,5 @@
+import { lastValueFrom } from "rxjs";
+import { orders$ } from "./orders";
+export function loadOrders(): Promise<unknown> {
+  return lastValueFrom(orders$);
+}

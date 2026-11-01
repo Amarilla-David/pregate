@@ -1,0 +1,3 @@
+export function renderMail({ title, body, footer, theme }) {
+  return `<h1 class="${theme}">${title}</h1><p>${body}</p><small>${footer}</small>`;
+}

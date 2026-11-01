@@ -1,0 +1,85 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "functional-ts",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "architecture",
+      "kind": "library",
+      "version": "1.3.0"
+    },
+    {
+      "ns": "testing",
+      "kind": "library",
+      "version": "1.2.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "clean-code/clean-code",
+    "architecture/functional-core-imperative-shell",
+    "testing/tdd",
+    "core/pregate-integrity",
+    "typescript/anti-evasion"
+  ],
+  "scope": {
+    "include": [
+      "src/**",
+      "test/**"
+    ]
+  },
+  "generatedMarkers": [
+    "@generated",
+    "DO NOT EDIT"
+  ],
+  "enforcement": "enforce",
+  "layers": {
+    "core": {
+      "paths": [
+        "src/core/**",
+        "src/domain/**",
+        "src/application/**"
+      ],
+      "mayImport": [],
+      "kind": "core"
+    },
+    "shell": {
+      "paths": [
+        "src/shell/**",
+        "src/infra/**",
+        "src/main.ts"
+      ],
+      "mayImport": [
+        "core"
+      ],
+      "kind": "adapter"
+    }
+  },
+  "resolve": {
+    "fn.size": {
+      "use": "CC-FN-001",
+      "params": {
+        "max": 30
+      },
+      "note": "Small pure functions compose; 30 leaves room for an exhaustive switch over a union."
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

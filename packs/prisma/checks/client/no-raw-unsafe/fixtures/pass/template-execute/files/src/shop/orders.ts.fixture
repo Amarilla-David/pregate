@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function deactivate(id: number) {
+  return prisma.$executeRaw`UPDATE users SET active = false WHERE id = ${id}`;
+}

@@ -1,0 +1,9 @@
+import { error } from "@sveltejs/kit";
+
+export async function load({ fetch }) {
+	const res = await fetch("/api/orders");
+	if (!res.ok) {
+		throw error(500, "Failed to load orders");
+	}
+	return { orders: await res.json() };
+}

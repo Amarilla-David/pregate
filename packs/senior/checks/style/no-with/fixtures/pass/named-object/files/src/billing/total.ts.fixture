@@ -1,0 +1,6 @@
+
+export function total(order: Order): number {
+  return order.amount + order.tax;
+}
+
+interface Order { amount: number; tax: number }

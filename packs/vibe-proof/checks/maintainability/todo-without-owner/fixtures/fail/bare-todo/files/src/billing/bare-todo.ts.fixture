@@ -1,0 +1,5 @@
+
+export function tax(total: number): number {
+  // TODO: fix rounding
+  return total;
+}

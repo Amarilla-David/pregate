@@ -1,0 +1,5 @@
+declare function initializeApp(cfg: Record<string, string>): unknown;
+export async function handleSync(cfg: Record<string, string>): Promise<unknown> {
+  const app = initializeApp(cfg);
+  return app;
+}

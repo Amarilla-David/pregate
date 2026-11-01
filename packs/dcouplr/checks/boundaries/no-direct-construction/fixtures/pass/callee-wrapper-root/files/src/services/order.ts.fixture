@@ -1,0 +1,1 @@
+(stage.addFactoryMethod as Setter)?.((input, kernel) => new Order(input, kernel));

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["src/lib/**"], "allow": [] },
+  "target": "src/lib/retry.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 4 }] }
+}

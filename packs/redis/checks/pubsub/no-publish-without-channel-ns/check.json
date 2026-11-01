@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "redis/pubsub/no-publish-without-channel-ns",
+  "version": "1.0.0",
+  "area": "pubsub",
+  "cardinality": "singleton",
+  "dimension": "redis.publish-channel-namespace",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-channel",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.publish\\s*\\(\\s*[\"'][^\"':]+[\"']"
+          }
+        },
+        {
+          "id": "bare-template-channel",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.publish\\s*\\(\\s*`[^`$:]+`"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} publishes to a channel with no namespace prefix. Name channels as <domain>:<event>."
+  }
+}

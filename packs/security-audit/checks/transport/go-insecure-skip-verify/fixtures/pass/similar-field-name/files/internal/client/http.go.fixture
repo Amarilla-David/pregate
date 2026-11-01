@@ -1,0 +1,9 @@
+package client
+
+type Options struct {
+	InsecureSkipVerifyWarning bool
+}
+
+func Defaults() Options {
+	return Options{InsecureSkipVerifyWarning: true}
+}

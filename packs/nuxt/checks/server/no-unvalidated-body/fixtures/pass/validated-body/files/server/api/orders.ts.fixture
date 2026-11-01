@@ -1,0 +1,5 @@
+import { orderSchema } from "~/server/schemas/order";
+export default defineEventHandler(async (event) => {
+  const body = await readValidatedBody(event, orderSchema.parse);
+  return body;
+});

@@ -1,0 +1,2009 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "maintainability/engineering",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SE-01",
+      "check": "maintainability/engineering/se-01",
+      "defaults": {
+        "verifier": "SE-01"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:138; SE-01",
+        "paraphrase": "Every line of code exists to satisfy a verifiable problem; code with no associated problem is not written."
+      },
+      "why": "Every line of code exists to satisfy a verifiable problem; code with no associated problem is not written.",
+      "fixHint": "Bind SE-01 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-01; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-02",
+      "check": "maintainability/engineering/se-02",
+      "defaults": {
+        "verifier": "SE-02"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:139; SE-02",
+        "paraphrase": "Every fragment of code is intelligible to an engineer who did not author it, without reconstruction of the author's mental context."
+      },
+      "why": "Every fragment of code is intelligible to an engineer who did not author it, without reconstruction of the author's mental context.",
+      "fixHint": "Bind SE-02 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-02; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-03",
+      "check": "maintainability/engineering/se-03",
+      "defaults": {
+        "verifier": "SE-03"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:140; SE-03",
+        "paraphrase": "Every non-obvious design decision has a recorded trade-off (ADR) stating context and the rejected alternative."
+      },
+      "why": "Every non-obvious design decision has a recorded trade-off (ADR) stating context and the rejected alternative.",
+      "fixHint": "Bind SE-03 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-03; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-04",
+      "check": "maintainability/engineering/se-04",
+      "defaults": {
+        "verifier": "SE-04"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:141; SE-04",
+        "paraphrase": "No line of code exists without a justification of value; dead code is deleted."
+      },
+      "why": "No line of code exists without a justification of value; dead code is deleted.",
+      "fixHint": "Bind SE-04 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-04; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-05",
+      "check": "maintainability/engineering/se-05",
+      "defaults": {
+        "verifier": "SE-05"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:142; SE-05",
+        "paraphrase": "Every third-party dependency is declared, isolated, audited, and replaceable."
+      },
+      "why": "Every third-party dependency is declared, isolated, audited, and replaceable.",
+      "fixHint": "Bind SE-05 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-05; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-06",
+      "check": "maintainability/engineering/se-06",
+      "defaults": {
+        "verifier": "SE-06"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:143; SE-06",
+        "paraphrase": "No known design or code defect remains without an owner and a correction plan."
+      },
+      "why": "No known design or code defect remains without an owner and a correction plan.",
+      "fixHint": "Bind SE-06 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-06; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-07",
+      "check": "maintainability/engineering/se-07",
+      "defaults": {
+        "verifier": "SE-07"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:144; SE-07",
+        "paraphrase": "The adopted solution is the simplest one that satisfies the current requirement."
+      },
+      "why": "The adopted solution is the simplest one that satisfies the current requirement.",
+      "fixHint": "Bind SE-07 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-07; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-08",
+      "check": "maintainability/engineering/se-08",
+      "defaults": {
+        "verifier": "SE-08"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:145; SE-08",
+        "paraphrase": "No abstraction, parameter, or extension exists for a requirement that has not yet been confirmed."
+      },
+      "why": "No abstraction, parameter, or extension exists for a requirement that has not yet been confirmed.",
+      "fixHint": "Bind SE-08 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-08; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-09",
+      "check": "maintainability/engineering/se-09",
+      "defaults": {
+        "verifier": "SE-09"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:146; SE-09",
+        "paraphrase": "Each item of system knowledge has exactly one authoritative representation."
+      },
+      "why": "Each item of system knowledge has exactly one authoritative representation.",
+      "fixHint": "Bind SE-09 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-09; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-10",
+      "check": "maintainability/engineering/se-10",
+      "defaults": {
+        "verifier": "SE-10"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:147; SE-10",
+        "paraphrase": "Every module admits a one-sentence explanation containing no exceptional qualifiers."
+      },
+      "why": "Every module admits a one-sentence explanation containing no exceptional qualifiers.",
+      "fixHint": "Bind SE-10 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-10; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-11",
+      "check": "maintainability/engineering/se-11",
+      "defaults": {
+        "verifier": "SE-11"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:148; SE-11",
+        "paraphrase": "The intent of the code is evident to a human reader before it is evident to the compiler."
+      },
+      "why": "The intent of the code is evident to a human reader before it is evident to the compiler.",
+      "fixHint": "Bind SE-11 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-11; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-12",
+      "check": "maintainability/engineering/se-12",
+      "defaults": {
+        "verifier": "SE-12"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:149; SE-12",
+        "paraphrase": "No module is retained out of attachment; it is retained only while it remains the best representation of the problem."
+      },
+      "why": "No module is retained out of attachment; it is retained only while it remains the best representation of the problem.",
+      "fixHint": "Bind SE-12 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-12; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-13",
+      "check": "maintainability/engineering/se-13",
+      "defaults": {
+        "verifier": "SE-13"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:150; SE-13",
+        "paraphrase": "Every corrected defect has an identified root cause, not merely a suppressed symptom."
+      },
+      "why": "Every corrected defect has an identified root cause, not merely a suppressed symptom.",
+      "fixHint": "Bind SE-13 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-13; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-14",
+      "check": "maintainability/engineering/se-14",
+      "defaults": {
+        "verifier": "SE-14"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:151; SE-14",
+        "paraphrase": "No unexpected behaviour is left without a verified hypothesis."
+      },
+      "why": "No unexpected behaviour is left without a verified hypothesis.",
+      "fixHint": "Bind SE-14 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-14; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-15",
+      "check": "maintainability/engineering/se-15",
+      "defaults": {
+        "verifier": "SE-15"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:152; SE-15",
+        "paraphrase": "Every behavioural change is introduced singly, with verification between changes."
+      },
+      "why": "Every behavioural change is introduced singly, with verification between changes.",
+      "fixHint": "Bind SE-15 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-15; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-16",
+      "check": "maintainability/engineering/se-16",
+      "defaults": {
+        "verifier": "SE-16"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:153; SE-16",
+        "paraphrase": "Every communicated estimate is a range with explicit assumptions, never a point value."
+      },
+      "why": "Every communicated estimate is a range with explicit assumptions, never a point value.",
+      "fixHint": "Bind SE-16 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-16; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-17",
+      "check": "maintainability/engineering/se-17",
+      "defaults": {
+        "verifier": "SE-17"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:154; SE-17",
+        "paraphrase": "Every prototype is discarded or rewritten before it enters production; its only permanent product is learning."
+      },
+      "why": "Every prototype is discarded or rewritten before it enters production; its only permanent product is learning.",
+      "fixHint": "Bind SE-17 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-17; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-18",
+      "check": "maintainability/engineering/se-18",
+      "defaults": {
+        "verifier": "SE-18"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:155; SE-18",
+        "paraphrase": "Every large feature has at least one vertical slice operating end to end before it is widened."
+      },
+      "why": "Every large feature has at least one vertical slice operating end to end before it is widened.",
+      "fixHint": "Bind SE-18 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-18; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-19",
+      "check": "maintainability/engineering/se-19",
+      "defaults": {
+        "verifier": "SE-19"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:156; SE-19",
+        "paraphrase": "No irreversible decision is taken before the information that would make it reversible, or cheap to reverse, is available."
+      },
+      "why": "No irreversible decision is taken before the information that would make it reversible, or cheap to reverse, is available.",
+      "fixHint": "Bind SE-19 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-19; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-20",
+      "check": "maintainability/engineering/se-20",
+      "defaults": {
+        "verifier": "SE-20"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:157; SE-20",
+        "paraphrase": "No technology is adopted by fashion; every adoption has a documented criterion of fit to the problem."
+      },
+      "why": "No technology is adopted by fashion; every adoption has a documented criterion of fit to the problem.",
+      "fixHint": "Bind SE-20 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-20; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-21",
+      "check": "maintainability/engineering/se-21",
+      "defaults": {
+        "verifier": "SE-21"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:160; SE-21",
+        "paraphrase": "Every name discloses the intent of the entity without a comment."
+      },
+      "why": "Every name discloses the intent of the entity without a comment.",
+      "fixHint": "Bind SE-21 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-21; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-22",
+      "check": "maintainability/engineering/se-22",
+      "defaults": {
+        "verifier": "SE-22"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:161; SE-22",
+        "paraphrase": "Every name is pronounceable and searchable across the repository."
+      },
+      "why": "Every name is pronounceable and searchable across the repository.",
+      "fixHint": "Bind SE-22 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-22; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-23",
+      "check": "maintainability/engineering/se-23",
+      "defaults": {
+        "verifier": "SE-23"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:162; SE-23",
+        "paraphrase": "Every type bears a noun name; every function bears a verb or verb–noun name."
+      },
+      "why": "Every type bears a noun name; every function bears a verb or verb–noun name.",
+      "fixHint": "Bind SE-23 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-23; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-24",
+      "check": "maintainability/engineering/se-24",
+      "defaults": {
+        "verifier": "SE-24"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:163; SE-24",
+        "paraphrase": "Each domain concept has exactly one term in the code."
+      },
+      "why": "Each domain concept has exactly one term in the code.",
+      "fixHint": "Bind SE-24 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-24; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-25",
+      "check": "maintainability/engineering/se-25",
+      "defaults": {
+        "verifier": "SE-25"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:164; SE-25",
+        "paraphrase": "No name encodes type, scope, or visibility."
+      },
+      "why": "No name encodes type, scope, or visibility.",
+      "fixHint": "Bind SE-25 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-25; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-26",
+      "check": "maintainability/engineering/se-26",
+      "defaults": {
+        "verifier": "SE-26"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:165; SE-26",
+        "paraphrase": "No numeric or string literal carrying domain meaning appears outside a named constant."
+      },
+      "why": "No numeric or string literal carrying domain meaning appears outside a named constant.",
+      "fixHint": "Bind SE-26 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-26; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-27",
+      "check": "maintainability/engineering/se-27",
+      "defaults": {
+        "verifier": "SE-27"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:166; SE-27",
+        "paraphrase": "The entire repository conforms to a single set of formatting rules, enforced by tooling."
+      },
+      "why": "The entire repository conforms to a single set of formatting rules, enforced by tooling.",
+      "fixHint": "Bind SE-27 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-27; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-28",
+      "check": "maintainability/engineering/se-28",
+      "defaults": {
+        "verifier": "SE-28"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:167; SE-28",
+        "paraphrase": "Vertical whitespace separates distinct ideas; visual proximity groups what changes together."
+      },
+      "why": "Vertical whitespace separates distinct ideas; visual proximity groups what changes together.",
+      "fixHint": "Bind SE-28 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-28; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-29",
+      "check": "maintainability/engineering/se-29",
+      "defaults": {
+        "verifier": "SE-29"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:168; SE-29",
+        "paraphrase": "Every variable is declared in the narrowest scope that permits its use."
+      },
+      "why": "Every variable is declared in the narrowest scope that permits its use.",
+      "fixHint": "Bind SE-29 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-29; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-30",
+      "check": "maintainability/engineering/se-30",
+      "defaults": {
+        "verifier": "SE-30"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:169; SE-30",
+        "paraphrase": "No condition is expressed in negative form when an equivalent positive form exists."
+      },
+      "why": "No condition is expressed in negative form when an equivalent positive form exists.",
+      "fixHint": "Bind SE-30 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-30; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-31",
+      "check": "maintainability/engineering/se-31",
+      "defaults": {
+        "verifier": "SE-31"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:172; SE-31",
+        "paraphrase": "Every function has a single responsibility and a single level of abstraction."
+      },
+      "why": "Every function has a single responsibility and a single level of abstraction.",
+      "fixHint": "Bind SE-31 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-31; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-32",
+      "check": "maintainability/engineering/se-32",
+      "defaults": {
+        "verifier": "SE-32"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:173; SE-32",
+        "paraphrase": "Every function fits on one screen and is comprehensible without scrolling."
+      },
+      "why": "Every function fits on one screen and is comprehensible without scrolling.",
+      "fixHint": "Bind SE-32 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-32; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-33",
+      "check": "maintainability/engineering/se-33",
+      "defaults": {
+        "verifier": "SE-33"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:174; SE-33",
+        "paraphrase": "Every function has at most three arguments, or a single options object if more are required."
+      },
+      "why": "Every function has at most three arguments, or a single options object if more are required.",
+      "fixHint": "Bind SE-33 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-33; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-34",
+      "check": "maintainability/engineering/se-34",
+      "defaults": {
+        "verifier": "SE-34"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:175; SE-34",
+        "paraphrase": "No function receives a Boolean that selects between two behaviours."
+      },
+      "why": "No function receives a Boolean that selects between two behaviours.",
+      "fixHint": "Bind SE-34 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-34; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-35",
+      "check": "maintainability/engineering/se-35",
+      "defaults": {
+        "verifier": "SE-35"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:176; SE-35",
+        "paraphrase": "Every function is either a command or a query, never both."
+      },
+      "why": "Every function is either a command or a query, never both.",
+      "fixHint": "Bind SE-35 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-35; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-36",
+      "check": "maintainability/engineering/se-36",
+      "defaults": {
+        "verifier": "SE-36"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:177; SE-36",
+        "paraphrase": "Every side effect is declared in the function name or in its contract."
+      },
+      "why": "Every side effect is declared in the function name or in its contract.",
+      "fixHint": "Bind SE-36 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-36; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-37",
+      "check": "maintainability/engineering/se-37",
+      "defaults": {
+        "verifier": "SE-37"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:178; SE-37",
+        "paraphrase": "No function mutates its arguments unless the contract so declares."
+      },
+      "why": "No function mutates its arguments unless the contract so declares.",
+      "fixHint": "Bind SE-37 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-37; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-38",
+      "check": "maintainability/engineering/se-38",
+      "defaults": {
+        "verifier": "SE-38"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:179; SE-38",
+        "paraphrase": "Every non-trivial conditional branch body is extracted to a named function."
+      },
+      "why": "Every non-trivial conditional branch body is extracted to a named function.",
+      "fixHint": "Bind SE-38 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-38; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-39",
+      "check": "maintainability/engineering/se-39",
+      "defaults": {
+        "verifier": "SE-39"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:180; SE-39",
+        "paraphrase": "Every boundary condition is encapsulated in a single place."
+      },
+      "why": "Every boundary condition is encapsulated in a single place.",
+      "fixHint": "Bind SE-39 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-39; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-40",
+      "check": "maintainability/engineering/se-40",
+      "defaults": {
+        "verifier": "SE-40"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:181; SE-40",
+        "paraphrase": "No function has a control-nesting depth greater than two."
+      },
+      "why": "No function has a control-nesting depth greater than two.",
+      "fixHint": "Bind SE-40 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-40; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-41",
+      "check": "maintainability/engineering/se-41",
+      "defaults": {
+        "verifier": "SE-41"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:184; SE-41",
+        "paraphrase": "Every module has exactly one reason to change."
+      },
+      "why": "Every module has exactly one reason to change.",
+      "fixHint": "Bind SE-41 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-41; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-42",
+      "check": "maintainability/engineering/se-42",
+      "defaults": {
+        "verifier": "SE-42"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:185; SE-42",
+        "paraphrase": "Every new case of a known variation is added by extension, without modifying the module that already works."
+      },
+      "why": "Every new case of a known variation is added by extension, without modifying the module that already works.",
+      "fixHint": "Bind SE-42 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-42; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-43",
+      "check": "maintainability/engineering/se-43",
+      "defaults": {
+        "verifier": "SE-43"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:186; SE-43",
+        "paraphrase": "Every subtype is substitutable for its base type without altering the observable behaviour of the client."
+      },
+      "why": "Every subtype is substitutable for its base type without altering the observable behaviour of the client.",
+      "fixHint": "Bind SE-43 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-43; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-44",
+      "check": "maintainability/engineering/se-44",
+      "defaults": {
+        "verifier": "SE-44"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:187; SE-44",
+        "paraphrase": "Every interface exposes only operations that all of its implementers use."
+      },
+      "why": "Every interface exposes only operations that all of its implementers use.",
+      "fixHint": "Bind SE-44 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-44; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-45",
+      "check": "maintainability/engineering/se-45",
+      "defaults": {
+        "verifier": "SE-45"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:188; SE-45",
+        "paraphrase": "Every high-level module depends on abstractions it owns, never on infrastructure concretions."
+      },
+      "why": "Every high-level module depends on abstractions it owns, never on infrastructure concretions.",
+      "fixHint": "Bind SE-45 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-45; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-46",
+      "check": "maintainability/engineering/se-46",
+      "defaults": {
+        "verifier": "SE-46"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:189; SE-46",
+        "paraphrase": "Every module has high cohesion: its parts change for the same reason. Coupling between modules is explicit and minimal."
+      },
+      "why": "Every module has high cohesion: its parts change for the same reason. Coupling between modules is explicit and minimal.",
+      "fixHint": "Bind SE-46 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-46; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-47",
+      "check": "maintainability/engineering/se-47",
+      "defaults": {
+        "verifier": "SE-47"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:190; SE-47",
+        "paraphrase": "Every “has-a” relation is modelled by composition; inheritance is used only when substitutability holds."
+      },
+      "why": "Every “has-a” relation is modelled by composition; inheritance is used only when substitutability holds.",
+      "fixHint": "Bind SE-47 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-47; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-48",
+      "check": "maintainability/engineering/se-48",
+      "defaults": {
+        "verifier": "SE-48"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:191; SE-48",
+        "paraphrase": "No method navigates more than one level of indirection over objects it did not create, receive, or own."
+      },
+      "why": "No method navigates more than one level of indirection over objects it did not create, receive, or own.",
+      "fixHint": "Bind SE-48 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-48; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-49",
+      "check": "maintainability/engineering/se-49",
+      "defaults": {
+        "verifier": "SE-49"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:192; SE-49",
+        "paraphrase": "Every decision that depends on an object's state is taken by that object."
+      },
+      "why": "Every decision that depends on an object's state is taken by that object.",
+      "fixHint": "Bind SE-49 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-49; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-50",
+      "check": "maintainability/engineering/se-50",
+      "defaults": {
+        "verifier": "SE-50"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:193; SE-50",
+        "paraphrase": "Every point of variation lies behind a stable boundary."
+      },
+      "why": "Every point of variation lies behind a stable boundary.",
+      "fixHint": "Bind SE-50 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-50; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-51",
+      "check": "maintainability/engineering/se-51",
+      "defaults": {
+        "verifier": "SE-51"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:194; SE-51",
+        "paraphrase": "Construction of the object graph is separated from its use."
+      },
+      "why": "Construction of the object graph is separated from its use.",
+      "fixHint": "Bind SE-51 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-51; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-52",
+      "check": "maintainability/engineering/se-52",
+      "defaults": {
+        "verifier": "SE-52"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:195; SE-52",
+        "paraphrase": "Every dependency is received by constructor or parameter; no module resolves it from a global."
+      },
+      "why": "Every dependency is received by constructor or parameter; no module resolves it from a global.",
+      "fixHint": "Bind SE-52 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-52; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-53",
+      "check": "maintainability/engineering/se-53",
+      "defaults": {
+        "verifier": "SE-53"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:196; SE-53",
+        "paraphrase": "Every domain concept with value equality is immutable."
+      },
+      "why": "Every domain concept with value equality is immutable.",
+      "fixHint": "Bind SE-53 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-53; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-54",
+      "check": "maintainability/engineering/se-54",
+      "defaults": {
+        "verifier": "SE-54"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:197; SE-54",
+        "paraphrase": "No domain function returns null; absence is an explicit type."
+      },
+      "why": "No domain function returns null; absence is an explicit type.",
+      "fixHint": "Bind SE-54 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-54; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-55",
+      "check": "maintainability/engineering/se-55",
+      "defaults": {
+        "verifier": "SE-55"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:198; SE-55",
+        "paraphrase": "Every type has a name that a reviewer can speak aloud and understand."
+      },
+      "why": "Every type has a name that a reviewer can speak aloud and understand.",
+      "fixHint": "Bind SE-55 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-55; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-56",
+      "check": "maintainability/engineering/se-56",
+      "defaults": {
+        "verifier": "SE-56"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:201; SE-56",
+        "paraphrase": "Domain, application, infrastructure, and delivery occupy separate boundaries; none imports inward across a boundary."
+      },
+      "why": "Domain, application, infrastructure, and delivery occupy separate boundaries; none imports inward across a boundary.",
+      "fixHint": "Bind SE-56 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-56; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-57",
+      "check": "maintainability/engineering/se-57",
+      "defaults": {
+        "verifier": "SE-57"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:202; SE-57",
+        "paraphrase": "The domain references neither frameworks, drivers, nor transport protocols."
+      },
+      "why": "The domain references neither frameworks, drivers, nor transport protocols.",
+      "fixHint": "Bind SE-57 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-57; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-58",
+      "check": "maintainability/engineering/se-58",
+      "defaults": {
+        "verifier": "SE-58"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:203; SE-58",
+        "paraphrase": "Every complex system in production evolved from a simple system that already worked."
+      },
+      "why": "Every complex system in production evolved from a simple system that already worked.",
+      "fixHint": "Bind SE-58 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-58; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-59",
+      "check": "maintainability/engineering/se-59",
+      "defaults": {
+        "verifier": "SE-59"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:204; SE-59",
+        "paraphrase": "The boundary between modules reflects a real communication boundary of the team, or the discrepancy is documented."
+      },
+      "why": "The boundary between modules reflects a real communication boundary of the team, or the discrepancy is documented.",
+      "fixHint": "Bind SE-59 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-59; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-60",
+      "check": "maintainability/engineering/se-60",
+      "defaults": {
+        "verifier": "SE-60"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:205; SE-60",
+        "paraphrase": "Every module can be understood, tested, and replaced without reading the interior of its neighbours."
+      },
+      "why": "Every module can be understood, tested, and replaced without reading the interior of its neighbours.",
+      "fixHint": "Bind SE-60 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-60; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-61",
+      "check": "maintainability/engineering/se-61",
+      "defaults": {
+        "verifier": "SE-61"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:206; SE-61",
+        "paraphrase": "Every published API preserves backward compatibility, or the break is versioned and announced."
+      },
+      "why": "Every published API preserves backward compatibility, or the break is versioned and announced.",
+      "fixHint": "Bind SE-61 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-61; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-62",
+      "check": "maintainability/engineering/se-62",
+      "defaults": {
+        "verifier": "SE-62"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:207; SE-62",
+        "paraphrase": "Every invalid state is unrepresentable in the types of the public API."
+      },
+      "why": "Every invalid state is unrepresentable in the types of the public API.",
+      "fixHint": "Bind SE-62 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-62; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-63",
+      "check": "maintainability/engineering/se-63",
+      "defaults": {
+        "verifier": "SE-63"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:208; SE-63",
+        "paraphrase": "No secret, environment URL, or feature flag resides in source code."
+      },
+      "why": "No secret, environment URL, or feature flag resides in source code.",
+      "fixHint": "Bind SE-63 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-63; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-64",
+      "check": "maintainability/engineering/se-64",
+      "defaults": {
+        "verifier": "SE-64"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:209; SE-64",
+        "paraphrase": "Every backing service is interchangeable by configuration, without recompilation."
+      },
+      "why": "Every backing service is interchangeable by configuration, without recompilation.",
+      "fixHint": "Bind SE-64 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-64; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-65",
+      "check": "maintainability/engineering/se-65",
+      "defaults": {
+        "verifier": "SE-65"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:210; SE-65",
+        "paraphrase": "No application process stores session state in local memory as the source of truth."
+      },
+      "why": "No application process stores session state in local memory as the source of truth.",
+      "fixHint": "Bind SE-65 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-65; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-66",
+      "check": "maintainability/engineering/se-66",
+      "defaults": {
+        "verifier": "SE-66"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:211; SE-66",
+        "paraphrase": "Every retryable operation is idempotent."
+      },
+      "why": "Every retryable operation is idempotent.",
+      "fixHint": "Bind SE-66 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-66; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-67",
+      "check": "maintainability/engineering/se-67",
+      "defaults": {
+        "verifier": "SE-67"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:212; SE-67",
+        "paraphrase": "Every call to an external system has a timeout, a bounded retry policy, and a circuit breaker."
+      },
+      "why": "Every call to an external system has a timeout, a bounded retry policy, and a circuit breaker.",
+      "fixHint": "Bind SE-67 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-67; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-68",
+      "check": "maintainability/engineering/se-68",
+      "defaults": {
+        "verifier": "SE-68"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:213; SE-68",
+        "paraphrase": "Failure of one component does not propagate resource exhaustion to its neighbours."
+      },
+      "why": "Failure of one component does not propagate resource exhaustion to its neighbours.",
+      "fixHint": "Bind SE-68 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-68; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-69",
+      "check": "maintainability/engineering/se-69",
+      "defaults": {
+        "verifier": "SE-69"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:214; SE-69",
+        "paraphrase": "Every business operation emits a structured log, metric, or trace sufficient to diagnose it in production."
+      },
+      "why": "Every business operation emits a structured log, metric, or trace sufficient to diagnose it in production.",
+      "fixHint": "Bind SE-69 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-69; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-70",
+      "check": "maintainability/engineering/se-70",
+      "defaults": {
+        "verifier": "SE-70"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:215; SE-70",
+        "paraphrase": "The development environment executes the same boundaries and contracts as production, or the difference is isolated and tested."
+      },
+      "why": "The development environment executes the same boundaries and contracts as production, or the difference is isolated and tested.",
+      "fixHint": "Bind SE-70 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-70; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-71",
+      "check": "maintainability/engineering/se-71",
+      "defaults": {
+        "verifier": "SE-71"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:218; SE-71",
+        "paraphrase": "Every impossible state aborts immediately; no error is swallowed silently."
+      },
+      "why": "Every impossible state aborts immediately; no error is swallowed silently.",
+      "fixHint": "Bind SE-71 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-71; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-72",
+      "check": "maintainability/engineering/se-72",
+      "defaults": {
+        "verifier": "SE-72"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:219; SE-72",
+        "paraphrase": "Every failure carries sufficient context to diagnose it without reproducing the case."
+      },
+      "why": "Every failure carries sufficient context to diagnose it without reproducing the case.",
+      "fixHint": "Bind SE-72 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-72; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-73",
+      "check": "maintainability/engineering/se-73",
+      "defaults": {
+        "verifier": "SE-73"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:220; SE-73",
+        "paraphrase": "The happy path of a module can be read without traversing error handling."
+      },
+      "why": "The happy path of a module can be read without traversing error handling.",
+      "fixHint": "Bind SE-73 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-73; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-74",
+      "check": "maintainability/engineering/se-74",
+      "defaults": {
+        "verifier": "SE-74"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:221; SE-74",
+        "paraphrase": "Every assumption of the form “this cannot happen” is guarded by an assertion."
+      },
+      "why": "Every assumption of the form “this cannot happen” is guarded by an assertion.",
+      "fixHint": "Bind SE-74 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-74; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-75",
+      "check": "maintainability/engineering/se-75",
+      "defaults": {
+        "verifier": "SE-75"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:222; SE-75",
+        "paraphrase": "Every input that crosses a boundary is validated before use."
+      },
+      "why": "Every input that crosses a boundary is validated before use.",
+      "fixHint": "Bind SE-75 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-75; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-76",
+      "check": "maintainability/engineering/se-76",
+      "defaults": {
+        "verifier": "SE-76"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:223; SE-76",
+        "paraphrase": "Every process, credential, and role holds only the minimum permissions its function requires."
+      },
+      "why": "Every process, credential, and role holds only the minimum permissions its function requires.",
+      "fixHint": "Bind SE-76 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-76; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-77",
+      "check": "maintainability/engineering/se-77",
+      "defaults": {
+        "verifier": "SE-77"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:224; SE-77",
+        "paraphrase": "No secret appears in the repository, in the image, or in the logs."
+      },
+      "why": "No secret appears in the repository, in the image, or in the logs.",
+      "fixHint": "Bind SE-77 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-77; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-78",
+      "check": "maintainability/engineering/se-78",
+      "defaults": {
+        "verifier": "SE-78"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:225; SE-78",
+        "paraphrase": "No query or command is constructed by concatenating external input."
+      },
+      "why": "No query or command is constructed by concatenating external input.",
+      "fixHint": "Bind SE-78 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-78; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-79",
+      "check": "maintainability/engineering/se-79",
+      "defaults": {
+        "verifier": "SE-79"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:226; SE-79",
+        "paraphrase": "Every ingress boundary verifies authentication and authorisation; none trusts a prior check."
+      },
+      "why": "Every ingress boundary verifies authentication and authorisation; none trusts a prior check.",
+      "fixHint": "Bind SE-79 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-79; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-80",
+      "check": "maintainability/engineering/se-80",
+      "defaults": {
+        "verifier": "SE-80"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:227; SE-80",
+        "paraphrase": "Every dependency has an update owner and a security-patch policy."
+      },
+      "why": "Every dependency has an update owner and a security-patch policy.",
+      "fixHint": "Bind SE-80 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-80; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-81",
+      "check": "maintainability/engineering/se-81",
+      "defaults": {
+        "verifier": "SE-81"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:230; SE-81",
+        "paraphrase": "Test code satisfies the same naming and structural rules as production code."
+      },
+      "why": "Test code satisfies the same naming and structural rules as production code.",
+      "fixHint": "Bind SE-81 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-81; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-82",
+      "check": "maintainability/engineering/se-82",
+      "defaults": {
+        "verifier": "SE-82"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:231; SE-82",
+        "paraphrase": "Every test asserts a single behaviour."
+      },
+      "why": "Every test asserts a single behaviour.",
+      "fixHint": "Bind SE-82 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-82; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-83",
+      "check": "maintainability/engineering/se-83",
+      "defaults": {
+        "verifier": "SE-83"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:232; SE-83",
+        "paraphrase": "Every test is deterministic, order-independent, and self-evaluating."
+      },
+      "why": "Every test is deterministic, order-independent, and self-evaluating.",
+      "fixHint": "Bind SE-83 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-83; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-84",
+      "check": "maintainability/engineering/se-84",
+      "defaults": {
+        "verifier": "SE-84"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:233; SE-84",
+        "paraphrase": "Every test reads as Arrange–Act–Assert and contains no conditional logic of its own."
+      },
+      "why": "Every test reads as Arrange–Act–Assert and contains no conditional logic of its own.",
+      "fixHint": "Bind SE-84 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-84; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-85",
+      "check": "maintainability/engineering/se-85",
+      "defaults": {
+        "verifier": "SE-85"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:234; SE-85",
+        "paraphrase": "Every corrected defect has a test that failed before the correction."
+      },
+      "why": "Every corrected defect has a test that failed before the correction.",
+      "fixHint": "Bind SE-85 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-85; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-86",
+      "check": "maintainability/engineering/se-86",
+      "defaults": {
+        "verifier": "SE-86"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:235; SE-86",
+        "paraphrase": "Every assumption about a library or an external environment is covered by a boundary test."
+      },
+      "why": "Every assumption about a library or an external environment is covered by a boundary test.",
+      "fixHint": "Bind SE-86 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-86; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-87",
+      "check": "maintainability/engineering/se-87",
+      "defaults": {
+        "verifier": "SE-87"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:236; SE-87",
+        "paraphrase": "The test suite passes in full before integration; a broken test blocks the change."
+      },
+      "why": "The test suite passes in full before integration; a broken test blocks the change.",
+      "fixHint": "Bind SE-87 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-87; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-88",
+      "check": "maintainability/engineering/se-88",
+      "defaults": {
+        "verifier": "SE-88"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:237; SE-88",
+        "paraphrase": "Every third-party adapter has tests that fix the usage contract."
+      },
+      "why": "Every third-party adapter has tests that fix the usage contract.",
+      "fixHint": "Bind SE-88 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-88; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-89",
+      "check": "maintainability/engineering/se-89",
+      "defaults": {
+        "verifier": "SE-89"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:238; SE-89",
+        "paraphrase": "The majority of domain behaviours are covered by unit tests; integration and end-to-end tests cover boundaries, not internal logic."
+      },
+      "why": "The majority of domain behaviours are covered by unit tests; integration and end-to-end tests cover boundaries, not internal logic.",
+      "fixHint": "Bind SE-89 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-89; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-90",
+      "check": "maintainability/engineering/se-90",
+      "defaults": {
+        "verifier": "SE-90"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:239; SE-90",
+        "paraphrase": "No test depends on a private implementation detail."
+      },
+      "why": "No test depends on a private implementation detail.",
+      "fixHint": "Bind SE-90 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-90; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-91",
+      "check": "maintainability/engineering/se-91",
+      "defaults": {
+        "verifier": "SE-91"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:242; SE-91",
+        "paraphrase": "No optimisation is merged without a measurement that demonstrates the bottleneck."
+      },
+      "why": "No optimisation is merged without a measurement that demonstrates the bottleneck.",
+      "fixHint": "Bind SE-91 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-91; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-92",
+      "check": "maintainability/engineering/se-92",
+      "defaults": {
+        "verifier": "SE-92"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:243; SE-92",
+        "paraphrase": "Every algorithm over unbounded data has known complexity and an explicit bound."
+      },
+      "why": "Every algorithm over unbounded data has known complexity and an explicit bound.",
+      "fixHint": "Bind SE-92 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-92; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-93",
+      "check": "maintainability/engineering/se-93",
+      "defaults": {
+        "verifier": "SE-93"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:244; SE-93",
+        "paraphrase": "No mutable state is shared across threads without a demonstrated synchronisation protocol."
+      },
+      "why": "No mutable state is shared across threads without a demonstrated synchronisation protocol.",
+      "fixHint": "Bind SE-93 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-93; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-94",
+      "check": "maintainability/engineering/se-94",
+      "defaults": {
+        "verifier": "SE-94"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:245; SE-94",
+        "paraphrase": "No concurrent code exists unless a throughput or latency requirement demands it."
+      },
+      "why": "No concurrent code exists unless a throughput or latency requirement demands it.",
+      "fixHint": "Bind SE-94 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-94; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-95",
+      "check": "maintainability/engineering/se-95",
+      "defaults": {
+        "verifier": "SE-95"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:246; SE-95",
+        "paraphrase": "Every non-deterministic failure is treated as a concurrency or timing defect until shown otherwise."
+      },
+      "why": "Every non-deterministic failure is treated as a concurrency or timing defect until shown otherwise.",
+      "fixHint": "Bind SE-95 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-95; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-96",
+      "check": "maintainability/engineering/se-96",
+      "defaults": {
+        "verifier": "SE-96"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:247; SE-96",
+        "paraphrase": "Every data transformation has explicit input, output, and error policy."
+      },
+      "why": "Every data transformation has explicit input, output, and error policy.",
+      "fixHint": "Bind SE-96 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-96; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-97",
+      "check": "maintainability/engineering/se-97",
+      "defaults": {
+        "verifier": "SE-97"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:248; SE-97",
+        "paraphrase": "Every datum is immutable by default; mutation is local and visible."
+      },
+      "why": "Every datum is immutable by default; mutation is local and visible.",
+      "fixHint": "Bind SE-97 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-97; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-98",
+      "check": "maintainability/engineering/se-98",
+      "defaults": {
+        "verifier": "SE-98"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:249; SE-98",
+        "paraphrase": "Every API that returns or accepts collections has a limit, pagination, or backpressure."
+      },
+      "why": "Every API that returns or accepts collections has a limit, pagination, or backpressure.",
+      "fixHint": "Bind SE-98 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-98; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-99",
+      "check": "maintainability/engineering/se-99",
+      "defaults": {
+        "verifier": "SE-99"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:252; SE-99",
+        "paraphrase": "Every change is under version control, in a commit whose message explains the why, and does not break the build."
+      },
+      "why": "Every change is under version control, in a commit whose message explains the why, and does not break the build.",
+      "fixHint": "Bind SE-99 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-99; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "SE-100",
+      "check": "maintainability/engineering/se-100",
+      "defaults": {
+        "verifier": "SE-100"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested future-human and software-engineering invariant catalog",
+        "locator": "packs/maintainability/INVARIANTS.md:253; SE-100",
+        "paraphrase": "Every repeatable step of build, test, lint, and deploy is automated; no release depends on an undocumented manual step."
+      },
+      "why": "Every repeatable step of build, test, lint, and deploy is automated; no release depends on an undocumented manual step.",
+      "fixHint": "Bind SE-100 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run SE-100; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

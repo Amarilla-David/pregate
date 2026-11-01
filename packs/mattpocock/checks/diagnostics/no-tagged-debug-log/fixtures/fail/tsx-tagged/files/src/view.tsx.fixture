@@ -1,0 +1,2 @@
+console.info("[DEBUG-render] order");
+const view = <Total />;

@@ -1,0 +1,10 @@
+export function classifyTier(points: number): string {
+  if (points >= 1000) {
+    return "platinum";
+  } else if (points >= 500) {
+    return "gold";
+  } else if (points >= 100) {
+    return "silver";
+  }
+  return "standard";
+}

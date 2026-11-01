@@ -1,0 +1,6 @@
+
+export function fail(err: Error, res: Res): void {
+  res.json(err["stack"]);
+}
+
+interface Res { json(body: unknown): void }

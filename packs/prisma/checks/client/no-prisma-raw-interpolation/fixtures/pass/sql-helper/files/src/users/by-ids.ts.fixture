@@ -1,0 +1,7 @@
+import { Prisma } from "@prisma/client";
+import { prisma } from "~/server/db";
+
+export async function byIds(ids: number[], name: string) {
+  const query = Prisma.sql`SELECT id, name FROM "User" WHERE id IN (${Prisma.join(ids)}) AND name = ${name}`;
+  return prisma.$queryRaw(query);
+}

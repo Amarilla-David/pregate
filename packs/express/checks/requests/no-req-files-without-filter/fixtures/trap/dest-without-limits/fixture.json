@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/upload-dest.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "dest-without-limits",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A dest option only chooses the folder. Without limits or a file filter the endpoint still accepts files of any size and type."
+  }
+}

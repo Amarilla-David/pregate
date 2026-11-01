@@ -1,0 +1,3 @@
+export function follow(socket: WebSocket, push: (row: unknown) => void): void {
+  socket.addEventListener("message", (event) => push(JSON.parse(event.data)));
+}

@@ -1,0 +1,13 @@
+const UPDATE_TOTAL = "updateTotal";
+
+export class Cart {
+  private total = 0;
+
+  [UPDATE_TOTAL](total: number): void {
+    this.total = total;
+  }
+
+  isEmpty(): boolean {
+    return this.total === 0;
+  }
+}

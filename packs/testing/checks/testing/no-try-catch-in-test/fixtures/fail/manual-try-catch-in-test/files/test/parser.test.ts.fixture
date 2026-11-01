@@ -1,0 +1,9 @@
+import { expect, test } from "bun:test";
+
+test("throws on invalid input", () => {
+  try {
+    parsePrice(-1);
+  } catch (err) {
+    expect(err).toBeDefined();
+  }
+});

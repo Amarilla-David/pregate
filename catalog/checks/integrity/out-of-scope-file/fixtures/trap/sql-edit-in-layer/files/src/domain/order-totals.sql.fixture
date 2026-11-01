@@ -1,0 +1,2 @@
+select order_id, sum(cents) * case when count(*) > 10 then 0.9 else 1 end as total
+from order_lines group by order_id;

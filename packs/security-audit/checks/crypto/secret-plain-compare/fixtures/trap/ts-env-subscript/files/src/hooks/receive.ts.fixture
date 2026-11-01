@@ -1,0 +1,6 @@
+export const receive = (received: string) => {
+  const configured = process.env["WEBHOOK_TOKEN"] ?? "";
+  if (configured !== received) {
+    throw new Error("rejected");
+  }
+};

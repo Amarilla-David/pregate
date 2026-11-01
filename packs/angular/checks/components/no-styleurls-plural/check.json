@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/components/no-styleurls-plural",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "angular.styleurls-plural",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "styleurls-plural",
+          "rule": {
+            "regex": "^styleUrls$"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses legacy styleUrls. Angular v17+ components declare a single styleUrl."
+  }
+}

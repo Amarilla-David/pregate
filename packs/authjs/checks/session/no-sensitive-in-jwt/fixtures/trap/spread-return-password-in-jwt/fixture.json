@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth-spread.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "returned-object-literal-secret-in-jwt",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Returning a new token object literal with a password property inside jwt() still encodes the credential into the JWT cookie."
+  }
+}

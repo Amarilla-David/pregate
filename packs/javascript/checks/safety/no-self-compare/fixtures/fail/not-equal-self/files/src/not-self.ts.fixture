@@ -1,0 +1,3 @@
+export function checkPoint(point: { x: number }): boolean {
+  return point.x !== point.x;
+}

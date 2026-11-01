@@ -1,0 +1,15 @@
+{
+  "language": "typescript",
+  "target": "test/kernel/forbidden-fetch.test.ts",
+  "before": null,
+  "params": {
+    "allow": [],
+    "exclude": [
+      "src/infra/http/fetcher.ts",
+      "test/kernel/forbidden-fetch.test.ts"
+    ]
+  },
+  "expect": {
+    "verdict": "pass"
+  }
+}

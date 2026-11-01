@@ -1,0 +1,9 @@
+import httpx
+
+
+async def fetch(client: httpx.AsyncClient, url):
+    return await client.request(
+        "GET",
+        url,
+        verify=False,
+    )

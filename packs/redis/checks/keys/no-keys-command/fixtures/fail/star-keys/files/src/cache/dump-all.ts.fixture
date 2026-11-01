@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function dumpAll(): Promise<string[]> {
+  return redis.keys("*");
+}

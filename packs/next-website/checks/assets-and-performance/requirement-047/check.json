@@ -1,0 +1,27 @@
+{
+  "id": "next-website/assets-and-performance/requirement-047",
+  "version": "1.0.0",
+  "area": "assets-and-performance",
+  "cardinality": "singleton",
+  "dimension": "next-website.r047",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "NEXT-WEBSITE-047"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "NEXT-WEBSITE-047 requires current passing project verification: {symbol}."
+  }
+}

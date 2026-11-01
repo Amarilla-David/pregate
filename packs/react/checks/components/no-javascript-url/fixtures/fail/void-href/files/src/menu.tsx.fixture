@@ -1,0 +1,7 @@
+export function Menu(props: { onOpen: () => void }) {
+  return (
+    <a href="javascript:void(0)" onClick={props.onOpen}>
+      Open
+    </a>
+  );
+}

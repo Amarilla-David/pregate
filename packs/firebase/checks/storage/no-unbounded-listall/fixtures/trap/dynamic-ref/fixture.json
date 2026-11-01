@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/media/user-files.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "dynamic-ref",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Scoping the ref to one user still lists without bound. A small prefix is not a page size; use list with maxResults."
+  }
+}

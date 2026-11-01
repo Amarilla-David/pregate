@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/classes/no-svelte-legacy-import",
+  "version": "1.0.0",
+  "area": "classes",
+  "cardinality": "singleton",
+  "dimension": "svelte.legacy-import",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "svelte-legacy-import",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "svelte/legacy",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "^require$"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports svelte/legacy. New code imports from svelte; keep legacy compat in one adapter module."
+  }
+}

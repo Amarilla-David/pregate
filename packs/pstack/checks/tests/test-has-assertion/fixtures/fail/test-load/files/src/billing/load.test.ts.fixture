@@ -1,0 +1,8 @@
+
+test("loads", () => {
+  load();
+});
+
+function load(): string {
+  return "inv_1";
+}

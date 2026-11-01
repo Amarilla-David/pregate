@@ -1,0 +1,6 @@
+
+import { Pool } from "pg";
+
+export function makePool(cs: string): Pool {
+  return new Pool({ connectionString: cs });
+}

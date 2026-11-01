@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/legacy/anon-async.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "async-anonymous-default",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "async does not name the function; the default export is still anonymous and breaks stack traces and fast refresh."
+  }
+}

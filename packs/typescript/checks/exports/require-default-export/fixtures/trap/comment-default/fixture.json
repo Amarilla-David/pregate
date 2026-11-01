@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "pages/orders.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-default",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A comment is not a default export. The router still has nothing to call."
+  }
+}

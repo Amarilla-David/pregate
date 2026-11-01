@@ -1,0 +1,6 @@
+export function replaceNode(node: Element, markup: string, legacy: boolean): void {
+  if (legacy) {
+    document.write(markup);
+    node["outerHTML"] = markup;
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/queries/no-unsafe-aggregation",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "mongodb.queries.unsafe-aggregation",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unsafe-aggregation",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.aggregate\\s*\\(",
+            "has": {
+              "regex": "\\$(where|function|accumulator)\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} runs an aggregation stage with server-side JavaScript. Rewrite with declarative operators ($match/$group/$project)."
+  }
+}

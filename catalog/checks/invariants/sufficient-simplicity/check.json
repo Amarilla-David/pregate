@@ -1,0 +1,27 @@
+{
+  "id": "core/invariants/sufficient-simplicity",
+  "version": "1.0.0",
+  "area": "invariants",
+  "cardinality": "singleton",
+  "dimension": "invariant.r027",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CORE-INV-027"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CORE-INV-027 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/session.controller.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "explicit-passthrough-false",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Passing { passthrough: false } to @Res still disables NestJS interceptors and standard response handling."
+  }
+}

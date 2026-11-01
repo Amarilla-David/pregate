@@ -1,0 +1,6 @@
+import { reactive } from "vue";
+
+const state = reactive({ count: 0, total: 0 });
+const { count, total } = reactive(state);
+
+export { count, total };

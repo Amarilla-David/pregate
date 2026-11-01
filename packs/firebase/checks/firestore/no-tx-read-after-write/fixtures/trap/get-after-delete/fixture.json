@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/cleanup-tx.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 6
+      }
+    ]
+  },
+  "trap": {
+    "family": "read-after-delete-in-transaction",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Calling t.get() after t.delete() inside runTransaction violates Firestore's all-reads-before-writes invariant."
+  }
+}

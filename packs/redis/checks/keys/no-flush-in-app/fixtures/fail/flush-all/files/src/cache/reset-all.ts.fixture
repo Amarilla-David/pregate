@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function resetAll(): Promise<void> {
+  await redis.flushAll();
+}

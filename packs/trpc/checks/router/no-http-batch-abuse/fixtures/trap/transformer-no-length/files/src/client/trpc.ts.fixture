@@ -1,0 +1,3 @@
+import { httpBatchLink } from "@trpc/client";
+import { transformer } from "./shared";
+export const link = httpBatchLink({ url: "/api/trpc", transformer });

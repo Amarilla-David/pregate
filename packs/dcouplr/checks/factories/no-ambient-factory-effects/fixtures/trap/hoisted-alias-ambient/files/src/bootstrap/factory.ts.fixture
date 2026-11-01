@@ -1,0 +1,1 @@
+const alias = creator; app.dependencyAdmission.declareIntent('ORDER').addMandatoryInputFields({}).addValidationPolicy().addVerificationPolicy().addFactoryMethod(alias).register(); function creator() { return typeof Date.now; }

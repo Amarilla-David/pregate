@@ -1,0 +1,2 @@
+const url = "https://api.example.com/data";
+export async function getCached() { return fetch(url, { cache: "force-cache" }); }

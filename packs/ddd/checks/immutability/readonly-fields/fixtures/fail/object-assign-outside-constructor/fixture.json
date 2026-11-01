@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["src/model/**"] },
+  "target": "src/model/temperature.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 7 }] }
+}

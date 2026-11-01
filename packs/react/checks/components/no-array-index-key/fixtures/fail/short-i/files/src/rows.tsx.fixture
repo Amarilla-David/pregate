@@ -1,0 +1,9 @@
+export function Rows(props: { items: string[] }) {
+  return (
+    <ul>
+      {props.items.map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
+  );
+}

@@ -1,0 +1,5 @@
+import { defineProps } from "vue";
+
+const props = defineProps<{ count: number }>();
+
+props.count += 1;

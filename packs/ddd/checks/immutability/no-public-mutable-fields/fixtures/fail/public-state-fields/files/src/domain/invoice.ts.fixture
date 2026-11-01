@@ -1,0 +1,16 @@
+type InvoiceStatus = "draft" | "issued";
+
+export class Invoice {
+  status: InvoiceStatus = "draft";
+  public total = 0;
+  readonly id: string;
+
+  constructor(id: string) {
+    this.id = id;
+  }
+
+  issue(): void {
+    if (this.total === 0) throw new Error("An empty invoice cannot be issued");
+    this.status = "issued";
+  }
+}

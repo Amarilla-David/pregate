@@ -1,0 +1,23 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/auth.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      },
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "alternate-constructor",
+    "note": "Options built with dict() and algorithms given as a tuple are the same settings.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

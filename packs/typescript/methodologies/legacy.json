@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "typescript/legacy",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "TS-LEGACY-001",
+      "check": "typescript/types/no-triple-slash-reference",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook",
+        "locator": "triple-slash directives",
+        "paraphrase": "Triple-slash reference directives are a legacy way to pull in declarations. Modules state their dependencies with imports."
+      },
+      "why": "A reference directive hides the dependency from the module graph. Imports name the dependency where the file declares it.",
+      "fixHint": "Replace the directive with an import of the types the file uses.",
+      "avoid": "A types directive is the same mechanism as a path directive. Both must become imports.",
+      "examples": {
+        "pass": "pass/import-type",
+        "fail": "fail/path-reference"
+      }
+    },
+    {
+      "id": "TS-LEGACY-002",
+      "check": "typescript/modules/no-declare-global",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook",
+        "locator": "global augmentations",
+        "paraphrase": "A global augmentation adds bindings to every module at once. Prefer explicit imports that name what a module needs."
+      },
+      "why": "A declare global block lets any file depend on bindings no import names, so removing the augmentation breaks distant files silently.",
+      "fixHint": "Move the declarations to a module and import them where they are used.",
+      "avoid": "declare module is a different shape and stays allowed. A single var inside declare global is still a global augmentation.",
+      "examples": {
+        "pass": "pass/app-window",
+        "fail": "fail/global-interface"
+      }
+    },
+    {
+      "id": "TS-LEGACY-003",
+      "check": "typescript/exports/no-anonymous-default",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook",
+        "locator": "default exports",
+        "paraphrase": "A default export should carry a name. An anonymous default leaves stack traces and tooling with nothing to display."
+      },
+      "why": "An anonymous default export shows up as unknown in stack traces and breaks fast refresh, which keys on the component name.",
+      "fixHint": "Name the function before default-exporting it, or export a named binding.",
+      "avoid": "Adding async does not name the function. Only a binding with a name counts.",
+      "examples": {
+        "pass": "pass/named-default-fn",
+        "fail": "fail/anon-arrow"
+      }
+    },
+    {
+      "id": "TS-LEGACY-004",
+      "check": "typescript/modules/no-export-assign",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook",
+        "locator": "export assignment",
+        "paraphrase": "export = is the legacy CommonJS interop form. Modules publish their surface with named exports."
+      },
+      "why": "An export assignment replaces the whole module surface with one value, so adding a second export changes what every importer receives.",
+      "fixHint": "Export each binding by name, and default-export a named binding where an entry point needs one.",
+      "avoid": "Assigning an object literal is the same form as assigning an identifier. export default is a different syntax and stays allowed.",
+      "examples": {
+        "pass": "pass/default-handler",
+        "fail": "fail/assign-handler"
+      }
+    },
+    {
+      "id": "TS-LEGACY-005",
+      "relations": [
+        {
+          "with": "ddd/DDD-ENT-002",
+          "kind": "duplicates",
+          "why": "A public constructor parameter property is reported by TS-LEGACY-005 as a parameter property and by DDD-ENT-002 as mutable domain state.",
+          "settle": "Declare a private field and assign it in the constructor body; that satisfies both rules."
+        },
+        {
+          "with": "nestjs/NEST-CTRL-001",
+          "kind": "contradicts",
+          "why": "NEST-CTRL-001 tells controllers to receive providers as private readonly constructor parameters, and TS-LEGACY-005 denies constructor parameter properties.",
+          "settle": "Nest also injects plain constructor parameters: declare the field and assign it in the constructor body to satisfy both, or exclude Nest controllers and providers from TS-LEGACY-005."
+        },
+        {
+          "with": "nestjs/NEST-INJ-001",
+          "kind": "contradicts",
+          "why": "NEST-INJ-001 tells callers to receive providers as constructor parameters, the Nest idiom being private readonly parameter properties, which TS-LEGACY-005 denies.",
+          "settle": "Nest also injects plain constructor parameters: declare the field and assign it in the constructor body to satisfy both, or exclude Nest controllers and providers from TS-LEGACY-005."
+        }
+      ],
+      "check": "typescript/types/no-constructor-param-property",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook",
+        "locator": "constructor parameter properties",
+        "paraphrase": "A visibility modifier on a constructor parameter silently declares and assigns a field. Declare the field and assign it in the body."
+      },
+      "why": "A parameter property hides an assignment inside the signature, so a reader of the body misses state the constructor sets.",
+      "fixHint": "Declare the field on the class and assign the parameter to it in the constructor body.",
+      "avoid": "A mixed list with one plain parameter still declares a property for each decorated one. readonly alone on a parameter is the same declaration.",
+      "examples": {
+        "pass": "pass/explicit-assign",
+        "fail": "fail/private-readonly"
+      }
+    }
+  ]
+}

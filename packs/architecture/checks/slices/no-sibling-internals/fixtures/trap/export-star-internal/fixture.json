@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/features/billing/export-prices.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "export-star",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Re-exporting a sibling internal folder is the same cross-slice edge as importing it."
+  }
+}

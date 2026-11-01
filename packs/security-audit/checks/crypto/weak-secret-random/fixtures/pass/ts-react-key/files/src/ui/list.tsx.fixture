@@ -1,0 +1,5 @@
+export function List({ items }: { items: string[] }) {
+  return items.map((item) => <li key={Math.random()}>{item}</li>);
+}
+
+export const keyFor = () => Math.random().toString(36);

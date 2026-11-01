@@ -1,0 +1,5 @@
+export class Invoice {
+  subtotal(): number { return 100; }
+  tax(): number { return 20; }
+  shipping(): number { return 5; }
+}

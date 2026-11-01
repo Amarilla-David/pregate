@@ -1,0 +1,7 @@
+import { ObjectId } from "mongodb";
+export async function remove(col: Col, req: Req): Promise<void> {
+  await col.deleteOne({ _id: new ObjectId(req.body.id) });
+}
+
+interface Req { body: { id: string } }
+interface Col { deleteOne(q: unknown): Promise<void> }

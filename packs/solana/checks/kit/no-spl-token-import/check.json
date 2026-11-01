@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "solana/kit/no-spl-token-import",
+  "version": "1.0.0",
+  "area": "kit",
+  "cardinality": "singleton",
+  "dimension": "solana.kit-spl-token-import",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "spl-token-import",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^@solana/spl-token(/|$)",
+            "inside": {
+              "kind": "string",
+              "any": [
+                {
+                  "inside": {
+                    "kind": "import_statement",
+                    "field": "source"
+                  }
+                },
+                {
+                  "inside": {
+                    "kind": "export_statement",
+                    "field": "source"
+                  }
+                },
+                {
+                  "inside": {
+                    "kind": "arguments",
+                    "inside": {
+                      "kind": "call_expression",
+                      "any": [
+                        {
+                          "has": {
+                            "field": "function",
+                            "kind": "import"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "function",
+                            "regex": "^require$"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports @solana/spl-token, which is built on web3.js v1. Kit clients use @solana-program/token or @solana-program/token-2022."
+  }
+}

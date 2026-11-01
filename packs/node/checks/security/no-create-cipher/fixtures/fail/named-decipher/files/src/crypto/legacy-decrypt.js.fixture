@@ -1,0 +1,6 @@
+import { createDecipher } from "node:crypto";
+
+export function decrypt(password, hex) {
+  const decipher = createDecipher("aes-256-cbc", password);
+  return decipher.update(hex, "hex", "utf8") + decipher.final("utf8");
+}

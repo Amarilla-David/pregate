@@ -1,0 +1,2 @@
+import { t, publicProcedure } from "./trpc";
+export const userRouter = t.router({ get: publicProcedure.query(() => { throw new Error("nope"); }) });

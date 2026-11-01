@@ -1,0 +1,6 @@
+
+import { Pool } from "pg";
+
+export async function count(pool: Pool): Promise<unknown> {
+  return pool.query("SELECT count(*) FROM users");
+}

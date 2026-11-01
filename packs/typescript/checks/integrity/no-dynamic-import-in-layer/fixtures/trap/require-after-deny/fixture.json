@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["@layers"] },
+  "context": {
+    "layers": {
+      "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" },
+      "infra": { "paths": ["src/infra/**"], "mayImport": ["domain"], "kind": "adapter" }
+    }
+  },
+  "target": "src/domain/orders.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 2 }, { "line": 5 }] },
+  "trap": {
+    "family": "dynamic-import",
+    "origin": "corpus",
+    "discovered": "2026-10-01",
+    "note": "After a deny on import \"../infra/db\" the agent builds the path at runtime: require(name) and a template literal with a substitution hide the edge."
+  }
+}

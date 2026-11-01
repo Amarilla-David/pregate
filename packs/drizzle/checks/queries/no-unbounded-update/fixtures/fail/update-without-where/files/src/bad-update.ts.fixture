@@ -1,0 +1,5 @@
+declare const db: { update(t: unknown): { set(v: Record<string, unknown>): Promise<unknown> } };
+declare const users: unknown;
+export async function disableUsers(): Promise<void> {
+  await db.update(users).set({ active: false });
+}

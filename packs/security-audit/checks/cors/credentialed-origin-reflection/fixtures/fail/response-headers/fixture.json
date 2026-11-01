@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/worker/api.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  }
+}

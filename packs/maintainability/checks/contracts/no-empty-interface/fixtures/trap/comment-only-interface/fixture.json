@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/contracts/todo.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-only-interface",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A comment inside an interface does not constitute a member declaration."
+  }
+}

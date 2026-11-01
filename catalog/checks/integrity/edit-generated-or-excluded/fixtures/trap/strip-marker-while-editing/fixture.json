@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "context": {
+    "scope": { "include": ["src/**"], "exclude": ["src/legacy/**"] },
+    "generatedMarkers": ["@generated"]
+  },
+  "target": "src/api/schema.ts",
+  "before": "before/",
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }] },
+  "trap": {
+    "family": "generated-marker",
+    "origin": "corpus",
+    "discovered": "2026-10-01",
+    "note": "The edit deletes the marker together with the change, so the result no longer looks generated; the file was generated before the edit."
+  }
+}

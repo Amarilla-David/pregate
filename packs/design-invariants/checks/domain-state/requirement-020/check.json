@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/domain-state/requirement-020",
+  "version": "1.0.0",
+  "area": "domain-state",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r020",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-020"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-020 requires current passing project verification: {symbol}."
+  }
+}

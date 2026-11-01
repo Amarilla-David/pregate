@@ -1,0 +1,40 @@
+{
+  "name": "rust-starter",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "rust",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "rust/quality"
+  ],
+  "enforcement": "shadow",
+  "scope": {
+    "include": [
+      "**"
+    ],
+    "exclude": [
+      "vendor/**",
+      "dist/**",
+      "build/**",
+      ".venv/**",
+      "venv/**",
+      "__pycache__/**",
+      "node_modules/**",
+      "target/**",
+      "**/target/**"
+    ]
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

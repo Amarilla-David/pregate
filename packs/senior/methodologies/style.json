@@ -1,0 +1,135 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "senior/style",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SR-VAR-001",
+      "check": "senior/style/no-var",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Google TypeScript style and Airbnb JavaScript style",
+        "locator": "variable declarations",
+        "paraphrase": "Use const by default and let when reassignment is required. Do not use var."
+      },
+      "why": "var is function-scoped and leaks out of the block the reader thinks it belongs to, including a for loop.",
+      "fixHint": "Use const when the binding does not change, and let when it does.",
+      "avoid": "A for loop does not make var block-scoped. The declaration is still var.",
+      "examples": {
+        "pass": "pass/const-total",
+        "fail": "fail/var-total"
+      }
+    },
+    {
+      "id": "SR-EQ-001",
+      "check": "senior/style/eqeqeq",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Airbnb JavaScript style and Google TypeScript style",
+        "locator": "equality",
+        "paraphrase": "Use strict equality. The exception is a comparison with null, which is a deliberate check for both null and undefined."
+      },
+      "why": "Loose equality coerces. A string and a number can compare equal, and the bug looks like a passing check.",
+      "fixHint": "Use === and !==. Compare with null only when the code really means null or undefined.",
+      "avoid": "=== contains the characters == and is not this rule. == null is the one allowed coercion. A comment claiming both sides are numbers does not make == strict.",
+      "examples": {
+        "pass": "pass/strict",
+        "fail": "fail/loose-eq"
+      }
+    },
+    {
+      "id": "SR-DEAD-001",
+      "check": "senior/control/no-unreachable-statement",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Compilers, unreachable code",
+        "locator": "statements after a jump",
+        "paraphrase": "A statement after a return, throw, break, or continue in the same block does not run."
+      },
+      "why": "The statement never runs. It misleads the next reader into thinking that charge or audit still happens.",
+      "fixHint": "Delete the dead statement, or move it before the exit.",
+      "avoid": "A comment between the return and the statement does not make the statement reachable. A statement after an if that returns is reachable on the other branch and is not this rule.",
+      "examples": {
+        "pass": "pass/early-return",
+        "fail": "fail/after-return"
+      }
+    },
+    {
+      "id": "SR-WITH-001",
+      "check": "senior/style/no-with",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "JavaScript language, strict mode",
+        "locator": "the with statement",
+        "paraphrase": "with is forbidden in strict mode because it makes every free name ambiguous."
+      },
+      "why": "with adds the object's properties to the scope chain. A reader cannot tell whether a name is a local, a parameter, or a field.",
+      "fixHint": "Bind the object to a name and read its fields through that name.",
+      "avoid": "A with whose body is a block is still with.",
+      "examples": {
+        "pass": "pass/named-object",
+        "fail": "fail/with-order"
+      }
+    },
+    {
+      "id": "SR-NATIVE-001",
+      "check": "senior/style/no-extend-native",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Google TypeScript style",
+        "locator": "https://google.github.io/styleguide/tsguide.html#modifying-builtin-objects",
+        "paraphrase": "Never modify builtin types, either by adding methods to their constructors or to their prototypes."
+      },
+      "why": "A method added to Array.prototype or String.prototype changes the type for every module and library in the process, and collides with the next language or library version that adds the same name.",
+      "fixHint": "Write a standalone function that takes the value, such as last(items), and import it where it is needed.",
+      "avoid": "Bracket access, a builtin read off globalThis and Object.defineProperty, Object.assign or Reflect.setPrototypeOf on the prototype are the same change. Static constructor settings such as Error.stackTraceLimit are not checked.",
+      "examples": {
+        "pass": "pass/standalone-function",
+        "fail": "fail/array-method"
+      }
+    },
+    {
+      "id": "SR-BRACE-001",
+      "check": "senior/style/no-braceless-if",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Google TypeScript style and Airbnb JavaScript style",
+        "locator": "braces",
+        "paraphrase": "Always use braces for if and else. A single-statement branch is how a later edit attaches the wrong line."
+      },
+      "why": "A braceless branch makes the next line look like it belongs to the condition. Inserting a statement later changes which line runs.",
+      "fixHint": "Wrap the branch in braces.",
+      "avoid": "else if is an if, and it is allowed. An else that returns without braces is still braceless.",
+      "examples": {
+        "pass": "pass/braced-if",
+        "fail": "fail/bare-return"
+      }
+    },
+    {
+      "id": "SR-MUT-001",
+      "check": "senior/style/no-param-reassign",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Refactoring (M. Fowler, 1999) and Airbnb JavaScript Style Guide",
+        "locator": "Remove Assignments to Parameters; Airbnb §7.12 no-param-reassign",
+        "paraphrase": "Never reassign a function parameter; introduce a separate local variable when the value must be transformed."
+      },
+      "why": "Reassigning a parameter obscures the original input passed by the caller and mixes input bindings with local working state.",
+      "fixHint": "Declare a new `const` or `let` variable initialized from the parameter instead of overwriting the parameter identifier.",
+      "avoid": "Direct assignments (`param = ...`), compound assignments (`param += ...`), and increment/decrement operators (`param++`) on identifiers declared in the enclosing function's parameter list are flagged.",
+      "examples": {
+        "pass": "pass/const-derived-local",
+        "fail": "fail/direct-param-assign"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+export function markFailed(): void {
+  process.exitCode = 1;
+}

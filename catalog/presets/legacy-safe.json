@@ -1,0 +1,69 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "legacy-safe",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "testing",
+      "kind": "library",
+      "version": "1.2.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "clean-code/clean-code",
+    "testing/tdd",
+    "core/pregate-integrity",
+    "typescript/anti-evasion"
+  ],
+  "scope": {
+    "include": [
+      "src/**",
+      "lib/**",
+      "test/**"
+    ],
+    "exclude": [
+      "src/**/generated/**"
+    ]
+  },
+  "generatedMarkers": [
+    "@generated",
+    "DO NOT EDIT",
+    "Code generated"
+  ],
+  "enforcement": "enforce",
+  "resolve": {
+    "fn.size": {
+      "use": "CC-FN-001",
+      "params": {
+        "max": 60
+      },
+      "note": "Legacy modules: new functions stay moderate, and the ratchet keeps existing ones from getting worse."
+    },
+    "fn.params": {
+      "use": "CC-FN-002",
+      "params": {
+        "max": 5
+      },
+      "note": "Existing call sites pass many arguments; five lets new code follow them while the ratchet blocks growth."
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

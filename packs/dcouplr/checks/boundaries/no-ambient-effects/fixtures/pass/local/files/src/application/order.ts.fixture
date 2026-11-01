@@ -1,0 +1,2 @@
+function run(fetch) { return fetch(); }
+const label = { console: 'documentation' };

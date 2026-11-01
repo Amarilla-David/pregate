@@ -1,0 +1,10 @@
+import { expect, it } from "bun:test";
+import { slugify } from "../src/slug";
+
+it("lowercases", () => {
+  expect(slugify("Hello")).toBe("hello");
+});
+
+it("joins words with dashes", () => {
+  expect(slugify("a b")).toBe("a-b");
+});

@@ -1,0 +1,8 @@
+import Vue from "vue";
+
+declare const http: { get(url: string): Promise<unknown> };
+Vue.prototype.$http = http;
+
+export default Vue.extend({
+  props: { title: { type: String, required: true } },
+});

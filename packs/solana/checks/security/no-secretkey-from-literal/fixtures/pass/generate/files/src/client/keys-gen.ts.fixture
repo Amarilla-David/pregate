@@ -1,0 +1,2 @@
+const kp = Keypair.generate();
+export { kp };

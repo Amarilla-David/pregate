@@ -1,0 +1,6 @@
+useEffect(() => {
+  let cancelled = false;
+  async function load() { await x(); }
+  void load();
+  return () => { cancelled = true; };
+}, [deps]);

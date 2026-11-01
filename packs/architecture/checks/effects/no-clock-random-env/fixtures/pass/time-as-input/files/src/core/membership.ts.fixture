@@ -1,0 +1,16 @@
+export interface Membership {
+  readonly startedOn: Date;
+  readonly expiresAt: number;
+}
+
+export function isExpired(membership: Membership, now: number): boolean {
+  return now >= membership.expiresAt;
+}
+
+export function yearsSince(membership: Membership, today: Date): number {
+  return today.getUTCFullYear() - membership.startedOn.getUTCFullYear();
+}
+
+export function clampScore(score: number): number {
+  return Math.min(100, Math.max(0, Math.round(score)));
+}

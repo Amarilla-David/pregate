@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/sec/exec-file-sync.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "execfile-sync",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "execFileSync avoids a shell but still blocks. Sync is the ban, not just shell use."
+  }
+}

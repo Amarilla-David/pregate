@@ -1,0 +1,7 @@
+function onMessage(event: MessageEvent) {
+  render(event.data.html);
+}
+
+export function mount() {
+  window.addEventListener("message", onMessage);
+}

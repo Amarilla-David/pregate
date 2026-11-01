@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/modular-monolith",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MOD-EDGE-001",
+      "check": "architecture/modules/no-cross-module-internals",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Modular monolith (S. Newman; module boundaries)",
+        "locator": "published interface of a module",
+        "paraphrase": "Modules in one process still hide their internals. Callers use the published interface. Persistence and internal helpers stay inside the module that owns them."
+      },
+      "why": "A modular monolith stays one deployable only while modules meet at their public API. Crossing into internals couples two modules' private schemas.",
+      "fixHint": "Call the other module through the function or type it exports from its root. Keep persistence inside the owning module.",
+      "avoid": "export { row } from the other module's persistence path is still a cross-module edge.",
+      "examples": {
+        "pass": "pass/public-module",
+        "fail": "fail/other-internal"
+      }
+    },
+    {
+      "id": "MOD-SHARED-001",
+      "check": "architecture/modules/no-shared-imports-business",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Domain-Driven Design (E. Evans, 2003); Modular Monolith (K. Grzybek)",
+        "locator": "Shared Kernel",
+        "paraphrase": "The shared module, if it exists, does not depend on any business module. Others may depend on it; it depends on none, staying free of business domain models."
+      },
+      "why": "A shared module that imports business modules creates circular dependencies and entangles shared utilities with specific domain logic.",
+      "fixHint": "Remove business feature imports from shared code, or move the domain-specific logic into the owning module.",
+      "avoid": "Re-exporting feature types or dynamically importing business modules from within shared/common packages.",
+      "examples": {
+        "pass": "pass/shared-pure-utilities",
+        "fail": "fail/shared-imports-module"
+      }
+    }
+  ]
+}

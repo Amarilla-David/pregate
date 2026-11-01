@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/client/no-server-get-session",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "supabase.server-get-session",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "server-auth-get-session",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "kind": "member_expression",
+              "regex": "\\.auth\\.getSession$"
+            },
+            "inside": {
+              "stopBy": "end",
+              "kind": "program",
+              "any": [
+                {
+                  "has": {
+                    "stopBy": "end",
+                    "kind": "export_statement",
+                    "regex": "^export\\s+(async\\s+)?function\\s+(GET|POST|PUT|PATCH|DELETE|middleware|proxy)\\b"
+                  }
+                },
+                {
+                  "has": {
+                    "stopBy": "end",
+                    "kind": "expression_statement",
+                    "regex": "^['\"]use server['\"];?$"
+                  }
+                },
+                {
+                  "has": {
+                    "stopBy": "end",
+                    "kind": "call_expression",
+                    "has": {
+                      "field": "function",
+                      "regex": "(^|\\.)createServerClient$"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls auth.getSession() in server code. Never trust getSession() on the server; call supabase.auth.getUser() to revalidate the Auth token."
+  }
+}

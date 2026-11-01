@@ -1,0 +1,8 @@
+
+export async function postInvoice(request: Request): Promise<Response> {
+  const parsed = InvoiceInput.safeParse(await request.json());
+  if (!parsed.success) return new Response("invalid", { status: 400 });
+  return new Response(parsed.data.id);
+}
+
+declare const InvoiceInput: { safeParse(value: unknown): { success: true; data: { id: string } } | { success: false } };

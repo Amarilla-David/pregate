@@ -1,0 +1,7 @@
+export function useStats() {
+  const stats = ref<{ orders: number } | null>(null);
+  useLazyAsyncData("stats", async function () {
+    stats.value = await $fetch<{ orders: number }>("/api/stats");
+  });
+  return { stats };
+}

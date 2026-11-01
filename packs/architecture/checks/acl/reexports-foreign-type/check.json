@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/acl/reexports-foreign-type",
+  "version": "1.0.0",
+  "area": "acl",
+  "cardinality": "singleton",
+  "dimension": "acl.foreign-reexport",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "foreign-reexport",
+          "rule": {
+            "kind": "export_statement",
+            "has": {
+              "stopBy": "end",
+              "kind": "string_fragment",
+              "regex": "^[^\\.\\s]"
+            }
+          },
+          "files": [
+            "**/acl/**",
+            "**/anti-corruption/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} re-exports a package type from the anti-corruption layer. Translate it and export the local type."
+  }
+}

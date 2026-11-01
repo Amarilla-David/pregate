@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/ops/cleanup.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "shell-string-build",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Concatenating a literal with an interpolated template through the cp alias still hands a caller-built string to the shell."
+  }
+}

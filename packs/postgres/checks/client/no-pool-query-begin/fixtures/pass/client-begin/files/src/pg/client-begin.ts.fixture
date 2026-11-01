@@ -1,0 +1,8 @@
+
+import { PoolClient } from "pg";
+
+export async function move(c: PoolClient): Promise<void> {
+  await c.query("BEGIN");
+  await c.query("UPDATE accounts SET balance = balance - 1");
+  await c.query("COMMIT");
+}

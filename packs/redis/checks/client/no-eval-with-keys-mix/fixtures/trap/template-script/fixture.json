@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/locks/tpl-eval.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-script",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Interpolating a value into the script bypasses KEYS/ARGV separation. Load the script once and call evalsha."
+  }
+}

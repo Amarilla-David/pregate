@@ -1,0 +1,6 @@
+
+export function missing(invoice: Invoice | null): boolean {
+  return invoice == null;
+}
+
+interface Invoice { id: string }

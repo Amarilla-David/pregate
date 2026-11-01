@@ -1,0 +1,8 @@
+export function processInvoice(valid: boolean, approved: boolean): boolean {
+  if (valid) {
+    if (approved) {
+      return true;
+    }
+  }
+  return false;
+}

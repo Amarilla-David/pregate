@@ -1,0 +1,27 @@
+{
+  "id": "vercel/cron/requirement-008",
+  "version": "1.0.0",
+  "area": "cron",
+  "cardinality": "singleton",
+  "dimension": "vercel.r008",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "VERCEL-008"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "VERCEL-008 requires current passing project verification: {symbol}."
+  }
+}

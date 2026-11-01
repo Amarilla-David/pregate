@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/queries/where-template.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-where",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A template literal in where looks parameterized but is still a raw string argument. Only the builder helpers or sql`` parameterize."
+  }
+}

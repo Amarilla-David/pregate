@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/accounts/rename.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "raw-on-outer-client",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The model write uses tx, so the callback looks transactional, but the raw statement goes through the outer client and commits even when the transaction rolls back."
+  }
+}

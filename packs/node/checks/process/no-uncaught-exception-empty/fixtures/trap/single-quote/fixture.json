@@ -1,0 +1,1 @@
+{"language":"typescript","params":{},"target":"src/a.ts","before":null,"expect":{"verdict":"fail","violations":[{"line":1}]},"trap":{"family":"quote-style","origin":"forge","discovered":"2026-10-03","note":"Using single quotes does not make an empty fatal-error handler meaningful."}}

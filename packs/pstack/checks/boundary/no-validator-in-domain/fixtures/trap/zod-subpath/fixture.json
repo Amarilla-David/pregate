@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {
+    "packages": [
+      "zod",
+      "valibot",
+      "ajv",
+      "superstruct",
+      "yup",
+      "io-ts"
+    ],
+    "paths": [
+      "**/domain/**",
+      "**/core/**",
+      "**/entities/**"
+    ]
+  },
+  "target": "src/entities/charge.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "validator-subpath",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A subpath import is still the validator package. Moving the schema into entities/ does not make it a domain type."
+  }
+}

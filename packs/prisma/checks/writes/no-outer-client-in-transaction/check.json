@@ -1,0 +1,138 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/writes/no-outer-client-in-transaction",
+  "version": "1.0.0",
+  "area": "writes",
+  "cardinality": "singleton",
+  "dimension": "prisma.transaction-client",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "outer-client-in-transaction",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "pattern": "$CLIENT"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^\\$transaction$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "any": [
+                      {
+                        "kind": "arrow_function"
+                      },
+                      {
+                        "kind": "function_expression"
+                      }
+                    ],
+                    "all": [
+                      {
+                        "not": {
+                          "has": {
+                            "field": "parameters",
+                            "has": {
+                              "stopBy": "end",
+                              "pattern": "$CLIENT"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "not": {
+                          "has": {
+                            "field": "parameter",
+                            "pattern": "$CLIENT"
+                          }
+                        }
+                      },
+                      {
+                        "has": {
+                          "stopBy": "end",
+                          "kind": "call_expression",
+                          "has": {
+                            "field": "function",
+                            "kind": "member_expression",
+                            "any": [
+                              {
+                                "all": [
+                                  {
+                                    "has": {
+                                      "field": "object",
+                                      "kind": "member_expression",
+                                      "has": {
+                                        "field": "object",
+                                        "pattern": "$CLIENT"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "has": {
+                                      "field": "property",
+                                      "regex": "^(findUnique|findUniqueOrThrow|findFirst|findFirstOrThrow|findMany|create|createMany|createManyAndReturn|update|updateMany|updateManyAndReturn|upsert|delete|deleteMany|count|aggregate|groupBy)$"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "all": [
+                                  {
+                                    "has": {
+                                      "field": "object",
+                                      "pattern": "$CLIENT"
+                                    }
+                                  },
+                                  {
+                                    "has": {
+                                      "field": "property",
+                                      "regex": "^\\$(queryRaw|executeRaw|queryRawUnsafe|executeRawUnsafe|queryRawTyped)$"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} queries the outer Prisma client inside an interactive $transaction callback. Run the query on the callback's tx client so it commits or rolls back with the transaction."
+  }
+}

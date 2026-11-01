@@ -1,0 +1,27 @@
+{
+  "id": "core/invariants/single-change-reason",
+  "version": "1.1.0",
+  "area": "invariants",
+  "cardinality": "singleton",
+  "dimension": "invariant.r007",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CORE-INV-007"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CORE-INV-007 requires current passing project verification: {symbol}."
+  }
+}

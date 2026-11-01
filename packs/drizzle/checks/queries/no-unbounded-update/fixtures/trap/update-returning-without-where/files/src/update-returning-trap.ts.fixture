@@ -1,0 +1,5 @@
+declare const db: { update(t: unknown): { set(v: Record<string, unknown>): { returning(): Promise<unknown[]> } } };
+declare const accounts: unknown;
+export async function resetBalances(): Promise<unknown[]> {
+  return await db.update(accounts).set({ balance: 0 }).returning();
+}

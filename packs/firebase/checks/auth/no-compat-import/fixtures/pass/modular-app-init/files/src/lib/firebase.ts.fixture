@@ -1,0 +1,7 @@
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+export const app = getApps().length ? getApp() : initializeApp({ apiKey: "public-key", projectId: "demo" });
+export const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => console.log("signed in:", Boolean(user)));

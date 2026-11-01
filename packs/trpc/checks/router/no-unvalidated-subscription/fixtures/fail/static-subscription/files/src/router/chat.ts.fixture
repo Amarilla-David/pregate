@@ -1,0 +1,2 @@
+import { t, publicProcedure } from "./trpc";
+export const chatRouter = t.router({ onAdd: publicProcedure.subscription(() => "static") });

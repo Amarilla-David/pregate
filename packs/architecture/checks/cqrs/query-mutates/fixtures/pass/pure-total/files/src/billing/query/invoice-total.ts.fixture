@@ -1,0 +1,4 @@
+
+export function totalDue(lines: { amount: number }[]): number {
+  return lines.reduce((sum, line) => sum + line.amount, 0);
+}

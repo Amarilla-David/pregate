@@ -1,0 +1,3 @@
+for (const u of users) {
+  const rows = await db.select().from(orders).where(eq(orders.userId, u.id));
+}

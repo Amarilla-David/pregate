@@ -1,0 +1,8 @@
+export const callbacks = {
+  jwt({ token, user }: { token: Record<string, unknown>; user?: { id: string; passwordHash: string } }) {
+    if (user) {
+      token.passwordHash = user.passwordHash;
+    }
+    return token;
+  },
+};

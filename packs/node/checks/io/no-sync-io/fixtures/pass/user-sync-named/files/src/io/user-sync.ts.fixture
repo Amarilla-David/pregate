@@ -1,0 +1,7 @@
+export function getSyncData(): string {
+  return "synced";
+}
+
+export function useIt(): string {
+  return getSyncData();
+}

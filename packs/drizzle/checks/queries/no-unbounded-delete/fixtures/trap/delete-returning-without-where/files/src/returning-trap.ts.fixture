@@ -1,0 +1,5 @@
+declare const db: { delete(t: unknown): { returning(): Promise<unknown[]> } };
+declare const tokens: unknown;
+export async function drainTokens(): Promise<unknown[]> {
+  return await db.delete(tokens).returning();
+}

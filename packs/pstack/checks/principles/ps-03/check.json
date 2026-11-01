@@ -1,0 +1,27 @@
+{
+  "id": "pstack/principles/ps-03",
+  "version": "1.0.0",
+  "area": "principles",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-03",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-03"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-03 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,7 @@
+
+export function place(order: Order): string {
+  throw new Error(order.id);
+  return order.id;
+}
+
+interface Order { id: string }

@@ -1,0 +1,5 @@
+exports.stopOwnedSaga = async (saga, inFlight) => {
+  saga.stop();
+  const results = await Promise.allSettled(inFlight);
+  for (const result of results) if (result.status === 'rejected') throw result.reason;
+};

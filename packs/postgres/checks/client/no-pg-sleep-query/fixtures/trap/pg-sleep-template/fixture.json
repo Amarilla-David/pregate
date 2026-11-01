@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/pg/pg-sleep-template.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-sleep",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A parameterized delay is still a delay. pg_sleep inside a template blocks the pooled connection for the same seconds."
+  }
+}

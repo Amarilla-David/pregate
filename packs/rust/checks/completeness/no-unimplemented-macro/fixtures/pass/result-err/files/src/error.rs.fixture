@@ -1,0 +1,6 @@
+pub fn parse(input: &str) -> Result<i32, &'static str> {
+    if input.is_empty() {
+        return Err("unimplemented format");
+    }
+    Ok(1)
+}

@@ -1,0 +1,1 @@
+const rows = await db.select().from(users).where(and(eq(users.id, id), eq(users.active, true)));

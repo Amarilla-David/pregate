@@ -1,0 +1,4 @@
+import { ValidationPipe } from "@nestjs/common";
+export function strictPipe(): ValidationPipe {
+  return new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true });
+}

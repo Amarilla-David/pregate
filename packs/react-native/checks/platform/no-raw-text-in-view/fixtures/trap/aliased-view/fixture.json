@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "app/cart.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "aliased-import",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Renaming View to Box and wrapping the copy in a template literal hides both the tag and the text shape, but it is still a bare string under a native View."
+  }
+}

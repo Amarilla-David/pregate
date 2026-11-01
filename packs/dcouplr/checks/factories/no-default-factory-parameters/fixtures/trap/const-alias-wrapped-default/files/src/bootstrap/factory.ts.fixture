@@ -1,0 +1,1 @@
+const creator = (input = {}, kernel) => input; const alias = ((creator satisfies Creator)); app.dependencyAdmission.declareIntent('ORDER').addMandatoryInputFields({}).addValidationPolicy().addVerificationPolicy().addFactoryMethod(alias).register();

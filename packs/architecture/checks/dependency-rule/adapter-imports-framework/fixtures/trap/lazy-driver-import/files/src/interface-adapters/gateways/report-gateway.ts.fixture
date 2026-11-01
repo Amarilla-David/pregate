@@ -1,0 +1,7 @@
+import type { QueueClient } from "../../frameworks/queue/client";
+
+export async function requestReport(id: string): Promise<void> {
+  const { queue } = await import("../../frameworks/queue/client");
+  const client: QueueClient = queue;
+  await client.send("reports", id);
+}

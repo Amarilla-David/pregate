@@ -1,0 +1,6 @@
+
+export function saveOrder(order: Order): Promise<void> {
+  return Promise.resolve();
+}
+
+interface Order { id: string }

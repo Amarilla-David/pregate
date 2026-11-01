@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/observability/requirement-002",
+  "version": "1.0.0",
+  "area": "observability",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.observability.r002",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DCP-OBSERVABILITY-002"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DCP-OBSERVABILITY-002 requires current passing project observability verification: {symbol}."
+  }
+}

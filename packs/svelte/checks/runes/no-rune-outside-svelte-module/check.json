@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/runes/no-rune-outside-svelte-module",
+  "version": "1.0.0",
+  "area": "runes",
+  "cardinality": "singleton",
+  "dimension": "svelte.rune-outside-module",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "rune-outside-svelte-module",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^\\$(state|derived|effect|props|bindable|inspect|host)(\\.[a-z]+)?$"
+            }
+          },
+          "ignores": [
+            "**/*.svelte.*"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a rune in a file Svelte does not compile. Runes only work in .svelte and .svelte.js/.svelte.ts files; rename the module."
+  }
+}

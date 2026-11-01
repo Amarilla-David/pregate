@@ -1,0 +1,6 @@
+export function legacyId(order: { id: string }): number {
+  // @ts-expect-error legacy ids are numeric strings
+  const id: number = order.id;
+  // @ts-expect-error same as above
+  return id + 0;
+}

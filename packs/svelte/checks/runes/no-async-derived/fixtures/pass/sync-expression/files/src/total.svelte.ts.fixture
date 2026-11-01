@@ -1,0 +1,4 @@
+declare function $derived<T>(v: T): T;
+export function computeTotal(price: number, qty: number) {
+  return $derived(price * qty);
+}

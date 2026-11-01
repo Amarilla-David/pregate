@@ -1,0 +1,169 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/factory-runtime",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-FACTORY-RUNTIME-001",
+      "check": "dcouplr/factory-runtime/requirement-001",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:780-837,1086-1154,3615-3620,3632-3660",
+        "paraphrase": "The composition root must own setup before runtime access and must apply one reviewed configuration. A second setup call must not be used to change a running configuration. A system factory must not use normal dependency gates through the bootstrap placeholder."
+      },
+      "why": "The composition root must own setup before runtime access and must apply one reviewed configuration. A second setup call must not be used to change a running configuration. A system factory must not use normal dependency gates through the bootstrap placeholder. The product initializes dcouplr or supplies a system factory.",
+      "fixHint": "Exercise the actual first setup, access before setup and attempted reconfiguration. Assert the effective configuration and system-factory bootstrap dependencies. The pinned setup ignores later calls; early system factories receive a placeholder whose dependency operations reject access. Inspector readiness is a separate asynchronous boundary. Bind DCP-FACTORY-RUNTIME-001 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-001.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-FACTORY-RUNTIME-002",
+      "check": "dcouplr/factory-runtime/requirement-002",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:842-880,1020-1046,1081-1086",
+        "paraphrase": "Each semantic identifier must have a documented owner and lifetime. Lookup and resolution must use the same lifetime. A transient and a singleton with the same identifier must be an explicit reviewed decision, not an accidental collision."
+      },
+      "why": "Each semantic identifier must have a documented owner and lifetime. Lookup and resolution must use the same lifetime. A transient and a singleton with the same identifier must be an explicit reviewed decision, not an accidental collision. The product admits or resolves dependencies.",
+      "fixHint": "Assert ownership across both registration stores, regular and singleton presence, the matching resolver and missing or duplicate registrations. The pinned runtime permits the same identifier in both stores and has does not see a singleton. Do not infer singleton presence from has or use a wrong resolver as a fallback. Bind DCP-FACTORY-RUNTIME-002 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-002.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-FACTORY-RUNTIME-003",
+      "check": "dcouplr/factory-runtime/requirement-003",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:467-486,517-527,566-575,1041-1046",
+        "paraphrase": "Factory input admission must enforce the actual domain constraints before the creator runs. A mandatory shape is not proof of strict input types, own-property membership or an immutable validation contract. Shared input and shape mutation must have an explicit owner."
+      },
+      "why": "Factory input admission must enforce the actual domain constraints before the creator runs. A mandatory shape is not proof of strict input types, own-property membership or an immutable validation contract. Shared input and shape mutation must have an explicit owner. A factory accepts untrusted input, a mandatory shape or singleton creation parameters.",
+      "fixHint": "Reject invalid domain values and assert that rejected input never reaches the creator. Test coercion-compatible values and inherited properties at the real boundary. Freeze or own the shape and nested parameters: the pinned shape is retained by reference, the input is not copied, and singleton parameters receive only a shallow copy. Bind DCP-FACTORY-RUNTIME-003 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-003.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-FACTORY-RUNTIME-004",
+      "check": "dcouplr/factory-runtime/requirement-004",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:461-465,517-527,1020-1035",
+        "paraphrase": "A creator must receive the input and injected kernel that its contract needs. Its result must have the promised synchronous or asynchronous lifetime. Resolution must not be treated as awaited initialization when a creator returns a promise or iterator."
+      },
+      "why": "A creator must receive the input and injected kernel that its contract needs. Its result must have the promised synchronous or asynchronous lifetime. Resolution must not be treated as awaited initialization when a creator returns a promise or iterator. The product defines a factory creator or consumes its result.",
+      "fixHint": "Assert actual argument delivery and result use, including default-parameter arity. If an asynchronous dependency is intentional, declare its promise contract and await it at the consuming boundary with an owned failure policy. The pinned runtime invokes creators according to Function.length and returns their result without awaiting it. Verify effects through the injected ports. Bind DCP-FACTORY-RUNTIME-004 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-004.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-FACTORY-RUNTIME-005",
+      "check": "dcouplr/factory-runtime/requirement-005",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:517-527,1026-1035,3377-3386,3391-3547",
+        "paraphrase": "Required creation verification must complete before a value is admitted to use. A verification callback must reject a failed invariant by throwing; a false return is not rejection. A configured system factory must satisfy the actual contract used by its consumers, not only callable-member admission."
+      },
+      "why": "Required creation verification must complete before a value is admitted to use. A verification callback must reject a failed invariant by throwing; a false return is not rejection. A configured system factory must satisfy the actual contract used by its consumers, not only callable-member admission. Creation has an output invariant or the product replaces a system dependency.",
+      "fixHint": "Assert rejection, completion order and required output behavior through actual resolution. An async verification callback is not awaited; a generator body does not run. The pinned runtime ignores verification return values and checks only selected callable members on system outputs. Failed singleton verification is not cached; test subsequent attempts and effect repeat safety. Bind DCP-FACTORY-RUNTIME-005 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-005.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-FACTORY-RUNTIME-006",
+      "check": "dcouplr/factory-runtime/requirement-006",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:846-875,1020-1035,1072-1076",
+        "paraphrase": "A dependency owner must choose transient or singleton lifetime and must verify the resulting identity, shared mutation and scope. A singleton must not hold one user's or organization's mutable state for unrelated callers. Resolution failure must have an owned retry and effect policy."
+      },
+      "why": "A dependency owner must choose transient or singleton lifetime and must verify the resulting identity, shared mutation and scope. A singleton must not hold one user's or organization's mutable state for unrelated callers. Resolution failure must have an owned retry and effect policy. A dependency is resolved repeatedly, shared across requests or materialized as a singleton.",
+      "fixHint": "Assert repeated transient creation, singleton identity, actual constructor input and ownership of mutable fields. Exercise failed creation and null or undefined singleton results. The pinned singleton rejects only nullish results and caches other values; a transient can return null. A successful registration is not successful materialization. Bind DCP-FACTORY-RUNTIME-006 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-006.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-FACTORY-RUNTIME-007",
+      "check": "dcouplr/factory-runtime/requirement-007",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:1047-1071,3636-3638",
+        "paraphrase": "Force replacement must be confined to an owned test runtime. A replacement must not be treated as disposal or revocation of previously returned instances. The bootstrap-owned kernel must not be replaced through public admission."
+      },
+      "why": "Force replacement must be confined to an owned test runtime. A replacement must not be treated as disposal or revocation of previously returned instances. The bootstrap-owned kernel must not be replaced through public admission. Tests use force registration or retain dependencies across replacement.",
+      "fixHint": "Assert production-mode rejection, test-mode replacement and ownership of the retired instance. The pinned force singleton operation removes its cache entry but does not dispose the old value; retained references remain live. Follow the supported injected kernel instead of relying on a warning to reject reserved admission. Bind DCP-FACTORY-RUNTIME-007 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-007.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-FACTORY-RUNTIME-008",
+      "check": "dcouplr/factory-runtime/requirement-008",
+      "defaults": {
+        "verifier": "DCP-FACTORY-RUNTIME-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:1077-1080,1154-1180,3623-3633",
+        "paraphrase": "The application must own shutdown and test-reset boundaries. Shutdown must stop new application work and settle or cancel owned work and resources according to a named budget. Runtime shutdown or test reset alone must not be treated as disposal, drained handlers or revoked retained references."
+      },
+      "why": "The application must own shutdown and test-reset boundaries. Shutdown must stop new application work and settle or cancel owned work and resources according to a named budget. Runtime shutdown or test reset alone must not be treated as disposal, drained handlers or revoked retained references. The product stops, resets a test runtime or replaces a runtime while references or work can remain live.",
+      "fixHint": "Exercise the actual application's admission barrier, retained references, resource disposal, pending work and failure deadline. The pinned shutdown only records a flag; old runtime references still resolve after shutdown or global reset. Reset creates a new global runtime but does not revoke previous application references. Verify inspector closure separately. Bind DCP-FACTORY-RUNTIME-008 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-FACTORY-RUNTIME-008.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

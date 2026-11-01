@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../../schema/check.v1.json",
+  "id": "core/integrity/edit-generated-or-excluded",
+  "version": "1.1.0",
+  "area": "integrity",
+  "cardinality": "singleton",
+  "dimension": "integrity.generated-edit",
+  "minSeverity": "deny",
+  "params": {},
+  "impl": { "kind": "primitive", "primitive": "placement", "cases": ["edit-generated-or-excluded"] },
+  "phase": ["pre", "stop"],
+  "feedback": { "message": "This file existed as generated or excluded code: regenerate it, do not edit it." }
+}

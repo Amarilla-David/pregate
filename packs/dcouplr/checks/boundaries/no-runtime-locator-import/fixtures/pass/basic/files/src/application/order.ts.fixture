@@ -1,0 +1,2 @@
+import type { IDKernel } from 'dcouplr';
+export const run = (kernel: IDKernel) => kernel.dependencies.resolve('STORE');

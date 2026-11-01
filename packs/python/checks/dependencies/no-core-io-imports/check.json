@@ -1,0 +1,32 @@
+{
+  "id": "python/dependencies/no-core-io-imports",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "multi",
+  "dimension": "python.deps.packages",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "banned-import"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: The core imports a selected I/O package."
+  }
+}

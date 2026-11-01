@@ -1,0 +1,27 @@
+import { describe, expect, it } from "bun:test";
+import { buildTimelineAxis } from "../src/timeline";
+
+function xit(label: string): string {
+  return `x-${label}`;
+}
+
+describe("timeline axis", () => {
+  it("fits the milestones in the range", () => {
+    const fit = buildTimelineAxis({ from: 0, to: 10 });
+    expect(fit.ticks).toHaveLength(11);
+    expect(fit.scale(5)).toBe(0.5);
+  });
+
+  it("zooms to fit", () => {
+    const zoom = (fit: number): number => Math.min(fit, 4);
+    const { xtest = 2 } = { xtest: zoom(8) };
+    expect(xtest).toBe(4);
+    expect(xit("axis")).toBe("x-axis");
+  });
+
+  it("refits after a resize", () => {
+    const self = buildTimelineAxis({ from: 0, to: 4 });
+    const { fit: span } = self.fit();
+    expect(span).toBe(self.fit().span);
+  });
+});

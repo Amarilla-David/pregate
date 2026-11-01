@@ -1,0 +1,7 @@
+export const OrderStatus = {
+  Pending: "pending",
+  Paid: "paid",
+  Shipped: "shipped",
+} as const;
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];

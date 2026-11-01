@@ -1,0 +1,4 @@
+export function issueSession(userId: string) {
+  const refreshToken = Math.random().toString(36).slice(2);
+  return { userId, refreshToken };
+}

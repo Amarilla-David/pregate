@@ -1,0 +1,8 @@
+import { model, Schema } from "mongoose";
+
+const User = model("User", new Schema({ name: String, email: String }));
+
+export async function updateProfile(id: string, name: string) {
+  await User.updateOne({ _id: id }, { name });
+  return User.findOneAndUpdate({ _id: id }, { email: `${name}@example.com` }, { new: true });
+}

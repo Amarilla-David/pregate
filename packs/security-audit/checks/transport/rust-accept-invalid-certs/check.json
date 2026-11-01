@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/transport/rust-accept-invalid-certs",
+  "version": "1.0.0",
+  "area": "transport",
+  "cardinality": "singleton",
+  "dimension": "security-audit.transport.rust-certificate-verification",
+  "minSeverity": null,
+  "languages": [
+    "rust"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "rust": [
+        {
+          "id": "danger-accept-invalid",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "field_expression",
+                  "has": {
+                    "field": "field",
+                    "regex": "^danger_accept_invalid_(?:certs|hostnames)$"
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "^\\(\\s*true\\s*\\)$"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} turns off TLS certificate or hostname verification. Add a trusted root with add_root_certificate instead."
+  }
+}

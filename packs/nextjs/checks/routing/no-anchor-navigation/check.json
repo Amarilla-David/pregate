@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/routing/no-anchor-navigation",
+  "version": "1.0.1",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-anchor-navigation",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "anchor-navigation",
+          "rule": {
+            "regex": "^<a\\b",
+            "has": {
+              "field": "name",
+              "kind": "identifier",
+              "regex": "^a$"
+            },
+            "all": [
+              {
+                "has": {
+                  "regex": "^href\\s*=",
+                  "has": {
+                    "kind": "property_identifier",
+                    "regex": "^href$"
+                  },
+                  "all": [
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "string",
+                            "has": {
+                              "kind": "string_fragment",
+                              "regex": "^/([^/]|$)"
+                            }
+                          },
+                          {
+                            "regex": "^\\{",
+                            "has": {
+                              "kind": "string",
+                              "has": {
+                                "kind": "string_fragment",
+                                "regex": "^/([^/]|$)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} navigates inside the app with an anchor tag. Use the next/link component instead."
+  }
+}

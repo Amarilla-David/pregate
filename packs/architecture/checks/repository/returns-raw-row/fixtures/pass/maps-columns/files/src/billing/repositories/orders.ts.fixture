@@ -1,0 +1,6 @@
+
+export function toOrder(row: { id: string; total: number }): Order {
+  return { id: row.id, total: row.total };
+}
+
+export interface Order { id: string; total: number }

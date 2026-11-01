@@ -1,0 +1,3 @@
+function Rows({ ids }) {
+  return ids.map(id => { const state = useState(id); return state[0]; });
+}

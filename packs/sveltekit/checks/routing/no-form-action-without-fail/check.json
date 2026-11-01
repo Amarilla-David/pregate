@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/routing/no-form-action-without-fail",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.form-throw-literal",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "throw-object",
+          "rule": {
+            "kind": "throw_statement",
+            "has": {
+              "stopBy": "neighbor",
+              "kind": "object"
+            }
+          },
+          "files": [
+            "**/+page.server.ts",
+            "**/+server.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} throws a plain object from a form action. Return fail() for expected form failures, or throw error() for unexpected ones."
+  }
+}

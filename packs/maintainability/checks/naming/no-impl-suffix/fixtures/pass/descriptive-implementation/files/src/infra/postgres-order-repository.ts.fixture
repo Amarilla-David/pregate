@@ -1,0 +1,17 @@
+export interface OrderRepository {
+  byId(id: string): Promise<{ id: string } | undefined>;
+}
+
+export class PostgresOrderRepository implements OrderRepository {
+  async byId(id: string): Promise<{ id: string } | undefined> {
+    return { id };
+  }
+}
+
+export class InMemoryOrderRepository implements OrderRepository {
+  private readonly orders = new Map<string, { id: string }>();
+
+  async byId(id: string): Promise<{ id: string } | undefined> {
+    return this.orders.get(id);
+  }
+}

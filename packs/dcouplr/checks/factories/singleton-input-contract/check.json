@@ -1,0 +1,294 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/factories/singleton-input-contract",
+  "version": "1.0.0",
+  "area": "factories",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.factory-singleton-input-contract",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "singleton-input",
+          "utils": {
+            "invalid-singleton": {
+              "any": [
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                },
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "kind": "class"
+                },
+                {
+                  "kind": "update_expression"
+                },
+                {
+                  "kind": "unary_expression",
+                  "not": {
+                    "regex": "^void\\b"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-singleton"
+                  }
+                }
+              ]
+            },
+            "creator-member": {
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(addFactoryMethod)$"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "subscript_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "index",
+                        "regex": "^[\\\"'`](addFactoryMethod)[\\\"'`]$"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "creator-member"
+                  }
+                }
+              ]
+            },
+            "factory-stage": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "creator-member"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "factory-stage"
+                  }
+                }
+              ]
+            },
+            "singleton-member": {
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(registerSingleton|registerSingletonForce)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "object",
+                        "matches": "factory-stage"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "subscript_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "index",
+                        "regex": "^[\\\"'`](registerSingleton|registerSingletonForce)[\\\"'`]$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "object",
+                        "matches": "factory-stage"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "singleton-member"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "matches": "singleton-member"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "kind": "arguments",
+                  "not": {
+                    "has": {
+                      "kind": "spread_element"
+                    }
+                  },
+                  "any": [
+                    {
+                      "has": {
+                        "nthChild": {
+                          "position": 1,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "matches": "invalid-singleton"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Fluent singleton registration accepts an object or omitted input, not a primitive, null or a function."
+  }
+}

@@ -1,0 +1,4 @@
+declare function getProgramDerivedAddress(input: { programAddress: string; seeds: Uint8Array[] }): Promise<[string, number]>;
+export async function deriveVaultPda(programAddress: string, seed: Uint8Array): Promise<[string, number]> {
+  return await getProgramDerivedAddress({ programAddress, seeds: [seed] });
+}

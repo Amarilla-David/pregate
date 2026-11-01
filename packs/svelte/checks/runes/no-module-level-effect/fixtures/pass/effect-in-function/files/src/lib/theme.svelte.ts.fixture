@@ -1,0 +1,7 @@
+export const theme = $state({ mode: "light" });
+
+export function persistTheme(key: string): void {
+  $effect(() => {
+    localStorage.setItem(key, theme.mode);
+  });
+}

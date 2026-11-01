@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/pg/await-generic.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "await-generic",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "tree-sitter-typescript parses `await pool.query<Row>(...)` as a call whose function is the await_expression, not the member_expression, so a callee anchor that only accepts member_expression misses typed pg calls."
+  }
+}

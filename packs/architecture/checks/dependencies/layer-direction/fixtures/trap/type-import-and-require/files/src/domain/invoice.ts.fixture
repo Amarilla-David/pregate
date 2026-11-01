@@ -1,0 +1,15 @@
+import type { Database } from "../infra/database";
+
+const legacyTax = require("../infra/legacy-tax");
+
+export class Invoice {
+  constructor(readonly id: string, readonly cents: number) {}
+
+  tax(): number {
+    return legacyTax.compute(this.cents);
+  }
+
+  static load(db: Database, id: string): Promise<Invoice> {
+    return db.invoices.find(id);
+  }
+}

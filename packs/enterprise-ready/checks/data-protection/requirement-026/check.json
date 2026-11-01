@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/data-protection/requirement-026",
+  "version": "1.0.0",
+  "area": "data-protection",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r026",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-026"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-026 requires current passing project verification: {symbol}."
+  }
+}

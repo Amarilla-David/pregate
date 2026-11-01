@@ -1,0 +1,4 @@
+declare const prisma: { session: { deleteMany(args: { where: Record<string, never> }): Promise<unknown> } };
+export async function clearAllSessions(): Promise<void> {
+  await prisma.session.deleteMany({ where: {} });
+}

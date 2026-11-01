@@ -1,0 +1,3 @@
+stage.addValidationPolicy();
+stage.addVerificationPolicy();
+stage.addFactoryMethod(async () => ({}));

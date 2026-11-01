@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "agent-practices/security-review",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PRACTICE-007",
+      "check": "agent-practices/security-review/requirement-007",
+      "defaults": {
+        "verifier": "PRACTICE-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Google Mantis README and reproduce/patch skills at 2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80; https://github.com/google/mantis/tree/2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80",
+        "locator": "docs/features/agent-practices-pack.md, rule 7; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "A scoped security review must use a threat model tied to the current code and deployment assumptions, identifying protected assets, trust boundaries, entry points and attacker capabilities before prioritizing vulnerability research."
+      },
+      "why": "A scoped security review must use a threat model tied to the current code and deployment assumptions, identifying protected assets, trust boundaries, entry points and attacker capabilities before prioritizing vulnerability research.",
+      "fixHint": "Bind PRACTICE-007 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-007; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-008",
+      "check": "agent-practices/security-review/requirement-008",
+      "defaults": {
+        "verifier": "PRACTICE-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Google Mantis README and reproduce/patch skills at 2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80; https://github.com/google/mantis/tree/2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80",
+        "locator": "docs/features/agent-practices-pack.md, rule 8; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Each candidate security finding must be triaged against a reachable code path and explicit exploit preconditions, with evidence, impact and uncertainty reviewed before it is labeled confirmed; failed reproduction alone must not label it a false positive."
+      },
+      "why": "Each candidate security finding must be triaged against a reachable code path and explicit exploit preconditions, with evidence, impact and uncertainty reviewed before it is labeled confirmed; failed reproduction alone must not label it a false positive.",
+      "fixHint": "Bind PRACTICE-008 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-008; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-009",
+      "check": "agent-practices/security-review/requirement-009",
+      "defaults": {
+        "verifier": "PRACTICE-009"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Google Mantis README and reproduce/patch skills at 2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80; https://github.com/google/mantis/tree/2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80",
+        "locator": "docs/features/agent-practices-pack.md, rule 9; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Generated exploit and patch-verification code must execute only in an isolated restricted environment with synthetic data, no production credentials or sensitive host access, and explicitly bounded filesystem, network and resource permissions."
+      },
+      "why": "Generated exploit and patch-verification code must execute only in an isolated restricted environment with synthetic data, no production credentials or sensitive host access, and explicitly bounded filesystem, network and resource permissions.",
+      "fixHint": "Bind PRACTICE-009 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-009; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-010",
+      "check": "agent-practices/security-review/requirement-010",
+      "defaults": {
+        "verifier": "PRACTICE-010"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Google Mantis README and reproduce/patch skills at 2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80; https://github.com/google/mantis/tree/2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80",
+        "locator": "docs/features/agent-practices-pack.md, rule 10; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Each attempted vulnerability reproduction must retain the scoped reproducer, versions, commands, preconditions and observed results so another reviewer can replay it safely; inconclusive and environment-limited outcomes must remain explicit."
+      },
+      "why": "Each attempted vulnerability reproduction must retain the scoped reproducer, versions, commands, preconditions and observed results so another reviewer can replay it safely; inconclusive and environment-limited outcomes must remain explicit.",
+      "fixHint": "Bind PRACTICE-010 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-010; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-011",
+      "check": "agent-practices/security-review/requirement-011",
+      "defaults": {
+        "verifier": "PRACTICE-011"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Google Mantis README and reproduce/patch skills at 2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80; https://github.com/google/mantis/tree/2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80",
+        "locator": "docs/features/agent-practices-pack.md, rule 11; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "A security patch must be checked against the original reproducer to show the attack no longer succeeds, with legitimate behavior and relevant regression coverage verified in the same restricted environment before the finding is marked fixed."
+      },
+      "why": "A security patch must be checked against the original reproducer to show the attack no longer succeeds, with legitimate behavior and relevant regression coverage verified in the same restricted environment before the finding is marked fixed.",
+      "fixHint": "Bind PRACTICE-011 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-011; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-012",
+      "check": "agent-practices/security-review/requirement-012",
+      "defaults": {
+        "verifier": "PRACTICE-012"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Google Mantis README and reproduce/patch skills at 2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80; https://github.com/google/mantis/tree/2b3bbdcbb8d259d1777b89dcfa3c8e87615ccc80",
+        "locator": "docs/features/agent-practices-pack.md, rule 12; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "A final security report must trace findings to reviewed evidence and patch status, separate confirmed, unconfirmed and unresolved risks, and receive qualified human review before external reporting; it must not claim that a scan proves the absence of vulnerabilities."
+      },
+      "why": "A final security report must trace findings to reviewed evidence and patch status, separate confirmed, unconfirmed and unresolved risks, and receive qualified human review before external reporting; it must not claim that a scan proves the absence of vulnerabilities.",
+      "fixHint": "Bind PRACTICE-012 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-012; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

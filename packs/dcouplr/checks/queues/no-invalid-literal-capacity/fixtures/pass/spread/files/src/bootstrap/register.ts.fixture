@@ -1,0 +1,1 @@
+kernel.dependencies.resolve('I_QUEUE', { segmentCapacity: 0, ...config });

@@ -1,0 +1,10 @@
+export async function rename(name: string) {
+  await db.transaction(async (tx) => {
+    await tx.update(accounts).set({ label: name }).where(eq(accounts.owner, "Dan"));
+
+    await tx.transaction(async (tx2) => {
+      await tx2.update(users).set({ name }).where(eq(users.name, "Dan"));
+    });
+  });
+  await db.insert(auditLog).values({ action: "rename" });
+}

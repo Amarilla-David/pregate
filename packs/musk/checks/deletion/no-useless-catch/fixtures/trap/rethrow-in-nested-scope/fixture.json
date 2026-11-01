@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/nested-rethrow.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "dead-wrapper",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Defensive try-catch placed inside nested control flow that only rethrows must still be deleted."
+  }
+}

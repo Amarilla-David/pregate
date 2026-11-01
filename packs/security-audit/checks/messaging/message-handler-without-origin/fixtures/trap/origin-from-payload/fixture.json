@@ -1,0 +1,23 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/receiver.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "payload-field",
+    "note": "An origin destructured out of event.data is a field the sender wrote, not the sender's origin.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

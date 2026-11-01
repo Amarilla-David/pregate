@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/dependencies/layer-direction",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "singleton",
+  "dimension": "deps.layers",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "layer-edge"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports code from a layer this layer may not depend on."
+  }
+}

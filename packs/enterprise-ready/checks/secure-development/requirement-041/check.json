@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/secure-development/requirement-041",
+  "version": "1.0.0",
+  "area": "secure-development",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r041",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-041"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-041 requires current passing project verification: {symbol}."
+  }
+}

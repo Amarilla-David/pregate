@@ -1,0 +1,4 @@
+import type { Col } from "./db";
+export async function recent(col: Col): Promise<void> {
+  await col.find({}).sort({ created: -1 }).toArray();
+}

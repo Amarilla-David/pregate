@@ -1,0 +1,205 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "svelte/runes",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SV-RUNE-001",
+      "check": "svelte/runes/no-state-destructure",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, runes ($state)",
+        "locator": "$state creates deeply reactive state",
+        "paraphrase": "Keep the state object whole and read its properties. Destructuring copies the values out once, so later updates never reach the copy."
+      },
+      "why": "A destructured binding holds the value from creation time. When the state updates, the copy stays stale while the template reads the live object.",
+      "fixHint": "Bind the whole object (const counter = $state(...)) and read counter.count at each use.",
+      "avoid": "Spreading the state into a new object ({...counter}) copies the same way. A factory that builds the initial value does not exempt the destructure.",
+      "examples": {
+        "pass": "pass/whole-object",
+        "fail": "fail/destructured-object"
+      }
+    },
+    {
+      "id": "SV-DERIVED-001",
+      "relations": [
+        {
+          "with": "svelte/SV-DERIVED-003",
+          "kind": "duplicates",
+          "why": "Both flag async callbacks passed to $derived or $derived.by; SV-DERIVED-001 also covers top-level await expressions inside $derived.",
+          "settle": "Keep both enabled or turn svelte/SV-DERIVED-003 off in overrides when SV-DERIVED-001 is active."
+        }
+      ],
+      "check": "svelte/runes/no-derived-write",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, runes ($derived)",
+        "locator": "$derived recomputes from its inputs",
+        "paraphrase": "$derived recomputes whenever its inputs change, so it must be a pure synchronous expression. An async function returns a promise, and an await has nothing to suspend."
+      },
+      "why": "An async derivation stores a promise instead of the value, and every reader must unwrap it. The derivation also reruns on each input change, refiring the request.",
+      "fixHint": "Load asynchronously in an $effect or an event handler, keep the result in $state, and derive synchronously from that state.",
+      "avoid": "Naming the async function (async function load) does not make it synchronous. A promise returned without the async keyword is still async and stays out of reach of this shape.",
+      "examples": {
+        "pass": "pass/sync-expression",
+        "fail": "fail/async-derive"
+      }
+    },
+    {
+      "id": "SV-EFFECT-001",
+      "check": "svelte/runes/no-effect-state-loop",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, runes ($effect)",
+        "locator": "$effect callbacks are synchronous",
+        "paraphrase": "An $effect callback runs its cleanup protocol on change. An async callback returns a promise instead of a cleanup, so teardown never runs and rejections escape."
+      },
+      "why": "The runtime treats the returned promise as the cleanup function. The real cleanup never runs, and a rejection escapes the effect instead of surfacing at the await.",
+      "fixHint": "Define an async function inside the synchronous callback and void it, or move the work into the event that caused it.",
+      "avoid": "An async helper declared inside the callback still matches the arguments text; hoist the helper out of the $effect call. $effect.pre and $effect.root take the same synchronous callback.",
+      "examples": {
+        "pass": "pass/sync-callback",
+        "fail": "fail/direct-async"
+      }
+    },
+    {
+      "id": "SV-INSPECT-001",
+      "check": "svelte/runes/no-inspect-in-prod",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, runes ($inspect)",
+        "locator": "$inspect traces reactive values",
+        "paraphrase": "$inspect logs reactive values while developing. It is a debugger, not program output, so it does not ship."
+      },
+      "why": "A shipped $inspect keeps logging internals on every state change, leaking data to the console and slowing the hot path.",
+      "fixHint": "Delete the $inspect call before commit. Keep the values it watched reachable through the state object for the next debug session.",
+      "avoid": "$inspect.trace is the same helper behind a member call and is still flagged. A comment that mentions $inspect is not a call and is ignored.",
+      "examples": {
+        "pass": "pass/no-inspect",
+        "fail": "fail/bare-inspect"
+      }
+    },
+    {
+      "id": "SV-DOLLAR-001",
+      "check": "svelte/runes/no-non-rune-dollar-fn",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, runes",
+        "locator": "the rune names are fixed",
+        "paraphrase": "The runes are $state, $derived, $effect, $props, $bindable, $inspect and $host. A different $Name is not a rune; it calls something that does not exist."
+      },
+      "why": "A hallucinated rune compiles as a call to an undefined function and fails at runtime, far from the line that invented it.",
+      "fixHint": "Use the documented rune for the job ($state for state, $derived for computed values, $effect for side effects).",
+      "avoid": "Lowercase $names outside the rune list (for example a local helper) are not flagged; only $Uppercase calls are. A member call on a $UPPER object is the same hallucinated shape.",
+      "examples": {
+        "pass": "pass/state-rune",
+        "fail": "fail/capital-state"
+      }
+    },
+    {
+      "id": "SV-MODULE-001",
+      "check": "svelte/runes/no-rune-outside-svelte-module",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, .svelte.js and .svelte.ts files; runtime errors (https://svelte.dev/docs/svelte/svelte-js-files)",
+        "locator": "What are runes?; rune_outside_svelte",
+        "paraphrase": "Runes are only available in .svelte and .svelte.js/.svelte.ts files. Other modules are not compiled by Svelte, so a rune there is an error."
+      },
+      "why": "Svelte never compiles a plain .ts or .js module, so $state, $derived or $effect there is an undefined call that fails at runtime.",
+      "fixHint": "Rename the module to name.svelte.ts (tests to name.svelte.test.ts) and update its imports, or move the reactive code into a component.",
+      "avoid": "A directory named svelte does not opt a file in; only the .svelte.ts or .svelte.js file name does. Store helpers from svelte/store are plain functions and are not matched.",
+      "examples": {
+        "pass": "pass/svelte-ts-module",
+        "fail": "fail/plain-ts-state"
+      }
+    },
+    {
+      "id": "SV-ORPHAN-001",
+      "check": "svelte/runes/no-module-level-effect",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, runes ($effect); runtime errors (https://svelte.dev/docs/svelte/$effect)",
+        "locator": "$effect.root; effect_orphan",
+        "paraphrase": "Effects can only be created while a parent effect is running, for example during component initialisation. $effect.root creates effects outside that phase."
+      },
+      "why": "Module code runs once when the file is imported, with no parent effect, so a top-level $effect throws effect_orphan instead of syncing anything.",
+      "fixHint": "Move the $effect into a function that a component calls during setup, or wrap it in $effect.root and keep the returned cleanup.",
+      "avoid": "An if (typeof window ...) guard still runs while the module loads. Effects inside functions, constructors and $effect.root callbacks are not matched; plain .ts modules are reported by SV-MODULE-001 instead.",
+      "examples": {
+        "pass": "pass/effect-in-function",
+        "fail": "fail/top-level-effect"
+      }
+    },
+    {
+      "id": "SV-PROPS-001",
+      "check": "svelte/runes/no-component-rune-in-module",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, compiler errors (https://svelte.dev/docs/svelte/compiler-errors)",
+        "locator": "props_invalid_placement; bindable_invalid_location; host_invalid_placement",
+        "paraphrase": "$props() only works at the top level of a component, $bindable() only inside a $props() declaration, and $host() only in custom element components."
+      },
+      "why": "A .svelte.js or .svelte.ts module is not a component, so the compiler rejects $props, $props.id, $bindable and $host there and the build fails.",
+      "fixHint": "Read props in the component with $props() and pass the values, or the host element, to the module function as arguments.",
+      "avoid": "$props.id() is part of $props, not a general id helper. Plain .ts modules are reported by SV-MODULE-001 instead.",
+      "examples": {
+        "pass": "pass/argument-in-module",
+        "fail": "fail/props-in-module"
+      }
+    },
+    {
+      "id": "SV-DERIVED-002",
+      "check": "svelte/runes/no-function-in-derived",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Svelte 5 documentation, runes ($derived) (https://svelte.dev/docs/svelte/$derived)",
+        "locator": "$derived.by",
+        "paraphrase": "$derived takes an expression; $derived.by takes a function. $derived(expression) is equivalent to $derived.by(() => expression)."
+      },
+      "why": "$derived(() => x) stores the arrow itself, and because nothing is read while deriving, the value never updates and readers get a function instead of the result.",
+      "fixHint": "Use $derived.by(() => ...) when the derivation needs a function body, or pass the expression directly: $derived(items.length).",
+      "avoid": "A type argument does not make the function intentional. Async functions are reported by SV-DERIVED-001 and are not matched here; callbacks inside the expression, such as filter((x) => ...), are fine.",
+      "examples": {
+        "pass": "pass/derived-by",
+        "fail": "fail/arrow-derived"
+      }
+    },
+    {
+      "id": "SV-DERIVED-003",
+      "relations": [
+        {
+          "with": "svelte/SV-DERIVED-001",
+          "kind": "duplicates",
+          "why": "Both flag async callbacks passed to $derived or $derived.by; SV-DERIVED-001 also covers top-level await expressions inside $derived.",
+          "settle": "Keep both enabled or turn svelte/SV-DERIVED-003 off in overrides when SV-DERIVED-001 is active."
+        }
+      ],
+      "check": "svelte/runes/no-async-derived",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, $derived and $derived.by (https://svelte.dev/docs/svelte/$derived)",
+        "locator": "$derived.by synchronous callback requirement",
+        "paraphrase": "$derived.by takes a synchronous function that returns the derived value. An async callback returns an unresolved Promise and stops tracking dependencies after the first await."
+      },
+      "why": "Passing an async function to $derived or $derived.by makes the derived state hold a Promise object and loses reactive tracking across await points.",
+      "fixHint": "Compute synchronous derivations in $derived.by(() => ...), and manage asynchronous fetching through $effect or an explicit async resource helper.",
+      "avoid": "Both async arrow functions and async function expressions passed directly to $derived or $derived.by are matched.",
+      "examples": {
+        "pass": "pass/sync-derived",
+        "fail": "fail/async-derived-by"
+      }
+    }
+  ]
+}

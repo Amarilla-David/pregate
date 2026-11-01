@@ -1,0 +1,2 @@
+const c = localStorage.getItem("cluster");
+export { c };

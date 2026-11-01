@@ -1,0 +1,27 @@
+{
+  "id": "next-website/rendering/requirement-005",
+  "version": "1.0.0",
+  "area": "rendering",
+  "cardinality": "singleton",
+  "dimension": "next-website.r005",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "NEXT-WEBSITE-005"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "NEXT-WEBSITE-005 requires current passing project verification: {symbol}."
+  }
+}

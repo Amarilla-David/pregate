@@ -1,0 +1,158 @@
+{
+  "id": "go/quality",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "GO-FN-001",
+      "check": "go/complexity/fn-max-lines",
+      "defaults": {
+        "max": 50
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "go fn.lines, revision 1",
+        "paraphrase": "Function size exceeds the selected limit."
+      },
+      "why": "Function size exceeds the selected limit.",
+      "fixHint": "Extract a cohesive operation and preserve behavior with relevant tests.",
+      "avoid": "Do not compress statements onto one line or split a single state machine into arbitrary fragments.",
+      "examples": {
+        "pass": "pass/small",
+        "fail": "fail/long"
+      }
+    },
+    {
+      "id": "GO-FN-002",
+      "check": "go/complexity/fn-max-params",
+      "defaults": {
+        "max": 4
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "go fn.params, revision 1",
+        "paraphrase": "Function parameter count exceeds the selected limit."
+      },
+      "why": "Function parameter count exceeds the selected limit.",
+      "fixHint": "Review whether the inputs describe a cohesive domain object.",
+      "avoid": "Do not hide unrelated inputs in a generic options map; Python self/cls and variadic parameters count, Go receivers do not.",
+      "examples": {
+        "pass": "pass/four",
+        "fail": "fail/five"
+      }
+    },
+    {
+      "id": "GO-NEST-001",
+      "check": "go/control/max-nesting",
+      "defaults": {
+        "max": 2
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "go control.nesting, revision 1",
+        "paraphrase": "Control-flow nesting exceeds the selected limit."
+      },
+      "why": "Control-flow nesting exceeds the selected limit.",
+      "fixHint": "Use an early return or name a cohesive inner operation.",
+      "avoid": "Do not hide nesting in loops, switch/match branches or exception handlers.",
+      "examples": {
+        "pass": "pass/two",
+        "fail": "fail/three"
+      }
+    },
+    {
+      "id": "GO-DOT-001",
+      "check": "go/dependencies/no-dot-import",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "go deps.dot-import, revision 1",
+        "paraphrase": "A dot import obscures the package owning an identifier."
+      },
+      "why": "A dot import obscures the package owning an identifier.",
+      "fixHint": "Use a named package qualifier, unless a reviewed DSL intentionally requires a dot import.",
+      "avoid": "Do not replace a dot import with copied package identifiers.",
+      "examples": {
+        "pass": "pass/named",
+        "fail": "fail/dot"
+      }
+    },
+    {
+      "id": "GO-IOUTIL-001",
+      "check": "go/dependencies/no-ioutil",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Go standard library documentation, package io/ioutil",
+        "locator": "https://pkg.go.dev/io/ioutil (package deprecation notice, Go 1.16)",
+        "paraphrase": "io/ioutil is deprecated. The same functionality is provided by package io or package os, and those should be preferred in new code."
+      },
+      "why": "New code that imports io/ioutil depends on a deprecated package whose functions are now thin wrappers around io and os.",
+      "fixHint": "Call the replacement named in each function's doc: os.ReadFile, os.WriteFile, os.ReadDir, os.MkdirTemp, os.CreateTemp, io.ReadAll or io.Discard.",
+      "avoid": "Do not rename the import or switch to a raw string path; the package is still io/ioutil.",
+      "examples": {
+        "pass": "pass/io-os",
+        "fail": "fail/single"
+      }
+    },
+    {
+      "id": "GO-CTX-001",
+      "check": "go/context/no-context-field",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Go standard library documentation, package context",
+        "locator": "https://pkg.go.dev/context (overview); https://go.dev/blog/context-and-structs",
+        "paraphrase": "Do not store Contexts inside a struct type; pass a Context explicitly to each function that needs it. Backward compatibility of an existing API is the exception the Go blog describes."
+      },
+      "why": "A context stored in a struct outlives the call it belongs to, so callers cannot set a deadline or cancel one operation without affecting every method on the value.",
+      "fixHint": "Remove the field and add ctx context.Context as the first parameter of each method that needs it.",
+      "avoid": "Do not embed the context, store a pointer to it or hide it in a nested struct. Keep a context field only to preserve an existing public API, under a reviewed exclusion.",
+      "examples": {
+        "pass": "pass/parameter",
+        "fail": "fail/named-field"
+      }
+    },
+    {
+      "id": "GO-CTX-002",
+      "check": "go/context/context-first",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Go standard library documentation, package context",
+        "locator": "https://pkg.go.dev/context (overview)",
+        "paraphrase": "The Context should be the first parameter, typically named ctx."
+      },
+      "why": "A context in any other position breaks the convention callers and tools rely on to find and propagate cancellation.",
+      "fixHint": "Move ctx context.Context to the first parameter and update the callers. Test helpers may keep *testing.T or testing.TB before it.",
+      "avoid": "Do not move the context into an options struct or a struct field to satisfy the order.",
+      "examples": {
+        "pass": "pass/first",
+        "fail": "fail/after-id"
+      }
+    },
+    {
+      "id": "GO-SELECT-001",
+      "check": "go/control/no-empty-select",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Effective Go / Concurrency Guidelines",
+        "locator": "select statement",
+        "paraphrase": "An empty select{} blocks the calling goroutine forever."
+      },
+      "why": "select {} permanently halts the goroutine, leaking goroutine stacks and preventing graceful termination.",
+      "fixHint": "Use context cancellation (<-ctx.Done()) or signal coordination instead of an empty select.",
+      "avoid": "Do not use select {} to sleep or wait forever.",
+      "examples": {
+        "pass": "pass/context-select",
+        "fail": "fail/empty-select"
+      }
+    }
+  ]
+}

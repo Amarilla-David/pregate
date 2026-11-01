@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/stats/score-guard.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "nan-spelling",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Number.NaN on the left is the same NaN. The comparison is still always true for !==."
+  }
+}

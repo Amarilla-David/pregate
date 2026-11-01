@@ -1,0 +1,7 @@
+import * as splToken from "@solana/spl-token";
+
+export const TOKEN_PROGRAMS = [splToken.TOKEN_PROGRAM_ID, splToken.TOKEN_2022_PROGRAM_ID];
+
+export function isTokenProgram(id: string): boolean {
+  return TOKEN_PROGRAMS.some((program) => program.toBase58() === id);
+}

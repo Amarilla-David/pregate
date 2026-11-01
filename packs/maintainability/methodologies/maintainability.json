@@ -1,0 +1,180 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "maintainability/maintainability",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MAINT-NEST-001",
+      "relations": [
+        {
+          "with": "clean-code/CC-NEST-001",
+          "kind": "duplicates",
+          "why": "Both measure control-flow nesting depth in TypeScript and JavaScript functions with a default maximum of 2.",
+          "settle": "Keep one active or turn clean-code/CC-NEST-001 off when maintainability/MAINT-NEST-001 already enforces the nesting limit."
+        }
+      ],
+      "check": "maintainability/control/no-deep-nesting",
+      "defaults": { "max": 2 },
+      "severity": "deny",
+      "source": {
+        "work": "One Hundred Invariants for Code Maintainable by Future Humans",
+        "locator": "FH Rule 24 / SE Rule 40",
+        "paraphrase": "Control-flow nesting never exceeds two levels; deeper decisions are named functions."
+      },
+      "why": "Deeply nested control structures strain working memory and obscure intent for future readers.",
+      "fixHint": "Extract inner conditionals into small, well-named helper functions or use early return guard clauses.",
+      "avoid": "Hiding deep nesting in loops, switch branches, try blocks, or mixed control structures.",
+      "examples": {
+        "pass": "pass/shallow-if",
+        "fail": "fail/three-nested-if"
+      }
+    },
+    {
+      "id": "MAINT-BOOL-001",
+      "check": "maintainability/naming/no-negated-boolean",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "One Hundred Invariants for Code Maintainable by Future Humans",
+        "locator": "FH Rule 15 / SE Rule 30",
+        "paraphrase": "Boolean names state the true condition, never a negated or ambiguous predicate."
+      },
+      "why": "Negated boolean identifiers (e.g. isNotActive, hasNoAccess, isInvalid) force callers into confusing double-negative logic like !isNotActive.",
+      "fixHint": "Rename the boolean to state the positive condition (e.g. isActive, hasAccess, isValid).",
+      "avoid": "Prefixing booleans with isNot, hasNo, noError, or isInvalid.",
+      "examples": {
+        "pass": "pass/positive-boolean",
+        "fail": "fail/is-not-active"
+      }
+    },
+    {
+      "id": "MAINT-NAME-001",
+      "check": "maintainability/naming/no-placeholder-name",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "One Hundred Invariants for Code Maintainable by Future Humans",
+        "locator": "FH Rule 11 & 22",
+        "paraphrase": "Every name denotes a domain concept or an operation, never an implementation accident."
+      },
+      "why": "Placeholder names like temp, tmp, foo, bar, baz on exported declarations hide domain intent from future maintainers.",
+      "fixHint": "Replace placeholder names with specific domain nouns or action verbs.",
+      "avoid": "Exporting variables or functions named temp, tmp, foo, bar, baz, obj, flag.",
+      "examples": {
+        "pass": "pass/descriptive-export",
+        "fail": "fail/export-temp"
+      }
+    },
+    {
+      "id": "MAINT-EMPTY-001",
+      "check": "maintainability/contracts/no-empty-interface",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "One Hundred Invariant Rules for the Software Engineer–Architect",
+        "locator": "SE Rule 8 & 1",
+        "paraphrase": "No abstraction, parameter, or extension exists for a requirement that has not yet been confirmed."
+      },
+      "why": "Empty interfaces declare speculative scaffolding with zero members, cluttering contracts and conveying no type safety.",
+      "fixHint": "Declare the necessary members on the interface, use an existing type, or delete the empty interface.",
+      "avoid": "Declaring interface Foo {} without members or heritage.",
+      "examples": {
+        "pass": "pass/interface-with-members",
+        "fail": "fail/bare-empty-interface"
+      }
+    },
+    {
+      "id": "MAINT-NULL-001",
+      "check": "maintainability/contracts/no-null-domain-return",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "One Hundred Invariant Rules for the Software Engineer–Architect",
+        "locator": "SE-54",
+        "paraphrase": "A domain function represents absence in its result contract rather than returning an untyped null sentinel."
+      },
+      "why": "Callers of a domain operation should see and handle absence as part of the declared variant.",
+      "fixHint": "Return a named absent variant or an existing result type when the domain contract calls for it.",
+      "avoid": "This advisory check matches direct null returns in domain paths only. It cannot infer the function's declared return type or detect indirect null values.",
+      "examples": { "pass": "pass/explicit-option", "fail": "fail/function-null" }
+    },
+    {
+      "id": "MAINT-CLOCK-001",
+      "relations": [
+        {
+          "with": "architecture/FCIS-IO-002",
+          "kind": "duplicates",
+          "why": "Both report Date.now() and new Date() in domain files of the core layer, so one clock read is reported twice.",
+          "settle": "FCIS-IO-002 also covers randomness and the environment; turn MAINT-CLOCK-001 off when the core layer is the domain."
+        }
+      ],
+      "check": "maintainability/effects/no-ambient-clock-in-domain",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "One Hundred Invariants for Code Maintainable by Future Humans",
+        "locator": "FH-71",
+        "paraphrase": "A domain operation takes the time it uses as an explicit input instead of consulting the machine clock."
+      },
+      "why": "Ambient time makes the same operation produce different outcomes under the same explicit inputs.",
+      "fixHint": "Accept a clock port or timestamp at the domain boundary and read the system clock in an adapter.",
+      "avoid": "Qualifying Date.now through globalThis still reads ambient time. An explicit date value is allowed.",
+      "examples": { "pass": "pass/injected-clock", "fail": "fail/date-now" }
+    },
+    {
+      "id": "MAINT-IMPL-001",
+      "check": "maintainability/naming/no-impl-suffix",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "One Hundred Invariants for Code Maintainable by Future Humans",
+        "locator": "FH-19",
+        "paraphrase": "No name encodes a layer, a pattern, or a framework (UserServiceImpl, ManagerHelper) when a domain name would do."
+      },
+      "why": "InvoiceServiceImpl tells the reader only that something implements InvoiceService. The second implementation then has no honest name, and the reader still has to open the class to learn what it is built on.",
+      "fixHint": "Name the class after what distinguishes it: PostgresInvoiceRepository, InMemorySessionStore, StripePaymentGateway.",
+      "avoid": "Only class declarations, class expressions and consts bound to a class whose name ends in Impl or Implementation are checked. Helper, Manager and similar suffixes need a domain judgment and are not matched; neither are functions such as sortImpl.",
+      "examples": { "pass": "pass/descriptive-implementation", "fail": "fail/service-impl" }
+    },
+    {
+      "id": "MAINT-DEPR-001",
+      "relations": [
+        {
+          "with": "pstack/PS-COMMENT-001",
+          "kind": "duplicates",
+          "why": "PS-COMMENT-001 denies every JSDoc comment that is not on its allowlist, so a bare @deprecated is reported by both rules, and a written notice still fails PS-COMMENT-001.",
+          "settle": "Migrating the callers and deleting the deprecated API satisfies both. Teams that keep deprecated surfaces exclude the files that carry them from PS-COMMENT-001."
+        }
+      ],
+      "check": "maintainability/contracts/deprecation-notice",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "One Hundred Invariants for Code Maintainable by Future Humans",
+        "locator": "FH-73",
+        "paraphrase": "Deprecated surfaces announce their replacement and their removal condition at the point of use."
+      },
+      "why": "Editors strike through a @deprecated symbol at every call site. With no text, the caller learns the API is going away but not what to use instead or how long it has.",
+      "fixHint": "Write the replacement and the removal condition after the tag: @deprecated Use issueInvoice; removed when the v1 API is retired. If every caller can move now, migrate them and delete the deprecated API instead.",
+      "avoid": "Only JSDoc block comments are checked, because TypeScript tooling ignores @deprecated in line comments. Any text, an inline {@link}, or a following @see counts as the notice; whether it names a real replacement and a removal condition is not checked.",
+      "examples": { "pass": "pass/inline-replacement", "fail": "fail/bare-single-line" }
+    },
+    {
+      "id": "MAINT-MIGR-001",
+      "check": "maintainability/migrations/reversible-migration",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "One Hundred Invariants for Code Maintainable by Future Humans",
+        "locator": "FH-38",
+        "paraphrase": "A database migration is reversible or explicitly marked irreversible, with the recovery path written down before it runs."
+      },
+      "why": "A migration with only an up step leaves the operator without a rollback when the deploy goes wrong, and nobody wrote down how to recover before it ran.",
+      "fixHint": "Add a down that reverses the change. If it cannot be reversed, add a down that throws an error stating the recovery path, such as the snapshot to restore.",
+      "avoid": "Only TS/JS modules under migrations/ are checked; SQL migration files are not parsed. A down that exists but does not reverse up is not detected. A comment saying irreversible is not the marker; the throwing down is.",
+      "examples": { "pass": "pass/up-and-down", "fail": "fail/up-only-function" }
+    }
+  ]
+}

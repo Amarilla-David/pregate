@@ -1,0 +1,167 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vibe-proof/transport",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VP-TIMEOUT-001",
+      "check": "vibe-proof/reliability/fetch-without-timeout",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Error handling, unsafe-retry / bounded timeout",
+        "paraphrase": "An external call has a bounded timeout or deadline. An indefinite wait is a failure."
+      },
+      "why": "A network call with no deadline can hang the request until the process is killed.",
+      "fixHint": "Pass an AbortSignal with a timeout, or the client's timeout option, and decide what the caller does when it fires.",
+      "avoid": "Putting signal: null in the options still contains the word signal and is a hole. A headers bag is not a deadline.",
+      "examples": {
+        "pass": "pass/fetch-signal",
+        "fail": "fail/bare-fetch"
+      }
+    },
+    {
+      "id": "VP-SQL-001",
+      "relations": [
+        {
+          "with": "postgres/PG-CONCAT-001",
+          "kind": "duplicates",
+          "why": "A .query() call with an interpolated template literal is reported by both rules.",
+          "settle": "Keep both: a parameterized query ($1 placeholders with a values array) satisfies both, and PG-CONCAT-001 also catches + concatenation."
+        },
+        {
+          "with": "prisma/PRISMA-RAW-002",
+          "kind": "duplicates",
+          "why": "Prisma.raw(`...${value}`) is a raw method with an interpolated first argument, so both rules report it.",
+          "settle": "Keep both. A $queryRaw tagged template or Prisma.sql satisfies both; PRISMA-RAW-002 also catches + concatenation."
+        }
+      ],
+      "check": "vibe-proof/security/sql-interpolation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Input / output, parameterized queries",
+        "paraphrase": "Queries go to the database through parameters. String concatenation and interpolation of SQL are not a query API."
+      },
+      "why": "A value spliced into SQL is an injection point. The database sees the caller's text as syntax.",
+      "fixHint": "Pass the SQL text with placeholders and send values as a separate argument list.",
+      "avoid": "This syntax check inspects a directly interpolated first argument of a query, execute, raw or unsafe method. Scope strings in other arguments and outer callbacks are not SQL. A $1 placeholder passes. Variables, concatenations and tagged sql templates require separate review; this rule does not prove their data flow or parameterization.",
+      "examples": {
+        "pass": "pass/placeholder",
+        "fail": "fail/query-template"
+      }
+    },
+    {
+      "id": "VP-CORS-001",
+      "check": "vibe-proof/security/cors-wildcard-credentials",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Input / output, production CORS",
+        "paraphrase": "Production CORS is not Access-Control-Allow-Origin * together with credentials."
+      },
+      "why": "A credentialed request reflected to every origin lets any site call the API with the user's cookies.",
+      "fixHint": "List the origins that may send credentials. A public API that needs no cookies can use * only without credentials.",
+      "avoid": "Splitting the two fields across lines does not split the object. A star origin without credentials is a different policy and is allowed here.",
+      "examples": {
+        "pass": "pass/listed-origin",
+        "fail": "fail/star-credentials"
+      }
+    },
+    {
+      "id": "VP-MASS-001",
+      "check": "vibe-proof/security/mass-assignment",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "mass-assignment-open",
+        "paraphrase": "Writes bind an allowlist of client fields. Spreading the raw request body into a create or update lets the caller set any column."
+      },
+      "why": "The body can carry role, price, or owner. Writing it through copies those fields into the row.",
+      "fixHint": "Pick the fields this operation accepts and pass only those.",
+      "avoid": "Aliasing the body to a local and then spreading the local is a hole. Spreading request.body under another name in the same call is still the raw body.",
+      "examples": {
+        "pass": "pass/picked-fields",
+        "fail": "fail/spread-body"
+      }
+    },
+    {
+      "id": "VP-HTML-001",
+      "check": "vibe-proof/security/dangerous-html",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Input / output, XSS",
+        "paraphrase": "HTML from a caller is encoded or sanitized. A raw HTML injection prop is a sink."
+      },
+      "why": "The prop inserts markup. A string that passed through a user becomes script in the page.",
+      "fixHint": "Render text as text. If a subset of HTML is required, sanitize it in one named function and keep that function the only caller.",
+      "avoid": "Renaming a wrapper that still passes the prop through does not remove the prop. The name is the sink.",
+      "examples": {
+        "pass": "pass/text-child",
+        "fail": "fail/jsx-prop"
+      }
+    },
+    {
+      "id": "VP-HTML-002",
+      "check": "vibe-proof/security/dom-html-sink",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist; MDN Web Docs, Element: innerHTML property",
+        "locator": "Input / output, XSS; https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML#security_considerations",
+        "paraphrase": "HTML from a caller is encoded or sanitized. Setting innerHTML to a string you do not control is a cross-site scripting vector; use textContent for plain text."
+      },
+      "why": "innerHTML, outerHTML, insertAdjacentHTML and document.write parse their string as markup, so a value that passed through a user becomes script in the page.",
+      "fixHint": "Set textContent or build elements with createElement. If a subset of HTML is required, sanitize it in one named function and keep that function the only writer.",
+      "avoid": "Bracket access such as el[\"outerHTML\"], += appends and template literals with ${} are the same sink. String literals, templates without ${} and ternaries of them are allowed, as is reading innerHTML.",
+      "examples": {
+        "pass": "pass/text-content",
+        "fail": "fail/inner-html-assign"
+      }
+    },
+    {
+      "id": "VP-STACK-001",
+      "check": "vibe-proof/errors/stack-in-response",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Error handling, stack traces not exposed",
+        "paraphrase": "End users do not receive stack traces. Diagnostic detail stays in server logs."
+      },
+      "why": "A stack trace shows file paths, dependency versions, and sometimes query text to the caller.",
+      "fixHint": "Send a stable message and a correlation id. Log the stack on the server.",
+      "avoid": "err[\"stack\"] is the same property. logger.error(error.stack) is not a response and is not this rule.",
+      "examples": {
+        "pass": "pass/safe-message",
+        "fail": "fail/json-stack"
+      }
+    },
+    {
+      "id": "VP-INPUT-001",
+      "check": "vibe-proof/security/unvalidated-body",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Input / output, server-side validation",
+        "paraphrase": "Entry points validate input on the server. A body that is used raw skipped that step."
+      },
+      "why": "The JSON body is untyped input. Using it without a parser lets a missing field or an extra field through as if it were an invoice.",
+      "fixHint": "Parse the JSON with a schema's safeParse and branch on the failure before the value reaches a write.",
+      "avoid": "A comment that says safeParse is not a call. A local function that is also named safeParse and does nothing is a hole: the call exists and the schema does not.",
+      "examples": {
+        "pass": "pass/safe-parse",
+        "fail": "fail/request-json"
+      }
+    }
+  ]
+}

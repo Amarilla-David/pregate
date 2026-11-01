@@ -1,0 +1,7 @@
+import yaml
+
+
+def read_all(text):
+    docs = list(yaml.load_all(text, Loader=yaml.UnsafeLoader))
+    first = yaml.load(text, yaml.FullLoader)
+    return docs, first

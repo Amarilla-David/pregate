@@ -1,0 +1,28 @@
+{
+  "language": "typescript",
+  "params": {
+    "paths": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "**/__tests__/**",
+      "test/**",
+      "tests/**"
+    ]
+  },
+  "target": "test/orders.test.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "switch-response",
+    "origin": "forge",
+    "discovered": "2026-10-06",
+    "note": "Switching response shapes is conditional mock logic even without an if or ternary."
+  }
+}

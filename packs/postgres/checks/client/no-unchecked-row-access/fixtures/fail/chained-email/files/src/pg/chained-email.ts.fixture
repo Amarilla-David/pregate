@@ -1,0 +1,6 @@
+
+interface Res { rows: Array<{ email: string }> }
+
+export function emailOf(res: Res): string {
+  return res.rows[0].email;
+}

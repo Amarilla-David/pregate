@@ -1,0 +1,12 @@
+import { createCallerFactory, publicProcedure, router } from "../trpc";
+import { appRouter } from "./_app";
+
+export const statsRouter = router({
+  summary: publicProcedure.query(async ({ ctx }) => {
+    const [posts, users] = await Promise.all([
+      createCallerFactory(appRouter)(ctx).post.count(),
+      ctx.db.user.count(),
+    ]);
+    return { posts, users };
+  }),
+});

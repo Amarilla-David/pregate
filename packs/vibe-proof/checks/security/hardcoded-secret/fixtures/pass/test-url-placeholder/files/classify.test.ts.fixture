@@ -1,0 +1,5 @@
+import { expect, it } from "vitest";
+
+it("classifies a connection port", () => {
+  expect("postgresql://user:secret@db.invalid:5432/example").toContain("5432");
+});

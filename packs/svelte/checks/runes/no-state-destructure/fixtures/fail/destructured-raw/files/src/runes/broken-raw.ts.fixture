@@ -1,0 +1,5 @@
+const { user } = $state.raw({ user: "ada" });
+
+export function name(): string {
+  return user;
+}

@@ -1,0 +1,10 @@
+
+export function start(): void {
+  setInterval(() => tick(), 1000);
+}
+
+export function stop(timer: number): void {
+  clearInterval(timer);
+}
+
+function tick(): void {}

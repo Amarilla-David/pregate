@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/workers/resize.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

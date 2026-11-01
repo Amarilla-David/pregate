@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/pg/exported-client.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "exported-client",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Exporting the Client does not make it a pool. One shared Client still serializes every query and leaks on reconnect; export a Pool instead."
+  }
+}

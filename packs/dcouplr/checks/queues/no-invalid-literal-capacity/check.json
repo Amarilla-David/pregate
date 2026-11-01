@@ -1,0 +1,303 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/queues/no-invalid-literal-capacity",
+  "version": "1.0.0",
+  "area": "queues",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.queue-numeric-limits",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "capacity",
+          "utils": {
+            "queue-config": {
+              "kind": "object",
+              "nthChild": {
+                "position": 2,
+                "ofRule": {
+                  "not": {
+                    "kind": "comment"
+                  }
+                }
+              },
+              "inside": {
+                "kind": "arguments",
+                "has": {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  },
+                  "regex": "^(?:[\"']I_QUEUE[\"']|[A-Za-z_$][A-Za-z0-9_$.]*\\.DependencyKeys\\.IQueue)$"
+                },
+                "inside": {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "member_expression",
+                    "has": {
+                      "field": "property",
+                      "regex": "^resolve$"
+                    }
+                  }
+                }
+              },
+              "not": {
+                "has": {
+                  "any": [
+                    {
+                      "kind": "spread_element"
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "kind": "computed_property_name"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "invalid-numeric-literal": {
+              "any": [
+                {
+                  "kind": "unary_expression",
+                  "regex": "^-",
+                  "has": {
+                    "field": "argument",
+                    "kind": "number"
+                  }
+                },
+                {
+                  "kind": "number",
+                  "regex": "^(?:(?:0+(?:_0+)*(?:\\.0*)?|\\.0+)(?:[eE][+-]?[0-9_]+)?|0[xX]0+|0[bB]0+|0[oO]0+|[0-9][0-9_]*\\.[0-9_]*[1-9][0-9_]*|[0-9][0-9_a-fA-FxXoObB]*n)$"
+                }
+              ]
+            },
+            "active-limit": {
+              "any": [
+                {
+                  "has": {
+                    "field": "key",
+                    "regex": "^[\"']?segmentCapacity[\"']?$"
+                  },
+                  "not": {
+                    "precedes": {
+                      "stopBy": "end",
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?segmentCapacity[\"']?$"
+                      }
+                    }
+                  }
+                },
+                {
+                  "has": {
+                    "field": "key",
+                    "regex": "^[\"']?maxSegments[\"']?$"
+                  },
+                  "not": {
+                    "precedes": {
+                      "stopBy": "end",
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?maxSegments[\"']?$"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "matches": "invalid-numeric-literal",
+            "inside": {
+              "field": "value",
+              "kind": "pair",
+              "inside": {
+                "matches": "queue-config"
+              },
+              "matches": "active-limit"
+            }
+          }
+        },
+        {
+          "id": "persistence-limits",
+          "utils": {
+            "queue-config": {
+              "kind": "object",
+              "nthChild": {
+                "position": 2,
+                "ofRule": {
+                  "not": {
+                    "kind": "comment"
+                  }
+                }
+              },
+              "inside": {
+                "kind": "arguments",
+                "has": {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  },
+                  "regex": "^(?:[\"']I_QUEUE[\"']|[A-Za-z_$][A-Za-z0-9_$.]*\\.DependencyKeys\\.IQueue)$"
+                },
+                "inside": {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "member_expression",
+                    "has": {
+                      "field": "property",
+                      "regex": "^resolve$"
+                    }
+                  }
+                }
+              },
+              "not": {
+                "has": {
+                  "any": [
+                    {
+                      "kind": "spread_element"
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "kind": "computed_property_name"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "invalid-numeric-literal": {
+              "any": [
+                {
+                  "kind": "unary_expression",
+                  "regex": "^-",
+                  "has": {
+                    "field": "argument",
+                    "kind": "number"
+                  }
+                },
+                {
+                  "kind": "number",
+                  "regex": "^(?:(?:0+(?:_0+)*(?:\\.0*)?|\\.0+)(?:[eE][+-]?[0-9_]+)?|0[xX]0+|0[bB]0+|0[oO]0+|[0-9][0-9_]*\\.[0-9_]*[1-9][0-9_]*|[0-9][0-9_a-fA-FxXoObB]*n)$"
+                }
+              ]
+            },
+            "active-limit": {
+              "any": [
+                {
+                  "has": {
+                    "field": "key",
+                    "regex": "^[\"']?aotMs[\"']?$"
+                  },
+                  "not": {
+                    "precedes": {
+                      "stopBy": "end",
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?aotMs[\"']?$"
+                      }
+                    }
+                  }
+                },
+                {
+                  "has": {
+                    "field": "key",
+                    "regex": "^[\"']?maxPendingOps[\"']?$"
+                  },
+                  "not": {
+                    "precedes": {
+                      "stopBy": "end",
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?maxPendingOps[\"']?$"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "matches": "invalid-numeric-literal",
+            "inside": {
+              "field": "value",
+              "kind": "pair",
+              "inside": {
+                "kind": "object",
+                "inside": {
+                  "field": "value",
+                  "kind": "pair",
+                  "inside": {
+                    "matches": "queue-config"
+                  },
+                  "has": {
+                    "field": "key",
+                    "regex": "^[\"']?persistence[\"']?$"
+                  },
+                  "not": {
+                    "precedes": {
+                      "stopBy": "end",
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?persistence[\"']?$"
+                      }
+                    }
+                  }
+                },
+                "not": {
+                  "has": {
+                    "any": [
+                      {
+                        "kind": "spread_element"
+                      },
+                      {
+                        "kind": "pair",
+                        "has": {
+                          "field": "key",
+                          "kind": "computed_property_name"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "matches": "active-limit"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Queue segmentCapacity, maxSegments, persistence.aotMs and persistence.maxPendingOps must be positive integer numbers. This literal is invalid."
+  }
+}

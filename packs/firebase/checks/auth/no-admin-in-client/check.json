@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/auth/no-admin-in-client",
+  "version": "1.0.0",
+  "area": "auth",
+  "cardinality": "singleton",
+  "dimension": "firebase.auth.admin-in-client",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "admin-import-in-client",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^firebase-admin(/|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "^require$"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "app/**",
+            "components/**",
+            "pages/**",
+            "src/app/**",
+            "src/components/**",
+            "src/pages/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports firebase-admin in a client file. The Admin SDK carries full service-account privilege; keep it in server code and use firebase/auth on the client."
+  }
+}

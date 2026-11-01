@@ -1,0 +1,7 @@
+import { execFile } from "node:child_process";
+
+export function log(branch: string, done: (out: string) => void): void {
+  execFile("git", ["log", "--oneline", branch], (error, stdout) => {
+    if (!error) done(stdout);
+  });
+}

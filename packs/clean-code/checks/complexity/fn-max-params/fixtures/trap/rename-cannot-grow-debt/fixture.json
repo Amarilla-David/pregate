@@ -1,0 +1,24 @@
+{
+  "language": "typescript",
+  "params": {
+    "max": 3,
+    "exempt": []
+  },
+  "target": "src/billing/total.ts",
+  "before": "before/",
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1,
+        "measured": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "metric-debt",
+    "origin": "corpus",
+    "discovered": "2026-10-02",
+    "note": "Renaming or reformatting must not renew the metric baseline."
+  }
+}

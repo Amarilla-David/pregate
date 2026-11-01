@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/routing/no-floating-navigateto",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "nuxt.floating-navigateto",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "floating-navigation",
+          "rule": {
+            "kind": "expression_statement",
+            "has": {
+              "stopBy": "neighbor",
+              "matches": "navigation-call"
+            }
+          },
+          "utils": {
+            "navigation-call": {
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "regex": "^(navigateTo|abortNavigation)$"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} discards the result of a navigation helper. Return navigateTo or abortNavigation from middleware, and await navigateTo elsewhere."
+  }
+}

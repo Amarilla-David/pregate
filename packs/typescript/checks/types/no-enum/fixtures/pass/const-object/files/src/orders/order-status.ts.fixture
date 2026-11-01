@@ -1,0 +1,7 @@
+
+export const OrderStatus = {
+  open: "open",
+  paid: "paid",
+} as const;
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];

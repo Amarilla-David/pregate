@@ -1,0 +1,1 @@
+kernel.event.unsubscribe(listener);

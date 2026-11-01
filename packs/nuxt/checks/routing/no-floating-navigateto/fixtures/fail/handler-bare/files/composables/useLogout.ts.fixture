@@ -1,0 +1,8 @@
+export function useLogout() {
+  const session = useCookie<string | null>("session");
+  function logout(): void {
+    session.value = null;
+    navigateTo("/");
+  }
+  return { logout };
+}

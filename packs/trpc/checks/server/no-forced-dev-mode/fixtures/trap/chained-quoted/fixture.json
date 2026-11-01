@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/server/trpc.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 14
+      }
+    ]
+  },
+  "trap": {
+    "family": "key-spelling",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A multi-line builder chain with meta and a quoted key still forces development mode on the root config."
+  }
+}

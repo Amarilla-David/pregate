@@ -1,0 +1,6 @@
+
+export async function page(db: Db, cursor: string): Promise<unknown> {
+  return db.invoice.findMany({ cursor: { id: cursor }, take: 50 });
+}
+
+interface Db { invoice: { findMany(q: unknown): Promise<unknown> } }

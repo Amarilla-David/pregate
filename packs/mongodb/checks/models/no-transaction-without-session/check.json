@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/models/no-transaction-without-session",
+  "version": "1.0.0",
+  "area": "models",
+  "cardinality": "singleton",
+  "dimension": "mongodb.models.raw-transaction",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "raw-transaction",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.startTransaction\\s*\\(\\s*\\)"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} starts a raw transaction. Use session.withTransaction() so commit, abort, and retry are automatic."
+  }
+}

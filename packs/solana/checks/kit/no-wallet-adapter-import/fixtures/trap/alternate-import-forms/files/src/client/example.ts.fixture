@@ -1,0 +1,4 @@
+import * as legacy from "@solana/wallet-adapter-react";
+export * from "@solana/wallet-adapter-react";
+const loaded = require("@solana/wallet-adapter-react");
+const lazy = await import("@solana/wallet-adapter-react");

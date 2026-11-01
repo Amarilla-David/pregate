@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/good_raise.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

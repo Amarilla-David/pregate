@@ -1,0 +1,15 @@
+package parse
+
+import "testing"
+
+func drain(p *Parser) {
+	p.Skip()
+}
+
+func TestDrain(t *testing.T) {
+	p := New("a b")
+	drain(p)
+	if !p.Done() {
+		t.Fatal("not drained")
+	}
+}

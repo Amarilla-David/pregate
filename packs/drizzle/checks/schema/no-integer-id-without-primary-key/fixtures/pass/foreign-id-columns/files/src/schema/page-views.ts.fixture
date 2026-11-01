@@ -1,0 +1,5 @@
+export const pageViews = pgTable("page_views", {
+  userId: integer("user_id").notNull(),
+  postId: bigint("post_id", { mode: "number" }).notNull(),
+  viewedAt: timestamp("viewed_at", { mode: "date" }).notNull(),
+});

@@ -1,0 +1,112 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "solana/security/no-browser-key-storage",
+  "version": "1.0.1",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "solana.custody-browser-storage",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "browser-key-storage",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "secretKey|keypair|mnemonic|seedPhrase|privateKey"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "regex": "^(?:(?:globalThis|window)\\.)?(localStorage|sessionStorage)(?:\\.(setItem|getItem|removeItem)|\\[\\s*[\"\\'](setItem|getItem|removeItem)[\"\\']\\s*\\])$"
+                    }
+                  },
+                  {
+                    "all": [
+                      {
+                        "pattern": "$RECEIVER.$METHOD($$$ARGS)"
+                      },
+                      {
+                        "inside": {
+                          "any": [
+                            {
+                              "kind": "program"
+                            },
+                            {
+                              "kind": "statement_block"
+                            }
+                          ],
+                          "stopBy": {
+                            "any": [
+                              {
+                                "kind": "program"
+                              },
+                              {
+                                "kind": "statement_block"
+                              }
+                            ]
+                          },
+                          "has": {
+                            "kind": "lexical_declaration",
+                            "regex": "^const\\b",
+                            "has": {
+                              "any": [
+                                {
+                                  "kind": "variable_declarator",
+                                  "all": [
+                                    {
+                                      "has": {
+                                        "field": "name",
+                                        "pattern": "$RECEIVER"
+                                      }
+                                    },
+                                    {
+                                      "has": {
+                                        "field": "value",
+                                        "pattern": "$SOURCE"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "constraints": {
+            "METHOD": {
+              "regex": "^(setItem|getItem|removeItem)$"
+            },
+            "SOURCE": {
+              "regex": "^(?:(?:globalThis|window)\\.)?(localStorage|sessionStorage)$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} stores key material in browser storage. Browser storage is readable by any script on the page."
+  }
+}

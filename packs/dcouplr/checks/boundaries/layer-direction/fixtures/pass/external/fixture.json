@@ -1,0 +1,42 @@
+{
+  "language": "typescript",
+  "target": "src/application/order.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "@layers:core"
+    ]
+  },
+  "context": {
+    "layers": {
+      "managed": {
+        "paths": [
+          "src/application/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "core"
+      },
+      "ports": {
+        "paths": [
+          "src/ports/**"
+        ],
+        "mayImport": [],
+        "kind": "port"
+      },
+      "adapters": {
+        "paths": [
+          "src/adapters/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "adapter"
+      }
+    }
+  },
+  "expect": {
+    "verdict": "pass"
+  }
+}

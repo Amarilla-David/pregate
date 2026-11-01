@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "postgres/safety",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PG-CONCAT-001",
+      "relations": [
+        {
+          "with": "vibe-proof/VP-SQL-001",
+          "kind": "duplicates",
+          "why": "A .query() call with an interpolated template literal is reported by both rules.",
+          "settle": "Keep both: a parameterized query ($1 placeholders with a values array) satisfies both, and PG-CONCAT-001 also catches + concatenation."
+        }
+      ],
+      "check": "postgres/safety/no-query-concat",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-postgres documentation, parameterized queries",
+        "locator": "parameterized query section with $1 placeholders",
+        "paraphrase": "Pass values as a params array against $1 placeholders. Concatenating values into the SQL string sends them as code, which is injection."
+      },
+      "why": "A concatenated or interpolated value is parsed as SQL, so a quote in user input escapes the literal and runs attacker SQL.",
+      "fixHint": "Rewrite the statement with $1, $2 placeholders and pass the values as the second query argument. Keep identifiers static or allowlist them.",
+      "avoid": "Backticks with ${} are still concatenation; only a params array parameterizes. The rule reads the first .query argument (or the text field of a config object), through parentheses, casts, ternaries and ??/||/&& fallbacks; values in the params array are not read. SQL built in a variable or inside a helper call is not seen, and any tagged template passes as a parameterizing tag.",
+      "examples": {
+        "pass": "pass/placeholder",
+        "fail": "fail/string-concat"
+      }
+    },
+    {
+      "id": "PG-SSL-001",
+      "check": "postgres/safety/no-sslmode-disable",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "PostgreSQL documentation, libpq connection strings",
+        "locator": "sslmode parameter and TLS verification",
+        "paraphrase": "Keep TLS verification on for database links. Disabling it sends credentials and rows over a connection anyone on the path can read or rewrite."
+      },
+      "why": "sslmode=disable, ssl false, or rejectUnauthorized false leaves the database link cleartext or MITM-able, exposing credentials and row data.",
+      "fixHint": "Use sslmode=require or verify-full in the URL, or ssl with rejectUnauthorized true and the CA. Scope any exception to local-only config, not code.",
+      "avoid": "Moving the disable into the connection URL is the same open link as the ssl flag.",
+      "examples": {
+        "pass": "pass/verify-full",
+        "fail": "fail/ssl-false"
+      }
+    },
+    {
+      "id": "PG-TIMEOUT-001",
+      "check": "postgres/safety/no-pool-without-timeout",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-postgres documentation, Pool configuration",
+        "locator": "statement_timeout and idleTimeoutMillis options",
+        "paraphrase": "Bound how long a statement and an idle client may live. Without a timeout one runaway query holds its connection forever and starves the pool."
+      },
+      "why": "A pool with no statement or idle timeout lets one stuck query pin a connection indefinitely until the pool is exhausted.",
+      "fixHint": "Set statement_timeout for statements and idleTimeoutMillis for idle clients on every Pool, sized from the slowest legitimate query.",
+      "avoid": "Tuning max alone sizes the pool; it does not bound a runaway statement.",
+      "examples": {
+        "pass": "pass/statement-timeout",
+        "fail": "fail/bare-pool"
+      }
+    },
+    {
+      "id": "PG-IDENT-001",
+      "check": "postgres/safety/no-identifier-placeholder",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-postgres documentation, queries",
+        "locator": "Parameterized query; https://node-postgres.com/features/queries#parameterized-query",
+        "paraphrase": "PostgreSQL does not support parameters for identifiers. Dynamic database, schema, table or column names need pg-format escaping instead of $n placeholders."
+      },
+      "why": "A $n placeholder always carries a value. FROM $1 or INSERT INTO $1 fails with a syntax error, and ORDER BY $1 sorts by a constant, so the rows come back unsorted without any error.",
+      "fixHint": "Keep table and column names static, choose them from a fixed allowlist, or escape them with pg-format's %I. Keep $n placeholders for values only.",
+      "avoid": "ORDER BY $1 runs without an error but does not sort by the named column. Placeholders after FROM inside EXTRACT, substring or trim, followed by a cast, or in FROM unnest($1) are values and pass. The rule reads literal query text in the .query arguments; text built in a variable is not seen.",
+      "examples": {
+        "pass": "pass/value-placeholders",
+        "fail": "fail/table-placeholder"
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+declare const redis: { quit(): Promise<string> };
+export async function closeRedis(): Promise<void> {
+  await redis.quit();
+}

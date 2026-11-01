@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/tw/hex-short.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "short-hex",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A 3-digit hex is still a hardcoded color outside the theme; the shorthand does not make it a token."
+  }
+}

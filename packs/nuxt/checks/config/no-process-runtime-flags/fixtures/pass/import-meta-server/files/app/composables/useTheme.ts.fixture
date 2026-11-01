@@ -1,0 +1,9 @@
+export function useTheme() {
+  const theme = useState("theme", () => "light");
+  if (import.meta.server) {
+    return theme;
+  }
+  const status = { client: true, server: false };
+  if (status.client) document.documentElement.dataset.theme = theme.value;
+  return theme;
+}

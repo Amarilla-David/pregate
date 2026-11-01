@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/hexagonal",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "HEX-EDGE-001",
+      "check": "architecture/boundaries/domain-imports-adapter",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Hexagonal architecture (A. Cockburn; ports and adapters)",
+        "locator": "ports and adapters, dependency direction",
+        "paraphrase": "The application speaks to the outside through ports it owns. Adapters sit outside and may depend inward. The inside does not mention the adapter."
+      },
+      "why": "A domain or application module that names an adapter compiles only when that adapter is present, so the policy can no longer be tested or reused on its own.",
+      "fixHint": "Depend on a port declared beside the domain, implement it in the adapter, and pass the implementation in from the composition root.",
+      "avoid": "Hiding the same path behind export * or import(). A string that merely mentions the folder, and is not an import specifier, is not this edge.",
+      "examples": {
+        "pass": "pass/money-and-ports",
+        "fail": "fail/imports-infra"
+      }
+    },
+    {
+      "id": "HEX-PORT-001",
+      "check": "architecture/ports/port-has-implementation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Hexagonal architecture (ports and adapters)",
+        "locator": "port versus adapter",
+        "paraphrase": "A port is the shape the inside needs. The body that talks to a database, a network, or a framework is an adapter and lives outside."
+      },
+      "why": "An implementation in the port folder pulls a concrete dependency into the boundary the domain is allowed to import.",
+      "fixHint": "Leave an interface or type alias in the port module. Move the class or function to an adapter that implements the port.",
+      "avoid": "Marking the class abstract, or binding the body to an exported const arrow, still leaves an implementation in the port module.",
+      "examples": {
+        "pass": "pass/repository-interface",
+        "fail": "fail/in-memory-class"
+      }
+    },
+    {
+      "id": "HEX-ADAPT-001",
+      "check": "architecture/hexagonal/no-cross-adapter",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Hexagonal architecture (A. Cockburn; ports and adapters)",
+        "locator": "driving adapter to driven adapter boundary",
+        "paraphrase": "Input/driving adapters speak to the application core through input ports; they do not reach directly into output/driven adapters, bypassing the center."
+      },
+      "why": "Direct communication between adapters bypasses domain logic, use-case orchestration, and port contracts.",
+      "fixHint": "Dispatch the request through an application use case or input port, and let the use case call the output port.",
+      "avoid": "Importing repositories or secondary adapters directly into HTTP controllers or queue consumers.",
+      "examples": {
+        "pass": "pass/http-adapter-calls-usecase",
+        "fail": "fail/http-imports-persistence-adapter"
+      }
+    },
+    {
+      "id": "ARCH-EFF-002",
+      "relations": [
+        {
+          "with": "architecture/FCIS-IO-002",
+          "kind": "duplicates",
+          "why": "Both flag crypto randomness and performance.now() when domain, entity, or use-case folders belong to the core layer.",
+          "settle": "Keep one active or turn architecture/ARCH-EFF-002 off when FCIS-IO-002 covers the core layer."
+        }
+      ],
+      "check": "architecture/effects/no-crypto-time-random",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Hexagonal architecture (A. Cockburn; ports and adapters) and Grokking Simplicity (E. Normand, 2021)",
+        "locator": "driven ports for nondeterministic clock and ID generation",
+        "paraphrase": "Domain entities and application use cases receive identifiers and timestamps through explicit inputs or driven ports instead of calling Web Crypto or high-resolution timers directly."
+      },
+      "why": "Direct calls to crypto.randomUUID(), crypto.getRandomValues(), or performance.now() make domain and use-case logic non-deterministic and impossible to replay deterministically in unit tests.",
+      "fixHint": "Pass the generated identifier, random bytes, or timestamp as a parameter from an adapter or inject a narrow Clock / IdGenerator port.",
+      "avoid": "Qualifying the call with globalThis or window in domain, entities, or use-cases directories still couples core logic to ambient runtime effects.",
+      "examples": {
+        "pass": "pass/injected-id-and-clock",
+        "fail": "fail/domain-random-uuid"
+      }
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "nextjs/rendering",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "NEXT-HEAD-001",
+      "check": "nextjs/rendering/no-next-head-import",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js App Router migration guide",
+        "locator": "next/head versus metadata API",
+        "paraphrase": "The App Router declares head data with the metadata export. next/head is the Pages Router component and does not run under app."
+      },
+      "why": "next/head belongs to the Pages Router and is valid there; in app/ files the metadata export owns the document head.",
+      "fixHint": "Export a metadata object from the page or layout. Keep next/head only in files that still run under the Pages Router.",
+      "avoid": "Only the exact next/head literal in an import/export source or first literal require/import argument is forbidden in app paths. next/headers, ordinary text and import option values are allowed. Computed specifiers and aliased runtime loaders are outside this syntax slice.",
+      "examples": {
+        "pass": "pass/metadata-import",
+        "fail": "fail/head-import"
+      }
+    },
+    {
+      "id": "NEXT-IMG-001",
+      "check": "nextjs/rendering/no-img-element",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Next.js image optimization docs",
+        "locator": "next/image responsive sizing",
+        "paraphrase": "Images go through the Image component so the framework can resize, lazy-load, and serve modern formats per viewport."
+      },
+      "why": "A raw img skips resizing and lazy loading, shipping full-weight files and causing layout shift the Image component prevents.",
+      "fixHint": "Replace the element with Image from next/image and give it a width, height, or fill plus an alt description.",
+      "avoid": "An img assembled outside the returned expression (a variable, an array, a prop default) sits outside the returned text this rule reads. The open-plus-close pair is still an img.",
+      "examples": {
+        "pass": "pass/next-image",
+        "fail": "fail/img-self-closing"
+      }
+    },
+    {
+      "id": "NEXT-FONT-001",
+      "check": "nextjs/rendering/no-google-font-link",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js font optimization docs",
+        "locator": "next/font self-hosting",
+        "paraphrase": "Fonts load through next/font so builds self-host the files. Remote stylesheet links reintroduce render-blocking requests and layout shift."
+      },
+      "why": "A googleapis link tag moves font loading back to a render-blocking remote request, undoing the self-hosting and shift guarantees.",
+      "fixHint": "Load the family with next/font and apply the generated class name or variable. Remove the link tag entirely.",
+      "avoid": "Preconnecting to the font host while keeping the stylesheet link still loads the font remotely.",
+      "examples": {
+        "pass": "pass/icon-link",
+        "fail": "fail/google-fonts-css"
+      }
+    },
+    {
+      "id": "NEXT-CACHE-001",
+      "check": "nextjs/data/no-fetch-without-cache",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Next.js data fetching docs, caching and revalidating",
+        "locator": "fetch cache and next.revalidate options",
+        "paraphrase": "A fetch without cache options uses the documented default auto no cache behavior; explicit options are optional."
+      },
+      "why": "The default is a legitimate choice, so missing cache options cannot be a universal violation.",
+      "fixHint": "Pass cache or next.revalidate in the fetch options. Choose force-cache, no-store, or an interval on purpose.",
+      "avoid": "Passing an empty options object or an unrelated option like signal does not declare a cache policy.",
+      "examples": {
+        "pass": "pass/next-revalidate",
+        "fail": "fail/bare-fetch"
+      }
+    },
+    {
+      "id": "NEXT-CONFLICT-001",
+      "check": "nextjs/data/no-conflicting-fetch-cache",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js App Router API reference, fetch",
+        "locator": "options.next.revalidate and options.cache",
+        "paraphrase": "Conflicting cache options such as no-store together with a positive revalidation interval are both ignored."
+      },
+      "why": "The developer requested incompatible cache lifetimes, so neither option governs the fetch as expected.",
+      "fixHint": "Keep cache: 'no-store' for uncached responses, or remove it and set next.revalidate to a positive interval.",
+      "avoid": "Swapping the order of the options does not change their conflict. An unrelated body object is not the fetch options object.",
+      "examples": {
+        "pass": "pass/no-store-alone",
+        "fail": "fail/no-store-revalidate"
+      }
+    },
+    {
+      "id": "NEXT-DIRECTIVE-001",
+      "check": "nextjs/rendering/no-misplaced-directive",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js API reference, use client, https://nextjs.org/docs/app/api-reference/directives/use-client; React reference, use server, https://react.dev/reference/rsc/use-server",
+        "locator": "use client usage; use server caveats",
+        "paraphrase": "'use client' goes at the top of the file, before imports, and cannot be placed inside a function. 'use server' must be at the very beginning of its file or function, above other code (comments are fine), in single or double quotes, not backticks."
+      },
+      "why": "A directive anywhere else is an ordinary string. The file silently stays a Server Component, or the function never becomes a Server Action, and hooks or browser APIs then fail at build or run time.",
+      "fixHint": "Move the directive to the first line of the file, above every import, in single or double quotes. For an inline Server Action, put 'use server' as the first statement of the async function body.",
+      "avoid": "Comments and other quoted string statements before the directive are not flagged. 'use server' as the first statement of a function body is allowed. Strings that merely contain the words, in variables or JSX, are not directives and are not flagged.",
+      "examples": {
+        "pass": "pass/top-of-file",
+        "fail": "fail/after-imports"
+      }
+    },
+    {
+      "id": "NEXT-META-001",
+      "check": "nextjs/rendering/no-client-metadata-export",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js API reference, generateMetadata, https://nextjs.org/docs/app/api-reference/functions/generate-metadata",
+        "locator": "Metadata object and generateMetadata function, good to know",
+        "paraphrase": "The metadata object and generateMetadata function exports are only supported in Server Components."
+      },
+      "why": "Next.js rejects a metadata export from a 'use client' page or layout at build time, so the page loses its title and description or the build fails.",
+      "fixHint": "Remove 'use client' from the page or layout and move the interactive part into a child client component. Keep metadata or generateMetadata on the server file.",
+      "avoid": "Only exported metadata or generateMetadata in page and layout files under app/ or src/app/ whose leading directive is 'use client' are flagged, including export { x as metadata }. A local metadata constant that is not exported, and server files that mention the directive in a comment, are allowed.",
+      "examples": {
+        "pass": "pass/server-page",
+        "fail": "fail/client-page-const"
+      }
+    },
+    {
+      "id": "NEXT-ASYNC-001",
+      "check": "nextjs/data/no-sync-request-api",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Next.js API reference, cookies, https://nextjs.org/docs/app/api-reference/functions/cookies; Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+        "locator": "cookies good to know; Async Request APIs (breaking change)",
+        "paraphrase": "cookies, headers and draftMode are async and must be awaited or unwrapped with React's use. Next.js 15 kept temporary synchronous access with a warning; Next.js 16 removes it."
+      },
+      "why": "On Next.js 16 the call returns a Promise, so .get or .isEnabled reads undefined or throws; on 15 it logs a deprecation warning on every request.",
+      "fixHint": "Await the call first, for example const store = await cookies(); store.get('theme'). In a component that cannot be async, unwrap the Promise with React's use().",
+      "avoid": "Only a member read directly on cookies(), headers() or draftMode() imported from next/headers, including renamed imports, is flagged. Awaited calls, use(...), .then/.catch/.finally and same-named functions from other modules pass. A result stored in a variable first is not traced. Warn only: Next.js 14 projects use the synchronous API correctly.",
+      "examples": {
+        "pass": "pass/awaited",
+        "fail": "fail/cookies-get"
+      }
+    }
+  ]
+}

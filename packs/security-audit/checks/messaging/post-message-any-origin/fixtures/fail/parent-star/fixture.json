@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/bridge.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  }
+}

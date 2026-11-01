@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/focused.test.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "focused-test",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "fit or fdescribe focus shortcuts disable all other tests in the file or suite."
+  }
+}

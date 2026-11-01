@@ -1,0 +1,6 @@
+
+export function label(order: Order): string {
+  return order.id;
+}
+
+interface Order { id: string }

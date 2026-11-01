@@ -1,0 +1,9 @@
+type Order = { id: string; cents: number };
+
+export function orderFrom(row: string[]): Order {
+  return row as never as Order;
+}
+
+export function ordersFrom(rows: string[][]): Order[] {
+  return rows as unknown[] as Order[];
+}

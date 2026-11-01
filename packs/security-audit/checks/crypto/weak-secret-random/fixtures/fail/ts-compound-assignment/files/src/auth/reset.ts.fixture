@@ -1,0 +1,7 @@
+const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+export function buildCode(length: number): string {
+  let resetToken = "";
+  for (let i = 0; i < length; i++) resetToken += chars[Math.floor(Math.random() * chars.length)];
+  return resetToken;
+}

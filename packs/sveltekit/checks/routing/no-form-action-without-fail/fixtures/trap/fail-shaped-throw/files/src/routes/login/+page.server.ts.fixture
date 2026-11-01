@@ -1,0 +1,6 @@
+export const actions = {
+	login: async () => {
+		// Shaped like fail(), but thrown: the form never sees it.
+		throw { status: 422, data: { email: "taken" } };
+	}
+};

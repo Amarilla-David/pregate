@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/runes/named-effect.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "named-async-fn",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Naming the async callback does not restore the cleanup protocol. The runtime still receives a promise instead of a cleanup function."
+  }
+}

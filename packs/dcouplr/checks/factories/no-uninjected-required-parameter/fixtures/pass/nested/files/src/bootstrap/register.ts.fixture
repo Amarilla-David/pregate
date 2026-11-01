@@ -1,0 +1,1 @@
+admission.addFactoryMethod((input, kernel) => ({ call(a, b, c) { return c; } }));

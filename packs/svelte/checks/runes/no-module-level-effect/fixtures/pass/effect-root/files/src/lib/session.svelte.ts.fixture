@@ -1,0 +1,8 @@
+export const session = $state({ token: "" });
+
+export const stopSessionSync = $effect.root(() => {
+  $effect(() => {
+    sessionStorage.setItem("token", session.token);
+  });
+  return () => sessionStorage.removeItem("token");
+});

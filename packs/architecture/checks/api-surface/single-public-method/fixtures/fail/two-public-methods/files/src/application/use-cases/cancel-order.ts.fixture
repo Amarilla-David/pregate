@@ -1,0 +1,13 @@
+import type { Orders } from "../ports/orders";
+
+export class CancelOrder {
+  constructor(private readonly orders: Orders) {}
+
+  async execute(orderId: string): Promise<void> {
+    await this.orders.cancel(orderId);
+  }
+
+  async undo(orderId: string): Promise<void> {
+    await this.orders.restore(orderId);
+  }
+}

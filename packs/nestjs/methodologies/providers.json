@@ -1,0 +1,107 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "conflicts": [],
+  "id": "nestjs/providers",
+  "invariants": [
+    {
+      "avoid": "Passing the dependency through a static factory that still calls new keeps the bypass. Register the class and inject it.",
+      "check": "nestjs/providers/no-new-injectable",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/service-new",
+        "pass": "pass/constructor-injection"
+      },
+      "fixHint": "List the provider class in the module and declare it as a constructor parameter where it is used.",
+      "id": "NEST-INJ-001",
+      "relations": [
+        {
+          "with": "typescript/TS-LEGACY-005",
+          "kind": "contradicts",
+          "why": "NEST-INJ-001 tells callers to receive providers as constructor parameters, the Nest idiom being private readonly parameter properties, which TS-LEGACY-005 denies.",
+          "settle": "Nest also injects plain constructor parameters: declare the field and assign it in the constructor body to satisfy both, or exclude Nest controllers and providers from TS-LEGACY-005."
+        }
+      ],
+      "severity": "deny",
+      "source": {
+        "locator": "providers and custom providers with useClass",
+        "paraphrase": "Providers are classes the injector builds. Modules list the class and consumers declare it as a dependency.",
+        "work": "NestJS documentation, Providers"
+      },
+      "why": "A new-built provider duplicates singleton state, so two writers diverge and tests cannot substitute the module graph."
+    },
+    {
+      "avoid": "Scope.TRANSIENT is a separate scope and is allowed here. Only Scope.REQUEST matches.",
+      "check": "nestjs/providers/no-request-scope",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/request-scope",
+        "pass": "pass/default-scope"
+      },
+      "fixHint": "Drop the scope option for the default singleton, or pass request state as a method argument.",
+      "id": "NEST-SCOPE-001",
+      "severity": "warn",
+      "source": {
+        "locator": "injection scopes, singleton default",
+        "paraphrase": "Providers are singletons by default. Request scope rebuilds the provider subtree for every request.",
+        "work": "NestJS documentation, Fundamentals"
+      },
+      "why": "Request scope is supported for request-specific state; it can increase per-request allocations, so review the tradeoff."
+    },
+    {
+      "avoid": "transform: true without whitelist still passes unknown properties. Only whitelist or forbidNonWhitelisted counts.",
+      "check": "nestjs/providers/no-validationpipe-any",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/bare-pipe",
+        "pass": "pass/whitelist-pipe"
+      },
+      "fixHint": "Construct the pipe with { whitelist: true }, and add forbidNonWhitelisted: true to reject instead of strip.",
+      "id": "NEST-PIPE-001",
+      "severity": "deny",
+      "source": {
+        "locator": "ValidationPipe with whitelist",
+        "paraphrase": "ValidationPipe strips properties that have no decorator when whitelist is set, closing mass assignment.",
+        "work": "NestJS documentation, Pipes"
+      },
+      "why": "Without whitelist an attacker sets admin flags and relation ids that no DTO decorator mentions."
+    },
+    {
+      "avoid": "A quoted key or a forRootAsync factory that returns synchronize: true is the same setting. A condition such as NODE_ENV === \"development\" is allowed. Test and e2e files are not checked. An options object built outside the call is not seen.",
+      "check": "nestjs/data/no-typeorm-synchronize",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/root-literal",
+        "pass": "pass/migrations"
+      },
+      "fixHint": "Set synchronize: false and apply schema changes with TypeORM migrations, or derive the flag from configuration so production never receives true.",
+      "id": "NEST-SYNC-001",
+      "severity": "warn",
+      "source": {
+        "locator": "https://docs.nestjs.com/data/typeorm (synchronize warning)",
+        "paraphrase": "Don't use synchronize: true in production; otherwise, you can lose production data.",
+        "work": "NestJS documentation, TypeORM integration"
+      },
+      "why": "With synchronize on, TypeORM alters the schema at startup to match the entities, so a renamed or removed column drops its production data."
+    },
+    {
+      "id": "NEST-DECORATOR-001",
+      "check": "nestjs/providers/no-undecorated-provider",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "NestJS documentation, Guards / Interceptors / Pipes (docs.nestjs.com)",
+        "locator": "https://docs.nestjs.com/guards",
+        "paraphrase": "Guards, interceptors, pipes, and exception filters are providers managed by the Nest IoC container and must be decorated with @Injectable() (or @Catch() for filters)."
+      },
+      "why": "Omitting @Injectable() prevents TypeScript from emitting constructor design:paramtypes metadata, causing Nest DI resolution to fail when dependencies are injected.",
+      "fixHint": "Add @Injectable() (or @Catch(...) on an ExceptionFilter) above the class declaration.",
+      "avoid": "Only classes with an explicit implements clause for CanActivate, NestInterceptor, PipeTransform, or ExceptionFilter are checked.",
+      "examples": {
+        "pass": "pass/injectable-guard",
+        "fail": "fail/undecorated-guard"
+      }
+    }
+  ],
+  "status": "complete",
+  "version": "1.1.0"
+}

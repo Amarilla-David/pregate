@@ -1,0 +1,4 @@
+export function updateCache(cache: Map<string, number>): number | undefined {
+  cache.set("a", 1);
+  return cache.get("a");
+}

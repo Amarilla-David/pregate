@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/models/no-index-in-code",
+  "version": "1.0.0",
+  "area": "models",
+  "cardinality": "singleton",
+  "dimension": "mongodb.models.index-in-code",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "index-in-code",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.(createIndex|ensureIndex|createIndexes)\\s*\\("
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds an index from application code. Declare indexes on the schema or in a migration instead."
+  }
+}

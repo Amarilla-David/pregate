@@ -1,0 +1,9 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "src/a.go",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "redis/client",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "REDIS-CONNECT-001",
+      "check": "redis/client/no-client-without-error-handler",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-redis and ioredis client documentation",
+        "locator": "error event on connection failure",
+        "paraphrase": "A Redis client emits error when the connection drops. Registering a handler that does nothing hides outages from logs and alerts."
+      },
+      "why": "An empty error handler swallows connection failures, so the app serves stale or missing data with no signal that Redis is down.",
+      "fixHint": "Log the error and surface it to health checks or metrics. Keep the handler next to createClient so every client gets one.",
+      "avoid": "function () {} swallows the error the same way an empty arrow does. The keyword form is not a real handler. Shape mirrors postgres/client/no-empty-pool-error-handler so both packs flag the same callback spellings.",
+      "examples": {
+        "pass": "pass/logged-error",
+        "fail": "fail/empty-arrow"
+      }
+    },
+    {
+      "id": "REDIS-PUBSUB-001",
+      "check": "redis/pubsub/no-publish-without-channel-ns",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Redis documentation, Pub/Sub delivery contract",
+        "locator": "fire-and-forget publish semantics",
+        "paraphrase": "PUBLISH is fire-and-forget to current subscribers on a global bus. A namespaced channel keeps each event stream routable to its own subscribers."
+      },
+      "why": "Publishing to a bare channel mixes event streams, so a subscriber cannot tell which domain an event came from and replays hit the wrong handlers.",
+      "fixHint": "Publish to <domain>:<event>. Document the channel contract next to the subscriber that consumes it.",
+      "avoid": "A template channel without a colon still lands on the global bus. Interpolation does not namespace.",
+      "examples": {
+        "pass": "pass/billing-channel",
+        "fail": "fail/bare-events"
+      }
+    },
+    {
+      "id": "REDIS-LUA-001",
+      "check": "redis/client/no-eval-with-keys-mix",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Redis documentation, scripting with Lua",
+        "locator": "KEYS and ARGV separation and script cache",
+        "paraphrase": "EVAL ships source on every call. Scripts should be loaded once and invoked by hash so keys travel in KEYS and values in ARGV."
+      },
+      "why": "Inline eval resends and recompiles the script per call, and interpolated values bypass the KEYS/ARGV separation cluster routing depends on.",
+      "fixHint": "Load the script once with scriptLoad and call evalSha, or register it with defineCommand. Keep keys in KEYS and values in ARGV.",
+      "avoid": "Interpolating a value into the script text mixes code and data. A template script is still an inline eval.",
+      "examples": {
+        "pass": "pass/eval-sha",
+        "fail": "fail/direct-eval"
+      }
+    },
+    {
+      "id": "REDIS-TX-001",
+      "check": "redis/client/no-multi-without-exec",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Redis documentation, transactions with MULTI and EXEC",
+        "locator": "queuing and EXEC requirement",
+        "paraphrase": "MULTI only queues commands. Nothing runs until EXEC, and DISCARD is the only other way to close the queue."
+      },
+      "why": "A multi chain without exec queues writes that never run, so the app reports success while Redis stored nothing.",
+      "fixHint": "Chain exec (or discard) onto the multi call in the same statement so the queue always closes.",
+      "avoid": "exec in a later statement is invisible to this single-statement rule. Chain it onto the multi call.",
+      "examples": {
+        "pass": "pass/chained-exec",
+        "fail": "fail/assigned-no-exec"
+      }
+    },
+    {
+      "id": "REDIS-SUB-001",
+      "check": "redis/pubsub/no-commands-on-subscriber",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "ioredis README (Pub/Sub) and node-redis documentation (Pub/Sub with RedisClient)",
+        "locator": "subscriber mode and dedicated connections; https://github.com/redis/ioredis#pubsub and https://github.com/redis/node-redis/blob/master/docs/pub-sub.md",
+        "paraphrase": "A connection cannot be both publisher and subscriber. After subscribe or psubscribe it only accepts subscription commands, so pub/sub needs a dedicated connection, for example from client.duplicate(). node-redis with RESP3, cluster and sentinel clients handle this themselves."
+      },
+      "why": "Once the client subscribes, regular commands such as get, set or publish on it are rejected. The publish or cache write fails at runtime, often only after the first message arrives.",
+      "fixHint": "Subscribe on a dedicated connection (const subscriber = client.duplicate() in node-redis, a second new Redis() in ioredis) and keep the original client for commands and publish.",
+      "avoid": "Calls in different methods of the same injected client still share one connection. The rule needs a redis or ioredis import in the file and the same receiver text for subscribe and the command; a file mentioning RESP: 3, createCluster, createSentinel or Cluster passes. Two unrelated clients that share a local name in one file are reported.",
+      "examples": {
+        "pass": "pass/duplicated-subscriber",
+        "fail": "fail/same-client-publish"
+      }
+    },
+    {
+      "id": "REDIS-QUIT-001",
+      "check": "redis/client/no-disconnect-without-quit",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "node-redis & ioredis documentation, Disconnecting (redis.io)",
+        "locator": "https://redis.io/docs/latest/develop/clients/nodejs/",
+        "paraphrase": "quit() waits for in-flight commands to receive replies before closing the connection, whereas disconnect() immediately closes the socket and rejects pending replies."
+      },
+      "why": "Calling .disconnect() during graceful shutdown aborts in-flight writes and pub/sub flushes that were already handed to the client.",
+      "fixHint": "Await client.quit() (or redis.quit()) during shutdown so queued commands complete before the socket closes.",
+      "avoid": "Matches .disconnect() on receivers named redis, client, redisClient, sub, subscriber, pub, or publisher. Non-Redis MutationObserver.disconnect() on observer names is not matched.",
+      "examples": {
+        "pass": "pass/graceful-quit",
+        "fail": "fail/redis-disconnect"
+      }
+    }
+  ]
+}

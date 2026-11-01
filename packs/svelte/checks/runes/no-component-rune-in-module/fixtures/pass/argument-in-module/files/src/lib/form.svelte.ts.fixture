@@ -1,0 +1,11 @@
+export type FormProps = { initial: string; onsave: (value: string) => void };
+
+export function createForm(props: FormProps) {
+  let value = $state(props.initial);
+  const dirty = $derived(value !== props.initial);
+  return {
+    get value() { return value; },
+    get dirty() { return dirty; },
+    save: () => props.onsave(value),
+  };
+}

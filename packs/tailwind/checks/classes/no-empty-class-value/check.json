@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "tailwind/classes/no-empty-class-value",
+  "version": "1.0.0",
+  "area": "classes",
+  "cardinality": "singleton",
+  "dimension": "tailwind.empty-class",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "empty-class-value",
+          "rule": {
+            "regex": "^(className|class)\\s*=",
+            "all": [
+              {
+                "has": {
+                  "kind": "property_identifier",
+                  "regex": "^(className|class)$"
+                }
+              },
+              {
+                "has": {
+                  "any": [
+                    {
+                      "kind": "string",
+                      "regex": "^(\"\"|'')$"
+                    },
+                    {
+                      "regex": "^\\{",
+                      "has": {
+                        "kind": "string",
+                        "regex": "^(\"\"|'')$"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sets an empty className or class attribute. Remove the empty attribute or supply the intended utility classes."
+  }
+}

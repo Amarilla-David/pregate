@@ -1,0 +1,4 @@
+import { onMessage } from "./verified";
+// The handler is defined elsewhere and is not resolved; its own module is checked where it is written.
+window.addEventListener("message", onMessage);
+window.addEventListener("message", (event) => onMessage(event));

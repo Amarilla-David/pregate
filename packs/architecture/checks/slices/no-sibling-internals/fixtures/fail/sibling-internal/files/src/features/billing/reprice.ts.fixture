@@ -1,0 +1,6 @@
+
+import { price } from "../orders/internal/pricing";
+
+export function reprice(orderId: string): string {
+  return price.name + orderId;
+}

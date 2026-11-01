@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/effects/no-ambient-clock-in-domain",
+  "version": "1.0.0",
+  "area": "effects",
+  "cardinality": "singleton",
+  "dimension": "maintainability.ambient-clock",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "ambient-clock-read",
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "has": { "field": "function", "regex": "^(Date|globalThis\\.Date|performance|globalThis\\.performance)\\.now$" }
+              },
+              {
+                "kind": "new_expression",
+                "all": [
+                  { "has": { "field": "constructor", "regex": "^Date$" } },
+                  { "has": { "field": "arguments", "regex": "^\\(\\s*\\)$" } }
+                ]
+              }
+            ]
+          },
+          "files": ["src/domain/**/*", "**/domain/**/*"]
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} reads the ambient clock from a domain module. Accept an explicit clock or timestamp instead." }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "express/middleware",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "EX-ERR-001",
+      "check": "express/middleware/no-missing-error-handler",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Express 5 API reference (expressjs.com)",
+        "locator": "Error handling",
+        "paraphrase": "An error-handling middleware takes four arguments. Express selects it by arity, so a three-argument function is ordinary middleware and never receives the error."
+      },
+      "why": "A broken error signature leaves the app with no error middleware: the handler never runs and the failure surfaces as a hang or a default HTML page.",
+      "fixHint": "Give the handler four parameters (err, req, res, next) and register it with app.use after the routes.",
+      "avoid": "Renaming err to error, or switching arrow to function, does not add the missing parameter. Arity is what Express reads.",
+      "examples": {
+        "pass": "pass/four-arg",
+        "fail": "fail/three-arg-arrow"
+      }
+    },
+    {
+      "id": "EX-LIMIT-001",
+      "check": "express/middleware/no-json-limit-missing",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Express 5 API reference (expressjs.com)",
+        "locator": "express.json",
+        "paraphrase": "Express JSON and urlencoded parsers enforce a default 100kb size limit. An explicit limit is an optional project policy."
+      },
+      "why": "A missing explicit limit does not mean an unbounded parser; the documented default remains active.",
+      "fixHint": "Pass a limit option such as express.json({ limit: \"100kb\" }). Raise it per route only where a large payload is legitimate.",
+      "avoid": "The default 100kb cap is valid. Syntax cannot determine the appropriate per-route limit.",
+      "examples": {
+        "pass": "pass/json-limit",
+        "fail": "fail/bare-json"
+      }
+    },
+    {
+      "id": "EX-FILE-001",
+      "check": "express/requests/no-req-files-without-filter",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Multer documentation (expressjs.com resources)",
+        "locator": "Limits and fileFilter",
+        "paraphrase": "An upload endpoint without limits or a file filter accepts files of any size and type. The disk and the downstream consumer pay for whatever the caller sends."
+      },
+      "why": "Unbounded uploads fill the disk and smuggle executables or archives into a pipeline that expected an avatar.",
+      "fixHint": "Configure multer with limits (fileSize, files) and a fileFilter that accepts only the mime types the feature needs.",
+      "avoid": "A dest or storage option only chooses where files land. It does not bound size, count, or type.",
+      "examples": {
+        "pass": "pass/with-limits",
+        "fail": "fail/bare-multer"
+      }
+    }
+  ]
+}

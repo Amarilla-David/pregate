@@ -1,0 +1,15 @@
+import { describe, expect, it } from "bun:test";
+import { refund } from "../src/refund";
+
+const { only } = it;
+const { skip: later } = describe;
+
+only("refunds a paid order", async () => {
+  expect(await refund("order-1")).toBe("refunded");
+});
+
+later("partial refunds", () => {
+  it("refunds one line", async () => {
+    expect(await refund("order-2", ["line-1"])).toBe("refunded");
+  });
+});

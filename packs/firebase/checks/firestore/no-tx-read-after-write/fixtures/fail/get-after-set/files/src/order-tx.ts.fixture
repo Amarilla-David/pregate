@@ -1,0 +1,8 @@
+interface Tx { get(ref: string): Promise<unknown>; set(ref: string, d: Record<string, unknown>): void; }
+declare function runTransaction(db: unknown, fn: (transaction: Tx) => Promise<void>): Promise<void>;
+export async function createOrder(db: unknown, orderRef: string, userRef: string): Promise<void> {
+  await runTransaction(db, async (transaction) => {
+    transaction.set(orderRef, { created: true });
+    await transaction.get(userRef);
+  });
+}

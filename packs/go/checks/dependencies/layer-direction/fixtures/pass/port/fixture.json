@@ -1,0 +1,40 @@
+{
+  "language": "go",
+  "params": {
+    "paths": [
+      "@layers:core"
+    ]
+  },
+  "target": "internal/core/a.go",
+  "before": null,
+  "context": {
+    "layers": {
+      "core": {
+        "paths": [
+          "internal/core/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "core"
+      },
+      "ports": {
+        "paths": [
+          "internal/ports/**"
+        ],
+        "mayImport": [],
+        "kind": "port"
+      },
+      "infra": {
+        "paths": [
+          "internal/infra/**"
+        ],
+        "mayImport": [],
+        "kind": "adapter"
+      }
+    }
+  },
+  "expect": {
+    "verdict": "pass"
+  }
+}

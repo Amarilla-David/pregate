@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      },
+      {
+        "line": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "javascript/safety/no-nan-compare",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "javascript.nan-compare",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "nan-compare",
+          "rule": {
+            "kind": "binary_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "operator",
+                  "regex": "^([!=]==?|[<>]=?)$"
+                }
+              },
+              {
+                "has": {
+                  "any": [
+                    {
+                      "kind": "identifier",
+                      "regex": "^NaN$"
+                    },
+                    {
+                      "kind": "member_expression",
+                      "regex": "^Number\\.NaN$"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} compares a value with NaN, which is never equal to anything. Use Number.isNaN(value)."
+  }
+}

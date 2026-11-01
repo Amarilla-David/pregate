@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/runes/no-effect-state-loop",
+  "version": "1.0.0",
+  "area": "runes",
+  "cardinality": "singleton",
+  "dimension": "svelte.effect-async",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "effect-async",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^\\$effect(\\.pre|\\.root)?$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "\\basync\\b"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes an async function to $effect. The effect callback must be synchronous."
+  }
+}

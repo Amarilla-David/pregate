@@ -1,0 +1,76 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/execution/py-os-shell-variable",
+  "version": "1.0.0",
+  "area": "execution",
+  "cardinality": "singleton",
+  "dimension": "security-audit.execution.python-shell-variable",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "os-system-variable",
+          "rule": {
+            "kind": "call",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "attribute",
+                  "regex": "^os\\.(?:system|popen)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": 1,
+                    "any": [
+                      {
+                        "kind": "identifier"
+                      },
+                      {
+                        "kind": "attribute"
+                      },
+                      {
+                        "kind": "subscript"
+                      }
+                    ],
+                    "not": {
+                      "regex": "^[A-Z][A-Z0-9_]+$"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/test/**",
+            "**/test_*.py",
+            "**/*_test.py",
+            "**/conftest.py",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} hands a command held in a variable to the shell. Check where the command comes from, or pass an argument list to subprocess without shell=True."
+  }
+}

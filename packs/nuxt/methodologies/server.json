@@ -1,0 +1,99 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "nuxt/server",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "NUXT-SERVER-001",
+      "check": "nuxt/server/no-server-import-in-app",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt directory structure and auto-imports",
+        "locator": "server directory conventions",
+        "paraphrase": "The server directory runs only on the server. App code reaches it through routes, never through imports."
+      },
+      "why": "Importing server modules into app code bundles server-only dependencies into the client and leaks secrets and database handles.",
+      "fixHint": "Expose the server logic through a server route or move the shared piece to a framework-agnostic util both sides may import.",
+      "avoid": "Lazy import() does not fix the boundary. A dynamic import of a server module still ships it to the client.",
+      "examples": {
+        "pass": "pass/server-route-ignored",
+        "fail": "fail/static-import"
+      }
+    },
+    {
+      "id": "NUXT-VALID-001",
+      "check": "nuxt/server/no-unvalidated-body",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "h3 request utilities",
+        "locator": "readBody versus readValidatedBody",
+        "paraphrase": "readBody returns the raw payload. readValidatedBody parses it against a schema and rejects what does not fit."
+      },
+      "why": "An unshaped payload flows into database writes and business logic, so one malformed request corrupts state instead of failing at the boundary.",
+      "fixHint": "Call readValidatedBody with a schema parse function and handle the validation error it throws.",
+      "avoid": "A size limit is not validation. maxBodySize caps bytes but proves nothing about the payload shape.",
+      "examples": {
+        "pass": "pass/validated-body",
+        "fail": "fail/plain-body"
+      }
+    },
+    {
+      "id": "NUXT-URL-001",
+      "check": "nuxt/server/no-absolute-url-in-app-fetch",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt data fetching and Nitro proxy",
+        "locator": "relative API paths in app code",
+        "paraphrase": "App code calls same-origin APIs with relative paths. The Nitro server proxies them, so client and SSR agree on the origin."
+      },
+      "why": "An absolute URL pins an origin that differs between SSR, preview, and production, and it bypasses the Nitro proxy and its headers.",
+      "fixHint": "Replace the origin with a relative path such as /api/orders and let Nitro route it.",
+      "avoid": "Loopback is still an absolute origin. http://localhost works on one machine and breaks everywhere else.",
+      "examples": {
+        "pass": "pass/relative-usefetch",
+        "fail": "fail/usefetch-absolute"
+      }
+    },
+    {
+      "id": "NUXT-CTX-001",
+      "check": "nuxt/server/no-event-context-export",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "h3 event lifecycle",
+        "locator": "per-request event scope",
+        "paraphrase": "The event object lives for one request. Exporting it lets later requests observe or mutate earlier request state."
+      },
+      "why": "A shared event binding leaks headers, sessions, and locals across requests, so one user sees another user's scope.",
+      "fixHint": "Keep the event inside the handler closure and pass only plain values to helpers.",
+      "avoid": "Renaming the binding to context does not change its scope. An exported alias leaks the same request.",
+      "examples": {
+        "pass": "pass/default-handler",
+        "fail": "fail/reexport-event"
+      }
+    },
+    {
+      "id": "NUXT-ERR-001",
+      "check": "nuxt/server/no-return-create-error",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Nuxt documentation, createError utility and server error handling (https://nuxt.com/docs/api/utils/create-error)",
+        "locator": "Server API error handling",
+        "paraphrase": "In server routes and middleware, throw createError({ statusCode, statusMessage }) to trigger H3 error handling; returning the error object does not reject the request."
+      },
+      "why": "Returning createError() from a Nitro handler serializes the error object as a normal response instead of halting middleware execution and sending the HTTP error status.",
+      "fixHint": "Replace return createError(...) with throw createError(...).",
+      "avoid": "Only return statements in server/** or src/server/** whose returned expression is a direct createError(...) call are flagged. Throwing createError(...) or passing it to a helper is allowed.",
+      "examples": {
+        "pass": "pass/throw-create-error",
+        "fail": "fail/return-create-error"
+      }
+    }
+  ]
+}

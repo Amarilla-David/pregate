@@ -1,0 +1,20 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "src/a.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "renamed-raw",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A local package name and a raw string import path still load the deprecated package."
+  }
+}

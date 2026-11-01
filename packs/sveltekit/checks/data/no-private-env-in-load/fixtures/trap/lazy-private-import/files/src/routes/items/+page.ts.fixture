@@ -1,0 +1,4 @@
+export async function load() {
+	const { env } = await import("$env/dynamic/private");
+	return { dsn: env.DATABASE_URL };
+}

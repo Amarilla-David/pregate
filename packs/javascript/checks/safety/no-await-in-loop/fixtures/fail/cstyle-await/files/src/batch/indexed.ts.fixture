@@ -1,0 +1,7 @@
+async function load(users) {
+  for (let i = 0; i < users.length; i++) {
+    await saveUser(users[i]);
+  }
+}
+
+export const runner = load;

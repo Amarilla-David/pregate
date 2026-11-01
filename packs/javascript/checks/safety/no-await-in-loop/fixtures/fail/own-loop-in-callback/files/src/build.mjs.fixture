@@ -1,0 +1,1 @@
+for (const task of tasks) { onReady(async () => { for (const value of values) { await task.run(value); } }); }

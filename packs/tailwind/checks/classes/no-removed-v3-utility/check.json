@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "tailwind/classes/no-removed-v3-utility",
+  "version": "1.0.0",
+  "area": "classes",
+  "cardinality": "singleton",
+  "dimension": "tailwind.no-removed-v3-utility",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "removed-v3-utility",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "(^|[\\s:!])((bg|text|border|divide|ring|placeholder)-opacity-\\S+|flex-(grow|shrink)(-\\S+)?|overflow-ellipsis|decoration-(slice|clone))(!|\\s|$)",
+            "inside": {
+              "any": [
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                }
+              ],
+              "inside": {
+                "stopBy": "end",
+                "any": [
+                  {
+                    "regex": "^(className|class)\\s*=",
+                    "has": {
+                      "kind": "property_identifier",
+                      "regex": "^(className|class)$"
+                    }
+                  },
+                  {
+                    "kind": "call_expression",
+                    "has": {
+                      "field": "function",
+                      "kind": "identifier",
+                      "regex": "^(clsx|cn|cx|classnames|classNames|twMerge|twJoin|cva|tv)$"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a utility Tailwind CSS v4 removed. Use the opacity modifier (bg-black/50), grow/shrink, text-ellipsis or box-decoration-slice/clone."
+  }
+}

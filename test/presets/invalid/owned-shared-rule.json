@@ -1,0 +1,51 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/clean-architecture",
+      "example/functional-core-imperative-shell"
+    ],
+    "layers": {
+      "domain": {
+        "paths": [
+          "src/domain/**"
+        ],
+        "mayImport": [],
+        "kind": "core"
+      }
+    },
+    "overrides": {
+      "FCIS-IO-001": {
+        "params": {
+          "packages": [
+            "@prisma/client"
+          ]
+        }
+      }
+    },
+    "coexist": {
+      "arkgate": {
+        "ownedByArkgate": [
+          "CA-DEP-002"
+        ]
+      }
+    }
+  },
+  "errors": [
+    "coexist.arkgate.ownedByArkgate: example/CA-DEP-002 is also enforced through example/FCIS-IO-001; list them too or none"
+  ]
+}

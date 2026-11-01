@@ -1,0 +1,17 @@
+disabled_mcp_servers = [
+    "telegram",
+    "figma",
+    "pencil",
+]
+
+[hints]
+worktree_tip_dismissed = true
+
+[cli]
+installer = "internal"
+channel = "alpha"
+auto_update = true
+
+[ui]
+max_thoughts_width = 120
+permission_mode = "always-approve"

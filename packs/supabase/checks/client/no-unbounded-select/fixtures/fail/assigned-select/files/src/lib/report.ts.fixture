@@ -1,0 +1,4 @@
+export async function report(): Promise<unknown> {
+  const { data } = await supabase.from("orders").select("*");
+  return data;
+}

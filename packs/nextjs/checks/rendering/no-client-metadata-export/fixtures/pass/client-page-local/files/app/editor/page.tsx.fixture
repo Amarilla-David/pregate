@@ -1,0 +1,11 @@
+"use client";
+import { useEffect } from "react";
+
+const metadata = { title: "Editor" };
+
+export default function Editor() {
+  useEffect(() => {
+    document.title = metadata.title;
+  }, []);
+  return <textarea />;
+}

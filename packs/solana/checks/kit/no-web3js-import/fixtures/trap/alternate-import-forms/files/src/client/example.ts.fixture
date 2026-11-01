@@ -1,0 +1,4 @@
+import * as legacy from "@solana/web3.js";
+export * from "@solana/web3.js";
+const loaded = require("@solana/web3.js");
+const lazy = await import("@solana/web3.js");

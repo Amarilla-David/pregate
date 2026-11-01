@@ -1,0 +1,27 @@
+{
+  "language": "typescript",
+  "target": "src/application/order.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/application/**",
+      "src/services/**"
+    ],
+    "exclude": [
+      "**/*.test.*",
+      "**/*.spec.*"
+    ],
+    "allow": []
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      },
+      {
+        "line": 4
+      }
+    ]
+  }
+}

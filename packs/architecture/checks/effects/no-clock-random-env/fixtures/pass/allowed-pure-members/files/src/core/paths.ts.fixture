@@ -1,0 +1,7 @@
+export function matches(glob: string, rel: string): boolean {
+  return new Bun.Glob(glob.toLowerCase()).match(rel.toLowerCase());
+}
+
+export function parseConfig(text: string): unknown {
+  return Bun.JSONC.parse(text);
+}

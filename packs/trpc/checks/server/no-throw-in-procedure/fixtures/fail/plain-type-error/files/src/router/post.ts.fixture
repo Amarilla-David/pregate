@@ -1,0 +1,2 @@
+import { t, publicProcedure } from "./trpc";
+export const postRouter = t.router({ list: publicProcedure.query(() => { throw new Error("db down"); }) });

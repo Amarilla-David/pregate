@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shop/awaited-legacy.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "awaited-legacy",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Awaiting the call does not modernize it. await obs.toPromise() is still the deprecated conversion."
+  }
+}

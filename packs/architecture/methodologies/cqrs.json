@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/cqrs",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "CQRS-QRY-001",
+      "check": "architecture/cqrs/query-mutates",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "CQRS (G. Young)",
+        "locator": "command and query separation",
+        "paraphrase": "A query answers a question and does not change observable state. A command changes state and is not used as a query."
+      },
+      "why": "A query that writes makes the read model a second source of truth and breaks the assumption that repeating the query is safe.",
+      "fixHint": "Return the read model from the query. Put the write in a command that is the only writer of that change.",
+      "avoid": "Calling db[\"update\"] or prisma.invoice.update from the query is still a write. A local helper that does not go through those clients is outside this rule.",
+      "examples": {
+        "pass": "pass/find-unique",
+        "fail": "fail/prisma-update"
+      }
+    },
+    {
+      "id": "CQRS-CMD-001",
+      "check": "architecture/cqrs/command-imports-query",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "CQRS (G. Young)",
+        "locator": "separate read and write models",
+        "paraphrase": "The write model and the read model change for different reasons. The command path does not take a dependency on the query path."
+      },
+      "why": "A command that calls the query stack couples the write to a read model and invites the command to trust a projection it should not update through.",
+      "fixHint": "Pass the facts the command needs as arguments, or read them through a port the command's application layer owns.",
+      "avoid": "export type { View } from a queries path is still a dependency on the query module.",
+      "examples": {
+        "pass": "pass/domain-only",
+        "fail": "fail/imports-query"
+      }
+    },
+    {
+      "id": "CQRS-QRY-002",
+      "check": "architecture/cqrs/query-imports-command",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "CQRS (G. Young)",
+        "locator": "separate read and write models",
+        "paraphrase": "The read side answers questions from its own model and changes nothing. Every state change goes through the write side, which the query path does not call."
+      },
+      "why": "A query that calls a command changes state every time someone reads, so repeating, caching or retrying the query is no longer safe.",
+      "fixHint": "Return the read model from the query. If reading should record something, let the caller issue that command separately.",
+      "avoid": "A type-only import, re-export or import() of a commands path is the same dependency. A write helper outside a commands folder is outside this rule; CQRS-QRY-001 covers direct writes through a store.",
+      "examples": {
+        "pass": "pass/read-model-only",
+        "fail": "fail/imports-command"
+      }
+    }
+  ]
+}

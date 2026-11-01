@@ -1,0 +1,5 @@
+export type Invoice = {
+  readonly details: {
+    total: number;
+  };
+};

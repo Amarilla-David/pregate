@@ -1,0 +1,10 @@
+
+import { prisma } from "~/server/db";
+
+export async function findByEmail(email: string) {
+  return prisma.$queryRawUnsafe("SELECT * FROM users WHERE email = $1", email);
+}
+
+export async function archive(id: number) {
+  return prisma.$executeRawUnsafe(`UPDATE orders SET archived = true WHERE id = $1`, id);
+}

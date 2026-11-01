@@ -1,0 +1,29 @@
+const assert = require('node:assert/strict');
+const { completeOrder } = require('../src/complete-order.cjs');
+
+async function verifyCompletion() {
+  let release, settled = false, envelope;
+  const blocked = new Promise(resolve => { release = resolve; });
+  const kernel = { event: { raiseLocalBlocking(event) { envelope = event; return blocked; } } };
+  const pending = completeOrder(kernel, 'order-1').then(value => { settled = true; return value; });
+  await Promise.resolve();
+  await Promise.resolve();
+  const beforeRelease = settled;
+  release();
+  assert.deepEqual(await pending, { status: 'completed', id: 'order-1' });
+  assert.equal(beforeRelease, false, 'The application reported completion before the listener finished');
+  assert.deepEqual(envelope, { eventType: 'order.completed', payload: { id: 'order-1' } });
+}
+
+async function verifyFailure() {
+  const failure = new Error('listener failed');
+  const kernel = { event: { raiseLocalBlocking: () => Promise.reject(failure) } };
+  await assert.rejects(() => completeOrder(kernel, 'order-1'), error => error === failure);
+}
+
+async function main() {
+  await verifyCompletion();
+  await verifyFailure();
+}
+
+main().catch(error => { console.error(error.message); process.exitCode = 1; });

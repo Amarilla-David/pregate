@@ -1,0 +1,5 @@
+import { signal } from "@angular/core";
+const count = signal(0);
+export function reset(): void {
+  count.set(0);
+}

@@ -1,0 +1,4 @@
+declare const PublicKey: { createProgramAddress(seeds: Uint8Array[], programId: unknown): Promise<unknown> };
+export async function buildAsyncVault(seeds: Uint8Array[], programId: unknown): Promise<unknown> {
+  return await PublicKey.createProgramAddress(seeds, programId);
+}

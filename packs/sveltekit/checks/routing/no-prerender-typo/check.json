@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/routing/no-prerender-typo",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.prerender-typo",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "prerender-typo",
+          "rule": {
+            "kind": "export_statement",
+            "regex": "^\\s*export\\s+(const|let|var)\\s+(preRender|PreRender|PRERENDER)\\b"
+          },
+          "files": [
+            "**/+page.ts",
+            "**/+page.server.ts",
+            "**/+layout.ts",
+            "**/+layout.server.ts",
+            "**/+server.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} exports a mis-cased prerender option. Only the exact lowercase `prerender` is read; any other casing is silently ignored."
+  }
+}

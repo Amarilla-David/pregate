@@ -1,0 +1,1 @@
+export function Css() { return <link rel="stylesheet" href="/app.css" />; }

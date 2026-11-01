@@ -1,0 +1,10 @@
+import type { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { verify } from "./password";
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({ authorize: (credentials) => verify(credentials) }),
+  ],
+  "session": { "strategy": `database` },
+};

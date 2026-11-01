@@ -1,0 +1,11 @@
+import { parse } from "../src/parser";
+
+fit("parses numbers", () => {
+  expect(parse("42")).toEqual({ kind: "number", value: 42 });
+});
+
+xdescribe("strings", () => {
+  it("parses quoted text", () => {
+    expect(parse('"a"')).toEqual({ kind: "string", value: "a" });
+  });
+});

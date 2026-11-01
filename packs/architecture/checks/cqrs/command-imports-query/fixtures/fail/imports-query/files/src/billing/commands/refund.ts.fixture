@@ -1,0 +1,6 @@
+
+import { invoiceById } from "../queries/invoice-read";
+
+export function refund(id: string): string {
+  return invoiceById.name;
+}

@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/crypto/box.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

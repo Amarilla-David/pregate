@@ -1,0 +1,12 @@
+import type { Remote } from "./remote";
+
+export function pushAll(remote: Remote, ids: string[]): void {
+  try {
+    remote.push(ids);
+  } catch (error) {
+  }
+}
+
+export function pushLater(remote: Remote, ids: string[]): void {
+  remote.pushAsync(ids).catch(() => {});
+}

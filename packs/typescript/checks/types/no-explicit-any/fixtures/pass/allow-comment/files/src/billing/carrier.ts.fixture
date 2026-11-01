@@ -1,0 +1,5 @@
+
+// pregate-allow-any: the carrier payload has no published schema
+export function readCarrier(raw: string): any {
+  return JSON.parse(raw);
+}

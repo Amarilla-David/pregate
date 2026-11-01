@@ -1,0 +1,4 @@
+declare const subscriber: { disconnect(): void };
+export function teardownSub(): void {
+  subscriber.disconnect();
+}

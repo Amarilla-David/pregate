@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/parser-wrong.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "wrong-option-no-limit",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "extended belongs to urlencoded, not json, and neither option caps the body. An options object without limit is still unbounded."
+  }
+}

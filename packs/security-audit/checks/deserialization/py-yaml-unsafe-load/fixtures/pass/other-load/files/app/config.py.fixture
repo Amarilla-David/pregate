@@ -1,0 +1,6 @@
+import json
+import pickle_free as store
+
+
+def read(text):
+    return json.load(text), store.load(text)

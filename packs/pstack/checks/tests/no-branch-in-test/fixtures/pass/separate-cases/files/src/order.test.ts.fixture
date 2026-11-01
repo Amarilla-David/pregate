@@ -1,0 +1,2 @@
+test("standard", () => { expect(price(false)).toBe(20); });
+test("vip", () => { expect(price(true)).toBe(10); });

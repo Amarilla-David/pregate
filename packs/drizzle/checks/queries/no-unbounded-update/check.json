@@ -1,0 +1,82 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/queries/no-unbounded-update",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "drizzle.unbounded-update",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "drizzle-update-without-where",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "kind": "member_expression",
+              "all": [
+                {
+                  "has": {
+                    "field": "object",
+                    "kind": "call_expression",
+                    "has": {
+                      "field": "function",
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "object",
+                            "regex": "^(db|tx)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^update$"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "has": {
+                    "field": "property",
+                    "regex": "^set$"
+                  }
+                }
+              ]
+            },
+            "not": {
+              "inside": {
+                "stopBy": "end",
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^where$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls db.update(table).set(...) without chaining .where(...), which overwrites every row in the table."
+  }
+}

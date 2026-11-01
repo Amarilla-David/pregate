@@ -1,0 +1,2 @@
+// @ts-expect-error(elon): known engine issue with union types
+export const value: string = 42 as any;

@@ -1,0 +1,46 @@
+{
+  "id": "go/control/no-empty-select",
+  "version": "1.0.0",
+  "area": "control",
+  "cardinality": "singleton",
+  "dimension": "go.control.empty-select",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "go": [
+        {
+          "id": "empty-select",
+          "rule": {
+            "kind": "select_statement",
+            "not": {
+              "has": {
+                "any": [
+                  {
+                    "kind": "communication_case"
+                  },
+                  {
+                    "kind": "default_case"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: select {} blocks the goroutine indefinitely. Use context cancellation or channel coordination for synchronization."
+  }
+}

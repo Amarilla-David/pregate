@@ -1,0 +1,13 @@
+import type { Connection, Pool } from "./pool";
+
+export async function withConnection<T>(pool: Pool, work: (c: Connection) => Promise<T>): Promise<T | null> {
+  const connection = await pool.connect();
+  try {
+    return await work(connection);
+  } catch (error) {
+    pool.report(error);
+    return null;
+  } finally {
+    connection.release();
+  }
+}

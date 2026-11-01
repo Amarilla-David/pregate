@@ -1,0 +1,6 @@
+import crypto from "node:crypto";
+
+export function open(key: Buffer, data: Buffer): Buffer {
+  const d = crypto.createDecipheriv('AES-128-ECB', key, null);
+  return Buffer.concat([d.update(data), d.final()]);
+}

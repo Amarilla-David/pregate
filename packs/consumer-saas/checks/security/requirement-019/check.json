@@ -1,0 +1,27 @@
+{
+  "id": "consumer-saas/security/requirement-019",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "consumer-saas.r019",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CONSUMER-019"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CONSUMER-019 requires current passing project verification: {symbol}."
+  }
+}

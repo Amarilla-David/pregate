@@ -1,0 +1,9 @@
+import { useEffect } from "react";
+export function List(props: { items: string[] }) {
+  for (const item of props.items) {
+    useEffect(() => {
+      document.title = item;
+    }, [item]);
+  }
+  return <ul>{props.items}</ul>;
+}

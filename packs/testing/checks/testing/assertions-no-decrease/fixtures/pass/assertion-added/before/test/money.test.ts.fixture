@@ -1,0 +1,7 @@
+import { expect, it } from "bun:test";
+import { Money } from "../src/money";
+
+it("adds amounts", () => {
+  expect(new Money(100).add(new Money(50)).cents).toBe(150);
+  expect(new Money(0).add(new Money(0)).cents).toBe(0);
+});

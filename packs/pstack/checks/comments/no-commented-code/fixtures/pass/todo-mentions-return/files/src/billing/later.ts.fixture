@@ -1,0 +1,5 @@
+
+// TODO(ada): return the previous total once the ledger catches up
+export function total(cents: number): number {
+  return cents;
+}

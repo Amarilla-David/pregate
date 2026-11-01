@@ -1,0 +1,6 @@
+
+it("saves", () => {
+  expect(save).toHaveBeenCalled();
+});
+
+declare function save(): void;

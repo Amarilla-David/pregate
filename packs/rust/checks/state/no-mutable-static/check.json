@@ -1,0 +1,37 @@
+{
+  "id": "rust/state/no-mutable-static",
+  "version": "1.0.0",
+  "area": "state",
+  "cardinality": "singleton",
+  "dimension": "rust.state.mutable-static",
+  "minSeverity": null,
+  "languages": [
+    "rust"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "rust": [
+        {
+          "id": "source",
+          "rule": {
+            "kind": "static_item",
+            "has": {
+              "kind": "mutable_specifier"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: A mutable static needs an explicit synchronization and safety policy."
+  }
+}

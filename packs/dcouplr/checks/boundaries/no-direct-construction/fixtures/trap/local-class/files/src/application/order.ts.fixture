@@ -1,0 +1,4 @@
+class OrderService {
+ run() { return new OrderStore(); }
+}
+admission.addFactoryMethod((input, dKernel) => new OrderService(input, dKernel));

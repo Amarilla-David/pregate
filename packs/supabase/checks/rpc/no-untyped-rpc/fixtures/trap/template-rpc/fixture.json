@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/cached.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-rpc",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Backticks do not add types. A template-literal function name with no params object is still an untyped rpc call."
+  }
+}

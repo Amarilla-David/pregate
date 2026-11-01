@@ -1,0 +1,6 @@
+declare const t: { middleware(fn: (opts: { ctx: { ok: boolean }; next: (o?: unknown) => Promise<unknown> }) => Promise<void>): unknown };
+export const branchy = t.middleware(async ({ ctx, next }) => {
+  if (ctx.ok) {
+    await next({ ctx });
+  }
+});

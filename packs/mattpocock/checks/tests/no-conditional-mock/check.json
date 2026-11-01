@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mattpocock/tests/no-conditional-mock",
+  "version": "1.0.0",
+  "area": "tests",
+  "cardinality": "singleton",
+  "dimension": "tests.mock-branch",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "conditional-mock",
+          "rule": {
+            "any": [
+              {
+                "kind": "if_statement"
+              },
+              {
+                "kind": "switch_statement"
+              },
+              {
+                "kind": "ternary_expression"
+              }
+            ],
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ],
+              "inside": {
+                "kind": "arguments",
+                "inside": {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "member_expression",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "object",
+                          "regex": "^(vi|jest)$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "field": "property",
+                          "regex": "^fn$"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} branches inside an inline mock. Prefer operation-specific responses or review an intentional stateful fake."
+  }
+}

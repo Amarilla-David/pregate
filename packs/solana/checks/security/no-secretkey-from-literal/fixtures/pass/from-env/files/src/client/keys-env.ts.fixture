@@ -1,0 +1,2 @@
+const kp = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.KEYPAIR as string)));
+export { kp };

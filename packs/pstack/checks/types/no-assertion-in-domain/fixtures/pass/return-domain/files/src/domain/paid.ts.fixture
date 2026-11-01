@@ -1,0 +1,6 @@
+
+export function paid(order: Order): Order {
+  return order;
+}
+
+interface Order { id: string; total: number }

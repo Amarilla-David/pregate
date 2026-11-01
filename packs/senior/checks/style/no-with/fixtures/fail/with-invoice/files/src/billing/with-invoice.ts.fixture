@@ -1,0 +1,6 @@
+
+export function label(invoice: Invoice): string {
+  with (invoice) { return id; }
+}
+
+interface Invoice { id: string }

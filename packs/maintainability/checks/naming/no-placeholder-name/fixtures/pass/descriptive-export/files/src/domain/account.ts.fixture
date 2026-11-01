@@ -1,0 +1,5 @@
+export const userAccount = { id: "u-1" };
+
+export function calculateTax(amount: number): number {
+  return amount * 0.2;
+}

@@ -1,0 +1,3 @@
+export function refund(paid: number, used: number): number {
+  return Math.max(0, paid - used);
+}

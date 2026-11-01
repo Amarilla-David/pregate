@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/no-boxed-primitive-type",
+  "version": "1.1.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.boxed-primitive",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "boxed-primitive-type",
+          "rule": {
+            "kind": "type_identifier",
+            "regex": "^(String|Number|Boolean|Symbol|Object|Function)$",
+            "not": {
+              "any": [
+                {
+                  "inside": {
+                    "kind": "nested_type_identifier"
+                  }
+                },
+                {
+                  "inside": {
+                    "field": "name",
+                    "any": [
+                      {
+                        "kind": "interface_declaration"
+                      },
+                      {
+                        "kind": "type_alias_declaration"
+                      },
+                      {
+                        "kind": "class_declaration"
+                      },
+                      {
+                        "kind": "abstract_class_declaration"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} names a boxed wrapper or untyped Function type. Use string, number, boolean, symbol, object or a specific function type."
+  }
+}

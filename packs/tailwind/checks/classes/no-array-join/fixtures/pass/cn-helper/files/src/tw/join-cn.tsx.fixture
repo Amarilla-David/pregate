@@ -1,0 +1,4 @@
+import { cn } from "./cn";
+export function Card({ extra }: { extra: string }) {
+  return <div className={cn("p-4", extra)} />;
+}

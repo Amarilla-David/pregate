@@ -1,0 +1,9 @@
+import { Controller, Post, HttpCode, HttpStatus } from "@nestjs/common";
+@Controller("orders")
+export class OrdersCreator {
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create() {
+    return { ok: true };
+  }
+}

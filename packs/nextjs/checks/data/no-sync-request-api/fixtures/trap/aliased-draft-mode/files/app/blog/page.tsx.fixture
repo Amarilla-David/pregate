@@ -1,0 +1,7 @@
+import { draftMode as preview } from "next/headers";
+import { getPosts } from "@/lib/cms";
+
+export default async function Blog() {
+  const posts = await getPosts({ draft: preview().isEnabled });
+  return <ul>{posts.map((post) => <li key={post.id}>{post.title}</li>)}</ul>;
+}

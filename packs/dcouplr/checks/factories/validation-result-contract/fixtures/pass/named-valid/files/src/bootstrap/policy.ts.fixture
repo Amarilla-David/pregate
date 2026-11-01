@@ -1,0 +1,4 @@
+const check = () => ({valid: false, msg: 'rejected'});
+stage.addValidationPolicy(check);
+function valid() { return true; }
+stage.addValidationPolicy(valid);

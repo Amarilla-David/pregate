@@ -1,0 +1,5 @@
+"use client";
+const dynamic = "local-mode";
+export function ClientFilter() {
+  return <div>{dynamic}</div>;
+}

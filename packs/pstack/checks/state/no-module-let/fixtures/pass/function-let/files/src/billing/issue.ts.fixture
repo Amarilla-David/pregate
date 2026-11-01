@@ -1,0 +1,6 @@
+
+export function issue(start: number): number {
+  let nextNumber = start;
+  nextNumber += 1;
+  return nextNumber;
+}

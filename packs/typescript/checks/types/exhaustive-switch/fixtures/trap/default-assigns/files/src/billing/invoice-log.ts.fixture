@@ -1,0 +1,13 @@
+
+export function log(status: "open" | "paid"): string {
+  switch (status) {
+    case "open":
+      return "open";
+    default: {
+      const ignored = status;
+      break;
+    }
+  }
+  return ignoredName(status);
+}
+function ignoredName(status: string): string { return status; }

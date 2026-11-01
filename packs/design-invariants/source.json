@@ -1,0 +1,6 @@
+{
+  "$schema": "../../schema/source.v1.json",
+  "ns": "design-invariants",
+  "version": "1.0.0",
+  "category": "invariants"
+}

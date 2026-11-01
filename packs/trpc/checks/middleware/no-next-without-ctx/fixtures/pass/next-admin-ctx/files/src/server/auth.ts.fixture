@@ -1,0 +1,2 @@
+import { t } from "./trpc";
+export const admin = t.procedure.use(({ ctx, next }) => next({ ctx: { user: ctx.user, role: "admin" } }));

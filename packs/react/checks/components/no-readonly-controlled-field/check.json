@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react/components/no-readonly-controlled-field",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "react.readonly-controlled-field",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "controlled-field-without-handler",
+          "utils": {
+            "value-attribute": { "regex": "^value\\s*=", "has": { "kind": "property_identifier", "regex": "^value$" } },
+            "checked-attribute": { "regex": "^checked\\s*=", "has": { "kind": "property_identifier", "regex": "^checked$" } },
+            "editable-type-or-none": {
+              "not": {
+                "has": {
+                  "regex": "^type\\s*=",
+                  "has": { "kind": "property_identifier", "regex": "^type$" },
+                  "not": {
+                    "has": {
+                      "kind": "string",
+                      "has": {
+                        "kind": "string_fragment",
+                        "regex": "^(text|email|password|search|tel|url|number|date|datetime-local|month|week|time|color|range)$"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "rule": {
+            "regex": "^<(input|textarea|select)\\b",
+            "all": [
+              { "has": { "field": "name", "kind": "identifier", "regex": "^(input|textarea|select)$" } },
+              {
+                "any": [
+                  {
+                    "regex": "^<input\\b",
+                    "all": [{ "has": { "matches": "value-attribute" } }, { "matches": "editable-type-or-none" }]
+                  },
+                  { "regex": "^<(textarea|select)\\b", "has": { "matches": "value-attribute" } },
+                  { "regex": "^<input\\b", "has": { "matches": "checked-attribute" } }
+                ]
+              },
+              {
+                "not": {
+                  "has": {
+                    "any": [
+                      {
+                        "regex": "^(onChange|onInput|readOnly|disabled)\\b",
+                        "has": { "kind": "property_identifier", "regex": "^(onChange|onInput|readOnly|disabled)$" }
+                      },
+                      { "regex": "^\\{\\s*\\.\\.\\." }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} controls a form field with value or checked but has no onChange, readOnly or disabled. React renders it read-only; add onChange, mark it readOnly, or use defaultValue." }
+}

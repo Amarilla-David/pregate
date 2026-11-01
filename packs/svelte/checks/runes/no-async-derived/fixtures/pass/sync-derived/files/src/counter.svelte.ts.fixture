@@ -1,0 +1,4 @@
+declare const $derived: { <T>(v: T): T; by<T>(fn: () => T): T };
+export function makeDoubled(count: number) {
+  return $derived.by(() => count * 2);
+}

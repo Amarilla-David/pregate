@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/security/no-expo-public-secret-name",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "react-native.no-expo-public-secret-name",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "expo-public-secret",
+          "rule": {
+            "regex": "^EXPO_PUBLIC_[A-Z0-9_]*(SECRET|TOKEN|PASSWORD|SERVICE_ROLE|PRIVATE_KEY)[A-Z0-9_]*$"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} names an EXPO_PUBLIC secret. EXPO_PUBLIC values ship to the client: keep secrets server-side."
+  }
+}

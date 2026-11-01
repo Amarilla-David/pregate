@@ -1,0 +1,2 @@
+// mainnet-beta only when explicitly asked
+export const CLUSTER = "devnet";

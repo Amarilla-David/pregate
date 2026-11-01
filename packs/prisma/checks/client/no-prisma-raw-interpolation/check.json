@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-prisma-raw-interpolation",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.raw-fragment",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "prisma-raw-assembled",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^Prisma\\.raw$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "kind": "arguments",
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "any": [
+                      {
+                        "kind": "template_string",
+                        "has": {
+                          "kind": "template_substitution"
+                        }
+                      },
+                      {
+                        "kind": "binary_expression",
+                        "has": {
+                          "field": "operator",
+                          "regex": "^\\+$"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds Prisma.raw text from interpolation or concatenation. Pass values through $queryRaw`...${value}` or Prisma.sql so they stay parameters."
+  }
+}

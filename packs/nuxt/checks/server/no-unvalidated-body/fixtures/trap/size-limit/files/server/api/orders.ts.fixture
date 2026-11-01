@@ -1,0 +1,4 @@
+export default defineEventHandler(async (event) => {
+  const body = await readBody(event, { maxBodySize: 1000 });
+  return body;
+});

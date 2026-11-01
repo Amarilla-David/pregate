@@ -1,0 +1,2 @@
+const log = globalThis['console'];
+log.info('order');

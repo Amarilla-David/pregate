@@ -1,0 +1,17 @@
+import type { Job, Logger } from "./job";
+
+export async function runNightly(jobs: Job[]): Promise<void> {
+  for (const job of jobs) {
+    try {
+      await job.run();
+    } catch (error) {
+      console.error(`job ${job.name} failed`, error);
+    }
+  }
+}
+
+export function warmCaches(jobs: Job[], logger: Logger): void {
+  for (const job of jobs) {
+    job.warm().catch((error) => logger.warn("warm-up failed", error));
+  }
+}

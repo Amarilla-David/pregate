@@ -1,0 +1,4 @@
+import type { Col } from "./db";
+export async function migrate(col: Col): Promise<void> {
+  await col.createIndex({ email: 1 });
+}

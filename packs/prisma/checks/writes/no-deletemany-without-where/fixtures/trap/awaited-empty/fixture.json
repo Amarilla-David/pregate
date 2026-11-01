@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shop/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "awaited-wipe",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Awaiting the promise only sequences the wipe. An empty filter still matches every row."
+  }
+}

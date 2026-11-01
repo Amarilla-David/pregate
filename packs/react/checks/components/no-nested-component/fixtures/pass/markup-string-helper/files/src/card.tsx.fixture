@@ -1,0 +1,4 @@
+export function Card() {
+  function markup() { return '<span>not a component</span>'; }
+  return <pre>{markup()}</pre>;
+}

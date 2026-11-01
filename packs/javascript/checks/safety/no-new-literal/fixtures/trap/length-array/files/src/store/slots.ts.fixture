@@ -1,0 +1,1 @@
+export const slots = new Array(3);

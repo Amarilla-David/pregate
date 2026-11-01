@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "pstack/reader-load",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PS-LET-001",
+      "check": "pstack/state/no-module-let",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "minimize reader load",
+        "paraphrase": "Hidden mutable state is a fact the reader has to keep in their head. Shrink that scope to the operation that actually changes the value."
+      },
+      "why": "A module-level let is hidden state. A reader of one function cannot know who else writes it.",
+      "fixHint": "Move the binding inside the function that uses it, or make it const if it never changes.",
+      "avoid": "`const` at module scope is not this rule. `var` belongs to the senior pack. A `let` inside a function, including a for loop initializer, is local and allowed. Renaming the binding does not move it.",
+      "examples": {
+        "pass": "pass/function-let",
+        "fail": "fail/module-let"
+      }
+    },
+    {
+      "id": "PS-COMMENT-001",
+      "relations": [
+        {
+          "with": "maintainability/MAINT-DEPR-001",
+          "kind": "duplicates",
+          "why": "A bare @deprecated JSDoc tag is reported by both rules, and the written notice MAINT-DEPR-001 asks for is still a comment PS-COMMENT-001 denies.",
+          "settle": "Migrating the callers and deleting the deprecated API satisfies both. Teams that keep deprecated surfaces exclude the files that carry them from PS-COMMENT-001."
+        }
+      ],
+      "check": "pstack/comments/no-narration",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "minimize reader load; ps-no-comments",
+        "paraphrase": "Comments that restate the next line add a second text the reader must keep in sync. The workflow that deletes them is a process; this rule is the comment shapes that process can refuse."
+      },
+      "why": "A narration comment goes stale and splits the reader's attention. The code should carry the fact. An owned TODO is a tracked debt, not narration.",
+      "fixHint": "Delete the comment. If the debt is real, write TODO(owner) with an owner of at least two characters, matching the vibe-proof TODO rule.",
+      "avoid": "Allowlisted: TODO/FIXME/HACK/XXX(owner), @ts-expect-error, eslint-, biome-ignore, pregate-, istanbul, c8, SPDX-License-Identifier, Copyright, @license, and /// <reference. @ts-ignore and @ts-nocheck are not allowlisted. A fake owner satisfies the spelling; that is a social hole, not a structural one.",
+      "examples": {
+        "pass": "pass/owned-todo",
+        "fail": "fail/narration"
+      }
+    },
+    {
+      "id": "PS-COMMENTED-001",
+      "check": "pstack/comments/no-commented-code",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "subtract before you add",
+        "paraphrase": "Remove the dead statement before adding the new one. A comment that keeps the old statement around is the dead code, still in the file."
+      },
+      "why": "Commented-out code is a second implementation. Readers do not know whether it is the old behavior, a sample, or the one that should run.",
+      "fixHint": "Delete the comment. History already keeps the old statement.",
+      "avoid": "A TODO(owner) or FIXME(owner) that mentions return is not this shape, because the comment does not start with the keyword. A comment that starts with a keyword and also carries an owner is exempt so it does not fight the owned-TODO allowlist.",
+      "examples": {
+        "pass": "pass/todo-mentions-return",
+        "fail": "fail/commented-const"
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function saveDraft(id: string, data: string): Promise<void> {
+  await redis.set(`draft:${id}`, data, {});
+}

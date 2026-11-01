@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/sync.component.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "conditional-signal-write-in-effect",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Guarding the signal write with an if statement inside effect() still propagates state through an effect instead of computed/linkedSignal."
+  }
+}

@@ -1,0 +1,10 @@
+export function useBridge(frame: { current: HTMLIFrameElement | null }, apply: (v: unknown) => void): void {
+  useEffect(() => {
+    const target = frame.current?.contentWindow;
+    window.addEventListener("message", function (event) {
+      if (event.source !== target) return;
+      apply(event.data);
+    });
+  }, [frame]);
+}
+declare function useEffect(f: () => void, deps: unknown[]): void;

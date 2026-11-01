@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/with-block.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "with-block",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A braced body does not make with a normal block. The names inside still sit on the object's scope."
+  }
+}

@@ -1,0 +1,11 @@
+import { prisma } from "~/server/db";
+
+export async function reset(teamId: string) {
+  await prisma.$transaction(
+    async (prisma) => {
+      await prisma.invite.deleteMany({ where: { teamId } });
+      await prisma.team.update({ where: { id: teamId }, data: { seats: 0 } });
+    },
+    { timeout: 10000 },
+  );
+}

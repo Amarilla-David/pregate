@@ -1,0 +1,5 @@
+let cursor = 0;
+while (cursor < ids.length) {
+  const row = await db.select().from(users).where(eq(users.id, ids[cursor]));
+  cursor += 1;
+}

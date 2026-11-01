@@ -1,0 +1,9 @@
+export async function transfer(from: string, to: string, amount: number) {
+  return db.transaction(async (tx) => {
+    const [account] = await tx.select({ balance: accounts.balance }).from(accounts).where(eq(accounts.owner, from)).limit(1);
+    if (!account || account.balance < amount) tx.rollback();
+    await tx.update(accounts).set({ balance: sql`${accounts.balance} - ${amount}` }).where(eq(accounts.owner, from));
+    await tx.update(accounts).set({ balance: sql`${accounts.balance} + ${amount}` }).where(eq(accounts.owner, to));
+    return tx.query.accounts.findFirst({ where: eq(accounts.owner, from) });
+  });
+}

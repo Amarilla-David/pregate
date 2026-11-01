@@ -1,0 +1,2 @@
+import { createClient } from "supabase";
+export const db = createClient("url", "key");

@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "musk/deletion/no-useless-catch",
+  "version": "1.0.0",
+  "area": "deletion",
+  "cardinality": "singleton",
+  "dimension": "deletion.useless-catch",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "useless-catch",
+          "rule": {
+            "pattern": "try { $$$A } catch ($ERR) { throw $ERR; }"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} catches an error only to immediately rethrow it unchanged. Step 2 (Musk): delete the part or process step."
+  }
+}

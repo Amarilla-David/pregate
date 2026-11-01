@@ -1,0 +1,6 @@
+export class CounterComponent {
+  count = { set: (_v: number) => {} };
+  reset() {
+    this.count.set(0);
+  }
+}

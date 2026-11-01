@@ -1,0 +1,7 @@
+import { users$ } from "./users";
+import { ordersFor } from "./orders";
+import { show } from "./screen";
+import { switchMap } from "rxjs";
+export function loadOrders(): void {
+  users$.pipe(switchMap((u) => ordersFor(u))).subscribe(show);
+}

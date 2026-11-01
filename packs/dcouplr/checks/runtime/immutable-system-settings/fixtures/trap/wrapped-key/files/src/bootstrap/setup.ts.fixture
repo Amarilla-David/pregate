@@ -1,0 +1,1 @@
+(kernel.settings.setSetting as Setter)(('forbiddenElements' as Key), []);

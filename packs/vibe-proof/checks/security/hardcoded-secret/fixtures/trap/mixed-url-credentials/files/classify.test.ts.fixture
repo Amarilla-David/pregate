@@ -1,0 +1,1 @@
+export const fixture = "postgresql://user:secret@db.invalid/example?fallback=postgresql://user:r3aL_9c7Password@other.invalid/example";

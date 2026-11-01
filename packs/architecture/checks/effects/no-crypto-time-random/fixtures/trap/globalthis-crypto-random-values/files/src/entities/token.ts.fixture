@@ -1,0 +1,5 @@
+export function generateNonce(): Uint8Array {
+  const bytes = new Uint8Array(16);
+  globalThis.crypto.getRandomValues(bytes);
+  return bytes;
+}

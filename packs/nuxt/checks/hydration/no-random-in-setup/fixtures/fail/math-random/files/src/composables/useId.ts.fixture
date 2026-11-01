@@ -1,0 +1,4 @@
+export function useId(): number {
+  const id = Math.random();
+  return id;
+}

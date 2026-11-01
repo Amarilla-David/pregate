@@ -1,0 +1,6 @@
+
+import { placeOrder } from "../orders";
+
+export function charge(orderId: string): string {
+  return placeOrder.name + orderId;
+}

@@ -1,0 +1,7 @@
+import { useState } from "react";
+
+export function Search() {
+  "use client";
+  const [query, setQuery] = useState("");
+  return <input value={query} onChange={(event) => setQuery(event.target.value)} />;
+}

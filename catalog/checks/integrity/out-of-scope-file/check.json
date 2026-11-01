@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../schema/check.v1.json",
+  "id": "core/integrity/out-of-scope-file",
+  "version": "1.1.0",
+  "area": "integrity",
+  "cardinality": "singleton",
+  "dimension": "integrity.scope",
+  "minSeverity": "deny",
+  "params": {
+    "extensions": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9]*$" } }
+  },
+  "impl": { "kind": "primitive", "primitive": "placement", "cases": ["new-in-exclude", "no-language-pack-in-layer"] },
+  "phase": ["pre", "stop"],
+  "feedback": { "message": "This file is new in an excluded path, or inside a layer in a language PREGATE cannot analyze." }
+}

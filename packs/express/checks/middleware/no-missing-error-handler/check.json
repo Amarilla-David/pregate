@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/middleware/no-missing-error-handler",
+  "version": "1.0.0",
+  "area": "middleware",
+  "cardinality": "singleton",
+  "dimension": "express.error-handler-arity",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "three-arg-error-handler",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.use\\s*\\(\\s*(function\\s*[A-Za-z_$]*[\\w$]*\\s*)?\\(\\s*(err|error)\\s*,\\s*\\w+\\s*,\\s*\\w+\\s*\\)",
+            "not": {
+              "regex": "\\(\\s*(err|error)\\s*,\\s*\\w+\\s*,\\s*\\w+\\s*,\\s*\\w+"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} registers an error middleware with three parameters. Express selects error middleware by arity, so it needs four (err, req, res, next)."
+  }
+}

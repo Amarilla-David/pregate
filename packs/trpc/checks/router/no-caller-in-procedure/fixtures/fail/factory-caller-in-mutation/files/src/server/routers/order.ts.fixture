@@ -1,0 +1,12 @@
+import { placeOrder } from "../orders/place-order";
+import { createCallerFactory, protectedProcedure, router } from "../trpc";
+import { appRouter } from "./_app";
+
+const createCaller = createCallerFactory(appRouter);
+
+export const orderRouter = router({
+  checkout: protectedProcedure.mutation(async ({ ctx }) => {
+    const cart = await createCaller(ctx).cart.get();
+    return placeOrder(ctx.db, cart);
+  }),
+});

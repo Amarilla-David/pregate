@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/controllers/catalog.controller.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "evasion",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Dynamic import() and re-exports still cross the layer boundary into persistence."
+  }
+}

@@ -1,0 +1,5 @@
+import { FlatList } from "react-native";
+
+export function Orders(): unknown {
+  return <FlatList data={ds} renderItem={r} keyExtractor="id" />;
+}

@@ -1,0 +1,124 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/migrations/reversible-migration",
+  "version": "1.0.0",
+  "area": "migrations",
+  "cardinality": "singleton",
+  "dimension": "migrations.reversible",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "up-without-down",
+          "utils": {
+            "defines-up": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "function_declaration"
+                    },
+                    {
+                      "kind": "variable_declarator"
+                    },
+                    {
+                      "kind": "method_definition"
+                    }
+                  ],
+                  "has": {
+                    "field": "name",
+                    "regex": "^up$"
+                  }
+                },
+                {
+                  "kind": "pair",
+                  "has": {
+                    "field": "key",
+                    "regex": "^up$"
+                  }
+                },
+                {
+                  "kind": "assignment_expression",
+                  "has": {
+                    "field": "left",
+                    "kind": "member_expression",
+                    "regex": "^(module\\.)?exports\\.up$"
+                  }
+                }
+              ]
+            },
+            "defines-down": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "function_declaration"
+                    },
+                    {
+                      "kind": "variable_declarator"
+                    },
+                    {
+                      "kind": "method_definition"
+                    }
+                  ],
+                  "has": {
+                    "field": "name",
+                    "regex": "^down$"
+                  }
+                },
+                {
+                  "kind": "pair",
+                  "has": {
+                    "field": "key",
+                    "regex": "^down$"
+                  }
+                },
+                {
+                  "kind": "assignment_expression",
+                  "has": {
+                    "field": "left",
+                    "kind": "member_expression",
+                    "regex": "^(module\\.)?exports\\.down$"
+                  }
+                },
+                {
+                  "kind": "export_specifier",
+                  "regex": "^down$|\\bas\\s+down$"
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "program",
+            "has": {
+              "stopBy": "end",
+              "matches": "defines-up"
+            },
+            "not": {
+              "has": {
+                "stopBy": "end",
+                "matches": "defines-down"
+              }
+            }
+          },
+          "files": [
+            "**/migrations/**"
+          ],
+          "x-note": "A migration module that defines up (function, const, class method, object member or CommonJS export) and no down in any of those forms or as an export specifier. A down that throws with the recovery path is the explicit irreversible marker."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "This migration defines up but no down. Write the reverse step, or a down that throws and states the recovery path."
+  }
+}

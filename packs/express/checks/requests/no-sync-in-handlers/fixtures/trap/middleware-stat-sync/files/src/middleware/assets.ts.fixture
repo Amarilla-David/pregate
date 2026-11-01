@@ -1,0 +1,8 @@
+import fs from "node:fs";
+declare const app: { use(fn: (req: unknown, res: unknown, next: () => void) => void): void };
+export function registerCheck(): void {
+  app.use((_req, _res, next) => {
+    fs.statSync("./public/index.html");
+    next();
+  });
+}

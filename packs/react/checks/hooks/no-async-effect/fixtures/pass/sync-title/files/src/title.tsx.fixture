@@ -1,0 +1,7 @@
+import { useEffect } from "react";
+export function Title(props: { title: string }) {
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
+  return <div>{props.title}</div>;
+}

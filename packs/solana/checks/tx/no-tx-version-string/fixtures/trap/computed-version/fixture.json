@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/client/example.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 2
+      },
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "computed-version",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "String(), interpolation and concatenation produce text, even without a string literal containing 1."
+  }
+}

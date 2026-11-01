@@ -1,0 +1,10 @@
+import { z } from "zod";
+import { Order } from "../domain/order";
+import type { OrderLine } from "../domain/order-line";
+
+const LinesSchema = z.array(z.object({ sku: z.string(), quantity: z.number().int().positive() }));
+
+export function placeOrder(input: unknown): Order {
+  const lines: OrderLine[] = LinesSchema.parse(input);
+  return Order.create(lines);
+}

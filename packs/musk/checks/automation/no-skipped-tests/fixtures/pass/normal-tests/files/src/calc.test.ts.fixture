@@ -1,0 +1,12 @@
+declare function describe(name: string, fn: () => void): void;
+declare function it(name: string, fn: () => void): void;
+declare function test(name: string, fn: () => void): void;
+
+describe("calculator", () => {
+  it("adds numbers", () => {
+    // verified
+  });
+  test("multiplies numbers", () => {
+    // verified
+  });
+});

@@ -1,0 +1,7 @@
+export interface NestInterceptor { intercept(ctx: unknown, next: unknown): unknown; }
+class TimingInterceptor implements NestInterceptor {
+  intercept(_ctx: unknown, next: unknown): unknown {
+    return next;
+  }
+}
+export const interceptorType = TimingInterceptor;

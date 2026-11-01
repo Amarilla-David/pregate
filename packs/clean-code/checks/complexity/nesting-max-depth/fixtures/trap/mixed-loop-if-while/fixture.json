@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {
+    "max": 2
+  },
+  "target": "src/orders/drain.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4,
+        "measured": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "mixed-control-nesting",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Mixing for, if, and while inside one function still crosses depth 2 on the inner while loop."
+  }
+}

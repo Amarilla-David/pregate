@@ -1,0 +1,426 @@
+--- a/common/define-grammar.js
++++ b/common/define-grammar.js
+@@ -7,6 +7,9 @@
+     externals: ($, previous) => previous.concat([
+       $._function_signature_automatic_semicolon,
+       $.__error_recovery,
++      $._jsx_double_string_fragment,
++      $._jsx_single_string_fragment,
++      $._nested_generic_type_argument_start,
+     ]),
+ 
+     supertypes: ($, previous) => previous.concat([
+@@ -52,7 +55,6 @@
+       [$.nested_type_identifier, $.generic_type, $.primary_type, $.lookup_type, $.index_type_query, $.type],
+       [$.as_expression, $.satisfies_expression, $.primary_type],
+       [$._type_query_member_expression, $.member_expression],
+-      [$.member_expression, $._type_query_member_expression_in_type_annotation],
+       [$._type_query_member_expression, $.primary_expression],
+       [$._type_query_subscript_expression, $.subscript_expression],
+       [$._type_query_subscript_expression, $.primary_expression],
+@@ -63,8 +65,8 @@
+       [$.decorator_call_expression, $.decorator],
+       [$.literal_type, $.pattern],
+       [$.predefined_type, $.pattern],
+-      [$.call_expression, $._type_query_call_expression],
+-      [$.call_expression, $._type_query_call_expression_in_type_annotation],
++      // Order matters (tree-sitter-cli 0.24.4): listing the type query first lets typeof import("x") win inside type arguments.
++      [$._type_query_call_expression, $.call_expression],
+       [$.new_expression, $.primary_expression],
+       [$.meta_property, $.primary_expression],
+       [$.construct_signature, $._property_name],
+@@ -73,3 +75,6 @@
+     conflicts: ($, previous) => previous.concat([
++      // Keep both import paths until their surrounding syntax distinguishes a type from an expression.
++      [$._type_query_member_expression_in_type_annotation, $.member_expression],
++      [$._type_query_call_expression_in_type_annotation, $.call_expression],
+       [$.call_expression, $.instantiation_expression, $.binary_expression],
+       [$.call_expression, $.instantiation_expression, $.binary_expression, $.unary_expression],
+@@ -88,6 +93,7 @@
+       [$.primary_expression, $._parameter_name],
+       [$.primary_expression, $._parameter_name, $.primary_type],
+       [$.primary_expression, $.literal_type],
++      [$.primary_expression, $._number],
+       [$.primary_expression, $.literal_type, $.rest_pattern],
+       [$.primary_expression, $.predefined_type, $.rest_pattern],
+       [$.primary_expression, $.primary_type],
+@@ -176,6 +182,11 @@
+           field('type_arguments', optional($.type_arguments)),
+           field('arguments', $.arguments),
+         )),
++        prec('call', seq(
++          field('function', $.expression),
++          field('type_arguments', $.type_arguments),
++          field('arguments', $.template_string),
++        )),
+         prec('template_call', seq(
+           field('function', choice($.primary_expression, $.new_expression)),
+           field('arguments', $.template_string),
+@@ -254,6 +265,20 @@
+             ),
+             repeat(field('attribute', $._jsx_attribute)),
+           ),
++        ),
++      ),
++
++      // The fragments come from the scanner, which keeps a bare `&` inside them.
++      _jsx_string: $ => choice(
++        seq(
++          '"',
++          repeat(choice(alias($._jsx_double_string_fragment, $.string_fragment), $.html_character_reference)),
++          '"',
++        ),
++        seq(
++          '\'',
++          repeat(choice(alias($._jsx_single_string_fragment, $.string_fragment), $.html_character_reference)),
++          '\'',
+         ),
+       ),
+ 
+@@ -322,8 +347,10 @@
+         seq(
+           'export',
+           'type',
+-          $.export_clause,
+-          optional($._from_clause),
++          choice(
++            seq($.export_clause, optional($._from_clause)),
++            seq(choice('*', $.namespace_export), $._from_clause),
++          ),
+           $._semicolon,
+         ),
+         seq('export', '=', $.expression, $._semicolon),
+@@ -926,10 +953,10 @@
+         $.undefined,
+       ),
+ 
+-      _number: $ => prec.left(1, seq(
++      _number: $ => seq(
+         field('operator', choice('-', '+')),
+         field('argument', $.number),
+-      )),
++      ),
+ 
+       existential_type: _ => '*',
+ 
+@@ -952,7 +979,7 @@
+       ),
+ 
+       type_arguments: $ => seq(
+-        '<',
++        choice('<', alias($._nested_generic_type_argument_start, '<')),
+         commaSep1($.type),
+         optional(','),
+         '>',
+@@ -1004,6 +1031,7 @@
+ 
+       type_parameter: $ => seq(
+         optional('const'),
++        optional(choice('out', seq('in', optional('out')))),
+         field('name', $._type_identifier),
+         field('constraint', optional($.constraint)),
+         field('value', optional($.default_type)),
+@@ -1055,7 +1083,11 @@
+         )),
+       ),
+ 
+-      array_type: $ => seq($.primary_type, '[', ']'),
++      array_type: $ => seq(
++        choice($.primary_type, alias($._type_query_member_expression_in_type_annotation, $.member_expression)),
++        '[',
++        ']',
++      ),
+       tuple_type: $ => seq(
+         '[', commaSep($._tuple_type_member), optional(','), ']',
+       ),
+@@ -1076,4 +1108,6 @@
+       _reserved_identifier: (_, previous) => choice(
++        'using',
++        'abstract',
+         'declare',
+         'namespace',
+         'type',
+@@ -1088,6 +1120,7 @@
+         'boolean',
+         'string',
+         'symbol',
++        'unique',
+         'export',
+         'object',
+         'new',
+--- a/common/scanner.h
++++ b/common/scanner.h
+@@ -13,6 +13,9 @@
+     JSX_TEXT,
+     FUNCTION_SIGNATURE_AUTOMATIC_SEMICOLON,
+     ERROR_RECOVERY,
++    JSX_DOUBLE_STRING_FRAGMENT,
++    JSX_SINGLE_STRING_FRAGMENT,
++    NESTED_GENERIC_TYPE_ARGUMENT_START,
+ };
+ 
+ static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
+@@ -27,7 +30,11 @@
+             case '`':
+                 return has_content;
+             case '\0':
+-                return false;
++                if (lexer->eof(lexer)) {
++                    return false;
++                }
++                advance(lexer);
++                break;
+             case '$':
+                 advance(lexer);
+                 if (lexer->lookahead == '{') {
+@@ -53,13 +60,13 @@
+ 
+             if (lexer->lookahead == '/') {
+                 skip(lexer);
+-                while (lexer->lookahead != 0 && lexer->lookahead != '\n') {
++                while (!lexer->eof(lexer) && lexer->lookahead != '\n') {
+                     skip(lexer);
+                 }
+                 *scanned_comment = true;
+             } else if (lexer->lookahead == '*') {
+                 skip(lexer);
+-                while (lexer->lookahead != 0) {
++                while (!lexer->eof(lexer)) {
+                     if (lexer->lookahead == '*') {
+                         skip(lexer);
+                         if (lexer->lookahead == '/') {
+@@ -84,7 +91,7 @@
+     lexer->mark_end(lexer);
+ 
+     for (;;) {
+-        if (lexer->lookahead == 0) {
++        if (lexer->eof(lexer)) {
+             return true;
+         }
+         if (lexer->lookahead == '}') {
+@@ -123,7 +130,6 @@
+         case '*':
+         case '%':
+         case '>':
+-        case '<':
+         case '=':
+         case '?':
+         case '^':
+@@ -133,6 +139,11 @@
+         case ':':
+             return false;
+ 
++        case '<':
++            // A newline can separate a type member from a generic call signature.
++            // Expressions can continue with a comparison or type arguments.
++            return !valid_symbols[LOGICAL_OR];
++
+         case '{':
+             if (valid_symbols[FUNCTION_SIGNATURE_AUTOMATIC_SEMICOLON]) {
+                 return false;
+@@ -172,6 +183,12 @@
+             }
+             skip(lexer);
+ 
++            // After a type (no binary operator is valid), `in?:` or `in:` starts a member named
++            // `in`. After an expression, TypeScript reads `in` as the operator.
++            if (!valid_symbols[LOGICAL_OR] && (lexer->lookahead == '?' || lexer->lookahead == ':')) {
++                return true;
++            }
++
+             if (!iswalpha(lexer->lookahead)) {
+                 return false;
+             }
+@@ -262,7 +279,7 @@
+         return false;
+     }
+ 
+-    while (lexer->lookahead != 0 && lexer->lookahead != '\n' && lexer->lookahead != 0x2028 &&
++    while (!lexer->eof(lexer) && lexer->lookahead != '\n' && lexer->lookahead != 0x2028 &&
+            lexer->lookahead != 0x2029) {
+         advance(lexer);
+     }
+@@ -273,6 +290,35 @@
+     return true;
+ }
+ 
++// After an `&`: is what follows the rest of an HTML character reference
++// (`&amp;`, `&#38;`, `&#x26;`), as the grammar's html_character_reference
++// token defines it? Consumes the name or number either way.
++static bool scan_character_reference_tail(TSLexer *lexer) {
++    unsigned length = 0;
++    if (lexer->lookahead == '#') {
++        advance(lexer);
++        if (lexer->lookahead == 'x' || lexer->lookahead == 'X') {
++            advance(lexer);
++            while (length < 6 && iswxdigit(lexer->lookahead)) {
++                advance(lexer);
++                length++;
++            }
++        } else {
++            while (length < 5 && iswdigit(lexer->lookahead)) {
++                advance(lexer);
++                length++;
++            }
++        }
++    } else {
++        while (length < 30 && ((lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||
++                               (lexer->lookahead >= 'A' && lexer->lookahead <= 'Z'))) {
++            advance(lexer);
++            length++;
++        }
++    }
++    return length > 0 && lexer->lookahead == ';';
++}
++
+ static bool scan_jsx_text(TSLexer *lexer) {
+     // saw_text will be true if we see any non-whitespace content, or any whitespace content that is not a newline and
+     // does not immediately follow a newline.
+@@ -281,8 +327,22 @@
+     // immediately follows a newline.
+     bool at_newline = false;
+ 
+-    while (lexer->lookahead != 0 && lexer->lookahead != '<' && lexer->lookahead != '>' && lexer->lookahead != '{' &&
+-           lexer->lookahead != '}' && lexer->lookahead != '&') {
++    lexer->result_symbol = JSX_TEXT;
++
++    while (!lexer->eof(lexer) && lexer->lookahead != '<' && lexer->lookahead != '>' && lexer->lookahead != '{' &&
++           lexer->lookahead != '}') {
++        if (lexer->lookahead == '&') {
++            // A character reference is its own token: the text ends before it.
++            // A bare ampersand (`Shipping & Handling`) is text.
++            lexer->mark_end(lexer);
++            advance(lexer);
++            if (scan_character_reference_tail(lexer)) {
++                return saw_text;
++            }
++            saw_text = true;
++            at_newline = false;
++            continue;
++        }
+         bool is_wspace = iswspace(lexer->lookahead);
+         if (lexer->lookahead == '\n') {
+             at_newline = true;
+@@ -310,10 +370,94 @@
+         advance(lexer);
+     }
+ 
+-    lexer->result_symbol = JSX_TEXT;
++    lexer->mark_end(lexer);
+     return saw_text;
+ }
+ 
++// A JSX attribute string has no escapes: a character reference is its own token, a bare
++// ampersand (`title="T&M"`) is part of the fragment.
++static bool scan_jsx_string_fragment(TSLexer *lexer, int32_t quote) {
++    bool has_content = false;
++    while (lexer->lookahead != quote && !lexer->eof(lexer)) {
++        if (lexer->lookahead == '&') {
++            lexer->mark_end(lexer);
++            advance(lexer);
++            if (scan_character_reference_tail(lexer)) {
++                return has_content;
++            }
++        } else {
++            advance(lexer);
++        }
++        has_content = true;
++    }
++    lexer->mark_end(lexer);
++    return has_content;
++}
++
++// Resolve `f<<T>(value: T) => T>()` without changing shift-expression tokens.
++// Look ahead only to the generic function's arrow, leaving the token end after
++// the first `<`. The grammar still validates the complete type and call.
++static bool scan_nested_generic_type_argument_start(TSLexer *lexer) {
++    advance(lexer);
++    lexer->mark_end(lexer);
++    if (lexer->lookahead != '<') return false;
++    unsigned budget = 4096, depth = 0;
++    bool parameters = false;
++    int32_t previous = 0, quote = 0;
++    while (!lexer->eof(lexer) && budget--) {
++        int32_t ch = lexer->lookahead;
++        if (quote) {
++            advance(lexer);
++            if (ch == '\\' && !lexer->eof(lexer)) advance(lexer);
++            else if (ch == quote) quote = 0;
++            continue;
++        }
++        if (ch == '\'' || ch == '"' || ch == '`') { quote = ch; advance(lexer); continue; }
++        if (ch == '/') {
++            advance(lexer);
++            if (lexer->lookahead == '/') {
++                while (!lexer->eof(lexer) && lexer->lookahead != '\n' && budget) { advance(lexer); budget--; }
++                continue;
++            }
++            if (lexer->lookahead == '*') {
++                advance(lexer);
++                while (!lexer->eof(lexer) && budget) {
++                    ch = lexer->lookahead; advance(lexer); budget--;
++                    if (ch == '*' && lexer->lookahead == '/') { advance(lexer); break; }
++                }
++                continue;
++            }
++            return false;
++        }
++        if (!parameters) {
++            if (ch == '<') depth++;
++            if (ch == '>' && previous != '=') {
++                if (--depth == 0) {
++                    advance(lexer);
++                    while (iswspace(lexer->lookahead) && budget) { advance(lexer); budget--; }
++                    if (lexer->lookahead != '(') return false;
++                    parameters = true; previous = 0; continue;
++                }
++            }
++        } else {
++            if (ch == '(') depth++;
++            if (ch == ')') {
++                if (--depth == 0) {
++                    advance(lexer);
++                    while (iswspace(lexer->lookahead) && budget) { advance(lexer); budget--; }
++                    if (lexer->lookahead != '=') return false;
++                    advance(lexer);
++                    if (lexer->lookahead != '>') return false;
++                    lexer->result_symbol = NESTED_GENERIC_TYPE_ARGUMENT_START;
++                    return true;
++                }
++            }
++        }
++        previous = ch; advance(lexer);
++    }
++    return false;
++}
++
+ static inline bool external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
+     if (valid_symbols[TEMPLATE_CHARS]) {
+         if (valid_symbols[AUTOMATIC_SEMICOLON]) {
+@@ -322,13 +466,26 @@
+         return scan_template_chars(lexer);
+     }
+ 
++    if (valid_symbols[NESTED_GENERIC_TYPE_ARGUMENT_START] && !valid_symbols[ERROR_RECOVERY] && lexer->lookahead == '<') {
++        return scan_nested_generic_type_argument_start(lexer);
++    }
++
+     if (valid_symbols[JSX_TEXT] && scan_jsx_text(lexer)) {
+         return true;
+     }
+ 
++    if (valid_symbols[JSX_DOUBLE_STRING_FRAGMENT] || valid_symbols[JSX_SINGLE_STRING_FRAGMENT]) {
++        bool is_double = valid_symbols[JSX_DOUBLE_STRING_FRAGMENT];
++        lexer->result_symbol = is_double ? JSX_DOUBLE_STRING_FRAGMENT : JSX_SINGLE_STRING_FRAGMENT;
++        return scan_jsx_string_fragment(lexer, is_double ? '"' : '\'');
++    }
++
+     if (valid_symbols[AUTOMATIC_SEMICOLON] || valid_symbols[FUNCTION_SIGNATURE_AUTOMATIC_SEMICOLON]) {
+         bool scanned_comment = false;
+         bool ret = scan_automatic_semicolon(lexer, valid_symbols, &scanned_comment);
++        if (!ret && !scanned_comment && valid_symbols[NESTED_GENERIC_TYPE_ARGUMENT_START] && lexer->lookahead == '<') {
++            return scan_nested_generic_type_argument_start(lexer);
++        }
+         if (!ret && !scanned_comment && valid_symbols[TERNARY_QMARK] && lexer->lookahead == '?') {
+             return scan_ternary_qmark(lexer);
+         }

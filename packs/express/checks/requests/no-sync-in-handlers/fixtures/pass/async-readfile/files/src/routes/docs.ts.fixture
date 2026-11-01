@@ -1,0 +1,8 @@
+import { readFile } from "node:fs/promises";
+declare const app: { get(path: string, fn: (req: unknown, res: { send(b: string): void }) => Promise<void>): void };
+export function mountDocs(): void {
+  app.get("/terms", async (_req, res) => {
+    const text = await readFile("terms.txt", "utf8");
+    res.send(text);
+  });
+}

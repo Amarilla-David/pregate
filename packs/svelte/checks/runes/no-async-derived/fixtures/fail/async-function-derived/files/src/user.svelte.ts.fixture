@@ -1,0 +1,4 @@
+declare const $derived: { by<T>(fn: () => T): T };
+export function loadProfile(fetchUser: () => Promise<string>) {
+  return $derived.by(async function () { return await fetchUser(); });
+}

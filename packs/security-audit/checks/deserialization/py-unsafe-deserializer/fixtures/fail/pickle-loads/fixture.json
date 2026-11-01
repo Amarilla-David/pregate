@@ -1,0 +1,14 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/cache.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  }
+}

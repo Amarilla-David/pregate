@@ -1,0 +1,6 @@
+import { redirect } from "@sveltejs/kit";
+
+export async function load({ locals }) {
+	// The dashboard backend blew up; bounce to the error page.
+	throw redirect(500, "/error");
+}

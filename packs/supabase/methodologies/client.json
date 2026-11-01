@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "supabase/client",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SB-KEY-001",
+      "check": "supabase/client/no-service-role-in-client",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, supabase-js client and API keys",
+        "locator": "service_role versus anon key pages",
+        "paraphrase": "The anon key is safe for the browser and obeys RLS. The service_role key bypasses RLS and must never ship to the client."
+      },
+      "why": "A service_role key in client-reachable code hands every reader full bypass of row-level security. Rotation then means reissuing keys and auditing every row.",
+      "fixHint": "Build the browser client with the anon key. Move service_role use into server code and expose safe operations through routes.",
+      "avoid": "Reading the key from process.env does not make it safe. A SERVICE_ROLE value in a component or page file still ships to the browser.",
+      "examples": {
+        "pass": "pass/anon-key",
+        "fail": "fail/service-role-const"
+      }
+    },
+    {
+      "id": "SB-CLIENT-001",
+      "check": "supabase/client/no-singleton-client-missing",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, supabase-js and ssr client setup",
+        "locator": "createClient import pages",
+        "paraphrase": "Browser and server clients come from @supabase/supabase-js or @supabase/ssr. The bare supabase specifier is not the client entrypoint."
+      },
+      "why": "Importing createClient from the wrong package resolves to nothing maintained, so the client silently misses auth, cookie, and typing behavior the documented packages provide.",
+      "fixHint": "Import createClient from @supabase/supabase-js in the browser, or from @supabase/ssr where cookies are involved.",
+      "avoid": "Dynamic import and require of the same bare specifier are the same mistake, not an escape.",
+      "examples": {
+        "pass": "pass/supabase-js",
+        "fail": "fail/bare-import"
+      }
+    },
+    {
+      "id": "SB-QUERY-001",
+      "check": "supabase/client/no-unbounded-select",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, querying with range and limit",
+        "locator": "pagination pages for range and limit",
+        "paraphrase": "Reads should page with range or cap with limit. An unbounded select returns the whole result set in one call."
+      },
+      "why": "One unbounded read can pull the whole table into memory, the response, and the bill. The failure shows up in production data sizes, not in review.",
+      "fixHint": "Chain .range(from, to) or .limit(n) onto every select, including exports.",
+      "avoid": "Exporting the selection with .csv() is not a bound. Ordering without range or limit still reads every row.",
+      "examples": {
+        "pass": "pass/ranged-select",
+        "fail": "fail/bare-select"
+      }
+    },
+    {
+      "id": "SB-AUTH-001",
+      "check": "supabase/client/no-auth-admin-in-client",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, auth admin API",
+        "locator": "server-side auth admin pages",
+        "paraphrase": "The auth admin API manages users with the service_role key and bypasses RLS. It runs server-side only."
+      },
+      "why": "An admin call from the browser needs the bypass key next to it, so flagging the call also flags the key leak. Either one alone compromises every user row.",
+      "fixHint": "Move admin calls into server code and call them from the client through a route that checks the caller's session first.",
+      "avoid": "An invite-shaped createUser is still the admin API. getUser and session reads stay client-safe and are not flagged.",
+      "examples": {
+        "pass": "pass/get-user",
+        "fail": "fail/delete-user"
+      }
+    },
+    {
+      "id": "SB-HELPERS-001",
+      "check": "supabase/client/no-deprecated-auth-helpers",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Supabase documentation, Migrating to the SSR package from Auth Helpers",
+        "locator": "https://supabase.com/docs/guides/auth/server-side/migrating-to-ssr-from-auth-helpers",
+        "paraphrase": "The Auth Helpers packages are deprecated and replaced by @supabase/ssr. Bug fixes and new features land only in @supabase/ssr, so uninstall the helpers and create clients with createBrowserClient and createServerClient."
+      },
+      "why": "The deprecated helpers no longer get fixes, so session and cookie bugs stay in the app. A new file that imports them also grows a codebase that must migrate later.",
+      "fixHint": "Import createBrowserClient or createServerClient from @supabase/ssr and pass cookie getAll/setAll handlers, as in the Supabase SSR guide for your framework.",
+      "avoid": "Do not wrap the helpers in a local barrel to hide the import; the re-export is still flagged. @supabase/auth-ui-react and @supabase/supabase-js are different packages and stay allowed.",
+      "examples": {
+        "pass": "pass/ssr-server-client",
+        "fail": "fail/nextjs-helpers"
+      }
+    },
+    {
+      "id": "SB-GETUSER-001",
+      "check": "supabase/client/no-server-get-session",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, Setting up Server-Side Auth for Next.js (supabase.com)",
+        "locator": "https://supabase.com/docs/guides/auth/server-side/nextjs",
+        "paraphrase": "Never trust supabase.auth.getSession() inside server code such as middleware, route handlers, or server actions; it does not revalidate the Auth token. Always use supabase.auth.getUser()."
+      },
+      "why": "auth.getSession() reads the session cookie without revalidating its signature or revocation state with the Supabase Auth server, allowing spoofed or revoked sessions in server handlers.",
+      "fixHint": "Call await supabase.auth.getUser() in server actions, route handlers, and createServerClient contexts.",
+      "avoid": "Matches .auth.getSession() in files declaring HTTP route handlers (GET/POST/PUT/PATCH/DELETE), 'use server' directives, or createServerClient calls.",
+      "examples": {
+        "pass": "pass/server-get-user",
+        "fail": "fail/route-handler-get-session"
+      }
+    }
+  ]
+}

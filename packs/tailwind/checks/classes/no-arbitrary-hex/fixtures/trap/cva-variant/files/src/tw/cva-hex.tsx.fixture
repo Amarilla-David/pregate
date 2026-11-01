@@ -1,0 +1,5 @@
+import { cva } from "class-variance-authority";
+
+export const card = cva("rounded", {
+  variants: { tone: { danger: "bg-[#1a2b3c]" } },
+});

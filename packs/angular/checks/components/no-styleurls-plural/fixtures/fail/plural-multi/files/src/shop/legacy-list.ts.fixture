@@ -1,0 +1,3 @@
+import { Component } from "@angular/core";
+@Component({ selector: "app-list", styleUrls: ["./a.css", "./b.css"] })
+export class ItemList {}

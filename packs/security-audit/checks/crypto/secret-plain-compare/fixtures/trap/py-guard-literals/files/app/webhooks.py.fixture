@@ -1,0 +1,4 @@
+def check(signature, digest, secret):
+    if signature is None or signature == "" or secret == None:
+        return False
+    return digest != "sha256" and len(signature) == 64 and signature == secret

@@ -1,0 +1,6 @@
+// Migrated from @solana/spl-token to @solana-program/token.
+export const MIGRATION_NOTE = "Replace @solana/spl-token helpers with @solana-program/token builders.";
+
+export const REPLACED_PACKAGES: Record<string, string> = {
+  "@solana/spl-token": "@solana-program/token",
+};

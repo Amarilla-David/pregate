@@ -1,0 +1,9 @@
+import random
+import string
+
+
+def make_password(n=16):
+    return "".join(random.choice(string.ascii_letters) for _ in range(n))
+
+
+api_token = random.getrandbits(128)

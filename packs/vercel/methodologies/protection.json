@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vercel/protection",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VERCEL-005",
+      "check": "vercel/protection/requirement-005",
+      "defaults": {
+        "verifier": "VERCEL-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/deployment-protection; checked 2026-10-05; docs/features/vercel-pack.md, rule 5",
+        "paraphrase": "Each deployment must enforce the project's reviewed access policy, including intentionally public environments and approved exceptions."
+      },
+      "why": "Each deployment must enforce the project's reviewed access policy, including intentionally public environments and approved exceptions.",
+      "fixHint": "Bind VERCEL-005 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-005; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-006",
+      "check": "vercel/protection/requirement-006",
+      "defaults": {
+        "verifier": "VERCEL-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/deployment-protection; checked 2026-10-05; docs/features/vercel-pack.md, rule 6",
+        "paraphrase": "An automation bypass must be explicitly authorized and its credential must not enter public source, client output or logs."
+      },
+      "why": "An automation bypass must be explicitly authorized and its credential must not enter public source, client output or logs.",
+      "fixHint": "Bind VERCEL-006 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-006; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

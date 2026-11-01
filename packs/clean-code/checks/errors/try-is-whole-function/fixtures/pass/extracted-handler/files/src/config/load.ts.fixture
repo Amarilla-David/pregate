@@ -1,0 +1,14 @@
+import { ConfigError, parseConfig, readText, register, type Config } from "./parts";
+
+export function loadConfig(path: string): Config {
+  try {
+    return parseConfig(readText(path));
+  } catch (error) {
+    throw new ConfigError(`cannot load ${path}`, { cause: error });
+  }
+}
+
+export function startup(path: string): void {
+  const config = loadConfig(path);
+  register(config);
+}

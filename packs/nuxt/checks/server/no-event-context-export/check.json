@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/server/no-event-context-export",
+  "version": "1.0.0",
+  "area": "server",
+  "cardinality": "singleton",
+  "dimension": "nuxt.no-event-context-export",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "event-context-export",
+          "rule": {
+            "kind": "export_statement",
+            "regex": "\\b(event|context)\\b"
+          },
+          "files": [
+            "server/**",
+            "src/server/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} exports a request-scoped binding from server code. Keep the event inside the handler so requests cannot share scope."
+  }
+}

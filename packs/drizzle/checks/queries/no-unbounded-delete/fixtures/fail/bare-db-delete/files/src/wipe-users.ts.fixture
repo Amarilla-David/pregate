@@ -1,0 +1,5 @@
+declare const db: { delete(t: unknown): Promise<unknown> };
+declare const users: unknown;
+export async function deleteAllUsers(): Promise<void> {
+  await db.delete(users);
+}

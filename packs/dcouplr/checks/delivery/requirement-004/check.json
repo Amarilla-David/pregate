@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/delivery/requirement-004",
+  "version": "1.0.0",
+  "area": "delivery",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.delivery.r004",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DCP-DELIVERY-004"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DCP-DELIVERY-004 requires current passing project delivery verification: {symbol}."
+  }
+}

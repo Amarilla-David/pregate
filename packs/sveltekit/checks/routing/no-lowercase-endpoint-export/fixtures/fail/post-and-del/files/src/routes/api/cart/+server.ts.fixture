@@ -1,0 +1,8 @@
+import { json } from "@sveltejs/kit";
+import { addItem, removeItem } from "$lib/server/cart";
+
+export function post({ request }: { request: Request }) {
+  return request.json().then((item) => json(addItem(item)));
+}
+
+export const del = async ({ url }: { url: URL }) => json(removeItem(url.searchParams.get("id")));

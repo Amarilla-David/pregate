@@ -1,0 +1,7 @@
+export function Row({ tone }: { tone: string }) {
+  return (
+    <div
+      className={`flex ${tone} hover:bg-opacity-75 md:!flex-shrink-0`}
+    />
+  );
+}

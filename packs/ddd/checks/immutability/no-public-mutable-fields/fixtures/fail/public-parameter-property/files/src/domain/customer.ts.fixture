@@ -1,0 +1,12 @@
+export class Customer {
+  constructor(
+    readonly id: string,
+    public email: string,
+    public nickname?: string,
+  ) {}
+
+  changeEmail(email: string): void {
+    if (!email.includes("@")) throw new Error("An email needs an @");
+    this.email = email;
+  }
+}

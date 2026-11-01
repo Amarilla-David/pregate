@@ -1,0 +1,6 @@
+
+export function find(row: { id: string }): Order {
+  return { id: row.id, total: 0 };
+}
+
+export interface Order { id: string; total: number }

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "server/api/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "maxbody-bypass",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A size limit is not validation. readBody with maxBodySize still returns an unshaped payload; only a schema proves the shape."
+  }
+}

@@ -1,0 +1,10 @@
+
+function helper(raw) {
+  return raw;
+}
+
+export function place(order: Order): string {
+  return String(helper(order.id));
+}
+
+interface Order { id: string }

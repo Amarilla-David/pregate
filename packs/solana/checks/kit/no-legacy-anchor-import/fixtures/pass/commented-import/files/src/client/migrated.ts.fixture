@@ -1,0 +1,3 @@
+// was: import { Program } from "@coral-xyz/anchor";
+import { Program } from "@anchor-lang/core";
+export { Program };

@@ -1,0 +1,34 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "acme",
+        "kind": "path",
+        "path": ".pregate/acme"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/tdd",
+      "acme/style"
+    ],
+    "overrides": {
+      "TDD-FOCUS-001": "warn"
+    }
+  },
+  "errors": [
+    "overrides.TDD-FOCUS-001: TDD-FOCUS-001 is ambiguous; write one of acme/TDD-FOCUS-001, example/TDD-FOCUS-001"
+  ]
+}

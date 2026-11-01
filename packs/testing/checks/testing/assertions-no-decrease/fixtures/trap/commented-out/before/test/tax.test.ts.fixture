@@ -1,0 +1,7 @@
+import { expect, it } from "bun:test";
+import { vat } from "../src/tax";
+
+it("rounds VAT to the cent", () => {
+  expect(vat(999)).toBe(210);
+  expect(vat(1)).toBe(0);
+});

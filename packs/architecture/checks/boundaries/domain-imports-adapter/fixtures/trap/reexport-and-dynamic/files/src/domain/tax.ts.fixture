@@ -1,0 +1,6 @@
+
+export type { Tax } from "../infra/tax-table";
+
+export async function loadTax(code: string): Promise<unknown> {
+  return import("../billing/adapters/tax");
+}

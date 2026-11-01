@@ -1,0 +1,3 @@
+export function pay(nav: { navigate: (r: string, p: object) => void }, orderId: string): void {
+  nav.navigate("Pay", { orderId });
+}

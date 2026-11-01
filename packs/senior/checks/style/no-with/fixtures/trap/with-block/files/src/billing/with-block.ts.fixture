@@ -1,0 +1,9 @@
+
+export function total(order: Order): number {
+  with (order) {
+    const sum = amount + tax;
+    return sum;
+  }
+}
+
+interface Order { amount: number; tax: number }

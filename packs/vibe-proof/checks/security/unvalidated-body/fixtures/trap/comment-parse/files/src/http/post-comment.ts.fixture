@@ -1,0 +1,6 @@
+
+export async function postInvoice(request: Request): Promise<Response> {
+  // safeParse happens in the client
+  const body = await request.json();
+  return new Response(body.id);
+}

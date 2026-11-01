@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/no-triple-slash-reference",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "typescript.triple-slash-reference",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "triple-slash-reference",
+          "rule": {
+            "kind": "comment",
+            "regex": "^///\\s*<reference"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a triple-slash reference directive. Import the types with an import statement."
+  }
+}

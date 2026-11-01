@@ -1,0 +1,6 @@
+import { collection, getDocs } from "firebase/firestore";
+
+export async function loadOrders(db: Firestore, toOrder: Mapper): Promise<Order[]> {
+  const snap = await getDocs(collection(db, "orders"));
+  return snap.docs.map((d) => toOrder(d.data()));
+}

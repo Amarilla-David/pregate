@@ -1,0 +1,13 @@
+export function shouldSave(draft: { signature: string; digest: string }, previousSignature: string, hash: string) {
+  if (draft.signature === previousSignature || draft.digest === hash) return false;
+  return true;
+}
+
+export function readEntry(reader: { readInt(n: number): number }, expectedSignature: number, secret: object) {
+  const signature = reader.readInt(4);
+  return signature === expectedSignature && secret !== ReactPropTypesSecret;
+}
+
+export function verify(req: { headers: Record<string, string> }, computed: string) {
+  return req.headers["x-signature"] !== computed;
+}

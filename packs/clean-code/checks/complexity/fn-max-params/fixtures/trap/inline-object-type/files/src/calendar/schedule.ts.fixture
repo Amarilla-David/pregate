@@ -1,0 +1,5 @@
+import type { Calendar } from "./calendar";
+
+export function schedule(calendar: Calendar, opts: { at: string; room: string; host: string }): void {
+  calendar.book(opts.room, opts.at, opts.host);
+}

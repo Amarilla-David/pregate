@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/security/unvalidated-body",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "security.unvalidated-body",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "raw-json",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^(request|req)\\.json$"
+            },
+            "not": {
+              "inside": {
+                "stopBy": "end",
+                "kind": "statement_block",
+                "has": {
+                  "stopBy": "end",
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "safeParse$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reads request JSON and never calls safeParse in that function."
+  }
+}

@@ -1,0 +1,16 @@
+import type { Source } from "./source";
+
+export async function loadConfig(source: Source): Promise<Record<string, string>> {
+  try {
+    return JSON.parse(await source.read());
+  } catch (error) {
+    console.error("config is not valid JSON");
+    throw new Error(`Cannot load config from ${source.name}`, { cause: error });
+  }
+}
+
+export function loadAll(sources: Source[]): Promise<Record<string, string>[]> {
+  return Promise.all(sources.map((source) => loadConfig(source).catch((error) => {
+    throw new Error(`while loading ${source.name}`, { cause: error });
+  })));
+}

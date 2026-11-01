@@ -1,0 +1,135 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "angular/components",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "ANG-IO-001",
+      "check": "angular/components/no-io-alias",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Angular style guide",
+        "locator": "inputs and outputs naming",
+        "paraphrase": "Name component inputs and outputs without string aliases, so the property name is the binding name."
+      },
+      "why": "An alias renames the binding at every use site, so a search for the property name misses the template that binds it.",
+      "fixHint": "Drop the string argument: @Input() label. Rename the property itself when the public name must change.",
+      "avoid": "The options-object form @Input({ alias }) is the same rename behind a key and is still banned.",
+      "examples": {
+        "pass": "pass/plain-input",
+        "fail": "fail/aliased-input"
+      }
+    },
+    {
+      "id": "ANG-GUARD-001",
+      "check": "angular/guards/no-canactivate-interface",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Angular router guide",
+        "locator": "functional guards",
+        "paraphrase": "Write route guards as functions returning CanActivateFn, not as classes implementing the CanActivate interface."
+      },
+      "why": "A class guard needs an injectable, a provider entry, and a canActivate method for one boolean. A function guard is the value the router calls.",
+      "fixHint": "Export a const typed CanActivateFn: export const authGuard: CanActivateFn = () => true.",
+      "avoid": "CanActivateChild is the same legacy shape for child routes, not a functional guard.",
+      "examples": {
+        "pass": "pass/functional-guard",
+        "fail": "fail/class-guard"
+      }
+    },
+    {
+      "id": "ANG-STYLE-001",
+      "check": "angular/components/no-styleurls-plural",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Angular v17 component API",
+        "locator": "styleUrl versus styleUrls",
+        "paraphrase": "Standalone-era components declare one styleUrl string instead of the legacy styleUrls array."
+      },
+      "why": "The plural key is the legacy API. One stylesheet per component keeps the metadata a single string the tooling reads directly.",
+      "fixHint": "Replace styleUrls: ['./a.css'] with styleUrl: './a.css'.",
+      "avoid": "A single-entry array is still the plural key. The key, not the length, is what the rule bans.",
+      "examples": {
+        "pass": "pass/singular-style",
+        "fail": "fail/plural-styles"
+      }
+    },
+    {
+      "id": "ANG-SVC-001",
+      "check": "angular/services/no-fetch-in-service",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Angular HttpClient guide",
+        "locator": "services and data access",
+        "paraphrase": "Services fetch data through HttpClient, not the global fetch, so interceptors, typing, and tests cover every request."
+      },
+      "why": "Global fetch bypasses interceptors for auth headers and error handling, and its responses stay untyped.",
+      "fixHint": "Inject HttpClient and call this.http.get<T>(url). Keep fetch, if ever needed, outside *.service.ts files.",
+      "avoid": "globalThis.fetch is still global fetch. The receiver prefix does not route through HttpClient.",
+      "examples": {
+        "pass": "pass/http-client",
+        "fail": "fail/direct-fetch"
+      }
+    },
+    {
+      "id": "ANG-INJECT-001",
+      "check": "angular/components/no-inject-outside-context",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Angular dependency injection guide, injection context (https://angular.dev/guide/di/dependency-injection-context)",
+        "locator": "Injection context; NG0203",
+        "paraphrase": "inject() works only in an injection context: field initializers, the constructor, factory functions and runInInjectionContext. Called elsewhere, such as in a lifecycle hook, it throws NG0203. effect() and takeUntilDestroyed() need the same context unless given an Injector or DestroyRef."
+      },
+      "why": "Lifecycle hooks run after construction, so inject(), effect() and argument-less takeUntilDestroyed() throw NG0203 at runtime instead of resolving a dependency.",
+      "fixHint": "Inject into a field (private readonly service = inject(Service)) or create the effect in the constructor; inside a hook, pass takeUntilDestroyed(this.destroyRef) or effect(fn, { injector: this.injector }).",
+      "avoid": "A callback created inside the hook, such as a subscribe handler, runs even later and is still outside the context. runInInjectionContext and injector.runInContext wrappers are not matched.",
+      "examples": {
+        "pass": "pass/field-and-constructor",
+        "fail": "fail/inject-in-ngoninit"
+      }
+    },
+    {
+      "id": "ANG-HTTPMOD-001",
+      "check": "angular/http/no-http-client-module",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Angular API reference, HttpClientModule (https://angular.dev/api/common/http/HttpClientModule)",
+        "locator": "Deprecation notice",
+        "paraphrase": "HttpClientModule is deprecated; use provideHttpClient(withInterceptorsFromDi()) as providers instead. HttpClientTestingModule, HttpClientXsrfModule and HttpClientJsonpModule are deprecated in favor of provideHttpClientTesting() and the withXsrfConfiguration / withJsonpSupport features."
+      },
+      "why": "The NgModule wrappers are deprecated and slated for removal, and they keep the app on the module-based setup instead of the provider functions that standalone bootstrap uses.",
+      "fixHint": "Replace the module with provideHttpClient(withInterceptorsFromDi()) in providers, or provideHttpClient() plus provideHttpClientTesting() in TestBed.",
+      "avoid": "An import alias or a re-export from a shared file is still the deprecated module. Imports of provideHttpClient and HttpTestingController are not matched.",
+      "examples": {
+        "pass": "pass/provide-http-client",
+        "fail": "fail/app-module"
+      }
+    },
+    {
+      "id": "ANG-SIGNAL-002",
+      "check": "angular/signals/no-effect-signal-write",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Angular documentation, Signals guide (https://angular.dev/guide/signals#when-not-to-use-effects)",
+        "locator": "When not to use effects",
+        "paraphrase": "Avoid using effects for propagation of state changes (writing to signals). This can result in ExpressionChangedAfterItHasBeenChecked errors, infinite circular updates, or unnecessary change detection cycles; use computed or linkedSignal instead."
+      },
+      "why": "Writing to signals inside an effect() callback cascades reactive updates after change detection, risking circular loops and out-of-order state synchronization.",
+      "fixHint": "Express derived state with computed(() => ...) or writable dependent state with linkedSignal(() => ...). Move imperative writes to event handlers.",
+      "avoid": "Single-argument .set(...) and .update(...) calls inside an effect(...) callback are flagged as advisory warnings; multi-argument calls such as Map.prototype.set(k, v) and signal writes in event handlers outside effect() pass.",
+      "examples": {
+        "pass": "pass/effect-log",
+        "fail": "fail/effect-set"
+      }
+    }
+  ]
+}

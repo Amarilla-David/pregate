@@ -1,0 +1,4 @@
+export async function photoCount(rootRef: ListRef): Promise<number> {
+  const page = await listAll(rootRef);
+  return page.items.length;
+}

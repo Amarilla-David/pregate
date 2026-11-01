@@ -1,0 +1,662 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "testing/testing/no-focused-tests",
+  "version": "1.1.2",
+  "area": "testing",
+  "cardinality": "singleton",
+  "dimension": "tests.focus",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "focused-or-skipped",
+          "utils": {
+            "function-like": {
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "generator_function_declaration"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "method_definition"
+                }
+              ]
+            },
+            "scope": {
+              "any": [
+                {
+                  "kind": "program"
+                },
+                {
+                  "kind": "statement_block"
+                },
+                {
+                  "kind": "switch_body"
+                },
+                {
+                  "kind": "for_statement"
+                },
+                {
+                  "kind": "for_in_statement"
+                },
+                {
+                  "kind": "catch_clause"
+                },
+                {
+                  "matches": "function-like"
+                }
+              ]
+            },
+            "boundary": {
+              "any": [
+                {
+                  "matches": "scope"
+                },
+                {
+                  "kind": "ambient_declaration"
+                }
+              ]
+            },
+            "destructuring": {
+              "any": [
+                {
+                  "kind": "object_pattern"
+                },
+                {
+                  "kind": "array_pattern"
+                },
+                {
+                  "kind": "pair_pattern"
+                },
+                {
+                  "kind": "object_assignment_pattern"
+                },
+                {
+                  "kind": "assignment_pattern"
+                },
+                {
+                  "kind": "rest_pattern"
+                }
+              ]
+            },
+            "not-a-default": {
+              "not": {
+                "inside": {
+                  "field": "right",
+                  "any": [
+                    {
+                      "kind": "assignment_pattern"
+                    },
+                    {
+                      "kind": "object_assignment_pattern"
+                    }
+                  ]
+                }
+              }
+            },
+            "binding-slot": {
+              "all": [
+                {
+                  "matches": "not-a-default"
+                },
+                {
+                  "any": [
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "name",
+                        "any": [
+                          {
+                            "kind": "variable_declarator"
+                          },
+                          {
+                            "kind": "function_declaration"
+                          },
+                          {
+                            "kind": "generator_function_declaration"
+                          },
+                          {
+                            "kind": "function_expression"
+                          },
+                          {
+                            "kind": "generator_function"
+                          },
+                          {
+                            "kind": "class_declaration"
+                          },
+                          {
+                            "kind": "abstract_class_declaration"
+                          },
+                          {
+                            "kind": "enum_declaration",
+                            "not": {
+                              "has": {
+                                "regex": "^const$"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "pattern",
+                        "any": [
+                          {
+                            "kind": "required_parameter"
+                          },
+                          {
+                            "kind": "optional_parameter"
+                          }
+                        ],
+                        "inside": {
+                          "kind": "formal_parameters",
+                          "inside": {
+                            "field": "parameters",
+                            "matches": "function-like"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "parameter",
+                        "any": [
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "catch_clause"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "left",
+                        "kind": "for_in_statement",
+                        "has": {
+                          "field": "kind",
+                          "regex": "^(const|let|var)$"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "declares": {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "function_declaration"
+                        },
+                        {
+                          "kind": "generator_function_declaration"
+                        }
+                      ]
+                    },
+                    {
+                      "has": {
+                        "field": "name",
+                        "pattern": "$G"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "identifier"
+                        },
+                        {
+                          "kind": "type_identifier"
+                        },
+                        {
+                          "kind": "shorthand_property_identifier_pattern"
+                        }
+                      ]
+                    },
+                    {
+                      "pattern": "$G"
+                    },
+                    {
+                      "matches": "binding-slot"
+                    }
+                  ]
+                }
+              ]
+            },
+            "not-the-global": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "matches": "not-a-default",
+                  "inside": {
+                    "stopBy": {
+                      "not": {
+                        "matches": "destructuring"
+                      }
+                    },
+                    "field": "pattern",
+                    "any": [
+                      {
+                        "kind": "required_parameter"
+                      },
+                      {
+                        "kind": "optional_parameter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "identifier"
+                        },
+                        {
+                          "kind": "shorthand_property_identifier"
+                        }
+                      ]
+                    },
+                    {
+                      "pattern": "$G"
+                    },
+                    {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "scope",
+                        "has": {
+                          "stopBy": {
+                            "matches": "boundary"
+                          },
+                          "matches": "declares"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "global-source": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "regex": "^(globalThis|window|global|self)$",
+                  "not": {
+                    "matches": "not-the-global"
+                  }
+                },
+                {
+                  "kind": "call_expression",
+                  "regex": "^(require|import)\\s*\\(\\s*[\"'`][^.\"'`]"
+                }
+              ]
+            },
+            "reaches-global": {
+              "any": [
+                {
+                  "matches": "global-source"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "await_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "stopBy": {
+                      "not": {
+                        "any": [
+                          {
+                            "kind": "parenthesized_expression"
+                          },
+                          {
+                            "kind": "await_expression"
+                          },
+                          {
+                            "kind": "as_expression"
+                          },
+                          {
+                            "kind": "satisfies_expression"
+                          },
+                          {
+                            "kind": "non_null_expression"
+                          }
+                        ]
+                      }
+                    },
+                    "matches": "global-source"
+                  }
+                }
+              ]
+            },
+            "runtime-ref": {
+              "any": [
+                { "kind": "identifier" },
+                { "kind": "member_expression" },
+                { "kind": "call_expression" },
+                { "kind": "await_expression" }
+              ]
+            },
+            "cond-wrapper": {
+              "any": [
+                { "kind": "parenthesized_expression" },
+                { "kind": "as_expression" },
+                { "kind": "satisfies_expression" },
+                { "kind": "non_null_expression" },
+                { "kind": "unary_expression", "has": { "field": "operator", "regex": "^!$" } }
+              ]
+            },
+            "truthy-value": {
+              "any": [
+                { "kind": "string" },
+                { "kind": "template_string" },
+                { "kind": "true" },
+                { "kind": "arrow_function" },
+                { "kind": "function_expression" },
+                { "kind": "generator_function" },
+                { "kind": "class" },
+                { "kind": "object" },
+                { "kind": "array" },
+                { "kind": "new_expression" },
+                { "kind": "sequence_expression" },
+                { "kind": "spread_element" },
+                { "kind": "identifier", "regex": "^globalThis$" }
+              ]
+            },
+            "always-truthy": {
+              "any": [
+                { "matches": "truthy-value" },
+                {
+                  "matches": "cond-wrapper",
+                  "has": {
+                    "stopBy": { "not": { "matches": "cond-wrapper" } },
+                    "matches": "truthy-value"
+                  }
+                }
+              ]
+            },
+            "runtime-skip": {
+              "all": [
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "any": [
+                      { "kind": "arrow_function" },
+                      { "kind": "function_expression" },
+                      { "kind": "function_declaration" },
+                      { "kind": "method_definition" }
+                    ]
+                  }
+                },
+                {
+                  "has": {
+                    "field": "arguments",
+                    "all": [
+                      {
+                        "has": {
+                          "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                          "not": { "matches": "always-truthy" },
+                          "any": [
+                            { "matches": "runtime-ref" },
+                            { "has": { "stopBy": "end", "matches": "runtime-ref" } }
+                          ]
+                        }
+                      },
+                      {
+                        "has": {
+                          "nthChild": { "position": 2, "ofRule": { "not": { "kind": "comment" } } },
+                          "any": [
+                            { "kind": "string" },
+                            { "kind": "template_string" }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "has": {
+                            "nthChild": { "position": 3, "ofRule": { "not": { "kind": "comment" } } }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "focus-key": {
+              "has": {
+                "stopBy": "end",
+                "any": [
+                  {
+                    "kind": "shorthand_property_identifier_pattern"
+                  },
+                  {
+                    "kind": "property_identifier"
+                  }
+                ],
+                "regex": "^(fit|fdescribe|xit|xdescribe|xtest)$"
+              }
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "member_expression",
+                "regex": "^(describe|it|test|context|suite)\\b",
+                "has": {
+                  "field": "property",
+                  "regex": "^(only|skip)$"
+                },
+                "not": {
+                  "all": [
+                    {
+                      "regex": "^test\\.skip$"
+                    },
+                    {
+                      "inside": {
+                        "field": "function",
+                        "kind": "call_expression",
+                        "matches": "runtime-skip"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "subscript_expression",
+                "regex": "^(describe|it|test|context|suite)\\b",
+                "has": {
+                  "field": "index",
+                  "regex": "^[\"'`](only|skip)[\"'`]$"
+                }
+              },
+              {
+                "all": [
+                  {
+                    "any": [
+                      {
+                        "kind": "identifier"
+                      },
+                      {
+                        "kind": "shorthand_property_identifier"
+                      }
+                    ],
+                    "regex": "^(fit|fdescribe|xit|xdescribe|xtest)$"
+                  },
+                  {
+                    "not": {
+                      "matches": "not-the-global"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "member_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "property",
+                      "regex": "^(fit|fdescribe|xit|xdescribe|xtest)$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "object",
+                      "matches": "reaches-global"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "subscript_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "index",
+                      "regex": "^[\"'`](fit|fdescribe|xit|xdescribe|xtest)[\"'`]$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "object",
+                      "matches": "reaches-global"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "variable_declarator",
+                "all": [
+                  {
+                    "has": {
+                      "field": "value",
+                      "matches": "reaches-global"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "name",
+                      "kind": "object_pattern",
+                      "matches": "focus-key"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "assignment_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "right",
+                      "matches": "reaches-global"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "left",
+                      "kind": "object_pattern",
+                      "matches": "focus-key"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "variable_declarator",
+                "all": [
+                  {
+                    "has": {
+                      "field": "value",
+                      "regex": "^(describe|it|test|context|suite)\\b"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "name",
+                      "kind": "object_pattern",
+                      "has": {
+                        "stopBy": "end",
+                        "any": [
+                          {
+                            "kind": "shorthand_property_identifier_pattern"
+                          },
+                          {
+                            "kind": "property_identifier"
+                          }
+                        ],
+                        "regex": "^(only|skip)$"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "x-note": "A reference is enough, not only a call: const focus = it.only and const { only } = it focus as well. The modifier may sit anywhere in the chain (it.concurrent.only). The Jasmine globals fit, fdescribe, xit, xdescribe and xtest count wherever they are referenced, except where the file binds the name itself: not-the-global is the scope walk of architecture/effects/no-clock-random-env (a parameter, variable, destructured name, function or class, looked for in each enclosing scope), so const fit = button and its uses are a local value, while a fit called in another function or a declare still reach the global. Unlike that check, an import never binds, not even from a relative module: paths reaches only the tests, never the helper that re-exports the global. A binding whose value the file shows to be the global is the global: a read of the name off globalThis, window, global or self, or off require() or import() of a package, by member, bracket or destructuring, counts where it is read. A value laundered through a call or a module the file does not show is out of reach. The one spelling left out is the Playwright runtime skip test.skip(condition, reason) called inside a function (a test body, hook or describe callback): it skips only that test, or that group from a describe callback (accepted: a conditional group skip still runs whenever the condition is false), and focuses nothing. The condition must reach a runtime value (an identifier, member access, call or await somewhere inside it) and must not be always true by its syntax: after unwrapping parentheses, as, satisfies, non-null and ! it is not a string, template, true, function, arrow, generator, class, object, array, new expression, sequence, spread or globalThis. And the reason must be a string or template; no third argument. So test.skip(), test.skip(true, r), test.skip(1, r), test.skip(!0, r), test.skip(title, fn), a top-level test.skip(cond, r), it.skip(...) (Mocha's it.skip(title, x) really skips), every .only, describe.skip and the bracket, alias and destructured forms stay reported. Known gaps: an always-true condition that still names a value (test.skip(true || x, r), test.skip(Boolean(1), r), const S = true; test.skip(S, r)) and Mocha's TDD UI test.skip(titleVar, 'str'), which reads as the Playwright form."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} focuses or skips tests, so the rest of the suite stops running."
+  }
+}

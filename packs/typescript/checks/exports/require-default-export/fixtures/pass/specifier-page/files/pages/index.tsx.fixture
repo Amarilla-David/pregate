@@ -1,0 +1,3 @@
+
+function Page() { return null; }
+export { Page as default };

@@ -1,0 +1,7 @@
+
+export function poll(window: Window): void {
+  window.setInterval(() => tick(), 1000);
+}
+
+function tick(): void {}
+interface Window { setInterval(fn: () => void, ms: number): number }

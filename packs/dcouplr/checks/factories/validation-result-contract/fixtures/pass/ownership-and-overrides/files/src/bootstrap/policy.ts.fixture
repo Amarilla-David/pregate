@@ -1,0 +1,3 @@
+stage.addValidationPolicy(() => { const helper = () => { return 1; }; return true; });
+stage.addValidationPolicy(() => ({ valid: 0, 'valid': true, msg: 1, 'msg': 'fixed' }));
+stage.addVerificationPolicy(() => 1);

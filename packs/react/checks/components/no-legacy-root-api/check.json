@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react/components/no-legacy-root-api",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "react.legacy-root-api",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "legacy-root-named-import",
+          "rule": {
+            "kind": "import_specifier",
+            "has": { "field": "name", "regex": "^(render|hydrate|unmountComponentAtNode|findDOMNode)$" },
+            "inside": {
+              "stopBy": "end",
+              "kind": "import_statement",
+              "has": { "field": "source", "regex": "^[\"']react-dom[\"']$" }
+            }
+          }
+        },
+        {
+          "id": "legacy-root-member",
+          "rule": {
+            "kind": "member_expression",
+            "all": [
+              { "has": { "field": "property", "regex": "^(render|hydrate|unmountComponentAtNode|findDOMNode)$" } },
+              { "has": { "field": "object", "kind": "identifier", "pattern": "$DOM" } },
+              {
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "program",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      { "has": { "field": "source", "regex": "^[\"']react-dom[\"']$" } },
+                      {
+                        "has": {
+                          "kind": "import_clause",
+                          "any": [
+                            { "has": { "kind": "identifier", "pattern": "$DOM" } },
+                            { "has": { "kind": "namespace_import", "has": { "kind": "identifier", "pattern": "$DOM" } } }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} uses a react-dom root API that React 19 removed. Use createRoot or hydrateRoot from react-dom/client, root.unmount(), or a DOM ref." }
+}

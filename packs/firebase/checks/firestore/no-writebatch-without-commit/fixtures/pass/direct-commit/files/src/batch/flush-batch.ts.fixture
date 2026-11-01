@@ -1,0 +1,5 @@
+import { writeBatch } from "firebase/firestore";
+
+export async function flushBatch(db: Firestore): Promise<void> {
+  await writeBatch(db).commit();
+}

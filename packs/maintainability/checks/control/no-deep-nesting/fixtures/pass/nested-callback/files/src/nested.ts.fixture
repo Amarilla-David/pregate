@@ -1,0 +1,9 @@
+export function schedule(items: readonly number[], ready: boolean) {
+  if (ready) {
+    for (const item of items) {
+      queueMicrotask(() => {
+        if (item > 0) console.log(item);
+      });
+    }
+  }
+}

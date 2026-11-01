@@ -1,0 +1,4 @@
+const check = async () => true;
+stage.addValidationPolicy(check);
+async function verify() { await Promise.resolve(); }
+stage.addVerificationPolicy(verify);

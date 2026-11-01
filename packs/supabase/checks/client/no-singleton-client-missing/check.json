@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/client/no-singleton-client-missing",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "supabase.wrong-client-package",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-supabase-import",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^supabase$",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "^require$"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports createClient from the bare supabase package. Import from @supabase/supabase-js or @supabase/ssr instead."
+  }
+}

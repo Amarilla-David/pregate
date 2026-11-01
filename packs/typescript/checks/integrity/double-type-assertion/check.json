@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/integrity/double-type-assertion",
+  "version": "1.0.0",
+  "area": "integrity",
+  "cardinality": "singleton",
+  "dimension": "integrity.type-erasure",
+  "minSeverity": "deny",
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "double-assertion",
+          "utils": {
+            "top-type": {
+              "any": [
+                {
+                  "kind": "predefined_type"
+                },
+                {
+                  "kind": "array_type"
+                }
+              ],
+              "regex": "^(unknown|any|never)(\\[\\])*$"
+            },
+            "erased": {
+              "any": [
+                {
+                  "kind": "as_expression",
+                  "has": {
+                    "matches": "top-type"
+                  }
+                },
+                {
+                  "has": {
+                    "nthChild": 1,
+                    "kind": "type_arguments",
+                    "has": {
+                      "matches": "top-type"
+                    }
+                  }
+                },
+                {
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "matches": "erased"
+                  }
+                }
+              ]
+            },
+            "angle-assertion": {
+              "has": {
+                "nthChild": 1,
+                "kind": "type_arguments"
+              }
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "as_expression"
+              },
+              {
+                "matches": "angle-assertion"
+              }
+            ],
+            "has": {
+              "matches": "erased"
+            }
+          },
+          "x-note": "x as unknown as T, x as any as T, x as never as T and <T><unknown>x, also with parentheses around the inner assertion or through an array of them (rows as unknown[] as T[]). The angle-bracket form is matched as a node whose first named child is type_arguments because type_assertion does not exist in the TSX grammar."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} erases a type with a double assertion through unknown, any or never."
+  }
+}

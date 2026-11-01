@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"] },
+  "target": "test/plan.test.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 11 }, { "line": 18 }, { "line": 22 }] },
+  "trap": {
+    "family": "shadowing",
+    "origin": "real",
+    "discovered": "2026-10-02",
+    "note": "Once a local variable named fit stops counting, the global fit comes back beside it: a const fit in one test does not bind the fit another test calls, a parameter xit shadows only its own function, an import from a package is the global itself and { fit } passes the global on."
+  }
+}

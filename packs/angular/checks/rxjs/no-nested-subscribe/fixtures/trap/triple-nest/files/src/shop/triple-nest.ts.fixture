@@ -1,0 +1,13 @@
+import { a$ } from "./a";
+import { b$ } from "./b";
+import { c$ } from "./c";
+import { show } from "./screen";
+export function loadAll(): void {
+  a$.subscribe((a) => {
+    b$.subscribe((b) => {
+      c$.subscribe((c) => {
+        show(a, b, c);
+      });
+    });
+  });
+}

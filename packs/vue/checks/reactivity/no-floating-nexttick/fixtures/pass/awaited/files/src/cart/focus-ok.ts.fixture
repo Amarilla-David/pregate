@@ -1,0 +1,5 @@
+import { nextTick } from "vue";
+
+export async function focusInput(): Promise<void> {
+  await nextTick();
+}

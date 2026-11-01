@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "params": {
+    "max": 50
+  },
+  "target": "src/a.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2,
+        "measured": 51
+      }
+    ]
+  }
+}

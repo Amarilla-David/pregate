@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/async/no-floating-promise",
+  "version": "1.0.0",
+  "area": "async",
+  "cardinality": "singleton",
+  "dimension": "async.floating-promise",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "floating-promise",
+          "rule": {
+            "kind": "expression_statement",
+            "has": {
+              "stopBy": "neighbor",
+              "any": [
+                {
+                  "matches": "floating-call"
+                },
+                {
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "stopBy": "end",
+                    "matches": "floating-call"
+                  }
+                },
+                {
+                  "kind": "new_expression",
+                  "has": {
+                    "field": "constructor",
+                    "regex": "^Promise$"
+                  }
+                }
+              ]
+            }
+          },
+          "utils": {
+            "floating-call": {
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "regex": "Async$|\\.(then|catch|finally)$|^Promise\\.(all|allSettled|race|any)$|^\\(async\\b"
+              },
+              "not": {
+                "inside": {
+                  "kind": "await_expression"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} starts a promise and does not await it, return it, or void it."
+  }
+}

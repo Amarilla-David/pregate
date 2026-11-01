@@ -1,0 +1,2 @@
+const check = ((() => ({valid: 1})) satisfies Policy);
+(stage[`addValidationPolicy`] as Setter)?.(/* first */ (check as Policy), ...extra);

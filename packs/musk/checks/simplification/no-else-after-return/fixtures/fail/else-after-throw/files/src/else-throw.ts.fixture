@@ -1,0 +1,7 @@
+export function checkPositive(x: number): number {
+  if (x <= 0) {
+    throw new Error("Must be positive");
+  } else {
+    return x;
+  }
+}

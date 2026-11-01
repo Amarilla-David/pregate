@@ -1,0 +1,30 @@
+{
+  "language": "typescript",
+  "target": "src/application/order.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/application/**",
+      "src/services/**"
+    ],
+    "exclude": [
+      "**/*.test.*",
+      "**/*.spec.*"
+    ],
+    "allow": []
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "architectural-bypass",
+    "origin": "forge",
+    "discovered": "2026-10-04",
+    "note": "A syntactic change must not bypass the selected project policy."
+  }
+}

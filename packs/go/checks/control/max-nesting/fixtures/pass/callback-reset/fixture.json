@@ -1,0 +1,11 @@
+{
+  "language": "go",
+  "params": {
+    "max": 2
+  },
+  "target": "src/a.go",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

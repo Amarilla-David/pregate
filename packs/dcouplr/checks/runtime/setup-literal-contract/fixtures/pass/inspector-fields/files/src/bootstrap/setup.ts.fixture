@@ -1,0 +1,1 @@
+startDcouplrInspector(app, {host: '127.0.0.1', port: 0, maxEvents: 0, captureOnStart: false, instanceId: 'local', announce: false, debugConsole: {enabled: true, path: '/inspect'}});

@@ -1,0 +1,9 @@
+import { protectedProcedure, router } from "../trpc";
+import { appRouter } from "./_app";
+
+export const feedRouter = router({
+  home: protectedProcedure.query(async ({ ctx }) => {
+    const caller = appRouter.createCaller(ctx);
+    return caller.post.list();
+  }),
+});

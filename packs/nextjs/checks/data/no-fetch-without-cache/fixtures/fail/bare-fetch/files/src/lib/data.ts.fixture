@@ -1,0 +1,2 @@
+const url = "https://api.example.com/data";
+export async function getData() { return fetch(url); }

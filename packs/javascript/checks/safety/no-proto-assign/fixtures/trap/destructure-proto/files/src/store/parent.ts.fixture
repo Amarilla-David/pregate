@@ -1,0 +1,4 @@
+const o = {};
+const { __proto__: parent } = o;
+
+export const value = parent;

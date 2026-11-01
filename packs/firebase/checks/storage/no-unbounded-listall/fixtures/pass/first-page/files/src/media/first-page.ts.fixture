@@ -1,0 +1,4 @@
+export async function firstPage(ref: ListRef): Promise<Item[]> {
+  const page = await list(ref, { maxResults: 20 });
+  return page.items;
+}

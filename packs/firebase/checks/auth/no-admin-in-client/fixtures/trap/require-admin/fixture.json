@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/Legacy.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "require-admin",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "require() loads the same privileged SDK as import. The module specifier, not the syntax, is what matters."
+  }
+}

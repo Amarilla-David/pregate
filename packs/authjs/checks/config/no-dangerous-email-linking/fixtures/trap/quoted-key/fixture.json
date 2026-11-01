@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "quoted-config",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A quoted key, a minifier-style !0 instead of true and an options object built outside the provider call still enable dangerous linking."
+  }
+}

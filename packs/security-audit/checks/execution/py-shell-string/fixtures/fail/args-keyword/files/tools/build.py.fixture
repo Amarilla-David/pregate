@@ -1,0 +1,5 @@
+import subprocess
+
+
+def archive(path):
+    subprocess.run(shell=True, args=f"tar czf out.tgz {path}")

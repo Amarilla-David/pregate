@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "agent-practices/behavior-testing",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PRACTICE-017",
+      "check": "agent-practices/behavior-testing/requirement-017",
+      "defaults": {
+        "verifier": "PRACTICE-017"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied testing-strategy post, adapted to behavioral verification and applicable test scope",
+        "locator": "docs/features/agent-practices-pack.md, rule 17; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Before implementing nontrivial behavior, define its observable acceptance cases and expected failures; use those cases to guide the implementation rather than deriving expectations from the finished code, without forbidding later tests that close a real gap."
+      },
+      "why": "Before implementing nontrivial behavior, define its observable acceptance cases and expected failures; use those cases to guide the implementation rather than deriving expectations from the finished code, without forbidding later tests that close a real gap.",
+      "fixHint": "Bind PRACTICE-017 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-017; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-018",
+      "check": "agent-practices/behavior-testing/requirement-018",
+      "defaults": {
+        "verifier": "PRACTICE-018"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied testing-strategy post, adapted to behavioral verification and applicable test scope",
+        "locator": "docs/features/agent-practices-pack.md, rule 18; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Before designing tests for an isolated subsystem, enumerate credible boundary, dependency, invalid-input and state-transition failures and map the applicable risks to assertions before implementing it."
+      },
+      "why": "Before designing tests for an isolated subsystem, enumerate credible boundary, dependency, invalid-input and state-transition failures and map the applicable risks to assertions before implementing it.",
+      "fixHint": "Bind PRACTICE-018 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-018; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-019",
+      "check": "agent-practices/behavior-testing/requirement-019",
+      "defaults": {
+        "verifier": "PRACTICE-019"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied testing-strategy post, adapted to behavioral verification and applicable test scope",
+        "locator": "docs/features/agent-practices-pack.md, rule 19; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Complex integrated features must be verified primarily through representative end-to-end user or system scenarios with realistic state, multiple steps and relevant failure/retry cases; focused unit and integration tests remain appropriate for isolated contracts."
+      },
+      "why": "Complex integrated features must be verified primarily through representative end-to-end user or system scenarios with realistic state, multiple steps and relevant failure/retry cases; focused unit and integration tests remain appropriate for isolated contracts.",
+      "fixHint": "Bind PRACTICE-019 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-019; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-020",
+      "check": "agent-practices/behavior-testing/requirement-020",
+      "defaults": {
+        "verifier": "PRACTICE-020"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied testing-strategy post, adapted to behavioral verification and applicable test scope",
+        "locator": "docs/features/agent-practices-pack.md, rule 20; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "End-to-end verification must emit a reviewable sanitized artifact containing results, revision, environment and replay inputs/commands, with traces or logs sufficient to reproduce failures without exposing secrets or personal data."
+      },
+      "why": "End-to-end verification must emit a reviewable sanitized artifact containing results, revision, environment and replay inputs/commands, with traces or logs sufficient to reproduce failures without exposing secrets or personal data.",
+      "fixHint": "Bind PRACTICE-020 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-020; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-021",
+      "check": "agent-practices/behavior-testing/requirement-021",
+      "defaults": {
+        "verifier": "PRACTICE-021"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied testing-strategy post, adapted to behavioral verification and applicable test scope",
+        "locator": "docs/features/agent-practices-pack.md, rule 21; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Tests must assert independently specified observable behavior and react to relevant behavioral faults; self-comparisons, duplicated production calculations and implementation-only change detectors must not stand in for behavioral verification."
+      },
+      "why": "Tests must assert independently specified observable behavior and react to relevant behavioral faults; self-comparisons, duplicated production calculations and implementation-only change detectors must not stand in for behavioral verification.",
+      "fixHint": "Bind PRACTICE-021 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-021; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-022",
+      "check": "agent-practices/behavior-testing/requirement-022",
+      "defaults": {
+        "verifier": "PRACTICE-022"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied testing-strategy post, adapted to behavioral verification and applicable test scope",
+        "locator": "docs/features/agent-practices-pack.md, rule 22; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "A bug fix must demonstrate the original failure and its corrected behavior using existing behavioral coverage where sufficient; add a focused regression test only when that coverage leaves a documented real gap."
+      },
+      "why": "A bug fix must demonstrate the original failure and its corrected behavior using existing behavioral coverage where sufficient; add a focused regression test only when that coverage leaves a documented real gap.",
+      "fixHint": "Bind PRACTICE-022 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-022; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/drafts/save.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 12
+      }
+    ]
+  },
+  "trap": {
+    "family": "content-fingerprint",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "signature and digest often name content fingerprints, file-format magic numbers or PascalCase sentinels; a signature name counts only in code that mentions HMAC, and a signature header always counts."
+  }
+}

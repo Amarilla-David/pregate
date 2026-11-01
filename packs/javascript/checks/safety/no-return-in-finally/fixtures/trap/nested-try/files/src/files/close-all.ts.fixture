@@ -1,0 +1,17 @@
+interface Handle {
+  flush(): void;
+  close(): void;
+}
+
+export function closeAll(handles: readonly Handle[]): number {
+  try {
+    handles.forEach((handle) => handle.flush());
+  } finally {
+    try {
+      handles.forEach((handle) => handle.close());
+    } catch {
+      return 0;
+    }
+  }
+  return handles.length;
+}

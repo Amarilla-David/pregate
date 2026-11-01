@@ -1,0 +1,3 @@
+admission.addFactoryMethod(function(input, dKernel) {
+ return { run() { const request = globalThis.fetch; return request('/order'); } };
+});

@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nestjs/data/no-typeorm-synchronize",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nestjs.typeorm-synchronize",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "typeorm-synchronize-true",
+          "rule": {
+            "kind": "pair",
+            "regex": "^[\"']?synchronize[\"']?\\s*:\\s*true$",
+            "inside": {
+              "stopBy": "end",
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "regex": "^TypeOrmModule\\s*\\.\\s*forRoot(Async)?$"
+              }
+            }
+          },
+          "ignores": [
+            "**/*.spec.ts",
+            "**/*.e2e-spec.ts",
+            "**/*.test.ts",
+            "**/test/**",
+            "**/__tests__/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} turns on TypeORM schema synchronize for every environment that loads this module. Run migrations instead, or gate the flag so production never receives true."
+  }
+}

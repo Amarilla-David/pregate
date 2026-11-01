@@ -1,0 +1,3 @@
+const fs = require(/* module */ "fs");
+const http = await import(/* module */ "http");
+const events = module.require(/* module */ "events");

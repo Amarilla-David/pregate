@@ -1,0 +1,4 @@
+import fs from "node:fs";
+export function read(p: string): Promise<string> {
+  return fs.promises.readFile(p, "utf8");
+}

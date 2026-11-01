@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/queries/no-empty-deletemany",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "mongodb.empty-deletemany",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "empty-deletemany-filter",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^deleteMany$"
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "any": [
+                    {
+                      "regex": "^\\(\\s*\\)$"
+                    },
+                    {
+                      "has": {
+                        "nthChild": {
+                          "position": 1,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "kind": "object",
+                        "regex": "^\\{\\s*\\}$"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls deleteMany with no filter or an empty {} filter, wiping the entire collection. Pass an explicit document filter."
+  }
+}

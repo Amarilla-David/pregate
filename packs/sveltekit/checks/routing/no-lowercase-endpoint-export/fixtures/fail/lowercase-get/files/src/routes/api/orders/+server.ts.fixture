@@ -1,0 +1,6 @@
+import { json } from "@sveltejs/kit";
+import { listOrders } from "$lib/server/orders";
+
+export async function get() {
+  return json(await listOrders());
+}

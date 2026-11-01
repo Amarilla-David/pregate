@@ -1,0 +1,8 @@
+
+export class InvoiceService {
+  pay(invoice: Invoice): string {
+    throw new Error(invoice.id);
+  }
+}
+
+interface Invoice { id: string }

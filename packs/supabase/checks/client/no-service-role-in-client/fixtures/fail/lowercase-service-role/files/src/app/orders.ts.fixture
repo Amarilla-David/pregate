@@ -1,0 +1,4 @@
+import { createClient } from "@supabase/supabase-js";
+export function orderDb(url: string, service_role: string): unknown {
+  return createClient(url, service_role);
+}

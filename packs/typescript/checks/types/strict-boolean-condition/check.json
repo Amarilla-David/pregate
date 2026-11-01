@@ -1,0 +1,178 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/strict-boolean-condition",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.strict-boolean",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bool-cond",
+          "rule": {
+            "any": [
+              {
+                "kind": "if_statement",
+                "has": {
+                  "field": "condition",
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "stopBy": "neighbor",
+                    "any": [
+                      {
+                        "kind": "member_expression",
+                        "has": {
+                          "field": "property",
+                          "regex": "^length$"
+                        }
+                      },
+                      {
+                        "kind": "string"
+                      },
+                      {
+                        "kind": "number"
+                      },
+                      {
+                        "kind": "unary_expression",
+                        "regex": "^!",
+                        "has": {
+                          "stopBy": "end",
+                          "kind": "member_expression",
+                          "has": {
+                            "field": "property",
+                            "regex": "^length$"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "kind": "while_statement",
+                "has": {
+                  "field": "condition",
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "stopBy": "neighbor",
+                    "any": [
+                      {
+                        "kind": "member_expression",
+                        "has": {
+                          "field": "property",
+                          "regex": "^length$"
+                        }
+                      },
+                      {
+                        "kind": "string"
+                      },
+                      {
+                        "kind": "number"
+                      },
+                      {
+                        "kind": "unary_expression",
+                        "regex": "^!",
+                        "has": {
+                          "stopBy": "end",
+                          "kind": "member_expression",
+                          "has": {
+                            "field": "property",
+                            "regex": "^length$"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "kind": "do_statement",
+                "has": {
+                  "field": "condition",
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "stopBy": "neighbor",
+                    "any": [
+                      {
+                        "kind": "member_expression",
+                        "has": {
+                          "field": "property",
+                          "regex": "^length$"
+                        }
+                      },
+                      {
+                        "kind": "string"
+                      },
+                      {
+                        "kind": "number"
+                      },
+                      {
+                        "kind": "unary_expression",
+                        "regex": "^!",
+                        "has": {
+                          "stopBy": "end",
+                          "kind": "member_expression",
+                          "has": {
+                            "field": "property",
+                            "regex": "^length$"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "kind": "for_statement",
+                "has": {
+                  "field": "condition",
+                  "stopBy": "neighbor",
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "has": {
+                        "field": "property",
+                        "regex": "^length$"
+                      }
+                    },
+                    {
+                      "kind": "string"
+                    },
+                    {
+                      "kind": "number"
+                    },
+                    {
+                      "kind": "unary_expression",
+                      "regex": "^!",
+                      "has": {
+                        "stopBy": "end",
+                        "kind": "member_expression",
+                        "has": {
+                          "field": "property",
+                          "regex": "^length$"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a string, a number, or a length as a condition. Compare it."
+  }
+}

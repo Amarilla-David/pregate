@@ -1,0 +1,4 @@
+export function useApiKey(): string {
+  const config = useRuntimeConfig();
+  return config.apiKey;
+}

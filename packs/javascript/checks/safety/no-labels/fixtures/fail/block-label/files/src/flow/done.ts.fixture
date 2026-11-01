@@ -1,0 +1,5 @@
+export function run() {
+  done: {
+    break done;
+  }
+}

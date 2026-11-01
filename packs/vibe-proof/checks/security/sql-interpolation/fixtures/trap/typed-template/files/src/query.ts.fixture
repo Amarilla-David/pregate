@@ -1,0 +1,5 @@
+export async function query(db: Database, id: string): Promise<unknown> {
+  return db.query((`select id from items where id = ${id}` as string));
+}
+
+interface Database { query(text: string): Promise<unknown> }

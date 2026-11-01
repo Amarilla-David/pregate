@@ -1,0 +1,6 @@
+declare const tx: { delete(t: unknown): { where(c: unknown): { returning(): Promise<unknown[]> } } };
+declare function eq(a: unknown, b: string): unknown;
+declare const sessions: { id: unknown };
+export async function popSession(id: string): Promise<unknown[]> {
+  return await tx.delete(sessions).where(eq(sessions.id, id)).returning();
+}

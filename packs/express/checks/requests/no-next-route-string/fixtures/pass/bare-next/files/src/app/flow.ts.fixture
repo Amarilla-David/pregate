@@ -1,0 +1,5 @@
+import type { NextFunction } from "express";
+
+export function keep(next: NextFunction): void {
+  next();
+}

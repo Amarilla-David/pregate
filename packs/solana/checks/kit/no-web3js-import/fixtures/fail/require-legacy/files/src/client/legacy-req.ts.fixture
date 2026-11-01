@@ -1,0 +1,2 @@
+const { Connection } = require("@solana/web3.js");
+export { Connection };

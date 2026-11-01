@@ -1,0 +1,207 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "testing/testing/no-unconditional-skip",
+  "version": "1.0.0",
+  "area": "testing",
+  "cardinality": "singleton",
+  "dimension": "tests.skip",
+  "minSeverity": null,
+  "languages": [
+    "python",
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "skip-decorator",
+          "utils": {
+            "skip-ref": {
+              "any": [
+                {
+                  "kind": "attribute",
+                  "regex": "^((pytest\\s*\\.\\s*)?mark|unittest)\\s*\\.\\s*skip$"
+                },
+                {
+                  "kind": "identifier",
+                  "regex": "^skip$"
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "decorator",
+            "has": {
+              "any": [
+                {
+                  "matches": "skip-ref"
+                },
+                {
+                  "kind": "call",
+                  "has": {
+                    "field": "function",
+                    "matches": "skip-ref"
+                  }
+                }
+              ]
+            }
+          },
+          "x-note": "@pytest.mark.skip, @mark.skip, @unittest.skip and an imported @skip, with or without a reason. skipif, skipUnless and xfail are conditional or still run, and pass."
+        },
+        {
+          "id": "skip-module-mark",
+          "utils": {
+            "skip-mark": {
+              "kind": "attribute",
+              "regex": "^(pytest\\s*\\.\\s*)?mark\\s*\\.\\s*skip$"
+            },
+            "skip-value": {
+              "any": [
+                {
+                  "matches": "skip-mark"
+                },
+                {
+                  "kind": "call",
+                  "has": {
+                    "field": "function",
+                    "matches": "skip-mark"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "assignment",
+            "has": {
+              "field": "left",
+              "regex": "^pytestmark$"
+            },
+            "all": [
+              {
+                "has": {
+                  "field": "right",
+                  "any": [
+                    {
+                      "matches": "skip-value"
+                    },
+                    {
+                      "any": [
+                        {
+                          "kind": "list"
+                        },
+                        {
+                          "kind": "tuple"
+                        }
+                      ],
+                      "has": {
+                        "matches": "skip-value"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "x-note": "pytestmark = pytest.mark.skip(...) or a list or tuple of marks containing it skips every test in the module."
+        },
+        {
+          "id": "skip-call",
+          "rule": {
+            "kind": "expression_statement",
+            "has": {
+              "kind": "call",
+              "has": {
+                "field": "function",
+                "kind": "attribute",
+                "regex": "^(pytest\\s*\\.\\s*skip|self\\s*\\.\\s*skipTest)$"
+              }
+            },
+            "inside": {
+              "any": [
+                {
+                  "kind": "module"
+                },
+                {
+                  "kind": "block",
+                  "inside": {
+                    "field": "body",
+                    "kind": "function_definition"
+                  }
+                }
+              ]
+            }
+          },
+          "x-note": "pytest.skip(...) or self.skipTest(...) as a statement directly in a function body or at module level. A call under if, for, with or try is conditional and passes."
+        }
+      ],
+      "go": [
+        {
+          "id": "skip-call",
+          "rule": {
+            "kind": "expression_statement",
+            "has": {
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "kind": "selector_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "operand",
+                      "kind": "identifier"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "field",
+                      "regex": "^(Skip|Skipf|SkipNow)$"
+                    }
+                  }
+                ]
+              }
+            },
+            "inside": {
+              "kind": "statement_list",
+              "inside": {
+                "kind": "block",
+                "inside": {
+                  "field": "body",
+                  "any": [
+                    {
+                      "kind": "function_declaration"
+                    },
+                    {
+                      "kind": "func_literal"
+                    }
+                  ],
+                  "has": {
+                    "field": "parameters",
+                    "has": {
+                      "kind": "parameter_declaration",
+                      "has": {
+                        "field": "type",
+                        "regex": "^(\\*\\s*testing\\s*\\.\\s*(T|B|F)|testing\\s*\\.\\s*TB)$"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x-note": "A Skip, Skipf or SkipNow call on a named value, as a statement directly in the body of a function or subtest closure with a *testing.T, *testing.B, *testing.F or testing.TB parameter. The receiver name is not matched to that parameter. A skip under if testing.Short() or another condition passes."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} skips a test unconditionally, so the suite reports green without running it."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/server/no-throw-in-procedure",
+  "version": "1.0.0",
+  "area": "server",
+  "cardinality": "singleton",
+  "dimension": "trpc.procedure-error",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "untyped-throw",
+          "rule": {
+            "any": [
+              {
+                "regex": "^throw\\s+new\\s+Error\\s*\\("
+              },
+              {
+                "regex": "^throw\\s+new\\s+AggregateError"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} throws an untyped error inside a procedure. Throw new TRPCError with a code so the client receives a failure it can match on."
+  }
+}

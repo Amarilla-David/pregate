@@ -1,0 +1,26 @@
+const assert = require('node:assert/strict');
+const { enqueuePriority } = require('../src/enqueue-priority.cjs');
+
+async function main() {
+  let calls = 0;
+  const recording = { enqueue: async () => { calls++; return true; } };
+  for (const priority of [1, 0, '1', 'High', '', null, undefined])
+    await assert.rejects(enqueuePriority(recording, priority, 'work'), /Invalid named priority/);
+  assert.equal(calls, 0, 'Invalid priority reached the adapter');
+  for (const priority of ['CRITICAL', 'HIGH', 'NORMAL', 'LOW']) {
+    await enqueuePriority({ enqueue: async (received, item) => {
+      assert.equal(received, priority); assert.equal(item, 'work'); return true;
+    } }, priority, 'work');
+  }
+  let release, completed = false;
+  const held = new Promise(resolve => { release = resolve; });
+  const pending = enqueuePriority({ enqueue: () => held }, 'HIGH', 'work').then(() => { completed = true; });
+  for (let i = 0; i < 5; i++) await Promise.resolve();
+  const early = completed;
+  release(true); await pending;
+  assert.equal(early, false, 'Producer completed before admission');
+  await assert.rejects(enqueuePriority({ enqueue: async () => false }, 'HIGH', 'work'), /Queue did not admit work/);
+  await assert.rejects(enqueuePriority({ enqueue: async () => { throw new Error('adapter failed'); } }, 'HIGH', 'work'), /adapter failed/);
+}
+
+main().catch(error => { console.error(error.message); process.exitCode = 1; });

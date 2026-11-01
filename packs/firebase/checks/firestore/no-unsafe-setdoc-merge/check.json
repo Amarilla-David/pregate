@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/firestore/no-unsafe-setdoc-merge",
+  "version": "1.0.0",
+  "area": "firestore",
+  "cardinality": "singleton",
+  "dimension": "firebase.firestore.setdoc-merge",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "setdoc-no-merge",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "\\bsetDoc$"
+            },
+            "not": {
+              "regex": "\\bmerge\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls setDoc with no merge option. A bare setDoc overwrites the whole document; pass { merge: true } or use updateDoc for a partial write."
+  }
+}

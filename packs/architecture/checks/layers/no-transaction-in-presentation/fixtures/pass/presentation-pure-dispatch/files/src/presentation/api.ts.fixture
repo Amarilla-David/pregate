@@ -1,0 +1,3 @@
+export function dispatchAction(commandBus: any, cmd: any) {
+  return commandBus.dispatch(cmd);
+}

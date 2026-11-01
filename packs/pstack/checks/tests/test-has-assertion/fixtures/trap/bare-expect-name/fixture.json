@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/name-only.test.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "expect-identifier",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Naming a local expect does not call the assertion. The test still cannot fail on a wrong total."
+  }
+}

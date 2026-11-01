@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/partial-readonly.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "one-readonly-field",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "readonly on id does not make status readonly. Each exported property is part of the public data."
+  }
+}

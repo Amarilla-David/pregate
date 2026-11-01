@@ -1,0 +1,3 @@
+pub fn connector() -> native_tls::TlsConnector {
+    native_tls::TlsConnector::builder().danger_accept_invalid_hostnames(true).build().unwrap()
+}

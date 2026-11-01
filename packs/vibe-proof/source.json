@@ -1,0 +1,5 @@
+{
+  "$schema": "../../schema/source.v1.json",
+  "ns": "vibe-proof",
+  "category": "practice","version": "1.1.0"
+}

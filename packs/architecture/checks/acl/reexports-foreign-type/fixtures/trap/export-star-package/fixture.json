@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/acl/stripe-public.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "renamed-reexport",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Renaming the foreign type in the export clause still publishes the package's type."
+  }
+}

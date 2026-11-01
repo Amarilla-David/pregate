@@ -1,0 +1,6 @@
+import { createCipheriv } from "node:crypto";
+
+export function seal(key: Buffer, data: Buffer): Buffer {
+  const cipher = createCipheriv("aes-256-ecb", key, null);
+  return Buffer.concat([cipher.update(data), cipher.final()]);
+}

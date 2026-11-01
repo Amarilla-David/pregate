@@ -1,0 +1,5 @@
+import { format } from "./format-lib";
+
+export function show(n: number): string {
+  return format(n);
+}

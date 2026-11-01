@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "agent-practices/domain-ownership",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PRACTICE-013",
+      "check": "agent-practices/domain-ownership/requirement-013",
+      "defaults": {
+        "verifier": "PRACTICE-013"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied AGENTS.md design post, hard invariants 10–12 and refactor-first workflow",
+        "locator": "docs/features/agent-practices-pack.md, rule 13; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Each business rule must have one declared owning domain module and rules document, and new callers must use that owner; a new owner requires an explicit domain-boundary justification rather than a dependency-cycle workaround."
+      },
+      "why": "Each business rule must have one declared owning domain module and rules document, and new callers must use that owner; a new owner requires an explicit domain-boundary justification rather than a dependency-cycle workaround.",
+      "fixHint": "Bind PRACTICE-013 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-013; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-014",
+      "check": "agent-practices/domain-ownership/requirement-014",
+      "defaults": {
+        "verifier": "PRACTICE-014"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied AGENTS.md design post, hard invariants 10–12 and refactor-first workflow",
+        "locator": "docs/features/agent-practices-pack.md, rule 14; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Cross-module access to a domain's state, tables and caches must go through its public contracts; domain operations must accept and return plain domain values without importing delivery-framework request, response or template objects."
+      },
+      "why": "Cross-module access to a domain's state, tables and caches must go through its public contracts; domain operations must accept and return plain domain values without importing delivery-framework request, response or template objects.",
+      "fixHint": "Bind PRACTICE-014 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-014; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-015",
+      "check": "agent-practices/domain-ownership/requirement-015",
+      "defaults": {
+        "verifier": "PRACTICE-015"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied AGENTS.md design post, hard invariants 10–12 and refactor-first workflow",
+        "locator": "docs/features/agent-practices-pack.md, rule 15; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Before introducing a second use of a business rule, schema fact or repeated UI piece, identify its existing copies and consolidate the affected callers in a separately verifiable behavior-preserving stage; preserve guards, rounding and clamps and document any remaining copies before changing behavior."
+      },
+      "why": "Before introducing a second use of a business rule, schema fact or repeated UI piece, identify its existing copies and consolidate the affected callers in a separately verifiable behavior-preserving stage; preserve guards, rounding and clamps and document any remaining copies before changing behavior.",
+      "fixHint": "Bind PRACTICE-015 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-015; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-016",
+      "check": "agent-practices/domain-ownership/requirement-016",
+      "defaults": {
+        "verifier": "PRACTICE-016"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied AGENTS.md design post, hard invariants 10–12 and refactor-first workflow",
+        "locator": "docs/features/agent-practices-pack.md, rule 16; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Templates, client presentation code, routes and view builders must display or orchestrate values supplied by the domain owner instead of independently computing business prices, classifications or access decisions; authoritative access decisions must be enforced at a trusted server boundary."
+      },
+      "why": "Templates, client presentation code, routes and view builders must display or orchestrate values supplied by the domain owner instead of independently computing business prices, classifications or access decisions; authoritative access decisions must be enforced at a trusted server boundary.",
+      "fixHint": "Bind PRACTICE-016 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-016; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

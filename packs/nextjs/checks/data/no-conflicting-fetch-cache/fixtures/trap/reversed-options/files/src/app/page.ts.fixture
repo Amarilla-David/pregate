@@ -1,0 +1,1 @@
+await fetch(url, { next: { revalidate: 10 }, cache: 'no-store' });

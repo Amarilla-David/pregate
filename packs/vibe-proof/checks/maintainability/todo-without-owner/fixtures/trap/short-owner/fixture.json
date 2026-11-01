@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/short-owner.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "one-letter-owner",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A one-letter owner is not a handle. The marker still names nobody."
+  }
+}

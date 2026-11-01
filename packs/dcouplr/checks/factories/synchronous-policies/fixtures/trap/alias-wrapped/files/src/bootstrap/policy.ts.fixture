@@ -1,0 +1,5 @@
+{
+  const check = function* () {};
+  const alias = (check as Policy);
+  stage['addVerificationPolicy']?.(alias!);
+}

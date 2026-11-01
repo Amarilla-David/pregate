@@ -1,0 +1,4 @@
+
+export function id(order: { id: string } | null): string {
+  return order!!.id;
+}

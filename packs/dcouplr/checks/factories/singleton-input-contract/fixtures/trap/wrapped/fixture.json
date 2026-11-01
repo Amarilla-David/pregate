@@ -1,0 +1,24 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/admission.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "dcouplr-admission-contract",
+    "origin": "forge",
+    "discovered": "2026-10-04",
+    "note": "Preserve syntax boundaries and disclose unresolved indirection instead of claiming general type inference."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/schema/legacy-sessions.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "uuid-id-without-pk",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A uuid id looks unique by construction but declares no constraint. Only the uuid branch sees this shape."
+  }
+}

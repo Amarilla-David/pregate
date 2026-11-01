@@ -1,0 +1,2 @@
+const m = sessionStorage.getItem("mnemonic");
+export { m };

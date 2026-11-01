@@ -1,0 +1,15 @@
+function checkConsent(consent: boolean): boolean {
+  if (consent) {
+    return true;
+  }
+  return false;
+}
+
+export function verifyEligibility(age: number, country: string, consent: boolean): boolean {
+  if (age >= 18) {
+    if (country === "US") {
+      return checkConsent(consent);
+    }
+  }
+  return false;
+}

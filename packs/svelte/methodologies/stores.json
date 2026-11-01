@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "svelte/stores",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SV-EVT-001",
+      "check": "svelte/events/no-createeventdispatcher-in-runes",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, events",
+        "locator": "callback props replace the dispatcher",
+        "paraphrase": "In runes mode a component notifies its parent through a callback prop. createEventDispatcher is the legacy event API."
+      },
+      "why": "A dispatcher event needs a forwarding listener at every level, while a callback prop is a typed function the parent passes down directly.",
+      "fixHint": "Declare the callback in $props (let { onsave } = $props()) and call it instead of dispatching.",
+      "avoid": "Importing the dispatcher from svelte/legacy is the same legacy call and is still flagged. Typing the dispatcher with a generic does not change the call shape.",
+      "examples": {
+        "pass": "pass/callback-prop",
+        "fail": "fail/bare-dispatch"
+      }
+    },
+    {
+      "id": "SV-LEGACY-001",
+      "check": "svelte/classes/no-svelte-legacy-import",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, legacy mode",
+        "locator": "svelte/legacy is the compatibility layer",
+        "paraphrase": "The svelte/legacy module keeps old components running. New runes code imports from svelte instead."
+      },
+      "why": "A legacy import pulls the compatibility layer into new code, so the next migration has to untangle both APIs from the same module.",
+      "fixHint": "Import from svelte (untrack, tick) or svelte/store. Isolate remaining legacy usage in one adapter module.",
+      "avoid": "A dynamic import or a require of the same path is still the compatibility layer. A comment that mentions the path is not an import and is ignored.",
+      "examples": {
+        "pass": "pass/svelte-import",
+        "fail": "fail/legacy-import"
+      }
+    },
+    {
+      "id": "SV-TICK-001",
+      "check": "svelte/async/no-floating-tick",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Svelte 5 documentation, tick",
+        "locator": "tick returns a promise",
+        "paraphrase": "tick settles after pending state changes apply. An un-awaited tick lets later lines run before the update landed."
+      },
+      "why": "Code after a floating tick reads the DOM before the state change applied, so measurements and focus land on the previous render.",
+      "fixHint": "Await the tick, or return it when the caller waits. Chain .then only on an awaited or returned tick.",
+      "avoid": "A branch does not settle the promise: tick on one arm still floats when the arm runs. Awaiting the .then chain settles it and is ignored.",
+      "examples": {
+        "pass": "pass/awaited",
+        "fail": "fail/bare-statement"
+      }
+    }
+  ]
+}

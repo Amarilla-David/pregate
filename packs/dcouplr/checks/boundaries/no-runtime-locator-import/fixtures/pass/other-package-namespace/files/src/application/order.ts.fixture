@@ -1,0 +1,2 @@
+import * as d from 'other-library';
+export const current = d.getDcouplr();

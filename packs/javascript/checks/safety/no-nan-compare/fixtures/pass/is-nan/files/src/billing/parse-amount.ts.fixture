@@ -1,0 +1,7 @@
+export function parseAmount(raw: string): number | null {
+  const amount = Number.parseFloat(raw);
+  if (Number.isNaN(amount)) {
+    return null;
+  }
+  return amount;
+}

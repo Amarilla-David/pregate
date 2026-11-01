@@ -1,0 +1,7 @@
+import type { HandleClientError } from "@sveltejs/kit";
+import { reportError } from "$lib/server/telemetry";
+
+export const handleError: HandleClientError = ({ error }) => {
+  reportError(error);
+  return { message: "Something went wrong" };
+};

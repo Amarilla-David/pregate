@@ -1,0 +1,23 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "tools/beep.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      },
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "constant-and-input",
+    "origin": "corpus",
+    "discovered": "2026-10-25",
+    "note": "An UPPER_CASE constant in the command exempts it only when every interpolated value is such a constant."
+  }
+}

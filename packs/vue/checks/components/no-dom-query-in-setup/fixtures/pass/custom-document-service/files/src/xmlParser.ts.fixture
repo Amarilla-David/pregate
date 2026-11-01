@@ -1,0 +1,3 @@
+export function findNode(xmlDoc: { querySelector: (s: string) => unknown }) {
+  return xmlDoc.querySelector("item");
+}

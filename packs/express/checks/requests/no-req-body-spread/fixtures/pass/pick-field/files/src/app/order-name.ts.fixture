@@ -1,0 +1,6 @@
+import type { Request } from "express";
+
+export function show(req: Request): string {
+  const name = req.body.name;
+  return String(name);
+}

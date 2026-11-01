@@ -1,0 +1,5 @@
+export default defineNuxtRouteMiddleware((to) =>
+  to.path === "/shop" ? navigateTo("/store", { redirectCode: 301 }) : undefined,
+);
+
+export const goHome = () => navigateTo("/");

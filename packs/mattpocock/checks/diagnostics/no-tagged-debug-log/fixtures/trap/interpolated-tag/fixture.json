@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "interpolated-tag",
+    "origin": "forge",
+    "discovered": "2026-10-06",
+    "note": "A template tag is still temporary instrumentation even when its probe identifier is interpolated."
+  }
+}

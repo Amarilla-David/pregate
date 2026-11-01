@@ -1,0 +1,5 @@
+const check = async () => true;
+function boot(check) { stage.addValidationPolicy(check); }
+async function verify() {}
+verify = () => {};
+stage.addVerificationPolicy(verify);

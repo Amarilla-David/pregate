@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/crypto/box.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  }
+}

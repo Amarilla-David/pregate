@@ -1,0 +1,20 @@
+import { taxCatalogMigration } from "./migration-probe";
+
+export async function ready(name: string, code: string): Promise<unknown[]> {
+  await taxCatalogMigration.require();
+  const loaded = module.require(name);
+  const result = globalThis.eval(code);
+  const cast = (globalThis as any).eval(code);
+  const bracket = window["eval"](code);
+  const chained = globalThis.window.eval(code);
+  return [loaded, result, cast, bracket, chained];
+}
+
+export function loaderOf(): unknown {
+  const { require: load } = module;
+  return load;
+}
+
+export function evalOf({ eval: run } = globalThis): unknown {
+  return run;
+}

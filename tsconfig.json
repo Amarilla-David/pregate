@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "Preserve",
+    "lib": ["ESNext"],
+    "types": ["bun"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src", "test", "scripts"]
+}

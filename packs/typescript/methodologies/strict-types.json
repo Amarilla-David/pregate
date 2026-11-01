@@ -1,0 +1,171 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "typescript/strict-types",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "TS-ANY-001",
+      "check": "typescript/types/no-explicit-any",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Effective TypeScript (D. Vanderkam)",
+        "locator": "item on any versus unknown",
+        "paraphrase": "Prefer unknown when a value's type is not yet known. any disables the checker for everything it touches."
+      },
+      "why": "any turns off checking for every value that flows through it, so a wrong field access compiles.",
+      "fixHint": "Give the value a named type, or accept unknown and narrow it before use. If a third-party payload truly has no schema, put pregate-allow-any: and the reason on the comment directly above that statement.",
+      "avoid": "A marker inside a string, or a marker above an earlier statement, does not cover a later any. as unknown as T is a different escape and is still a cast.",
+      "examples": {
+        "pass": "pass/allow-comment",
+        "fail": "fail/annotated-any"
+      }
+    },
+    {
+      "id": "TS-SWITCH-001",
+      "check": "typescript/types/exhaustive-switch",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Effective TypeScript (D. Vanderkam)",
+        "locator": "exhaustiveness checking",
+        "paraphrase": "Use the type checker to prove a switch covered every member of a union. A default that accepts never fails the build when a member is added."
+      },
+      "why": "A union that gains a member stays compilable when the switch has no exhaustiveness check, and the new member falls through.",
+      "fixHint": "Add a default that assigns the remaining value to never and then throws or returns it, so a new union member fails the build.",
+      "avoid": "default: break compiles and does nothing. A nested switch's default does not count for the outer switch.",
+      "examples": {
+        "pass": "pass/default-throw",
+        "fail": "fail/no-default"
+      }
+    },
+    {
+      "id": "TS-BANG-001",
+      "check": "typescript/types/no-non-null-assertion",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Effective TypeScript (D. Vanderkam)",
+        "locator": "non-null assertions",
+        "paraphrase": "A postfix ! tells the checker to assume a value is present. That assumption is unchecked at runtime."
+      },
+      "why": "The assertion silences null and undefined. When the value is absent, the failure moves to a property access far from the check that should have handled it.",
+      "fixHint": "Narrow with a conditional, use optional chaining and a fallback, or change the callee so it does not return null.",
+      "avoid": "Writing the assertion twice (value!!) is still an assertion. !== is a comparison, not this operator.",
+      "examples": {
+        "pass": "pass/optional-chain",
+        "fail": "fail/bang-field"
+      }
+    },
+    {
+      "id": "TS-ENUM-001",
+      "check": "typescript/types/no-enum",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Effective TypeScript (D. Vanderkam)",
+        "locator": "enums versus unions",
+        "paraphrase": "Prefer a union of string literals to an enum. The union does not emit a reverse mapping, and each member is its value."
+      },
+      "why": "A numeric enum invents a reverse map and a value that is not the name callers use. A string union is the set of values and needs no emit.",
+      "fixHint": "Replace the enum with a union of string literals, and keep the list next to the function that switches on it.",
+      "avoid": "const enum still declares an enum. It only changes emit. A union is the replacement.",
+      "examples": {
+        "pass": "pass/string-union",
+        "fail": "fail/string-enum"
+      }
+    },
+    {
+      "id": "TS-BOOL-001",
+      "check": "typescript/types/strict-boolean-condition",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook, strict boolean checks, and Google TypeScript style",
+        "locator": "boolean conditions",
+        "paraphrase": "Conditions should be booleans. Do not rely on the truthiness of a number or a string when the comparison can be written."
+      },
+      "why": "A length or a literal used as a condition hides the comparison. 0 and \"\" are easy to misread as a boolean the domain named.",
+      "fixHint": "Compare length to 0, or name a boolean. Leave a plain identifier alone when the checker cannot see the type.",
+      "avoid": "if (!!items.length) is still a length used as a boolean. if (items.length > 0) is the comparison.",
+      "examples": {
+        "pass": "pass/named-boolean",
+        "fail": "fail/length-if"
+      }
+    },
+    {
+      "id": "TS-EXPORT-ANY-001",
+      "check": "typescript/types/export-parameter-typed",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript strict mode, noImplicitAny",
+        "locator": "exported signatures",
+        "paraphrase": "Explicit public function annotations are an optional boundary policy. TypeScript also supports contextual inference, so inferred inner callbacks and annotated function-valued exports are valid."
+      },
+      "why": "This optional public-boundary policy requires explicit parameter annotations on directly exported TypeScript functions, including defaulted parameters. TypeScript correctly infers limit = 25 or now = new Date(); an annotation fixes the reviewed boundary instead of letting an implementation default change it. A finding does not prove implicit any or a type-checker defect.",
+      "fixHint": "Write limit: number = 25 or now: Date = new Date(), or annotate the exported function-valued variable. Keep inferred implementation callbacks unchanged. If inferred public defaults are the project policy, propose a scoped override or replace this optional style check with a compiler assertion; do not add impossible TypeScript annotations to JavaScript.",
+      "avoid": "Only .ts/.tsx/.mts/.cts parameters directly owned by a directly exported function or an unannotated exported function-valued variable are checked. Inferred literal and constructor defaults still require annotations under this selected policy. Nested callbacks, annotated function-valued variables and plain JavaScript are allowed. Re-exported declarations, class members and shorthand single-parameter arrows require compiler evidence; this syntax rule does not replace noImplicitAny.",
+      "examples": {
+        "pass": "pass/typed-export",
+        "fail": "fail/untyped-function"
+      }
+    },
+    {
+      "id": "TS-READONLY-001",
+      "check": "typescript/types/readonly-exported-property",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Effective TypeScript (D. Vanderkam)",
+        "locator": "readonly public data",
+        "paraphrase": "Prefer readonly for data other modules can see, so a change has to go through an operation that returns a new value."
+      },
+      "why": "A mutable field on an exported type lets any caller reassign data the owner thought it controlled.",
+      "fixHint": "Review the public contract and add readonly to its properties when caller mutation is forbidden. Return a new value from the operation that changes it. Keep implementation-local types and deliberate mutation fixtures unchanged; propose a scoped policy change if the public API intentionally permits mutation.",
+      "avoid": "The syntax check covers properties in directly exported interfaces, type aliases and explicit function/method signature annotations, including nested public types. Executable bodies, runtime assertions and runtime call type arguments are implementation context. Marking one public field readonly does not cover the next. Class field declarations and a non-exported type followed by export { Type } require additional compiler evidence.",
+      "examples": {
+        "pass": "pass/readonly-interface",
+        "fail": "fail/mutable-field"
+      }
+    },
+    {
+      "id": "TS-NS-001",
+      "check": "typescript/types/no-namespace",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook, namespaces and modules",
+        "locator": "modules over namespaces",
+        "paraphrase": "For application code, ES modules replace namespaces. A namespace is an older container that merges across files."
+      },
+      "why": "A namespace merges values and types in a way modules already express, and it encourages a second module system inside the file.",
+      "fixHint": "Move the values to a module and export them by name.",
+      "avoid": "export namespace is still a namespace. A class or a plain object does not need one.",
+      "examples": {
+        "pass": "pass/module-exports",
+        "fail": "fail/namespace-block"
+      }
+    },
+    {
+      "id": "TS-WRAPPER-001",
+      "check": "typescript/types/no-boxed-primitive-type",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "TypeScript handbook, Do's and Don'ts",
+        "locator": "https://www.typescriptlang.org/docs/handbook/declaration-files/do-s-and-don-ts.html#number-string-boolean-symbol-and-object",
+        "paraphrase": "Don't use the types Number, String, Boolean, Symbol, Object or Function. They refer to boxed objects or untyped callables. Use number, string, boolean, symbol, object, and specific function types."
+      },
+      "why": "A boxed type names an object wrapper the code almost never holds, Object accepts every primitive, and Function accepts any callable without parameter or return type safety.",
+      "fixHint": "Write string, number, boolean or symbol. Replace Object with object, unknown or a named shape, and replace Function with a specific signature such as () => void.",
+      "avoid": "Generic constraints and type arguments are type positions too. Value calls such as String(x) or Object.keys are not types. A global interface String augmentation and a qualified name such as Wire.Object are allowed.",
+      "examples": {
+        "pass": "pass/primitive-types",
+        "fail": "fail/string-param"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "language": "typescript",
+  "params": {
+    "paths": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "**/__tests__/**",
+      "test/**",
+      "tests/**"
+    ]
+  },
+  "target": "tests/orders.test.js",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

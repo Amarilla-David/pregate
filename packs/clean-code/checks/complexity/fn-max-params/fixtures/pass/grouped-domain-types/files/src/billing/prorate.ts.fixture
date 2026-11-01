@@ -1,0 +1,11 @@
+type Money = { cents: number; currency: string };
+type Period = { from: string; to: string };
+
+export function prorate(amount: Money, period: Period, usedDays: number): Money {
+  const totalDays = daysBetween(period);
+  return { cents: Math.round((amount.cents * usedDays) / totalDays), currency: amount.currency };
+}
+
+function daysBetween(period: Period): number {
+  return Math.max(1, (Date.parse(period.to) - Date.parse(period.from)) / 86_400_000);
+}

@@ -1,0 +1,7 @@
+import { systemClock } from "../infra/clock";
+
+export class Order {
+  readonly placedAt: number = systemClock.now();
+
+  constructor(readonly id: string) {}
+}

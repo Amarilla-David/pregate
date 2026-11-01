@@ -1,0 +1,23 @@
+package: tree-sitter-rust@0.24.2
+url: https://codeload.github.com/tree-sitter/tree-sitter-rust/tar.gz/refs/tags/v0.24.2
+tarball-sha256: 061e90a539a55a6aa65dceb0ad6425c50ab1a6e3e6d4ba430e2795ed4550f10e
+source: https://github.com/tree-sitter/tree-sitter-rust/tree/v0.24.2
+license: MIT
+modified: no source changes; LICENSE is byte for byte. WASM is built from the tagged
+  generated src/parser.c and src/scanner.c; no grammar patch or Cargo/build script runs.
+build: emscripten/emsdk:3.1.64 linux/amd64, image sha256:8847dad4171ebc8a53d9ae5cda86a2546ef5b2e68834c14dc1ba2b2962e125cc.
+  In src/: emcc -o ../tree-sitter-rust.wasm -Os -s WASM=1 -s SIDE_MODULE=2
+  -s TOTAL_MEMORY=33554432 -s NODEJS_CATCH_EXIT=0 -s EXPORTED_FUNCTIONS=["_tree_sitter_rust"]
+  -fno-exceptions -fvisibility=hidden -I . scanner.c parser.c
+reproducible: two independent container compilations yield the same WASM hash below.
+verification: pinned upstream tree-sitter CLI 0.26.7 passes all 151 upstream corpus
+  cases (native generated parser and secondary WASI build). The shipped WASM in
+  web-tree-sitter 0.27.0 also matches all 151 expected named corpus trees, ignoring
+  field labels and formatting as the upstream corpus does. Runtime WASM passes
+  the Rust pack's 30 fixtures plus language/resolver/marker and invalid controls.
+selection: npm 0.24.0 rejects Rust 2024 unsafe extern blocks; upstream v0.24.2 accepts
+  that syntax without weakening ERROR/MISSING handling. The source grammar also has
+  conservative syntax limits; this does not claim equivalence with rustc.
+files:
+31d5b6f4243d5c7c6e1c4ebbbb9f6407bd1457a08bcc4f706521710341acba36  LICENSE
+87fcf525b5468c6708738ef0562a8f8133f824620ec34519fa3a35126853d9f1  tree-sitter-rust.wasm

@@ -1,0 +1,2 @@
+// never localStorage.setItem("keypair", ...)
+localStorage.setItem("theme", theme);

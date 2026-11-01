@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/legacy/hidden-mixed.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "mixed-param-property",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "One decorated parameter hides one assignment even when the next parameter is plain; the mixed list still declares a property."
+  }
+}

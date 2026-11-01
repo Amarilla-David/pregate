@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/server/no-return-create-error",
+  "version": "1.0.0",
+  "area": "server",
+  "cardinality": "singleton",
+  "dimension": "nuxt.return-create-error",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "return-create-error",
+          "files": [
+            "server/**",
+            "src/server/**"
+          ],
+          "rule": {
+            "kind": "return_statement",
+            "has": {
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "regex": "^createError$"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} returns createError(...) instead of throwing it. In Nitro and H3 route handlers, throw createError(...) so the error response status is sent."
+  }
+}

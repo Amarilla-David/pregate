@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shared/index.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "reexport-or-import",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Re-exporting a business module or dynamically importing it from shared still couples the shared kernel to a feature."
+  }
+}

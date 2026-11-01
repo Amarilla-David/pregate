@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/transform.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-callback-param-reassign",
+    "origin": "forge",
+    "discovered": "2026-10-19",
+    "note": "Reassigning an inner callback's own single-identifier parameter is still flagged at the inner function boundary."
+  }
+}

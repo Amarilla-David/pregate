@@ -1,0 +1,12 @@
+import { describe, expect, it } from "bun:test";
+import { checkout } from "../src/checkout";
+
+it.only("charges the card", async () => {
+  expect(await checkout("cart-1")).toBe("charged");
+});
+
+describe.skip("refunds", () => {
+  it("refunds the card", async () => {
+    expect(await checkout("cart-2")).toBe("refunded");
+  });
+});

@@ -1,0 +1,1 @@
+export const creator = () => Date.now(); stage.addFactoryMethod(creator);

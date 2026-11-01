@@ -1,0 +1,4 @@
+export function checkPermissions(): void {
+  const hasNoAccess: boolean = false;
+  console.log(hasNoAccess);
+}

@@ -1,0 +1,27 @@
+{
+  "id": "pstack/playbooks/ps-55",
+  "version": "1.0.0",
+  "area": "playbooks",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-55",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-55"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-55 requires current passing project verification: {symbol}."
+  }
+}

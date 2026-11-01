@@ -1,0 +1,3 @@
+// Keypair.fromSecretKey(bytes) reads from env in prod
+const kp = Keypair.generate();
+export { kp };

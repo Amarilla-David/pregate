@@ -1,0 +1,6 @@
+import crypto from "node:crypto";
+
+export function verify(body: string, receivedDigest: string, key: string): boolean {
+  const expected = crypto.createHmac("sha256", key).update(body).digest("hex");
+  return receivedDigest === expected;
+}

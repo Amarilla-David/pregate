@@ -1,0 +1,12 @@
+import { test, expect } from "@playwright/test";
+
+test("checkout", async ({ page }) => {
+  test.skip(true, "later");
+  test.skip();
+  test.skip("nested", async () => {});
+  await expect(page).toHaveTitle("Checkout");
+});
+test.skip("refund", async () => {});
+test.only("charge", async () => {});
+test.skip(process.env.CI === undefined, "needs CI");
+test.skip(({ browserName }) => browserName === "webkit", "no webkit");

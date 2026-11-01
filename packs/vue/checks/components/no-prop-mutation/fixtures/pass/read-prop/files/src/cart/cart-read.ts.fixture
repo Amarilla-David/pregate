@@ -1,0 +1,7 @@
+import { defineProps } from "vue";
+
+const props = defineProps<{ title: string }>();
+
+export function label(): string {
+  return props.title.toUpperCase();
+}

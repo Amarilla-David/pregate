@@ -1,0 +1,5 @@
+export function createStock(levels: Record<string, number>) {
+  let sku = $state("A-1");
+  const available = $derived<() => number>(() => levels[sku] ?? 0);
+  return { get available() { return available; } };
+}

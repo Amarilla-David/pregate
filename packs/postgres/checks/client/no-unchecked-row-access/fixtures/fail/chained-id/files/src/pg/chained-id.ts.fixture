@@ -1,0 +1,6 @@
+
+interface Res { rows: Array<{ id: number }> }
+
+export function idOf(res: Res): number {
+  return res.rows[0].id;
+}

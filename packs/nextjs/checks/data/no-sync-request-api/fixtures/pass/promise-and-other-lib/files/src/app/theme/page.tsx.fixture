@@ -1,0 +1,10 @@
+import { use } from "react";
+import { cookies } from "next/headers";
+import { headers } from "@/lib/fake-request";
+
+export default function Theme() {
+  const theme = use(cookies()).get("theme")?.value;
+  const ready = cookies().then((store) => store.has("theme"));
+  const locale = headers().get("accept-language");
+  return <p data-ready={String(ready)}>{theme ?? locale}</p>;
+}

@@ -1,0 +1,195 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/integrity/no-dynamic-import-in-layer",
+  "version": "1.1.1",
+  "area": "integrity",
+  "cardinality": "singleton",
+  "dimension": "integrity.dynamic-load",
+  "minSeverity": "deny",
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "dynamic-load",
+          "utils": {
+            "global-object": {
+              "regex": "\\b(globalThis|global|window|self|top|parent|frames|defaultView|module|mainModule)\\b|\\bimport\\.meta\\b"
+            },
+            "literal-first-argument": {
+              "kind": "arguments",
+              "has": {
+                "nthChild": 1,
+                "any": [
+                  {
+                    "kind": "string"
+                  },
+                  {
+                    "kind": "template_string",
+                    "not": {
+                      "has": {
+                        "kind": "template_substitution"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "kind": "import"
+                },
+                "not": {
+                  "has": {
+                    "field": "arguments",
+                    "matches": "literal-first-argument"
+                  }
+                }
+              },
+              {
+                "kind": "identifier",
+                "regex": "^require$",
+                "not": {
+                  "inside": {
+                    "field": "function",
+                    "kind": "call_expression",
+                    "has": {
+                      "field": "arguments",
+                      "matches": "literal-first-argument"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "identifier",
+                "regex": "^(createRequire|eval|Function)$"
+              },
+              {
+                "kind": "property_identifier",
+                "regex": "^(createRequire|Function)$"
+              },
+              {
+                "kind": "subscript_expression",
+                "has": {
+                  "field": "index",
+                  "regex": "^[\"'`](createRequire|Function)[\"'`]$"
+                }
+              },
+              {
+                "kind": "property_identifier",
+                "regex": "^(require|eval)$",
+                "inside": {
+                  "kind": "member_expression",
+                  "field": "property",
+                  "has": {
+                    "field": "object",
+                    "matches": "global-object"
+                  }
+                }
+              },
+              {
+                "kind": "subscript_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "index",
+                      "regex": "^[\"'`](require|eval)[\"'`]$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "object",
+                      "matches": "global-object"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "property_identifier",
+                "regex": "^(require|eval)$",
+                "inside": {
+                  "kind": "pair_pattern",
+                  "field": "key",
+                  "inside": {
+                    "stopBy": {
+                      "any": [
+                        {
+                          "kind": "variable_declarator"
+                        },
+                        {
+                          "kind": "assignment_expression"
+                        },
+                        {
+                          "kind": "assignment_pattern"
+                        },
+                        {
+                          "kind": "required_parameter"
+                        },
+                        {
+                          "kind": "optional_parameter"
+                        }
+                      ]
+                    },
+                    "any": [
+                      {
+                        "kind": "variable_declarator",
+                        "has": {
+                          "field": "value",
+                          "matches": "global-object"
+                        }
+                      },
+                      {
+                        "kind": "assignment_expression",
+                        "has": {
+                          "field": "right",
+                          "matches": "global-object"
+                        }
+                      },
+                      {
+                        "kind": "assignment_pattern",
+                        "has": {
+                          "field": "right",
+                          "matches": "global-object"
+                        }
+                      },
+                      {
+                        "kind": "required_parameter",
+                        "has": {
+                          "field": "value",
+                          "matches": "global-object"
+                        }
+                      },
+                      {
+                        "kind": "optional_parameter",
+                        "has": {
+                          "field": "value",
+                          "matches": "global-object"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "x-note": "A module that is not a literal cannot be resolved, so no layer or package rule can see it. require is allowed only as the callee of a literal call; any other reference (alias, require.call) is a loader in disguise, as are eval, Function and createRequire under any name. require and eval as properties count only on the global object or module (also cast, parenthesized or chained, as in (globalThis as any).eval or globalThis.window.eval), by member, bracket or destructuring (O35): a method of another object named require, or an object key eval:, is not a loader. The object counts when it names the global object, one of its window aliases (top, parent, frames, document.defaultView), module, process.mainModule or import.meta anywhere in its text, so (0, globalThis), (<any>globalThis) and Object(globalThis) count too; a false deny is the safe direction. Residual: an alias of the global object in a local (const g = globalThis; g.eval(x)) is not followed."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} loads code that cannot be resolved statically (non-literal import or require, eval, Function or createRequire)."
+  }
+}

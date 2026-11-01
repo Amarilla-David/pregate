@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/runner.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "compile-wrapper",
+    "origin": "corpus",
+    "discovered": "2026-10-25",
+    "note": "compile() of a literal is a literal, but compile() of a variable still runs input."
+  }
+}

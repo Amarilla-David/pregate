@@ -1,0 +1,15 @@
+import { pool } from "./pool";
+
+export async function ping(): Promise<boolean> {
+  const conn = await pool.connect();
+  let broken: Error | undefined;
+  try {
+    await conn.query("SELECT 1");
+    return true;
+  } catch (error) {
+    broken = error as Error;
+    return false;
+  } finally {
+    conn.release(broken);
+  }
+}

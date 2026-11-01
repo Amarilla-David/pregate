@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function dropBoth(data: string): Promise<void> {
+  await redis.multi().set("session:1", data).discard();
+}

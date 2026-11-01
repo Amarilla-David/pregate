@@ -1,0 +1,8 @@
+class Lookup:
+    def query(self, target):
+        res = self.sf.fetchUrl(
+            "https://api.example.com/v1/" + target,
+            timeout=10,
+            verify=False,
+        )
+        return download_file(target, verify=False)

@@ -1,0 +1,13 @@
+import type { Reports } from "../ports/reports";
+
+export class ExportReport {
+  constructor(private readonly reports: Reports) {}
+
+  static quickExport(reports: Reports, month: string): Promise<string> {
+    return reports.render(month);
+  }
+
+  async execute(month: string): Promise<string> {
+    return this.reports.render(month);
+  }
+}

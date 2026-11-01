@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/data/bare-save.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      }
+    ]
+  },
+  "trap": {
+    "family": "second-method",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "The ban covers every HttpClient verb, not just get. An untyped post with a body is still untyped."
+  }
+}

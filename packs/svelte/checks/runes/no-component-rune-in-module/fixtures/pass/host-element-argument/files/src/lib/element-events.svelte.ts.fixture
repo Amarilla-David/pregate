@@ -1,0 +1,5 @@
+export function dispatchChange(host: HTMLElement, detail: string): void {
+  host.dispatchEvent(new CustomEvent("change", { detail }));
+}
+
+export const props = $state({ label: "Save" });

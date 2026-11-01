@@ -1,0 +1,120 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/transport/py-unverified-tls",
+  "version": "1.0.0",
+  "area": "transport",
+  "cardinality": "singleton",
+  "dimension": "security-audit.transport.python-certificate-verification",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "http-call-verify-false",
+          "rule": {
+            "kind": "call",
+            "all": [
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "regex": "^(?:requests|httpx)\\.\\w+$|\\.(?:get|post|put|patch|delete|head|options|request|send|stream)$|^httpx\\.(?:Async)?Client$|^(?:Async)?Client$|(?:^|\\.)(?:[Ff]etch\\w*|\\w*[Rr]equest|urlopen|[Dd]ownload\\w*)$|^(?:get|post|put|patch|delete|head|send)$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "has": {
+                        "nthChild": 1,
+                        "any": [
+                          {
+                            "kind": "identifier"
+                          },
+                          {
+                            "kind": "attribute"
+                          }
+                        ],
+                        "regex": "(?:^|\\.)\\w*(?:url|Url|URL)$"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "kind": "keyword_argument",
+                    "regex": "^verify\\s*=\\s*False$"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "session-verify-false",
+          "rule": {
+            "kind": "assignment",
+            "all": [
+              {
+                "has": {
+                  "field": "left",
+                  "regex": "(?i)(?:^|\\.)(?:s|sess|\\w*session|\\w*client|\\w*http\\w*)\\.verify$"
+                }
+              },
+              {
+                "has": {
+                  "field": "right",
+                  "kind": "false"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "unverified-context",
+          "rule": {
+            "kind": "attribute",
+            "regex": "^ssl\\._create_unverified_context$"
+          }
+        },
+        {
+          "id": "cert-none",
+          "rule": {
+            "kind": "assignment",
+            "all": [
+              {
+                "has": {
+                  "field": "left",
+                  "regex": "\\.verify_mode$"
+                }
+              },
+              {
+                "has": {
+                  "field": "right",
+                  "regex": "^(?:ssl\\.)?CERT_NONE$"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} turns off TLS certificate verification. Keep verification on, and pass a CA bundle path to verify= for a private CA."
+  }
+}

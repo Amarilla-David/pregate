@@ -1,0 +1,8 @@
+{
+  "$schema": "../../schema/request.v1.json",
+  "why": "Use cases need a single public method again; the exception was temporary.",
+  "patch": [
+    { "op": "test", "path": "/overrides/CA-UC-001", "value": "off" },
+    { "op": "remove", "path": "/overrides/CA-UC-001" }
+  ]
+}

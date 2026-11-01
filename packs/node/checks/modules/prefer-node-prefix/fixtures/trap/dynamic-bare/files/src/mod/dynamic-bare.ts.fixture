@@ -1,0 +1,4 @@
+export async function loadPath(): Promise<unknown> {
+  const path = await import("path");
+  return path;
+}

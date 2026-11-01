@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/controllers/refund.controller.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      },
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "transaction-management",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Calling commit() or rollback() directly in presentation code manages transaction state outside business logic."
+  }
+}

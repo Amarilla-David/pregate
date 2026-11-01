@@ -1,0 +1,6 @@
+declare function load(): Promise<string>;
+let data = $state("idle");
+
+$effect.pre(async () => {
+  data = await load();
+});

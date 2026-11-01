@@ -1,0 +1,5 @@
+import { getAuth } from "firebase/auth";
+
+export function currentUid(): string | null {
+  return getAuth().currentUser?.uid ?? null;
+}

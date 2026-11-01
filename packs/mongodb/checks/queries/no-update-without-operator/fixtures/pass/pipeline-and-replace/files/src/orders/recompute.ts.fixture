@@ -1,0 +1,7 @@
+import type { Db, ObjectId } from "mongodb";
+
+export async function recompute(db: Db, id: ObjectId, shipping: { city: string; zip: string }) {
+  const orders = db.collection("orders");
+  await orders.updateMany({ status: "open" }, [{ $set: { total: { $add: ["$subtotal", "$tax"] } } }]);
+  await db.collection("addresses").replaceOne({ orderId: id }, { orderId: id, ...shipping });
+}

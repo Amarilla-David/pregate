@@ -1,0 +1,7 @@
+
+export function pay(invoice: Invoice): string {
+  if (invoice.total < 0) throw new Error("negative");
+  return invoice.id;
+}
+
+interface Invoice { id: string; total: number }

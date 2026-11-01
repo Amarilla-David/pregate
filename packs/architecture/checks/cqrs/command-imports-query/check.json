@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/cqrs/command-imports-query",
+  "version": "1.0.0",
+  "area": "cqrs",
+  "cardinality": "singleton",
+  "dimension": "cqrs.command-query",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "import-edge",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "(^|/)queries(/|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "**/commands/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a query module from a command. The command owns the write; it does not call the read side."
+  }
+}

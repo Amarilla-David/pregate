@@ -1,0 +1,4 @@
+import { Schema } from "mongoose";
+export function build(def: object): void {
+  const s = new Schema(def, { strict: false, minimize: false });
+}

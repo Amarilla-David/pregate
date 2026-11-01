@@ -1,0 +1,27 @@
+{
+  "id": "maintainability/future-humans/fh-92",
+  "version": "1.0.0",
+  "area": "future-humans",
+  "cardinality": "singleton",
+  "dimension": "maintainability.fh-92",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "FH-92"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "FH-92 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,2 @@
+const stage = builder.declareIntent('ORDER');
+stage.addFactoryMethod(creator);

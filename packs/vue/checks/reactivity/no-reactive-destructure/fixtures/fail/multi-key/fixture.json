@@ -1,0 +1,1 @@
+{"before": null,"expect": {"verdict": "fail","violations": [{"line": 4}]},"language": "typescript","params": {},"$schema": "../../../../../../../schema/fixture.v1.json","target": "src/cart/cart-multi.ts"}

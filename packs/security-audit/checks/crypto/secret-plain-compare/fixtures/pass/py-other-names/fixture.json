@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/oauth.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

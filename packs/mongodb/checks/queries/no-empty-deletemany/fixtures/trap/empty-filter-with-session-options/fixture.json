@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/tx-wipe.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-filter-with-second-options-arg",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Passing an options object as the second argument to deleteMany({}, { session }) still wipes the entire collection because the first filter argument is empty."
+  }
+}

@@ -1,0 +1,3 @@
+pub fn client(cert: reqwest::Certificate) -> reqwest::Client {
+    reqwest::Client::builder().add_root_certificate(cert).build().unwrap()
+}

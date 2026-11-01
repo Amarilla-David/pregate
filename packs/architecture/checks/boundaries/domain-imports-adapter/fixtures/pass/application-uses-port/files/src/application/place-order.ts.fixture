@@ -1,0 +1,7 @@
+
+import { Order } from "../domain/order";
+import type { OrderRepository } from "../ports/order-repository";
+
+export async function placeOrder(order: Order, orders: OrderRepository): Promise<Order> {
+  return orders.save(order);
+}

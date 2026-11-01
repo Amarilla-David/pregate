@@ -1,0 +1,4 @@
+declare function $derived<T>(v: T): T;
+export function badDerived() {
+  return $derived(async () => 42);
+}

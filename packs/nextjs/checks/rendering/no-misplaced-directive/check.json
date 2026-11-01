@@ -1,0 +1,99 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/rendering/no-misplaced-directive",
+  "version": "1.0.0",
+  "area": "rendering",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-misplaced-directive",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "late-module-directive",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "^[\"']use (client|server)[\"'];?$",
+            "inside": {
+              "kind": "program"
+            },
+            "follows": {
+              "stopBy": "end",
+              "not": {
+                "any": [
+                  {
+                    "kind": "comment"
+                  },
+                  {
+                    "kind": "hash_bang_line"
+                  },
+                  {
+                    "kind": "expression_statement",
+                    "regex": "^[\"'][^\"']*[\"'];?$"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "nested-use-client",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "^[\"']use client[\"'];?$",
+            "not": {
+              "inside": {
+                "kind": "program"
+              }
+            }
+          }
+        },
+        {
+          "id": "late-function-use-server",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "^[\"']use server[\"'];?$",
+            "inside": {
+              "kind": "statement_block"
+            },
+            "follows": {
+              "stopBy": "end",
+              "not": {
+                "any": [
+                  {
+                    "regex": "^\\{$"
+                  },
+                  {
+                    "kind": "comment"
+                  },
+                  {
+                    "kind": "expression_statement",
+                    "regex": "^[\"'][^\"']*[\"'];?$"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "template-directive",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "^`use (client|server)`;?$"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is not a directive where it stands, so Next.js ignores it. Put 'use client' or 'use server' in quotes as the first statement of the file (or 'use server' first in an async function body)."
+  }
+}

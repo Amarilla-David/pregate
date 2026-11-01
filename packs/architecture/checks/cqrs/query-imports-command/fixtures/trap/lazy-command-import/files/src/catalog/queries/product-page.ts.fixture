@@ -1,0 +1,8 @@
+import { productViews } from "../read-models/product-view";
+
+export async function productPage(id: string): Promise<string | undefined> {
+  const view = productViews.find((candidate) => candidate.id === id);
+  const { recordProductVisit } = await import("../commands/record-product-visit");
+  await recordProductVisit(id);
+  return view?.title;
+}

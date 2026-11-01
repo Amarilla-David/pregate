@@ -1,0 +1,13 @@
+import { Component } from "react";
+import * as Dom from "react-dom";
+
+export class Measure extends Component {
+  componentDidMount() {
+    const node = Dom.findDOMNode(this);
+    console.info(node);
+  }
+
+  render() {
+    return <div />;
+  }
+}

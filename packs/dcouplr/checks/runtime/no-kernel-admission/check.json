@@ -1,0 +1,133 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/runtime/no-kernel-admission",
+  "version": "1.0.0",
+  "area": "runtime",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.bootstrap-kernel-ownership",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [{
+        "id": "bootstrap-owned-kernel",
+        "utils": {
+          "kernel-key": {
+            "any": [
+              { "regex": "^[\"'`]DKERNEL[\"'`]$" },
+              {
+                "any": [
+                  { "kind": "member_expression", "has": { "field": "property", "regex": "^Kernel$" } },
+                  { "kind": "subscript_expression", "has": { "field": "index", "regex": "^[\"'`]Kernel[\"'`]$" } }
+                ],
+                "has": {
+                  "field": "object",
+                  "any": [
+                    { "kind": "identifier", "regex": "^DependencyKeys$" },
+                    { "kind": "member_expression", "has": { "field": "property", "regex": "^DependencyKeys$" } },
+                    { "kind": "subscript_expression", "has": { "field": "index", "regex": "^[\"'`]DependencyKeys[\"'`]$" } }
+                  ]
+                }
+              },
+              {
+                "any": [
+                  { "kind": "parenthesized_expression" }, { "kind": "as_expression" },
+                  { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }
+                ],
+                "has": {
+                  "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                  "matches": "kernel-key"
+                }
+              }
+            ]
+          },
+          "kernel-intent": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "any": [
+                    { "kind": "member_expression", "has": { "field": "property", "regex": "^declareIntent$" } },
+                    { "kind": "subscript_expression", "has": { "field": "index", "regex": "^[\"'`]declareIntent[\"'`]$" } }
+                  ]
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments", "kind": "arguments",
+                  "has": {
+                    "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                    "matches": "kernel-key"
+                  }
+                }
+              }
+            ]
+          },
+          "kernel-admission-chain": {
+            "any": [
+              { "matches": "kernel-intent" },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        { "has": { "field": "property", "regex": "^add(?:MandatoryInputFields|ValidationPolicy|VerificationPolicy|FactoryMethod)$" } },
+                        { "has": { "field": "object", "matches": "kernel-admission-chain" } }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        { "has": { "field": "index", "regex": "^[\"'`]add(?:MandatoryInputFields|ValidationPolicy|VerificationPolicy|FactoryMethod)[\"'`]$" } },
+                        { "has": { "field": "object", "matches": "kernel-admission-chain" } }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "any": [
+                  { "kind": "parenthesized_expression" }, { "kind": "as_expression" },
+                  { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }
+                ],
+                "has": {
+                  "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                  "matches": "kernel-admission-chain"
+                }
+              }
+            ]
+          }
+        },
+        "rule": {
+          "kind": "call_expression",
+          "has": {
+            "field": "function",
+            "any": [
+              {
+                "kind": "member_expression",
+                "all": [
+                  { "has": { "field": "property", "regex": "^register(?:Singleton)?(?:Force)?$" } },
+                  { "has": { "field": "object", "matches": "kernel-admission-chain" } }
+                ]
+              },
+              {
+                "kind": "subscript_expression",
+                "all": [
+                  { "has": { "field": "index", "regex": "^[\"'`]register(?:Singleton)?(?:Force)?[\"'`]$" } },
+                  { "has": { "field": "object", "matches": "kernel-admission-chain" } }
+                ]
+              }
+            ]
+          }
+        }
+      }]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "DKERNEL is bootstrap-owned. Do not register it through dependency admission; use the kernel injected into the factory." }
+}

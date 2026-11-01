@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/modules/probe.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "url-argument",
+    "origin": "corpus",
+    "discovered": "2026-10-25",
+    "note": "A project wrapper with an unrelated name forwards verify to the HTTP library; a first argument named like a URL marks it as a request."
+  }
+}

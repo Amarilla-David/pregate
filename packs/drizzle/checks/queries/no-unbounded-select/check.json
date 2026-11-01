@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/queries/no-unbounded-select",
+  "version": "1.1.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "drizzle.unbounded-select",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "drizzle-bounded-select"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} has a select/from result without its own limit, terminal get(), schema-proven unique predicate or validated input budget. Add a result bound or establish the actual schema and input cardinality."
+  }
+}

@@ -1,0 +1,4 @@
+export function publicApi(req: Request, res: Response): void {
+  // Without credentials a reflected origin grants no more than "*".
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+}

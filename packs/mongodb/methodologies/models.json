@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "mongodb/models",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MONGO-SCHEMA-001",
+      "check": "mongodb/models/no-schema-any",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Mongoose guide (Strict mode)",
+        "locator": "strict option on schemas",
+        "paraphrase": "With strict: false, paths not in the schema are stored silently. The default keeps undeclared paths out of the database."
+      },
+      "why": "A non-strict schema stores whatever the client sends, so typos and injected fields persist without an error.",
+      "fixHint": "Declare the paths on the schema, or use strict: \"throw\" so undeclared paths fail loudly instead of persisting.",
+      "avoid": "Extra options beside strict do not cancel it. This rule complements mass-assignment: that one guards the write call, this one guards the schema.",
+      "examples": {
+        "pass": "pass/default-strict",
+        "fail": "fail/strict-false"
+      }
+    },
+    {
+      "id": "MONGO-CONNECT-001",
+      "check": "mongodb/models/no-connect-without-options",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Node.js driver docs (Connection pooling and server selection)",
+        "locator": "maxPoolSize and serverSelectionTimeoutMS options",
+        "paraphrase": "A bare connect() inherits the default pool size and waits the default timeout before failing over. Name both explicitly."
+      },
+      "why": "Default pool and timeout settings hang or overload under load instead of failing fast with a tuned budget.",
+      "fixHint": "Pass maxPoolSize and serverSelectionTimeoutMS in the connect() options for the workload this service runs.",
+      "avoid": "An empty options object sets nothing. Unrelated options such as dbName do not satisfy this rule.",
+      "examples": {
+        "pass": "pass/pooled",
+        "fail": "fail/bare-connect"
+      }
+    },
+    {
+      "id": "MONGO-TX-001",
+      "check": "mongodb/models/no-transaction-without-session",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Manual (Transactions: withTransaction)",
+        "locator": "withTransaction() retry, commit, and abort behavior",
+        "paraphrase": "withTransaction() retries the body on transient errors and always commits or aborts. A raw startTransaction() leaves that to the caller."
+      },
+      "why": "A raw transaction that throws mid-way stays open until it times out, holding locks and a session slot.",
+      "fixHint": "Run the writes inside session.withTransaction() so commit, abort, and transient-error retry are automatic.",
+      "avoid": "Renaming the session (sess) does not change the call. Passing { session } to a write outside withTransaction is still manual.",
+      "examples": {
+        "pass": "pass/with-transaction",
+        "fail": "fail/bare-start"
+      }
+    },
+    {
+      "id": "MONGO-INDEX-001",
+      "check": "mongodb/models/no-index-in-code",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Manual (Index builds on populated collections)",
+        "locator": "index build cost and foreground behavior",
+        "paraphrase": "Building an index scans the collection and competes with traffic. Declare indexes with the schema or a migration, not inline."
+      },
+      "why": "An index built from a request path runs at request time, blocking or slowing the collection it is supposed to speed up.",
+      "fixHint": "Declare the index with schema.index() (Mongoose) or in a migration script that runs outside request handling.",
+      "avoid": "Reaching the collection through db.collection() does not move the build out of code. ensureIndex() is the same call under an older name.",
+      "examples": {
+        "pass": "pass/schema-index",
+        "fail": "fail/create-index"
+      }
+    }
+  ]
+}

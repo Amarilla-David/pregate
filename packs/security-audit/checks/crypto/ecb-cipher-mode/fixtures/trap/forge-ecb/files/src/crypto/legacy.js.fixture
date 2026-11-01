@@ -1,0 +1,9 @@
+const forge = require("node-forge");
+
+function seal(key) {
+  return forge.cipher.createCipher(
+    "AES-ECB",
+    key,
+  );
+}
+module.exports = { seal };

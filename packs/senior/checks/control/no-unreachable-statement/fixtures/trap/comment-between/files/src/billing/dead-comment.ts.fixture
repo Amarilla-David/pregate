@@ -1,0 +1,9 @@
+
+export function place(order: Order): string {
+  return order.id;
+  // still need to charge
+  charge(order);
+}
+
+function charge(order: Order): void { order.id; }
+interface Order { id: string }

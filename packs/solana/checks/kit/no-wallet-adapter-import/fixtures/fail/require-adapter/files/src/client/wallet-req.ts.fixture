@@ -1,0 +1,2 @@
+const base = require("@solana/wallet-adapter-base");
+export { base };

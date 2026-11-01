@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function purge() {
+  return prisma.user.deleteMany({ where: { active: false } });
+}

@@ -1,0 +1,6 @@
+function check() {
+  function helper() { return 1; }
+  return true;
+}
+const alias = check;
+stage.addValidationPolicy(alias);

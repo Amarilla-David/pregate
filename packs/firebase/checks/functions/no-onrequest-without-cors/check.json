@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/functions/no-onrequest-without-cors",
+  "version": "1.0.0",
+  "area": "functions",
+  "cardinality": "singleton",
+  "dimension": "firebase.functions.onrequest-cors",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-onrequest",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "\\bonRequest\\s*\\(",
+            "not": {
+              "regex": "\\bcors\\b"
+            }
+          }
+        },
+        {
+          "id": "assigned-onrequest",
+          "rule": {
+            "kind": "lexical_declaration",
+            "regex": "\\bonRequest\\s*\\(",
+            "not": {
+              "regex": "\\bcors\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} registers onRequest with no cors handling in the same statement. Browser callers get opaque CORS failures; wrap the handler with cors middleware."
+  }
+}

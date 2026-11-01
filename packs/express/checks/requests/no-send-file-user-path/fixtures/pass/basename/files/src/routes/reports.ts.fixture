@@ -1,0 +1,9 @@
+import path from "node:path";
+import { Router } from "express";
+
+export const reportsRouter = Router();
+const reportsDir = path.join(__dirname, "reports");
+
+reportsRouter.get("/reports/:file", (req, res) => {
+  res.download(path.join(reportsDir, path.basename(req.params.file)), "report.pdf");
+});

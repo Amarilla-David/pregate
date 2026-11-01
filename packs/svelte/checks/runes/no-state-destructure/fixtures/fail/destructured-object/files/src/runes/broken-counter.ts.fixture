@@ -1,0 +1,5 @@
+const { count } = $state({ count: 0 });
+
+export function current(): number {
+  return count;
+}

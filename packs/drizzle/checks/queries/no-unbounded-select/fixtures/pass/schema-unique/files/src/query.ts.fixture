@@ -1,0 +1,3 @@
+import { eq } from "drizzle-orm";
+import { records } from "./schema";
+export const query = db.select().from(records).where(eq(records.key, key));

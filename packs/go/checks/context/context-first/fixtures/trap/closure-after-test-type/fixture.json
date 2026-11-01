@@ -1,0 +1,23 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "src/a_test.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 9
+      },
+      {
+        "line": 14
+      }
+    ]
+  },
+  "trap": {
+    "family": "closure-after-test-type",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A wrapped closure signature, or another parameter between *testing.T and the context, still puts the context after a non-test parameter."
+  }
+}

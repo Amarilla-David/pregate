@@ -1,0 +1,5 @@
+import cors from "cors";
+
+const allowlist = ["https://app.example.com"];
+
+export const policy = cors({ origin: allowlist });

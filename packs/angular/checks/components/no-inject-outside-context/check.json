@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/components/no-inject-outside-context",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "angular.inject-outside-context",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "inject-in-lifecycle-hook",
+          "rule": {
+            "kind": "call_expression",
+            "any": [
+              { "has": { "field": "function", "regex": "^inject$" } },
+              {
+                "all": [
+                  { "has": { "field": "function", "regex": "^takeUntilDestroyed$" } },
+                  { "has": { "field": "arguments", "regex": "^\\(\\s*\\)$" } }
+                ]
+              },
+              {
+                "all": [
+                  { "has": { "field": "function", "regex": "^effect$" } },
+                  { "not": { "has": { "field": "arguments", "regex": "\\binjector\\b" } } }
+                ]
+              }
+            ],
+            "inside": {
+              "stopBy": "end",
+              "kind": "method_definition",
+              "has": {
+                "field": "name",
+                "regex": "^ng(OnInit|OnChanges|DoCheck|AfterContentInit|AfterContentChecked|AfterViewInit|AfterViewChecked|OnDestroy)$"
+              }
+            },
+            "not": {
+              "inside": {
+                "stopBy": "end",
+                "kind": "call_expression",
+                "has": { "field": "function", "regex": "(^|\\.)(runInInjectionContext|runInContext)$" }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} needs an injection context but runs inside a lifecycle hook. Move it to a field initializer or the constructor, or pass a DestroyRef or Injector explicitly."
+  }
+}

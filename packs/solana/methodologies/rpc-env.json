@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "solana/rpc-env",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SOL-RPC-001",
+      "check": "solana/rpc/no-public-endpoint",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "practices (SOLANA-RULES.md) and infra pages",
+        "paraphrase": "The RPC URL comes from the environment and is never hardcoded or committed."
+      },
+      "why": "The public endpoint rate-limits and falls over, usually in the middle of the demo. Static syntax cannot prove values or provenance across helpers and imports; see BACKLOG.md for this rule's uncaught flow and warning default.",
+      "fixHint": "Read the RPC URL from .env.local (one Triton key per team) and never commit it.",
+      "avoid": "A committed .env.local, or a fallback constant that points back at the public endpoint.",
+      "examples": {
+        "pass": "pass/env-url",
+        "fail": "fail/devnet-url"
+      }
+    },
+    {
+      "id": "SOL-RPC-002",
+      "check": "solana/rpc/no-mainnet-cluster-literal",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "avoid page and practices rules",
+        "paraphrase": "Hackathon code runs on devnet unless the task says mainnet."
+      },
+      "why": "Nobody deploys to mainnet in a hackathon; a mainnet default burns real SOL and demo time. Static syntax cannot prove values or provenance across helpers and imports; see BACKLOG.md for this rule's uncaught flow and warning default.",
+      "fixHint": "Default to devnet. Touch mainnet only when explicitly asked.",
+      "avoid": "A flag that defaults to mainnet with a comment saying it should be devnet.",
+      "examples": {
+        "pass": "pass/devnet",
+        "fail": "fail/mainnet-cluster"
+      }
+    }
+  ]
+}

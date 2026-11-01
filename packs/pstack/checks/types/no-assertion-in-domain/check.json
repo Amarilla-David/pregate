@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/types/no-assertion-in-domain",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "domain.assertion",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "domain-as",
+          "rule": {
+            "kind": "as_expression",
+            "not": {
+              "regex": "\\bas\\s+const$"
+            }
+          },
+          "files": [
+            "**/domain/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} asserts a type in the domain. Parse at the boundary or narrow with a guard."
+  }
+}

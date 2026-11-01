@@ -1,0 +1,17 @@
+import { initTRPC } from "@trpc/server";
+import type { Context } from "./context";
+
+interface Meta {
+  readonly audit: boolean;
+}
+
+const t = initTRPC
+  .context<Context>()
+  .meta<Meta>()
+  .create({
+    defaultMeta: { audit: false },
+    errorFormatter: ({ shape }) => shape,
+    "isDev": true,
+  });
+
+export const router = t.router;

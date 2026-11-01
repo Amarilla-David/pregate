@@ -1,0 +1,54 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "local",
+        "kind": "path",
+        "path": ".pregate/rules"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/clean-code",
+      "local/team"
+    ],
+    "layers": {
+      "domain": {
+        "paths": [
+          "src/domain/**"
+        ],
+        "mayImport": [],
+        "kind": "core"
+      }
+    },
+    "overrides": {
+      "example/complexity/fn-max-params": {
+        "params": {
+          "max": 4
+        }
+      }
+    },
+    "coexist": {
+      "arkgate": {
+        "ownedByArkgate": [
+          "TEAM-FN-001"
+        ]
+      }
+    }
+  },
+  "errors": [
+    "coexist.arkgate.ownedByArkgate: example/CC-FN-002 is also enforced through example/CC-FN-002; list them too or none"
+  ]
+}

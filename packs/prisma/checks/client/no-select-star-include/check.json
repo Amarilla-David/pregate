@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-select-star-include",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.select-include",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "include-true",
+          "rule": {
+            "kind": "pair",
+            "regex": "^include\\s*:\\s*\\{[^}{]*:\\s*true"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} includes a full relation with `: true` and loads every column. Nest a select or take so the query fetches only the fields the caller needs."
+  }
+}

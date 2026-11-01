@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/rendering/no-google-font-link",
+  "version": "1.0.0",
+  "area": "rendering",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-google-font-link",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "google-font-link",
+          "rule": {
+            "kind": "return_statement",
+            "regex": "fonts\\.googleapis\\.com"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} loads fonts with a googleapis link tag. Load fonts with next/font instead."
+  }
+}

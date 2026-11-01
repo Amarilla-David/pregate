@@ -1,0 +1,8 @@
+
+export interface Prefs {
+  sendEmail?: boolean;
+}
+
+export function notify(userId: string, prefs: Prefs): string {
+  return userId + String(prefs.sendEmail);
+}

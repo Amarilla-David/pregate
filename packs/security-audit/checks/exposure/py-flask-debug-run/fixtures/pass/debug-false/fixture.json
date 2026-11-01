@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/main.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

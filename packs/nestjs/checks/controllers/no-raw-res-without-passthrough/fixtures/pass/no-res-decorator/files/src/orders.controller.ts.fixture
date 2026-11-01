@@ -1,0 +1,9 @@
+declare function Controller(prefix?: string): ClassDecorator;
+declare function Get(path?: string): MethodDecorator;
+@Controller("orders")
+export class OrdersController {
+  @Get()
+  list(): string[] {
+    return [];
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/router/admin.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "middleware-no-input",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Middleware (.use) is not input validation. The chain still has no .input validator, so the resolver is unvalidated."
+  }
+}

@@ -1,0 +1,8 @@
+import { createClient } from "redis";
+
+const client = createClient();
+await client.connect();
+
+await client.subscribe("jobs:done", async (id) => {
+  await client.set("jobs:last", id);
+});

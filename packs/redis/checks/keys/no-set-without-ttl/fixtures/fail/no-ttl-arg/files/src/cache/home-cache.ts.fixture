@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function cacheHome(html: string): Promise<void> {
+  await redis.set("cache:home", html);
+}

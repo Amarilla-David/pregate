@@ -1,0 +1,3 @@
+const worker = new Worker(new URL("./resize.worker.ts", import.meta.url));
+worker.postMessage({ width: 640 });
+self.postMessage({ done: true });

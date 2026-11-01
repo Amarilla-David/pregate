@@ -1,0 +1,9 @@
+import type { PoolClient } from "pg";
+import { pool } from "./pool";
+
+export async function getClient(): Promise<PoolClient> {
+  const client: PoolClient = await pool.connect();
+  const timeout = setTimeout(() => console.error("client checked out for more than 5 seconds"), 5000);
+  client.once("release", () => clearTimeout(timeout));
+  return client;
+}

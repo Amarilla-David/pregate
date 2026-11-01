@@ -1,0 +1,5 @@
+declare const it: any;
+
+it.only("runs exclusively", () => {
+  // focus
+});

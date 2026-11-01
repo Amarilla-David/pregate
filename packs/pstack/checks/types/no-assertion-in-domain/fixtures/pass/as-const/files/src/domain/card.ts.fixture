@@ -1,0 +1,4 @@
+
+export const CARD = "card" as const;
+
+export type Tender = typeof CARD;

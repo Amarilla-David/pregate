@@ -1,0 +1,9 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "src/poll.go",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

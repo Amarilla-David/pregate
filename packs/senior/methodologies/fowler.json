@@ -1,0 +1,109 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "senior/fowler",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SR-FLAG-001",
+      "check": "senior/api/no-boolean-flag",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Refactoring (M. Fowler, 1999)",
+        "locator": "flag argument",
+        "paraphrase": "A boolean argument that selects behavior is a flag. Replace it with two operations whose names say which behavior they run."
+      },
+      "why": "A boolean flag hides two operations behind one name. The call site reads notify(user, true) and the reader has to open the function to know what true means.",
+      "fixHint": "Split into two named operations, or pass a union such as \"email\" | \"none\".",
+      "avoid": "Making the flag optional, or giving it a default, keeps the flag. A boolean property on a type is not a parameter and is not this rule.",
+      "examples": {
+        "pass": "pass/mode-union",
+        "fail": "fail/required-flag"
+      }
+    },
+    {
+      "id": "SR-CHAIN-001",
+      "check": "senior/design/no-message-chain",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Refactoring (M. Fowler, 1999)",
+        "locator": "message chains",
+        "paraphrase": "A long chain of getters means the caller knows the layout of objects it does not own. Ask the first object for the result instead."
+      },
+      "why": "The caller is navigating someone else's structure. When that structure changes, every chain breaks, which is the feature-envy smell in a form the tree can see.",
+      "fixHint": "Add a method on the owner that returns the value the caller actually needs, and call that once.",
+      "avoid": "Optional chaining does not shorten the chain. a.b.c is two hops and is allowed; a.b.c.d is the chain this rule rejects.",
+      "examples": {
+        "pass": "pass/two-hops",
+        "fail": "fail/four-names"
+      }
+    },
+    {
+      "id": "SR-EMPTY-001",
+      "check": "senior/design/no-empty-body",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Refactoring (M. Fowler, 1999)",
+        "locator": "speculative generality and stubs",
+        "paraphrase": "Do not leave a function that has a name and no behavior. Either it does the work or it is not in the code yet."
+      },
+      "why": "An empty body is a stub that looks finished. Callers compile against a function that does not do the thing its name says.",
+      "fixHint": "Write the operation, or delete the function until there is a real body. An empty constructor can stay.",
+      "avoid": "A comment inside the braces is not an implementation. Filling the body with a log line only to silence the rule is a stub of a different shape and is called out in the avoid text of the vibe-proof console rule.",
+      "examples": {
+        "pass": "pass/returns-id",
+        "fail": "fail/empty-function"
+      }
+    },
+    {
+      "id": "SR-NEST-001",
+      "check": "senior/style/no-nested-ternary",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Refactoring (M. Fowler) and Google TypeScript style",
+        "locator": "nested conditional expressions",
+        "paraphrase": "One conditional expression is enough. A second one inside it hides the decision."
+      },
+      "why": "A nested ternary packs two decisions into one expression. The reader cannot see which branch matches which condition without counting question marks.",
+      "fixHint": "Use if statements, or a function whose name is the decision.",
+      "avoid": "Parentheses around the inner ternary do not flatten it.",
+      "examples": {
+        "pass": "pass/single-ternary",
+        "fail": "fail/nested-alternative"
+      }
+    },
+    {
+      "id": "SR-WIDE-001",
+      "relations": [
+        {
+          "with": "architecture/CA-UC-001",
+          "kind": "duplicates",
+          "why": "Both count public methods: in use-case files CA-UC-001 allows 1 and SR-WIDE-001 allows 8, so a wide use case is reported by both.",
+          "settle": "Usually keep both, since CA-UC-001 is the narrower use-case rule; to report once, exclude the use-case globs from SR-WIDE-001."
+        }
+      ],
+      "check": "senior/design/wide-module",
+      "defaults": {
+        "max": 8
+      },
+      "severity": "deny",
+      "source": {
+        "work": "A Philosophy of Software Design (J. Ousterhout, 2018)",
+        "locator": "deep modules",
+        "paraphrase": "A module should hide a lot of complexity behind a small interface. A class with a long list of public operations is a shallow module."
+      },
+      "why": "A wide class is a module that makes every caller learn a large surface. Ousterhout's deep module hides complexity behind a small interface; past eight public operations the type is doing several jobs.",
+      "fixHint": "Split the class by the reason its methods change. Keep the public operations the caller actually needs.",
+      "avoid": "Renaming methods to a private prefix with the private keyword or a # name removes them from the count without splitting the job. That is a hole. Arrow fields are public surface and count. The constructor does not.",
+      "examples": {
+        "pass": "pass/eight-methods",
+        "fail": "fail/nine-methods"
+      }
+    }
+  ]
+}

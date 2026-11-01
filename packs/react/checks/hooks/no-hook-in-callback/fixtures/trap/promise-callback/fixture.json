@@ -1,0 +1,1 @@
+{"language":"typescript","params":{},"target":"src/data.ts","before":null,"expect":{"verdict":"fail","violations":[{"line":2}]},"trap":{"family":"promise-callback","origin":"forge","discovered":"2026-10-03","note":"A Promise callback is still not a React component or custom Hook render."}}

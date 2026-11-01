@@ -1,0 +1,4 @@
+import fs from "node:fs";
+export function probe(path: string, done: (ok: boolean) => void): void {
+  fs.exists(path, done);
+}

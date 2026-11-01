@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/old-return.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "commented-statement",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Commenting the old return out leaves it in the function. Delete the line."
+  }
+}

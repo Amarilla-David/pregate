@@ -1,0 +1,4 @@
+import { Schema, model } from "mongoose";
+export function build(): void {
+  const User = model("User", new Schema({ role: String }, { strict: false }));
+}

@@ -1,0 +1,2 @@
+const Document = require("next/document");
+export const legacy = Document;

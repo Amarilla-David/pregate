@@ -1,0 +1,7 @@
+export class OrderController {
+  constructor(private readonly service: any) {}
+
+  async createOrder(data: any) {
+    return this.service.executeOrder(data);
+  }
+}

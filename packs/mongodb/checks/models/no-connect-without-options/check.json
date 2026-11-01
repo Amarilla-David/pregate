@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/models/no-connect-without-options",
+  "version": "1.0.0",
+  "area": "models",
+  "cardinality": "singleton",
+  "dimension": "mongodb.models.connect-options",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "connect-options",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.connect\\s*\\(",
+            "not": {
+              "regex": "(serverSelectionTimeoutMS|maxPoolSize)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} connects without pool/timeout options. Set maxPoolSize and serverSelectionTimeoutMS."
+  }
+}

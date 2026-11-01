@@ -1,0 +1,6 @@
+declare const db: { delete(t: unknown): { where(c: unknown): Promise<unknown> } };
+declare function eq(a: unknown, b: string): unknown;
+declare const users: { id: unknown };
+export async function removeUser(id: string): Promise<void> {
+  await db.delete(users).where(eq(users.id, id));
+}

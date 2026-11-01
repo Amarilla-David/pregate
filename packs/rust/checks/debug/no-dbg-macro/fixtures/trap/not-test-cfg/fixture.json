@@ -1,0 +1,20 @@
+{
+  "language": "rust",
+  "params": {},
+  "target": "src/a.rs",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "not-test-cfg",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "An attribute that mentions test, such as cfg(not(test)), marks production code; the dbg! still ships."
+  }
+}

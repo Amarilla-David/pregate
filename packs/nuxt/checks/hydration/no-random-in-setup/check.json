@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/hydration/no-random-in-setup",
+  "version": "1.0.0",
+  "area": "hydration",
+  "cardinality": "singleton",
+  "dimension": "nuxt.no-random-in-setup",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "random-in-setup",
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "regex": "^Math\\.random$"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "regex": "^Date\\.now$"
+                }
+              }
+            ]
+          },
+          "files": [
+            "pages/**",
+            "components/**",
+            "composables/**",
+            "app/**",
+            "src/pages/**",
+            "src/components/**",
+            "src/composables/**",
+            "src/app/**"
+          ],
+          "ignores": [
+            "**/server/**",
+            "server/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} computes a nondeterministic value in app setup code. Compute it on the server or after mount so SSR and client agree."
+  }
+}

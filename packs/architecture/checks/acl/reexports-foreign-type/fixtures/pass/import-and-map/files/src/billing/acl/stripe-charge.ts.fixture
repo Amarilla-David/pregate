@@ -1,0 +1,13 @@
+
+import type { Charge } from "stripe";
+
+export interface LocalCharge {
+  id: string;
+  amount: number;
+}
+
+export function toLocal(charge: Charge): LocalCharge {
+  return { id: charge.id, amount: charge.amount };
+}
+
+interface Charge { id: string; amount: number }

@@ -1,0 +1,4 @@
+export function f(id: string) {
+  const k = `./reports/legacy/${id}`;
+  return log(`../x.legacy`, k);
+}

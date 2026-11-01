@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/commercial-and-support/requirement-056",
+  "version": "1.0.0",
+  "area": "commercial-and-support",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r056",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-056"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-056 requires current passing project verification: {symbol}."
+  }
+}

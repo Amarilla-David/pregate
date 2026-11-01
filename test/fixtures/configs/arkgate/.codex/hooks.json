@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "ApplyPatch|apply_patch|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 30,
+            "command": "node \"${CODEX_PROJECT_DIR:-${PWD:-.}}/bin/ark-mcp.mjs\" --hook --hook-repair --root \"${CODEX_PROJECT_DIR:-${PWD:-.}}\" --config ark.config.json"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 30,
+            "command": "node \"${CODEX_PROJECT_DIR:-${PWD:-.}}/bin/ark-mcp.mjs\" --session-context --root \"${CODEX_PROJECT_DIR:-${PWD:-.}}\" --config ark.config.json"
+          }
+        ]
+      }
+    ]
+  }
+}

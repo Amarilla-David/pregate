@@ -1,0 +1,4 @@
+export function send(token: string, frame: HTMLIFrameElement): void {
+  window.top!.postMessage({ token }, "*");
+  frame.contentWindow!.postMessage({ token }, "*");
+}

@@ -1,0 +1,182 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string" },
+    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    "engine": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ns": { "const": "core" },
+              "kind": { "const": "builtin" },
+              "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" }
+            },
+            "required": ["ns", "kind", "version"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ns": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+              "kind": { "const": "library" },
+              "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" }
+            },
+            "required": ["ns", "kind", "version"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ns": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+              "kind": { "const": "path" },
+              "path": { "type": "string" }
+            },
+            "required": ["ns", "kind", "path"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ns": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+              "kind": { "const": "git" },
+              "url": { "type": "string" },
+              "ref": { "type": "string" }
+            },
+            "required": ["ns", "kind", "url", "ref"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "methodologies": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$" }
+    },
+    "fitness": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "command": { "type": "array", "items": { "type": "string", "pattern": "[\\s\\S]+" }, "minItems": 1 },
+          "inputs": { "type": "array", "items": { "type": "string", "pattern": "[\\s\\S]+" }, "minItems": 1 },
+          "verificationHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "timeoutMs": { "type": "integer", "minimum": 1 },
+          "maxAgeMs": { "type": "integer", "minimum": 1 },
+          "rationale": { "type": "string", "pattern": "\\S" }
+        },
+        "required": ["command", "inputs", "verificationHash", "timeoutMs", "rationale"],
+        "additionalProperties": false
+      }
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "include": { "type": "array", "items": { "type": "string" } },
+        "exclude": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "generatedMarkers": { "type": "array", "items": { "type": "string" } },
+    "enforcement": { "enum": ["enforce", "shadow", "advisor"] },
+    "layers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "paths": { "type": "array", "items": { "type": "string" } },
+          "mayImport": { "type": "array", "items": { "type": "string" } },
+          "kind": { "enum": ["core", "port", "adapter", "main"] }
+        },
+        "required": ["paths", "mayImport", "kind"],
+        "additionalProperties": false
+      }
+    },
+    "resolve": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "use": { "type": "string" },
+          "params": { "type": "object" },
+          "severity": { "enum": ["deny", "ask", "warn"] },
+          "note": { "type": "string" }
+        },
+        "required": ["use"],
+        "additionalProperties": false
+      }
+    },
+    "overrides": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          { "enum": ["deny", "ask", "warn", "off"] },
+          {
+            "type": "object",
+            "properties": {
+              "severity": { "enum": ["deny", "ask", "warn", "off"] },
+              "enforcement": { "enum": ["enforce", "shadow", "advisor"] },
+              "params": { "type": "object" },
+              "note": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "settled": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rules": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*/[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$" }, "minItems": 2 },
+          "note": { "type": "string", "pattern": "\\S" }
+        },
+        "required": ["rules", "note"],
+        "additionalProperties": false
+      }
+    },
+    "ratchet": {
+      "type": "object",
+      "properties": { "mode": { "enum": ["strict", "no-new"] } },
+      "required": ["mode"],
+      "additionalProperties": false
+    },
+    "loop": {
+      "type": "object",
+      "properties": {
+        "maxDenialsPerFileRule": { "type": "integer", "minimum": 1 },
+        "maxDenialsPerTurn": { "type": "integer", "minimum": 1 },
+        "noProgressLimit": { "type": "integer", "minimum": 1 },
+        "maxStopBlocks": { "type": "integer", "minimum": 0 },
+        "allowAsk": { "type": "boolean" },
+        "maxDetailedViolations": { "type": "integer", "minimum": 1 },
+        "escalate": { "const": "stop" }
+      },
+      "additionalProperties": false
+    },
+    "failMode": { "const": "closed" },
+    "coexist": {
+      "type": "object",
+      "properties": {
+        "arkgate": {
+          "type": "object",
+          "properties": {
+            "ownedByArkgate": { "type": "array", "items": { "type": "string" } },
+            "config": { "type": "string" },
+            "note": { "type": "string" }
+          },
+          "required": ["ownedByArkgate"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "version", "engine", "sources", "methodologies"],
+  "additionalProperties": false
+}

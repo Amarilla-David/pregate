@@ -1,0 +1,4 @@
+import { SectionList, Text } from "react-native";
+export function Contacts({ sections }: { sections: never[] }) {
+  return <SectionList sections={sections} keyExtractor={(i: { id: string }) => i.id} renderItem={({ item }) => <Text>{item.id}</Text>} />;
+}

@@ -1,0 +1,9 @@
+import { Prisma } from "@prisma/client";
+import { prisma } from "~/server/db";
+
+const NEWEST_FIRST = Prisma.raw("ORDER BY created_at DESC");
+const ACTIVE = Prisma.raw(`status = 'active'`);
+
+export async function latest() {
+  return prisma.$queryRaw`SELECT id, title FROM posts WHERE ${ACTIVE} ${NEWEST_FIRST} LIMIT 20`;
+}

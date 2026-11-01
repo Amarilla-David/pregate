@@ -1,0 +1,5 @@
+exports.enqueuePriority = async (queue, priority, item) => {
+  if (!['CRITICAL', 'HIGH', 'NORMAL', 'LOW'].includes(priority)) throw new Error('Invalid named priority');
+  const accepted = await queue.enqueue(priority, item);
+  if (!accepted) throw new Error('Queue did not admit work');
+};

@@ -1,0 +1,5 @@
+import { GetOrderQuery } from "../application/queries/get-order";
+
+export function renderOrder(query: GetOrderQuery) {
+  return query.execute();
+}

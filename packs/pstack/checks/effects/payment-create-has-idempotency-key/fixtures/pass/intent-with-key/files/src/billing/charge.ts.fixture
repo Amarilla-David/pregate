@@ -1,0 +1,8 @@
+
+export async function charge(stripe: Stripe, key: string): Promise<void> {
+  await stripe.paymentIntents.create({ amount: 1200, currency: "usd", idempotencyKey: key });
+}
+
+interface Stripe {
+  paymentIntents: { create(body: object): Promise<void> };
+}

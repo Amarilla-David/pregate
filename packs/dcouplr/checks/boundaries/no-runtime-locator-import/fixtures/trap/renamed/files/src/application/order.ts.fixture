@@ -1,0 +1,2 @@
+import { getDcouplr as obtainRuntime } from 'dcouplr';
+obtainRuntime();

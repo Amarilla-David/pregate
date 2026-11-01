@@ -1,0 +1,6 @@
+
+export function walk(lines: string[]): number {
+  let count = 0;
+  for (const line of lines) if (line.length > 0) count += 1;
+  return count;
+}

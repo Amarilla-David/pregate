@@ -1,0 +1,5 @@
+import { Linking } from "react-native";
+
+export async function canJoin(): Promise<boolean> {
+  return Linking.canOpenURL("exp://expo.dev/@user/app");
+}

@@ -1,0 +1,2 @@
+stage.addValidationPolicy(check);
+export default function check() { if (input) return 1; return true; }

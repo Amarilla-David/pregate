@@ -1,0 +1,156 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/style/no-extend-native",
+  "version": "1.0.0",
+  "area": "style",
+  "cardinality": "singleton",
+  "dimension": "style.extend-native",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "builtin-prototype-write",
+          "utils": {
+            "builtin": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "regex": "^(Object|Array|String|Number|Boolean|Function|Symbol|BigInt|Date|RegExp|Error|EvalError|RangeError|ReferenceError|SyntaxError|TypeError|URIError|AggregateError|Promise|Map|Set|WeakMap|WeakSet|WeakRef|ArrayBuffer|SharedArrayBuffer|DataView|Int8Array|Uint8Array|Uint8ClampedArray|Int16Array|Uint16Array|Int32Array|Uint32Array|Float32Array|Float64Array|BigInt64Array|BigUint64Array)$"
+                },
+                {
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "kind": "identifier",
+                        "regex": "^(globalThis|window|self|global)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(Object|Array|String|Number|Boolean|Function|Symbol|BigInt|Date|RegExp|Error|Promise|Map|Set|WeakMap|WeakSet)$"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "builtin-prototype": {
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "matches": "builtin"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^prototype$"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "subscript_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "matches": "builtin"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "index",
+                        "regex": "^[\"'`]prototype[\"'`]$"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "on-prototype": {
+              "any": [
+                {
+                  "matches": "builtin-prototype"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression"
+                    },
+                    {
+                      "kind": "subscript_expression"
+                    }
+                  ],
+                  "has": {
+                    "field": "object",
+                    "matches": "builtin-prototype"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "any": [
+                  {
+                    "kind": "assignment_expression"
+                  },
+                  {
+                    "kind": "augmented_assignment_expression"
+                  }
+                ],
+                "has": {
+                  "field": "left",
+                  "matches": "on-prototype"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "kind": "member_expression",
+                      "regex": "^(Object|Reflect)\\s*\\.\\s*(defineProperty|defineProperties|assign|setPrototypeOf)$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "has": {
+                        "nthChild": 1,
+                        "matches": "builtin-prototype"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "x-note": "A write to a property of a built-in ECMAScript prototype, or to the prototype itself, by assignment or by Object/Reflect defineProperty, defineProperties, assign or setPrototypeOf with the prototype as the first argument. Reading a prototype method, Object.create(Array.prototype), a project class prototype and declare global type augmentation pass. A local binding that shadows a built-in name is not resolved."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} changes a built-in prototype. Use a standalone function instead."
+  }
+}

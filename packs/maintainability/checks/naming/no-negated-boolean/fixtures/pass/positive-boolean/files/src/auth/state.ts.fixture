@@ -1,0 +1,7 @@
+export interface UserSession {
+  isActive: boolean;
+  hasAccess: boolean;
+  isValid: boolean;
+}
+
+export const isEnabled: boolean = true;

@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function peek(): Promise<unknown> {
+  return redis.eval("return KEYS[1]", 0);
+}

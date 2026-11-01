@@ -1,0 +1,19 @@
+import { randomInt } from "node:crypto";
+
+export function pickWinner(entries: string[]): string {
+  return entries[randomInt(entries.length)] ?? "";
+}
+
+export function today(): string {
+  return Temporal.Now.plainDateISO().toString();
+}
+
+export function region(): string {
+  const fromBun = Bun.env.REGION;
+  return fromBun ?? import.meta.env.REGION ?? "eu";
+}
+
+export async function rate(currency: string): Promise<number> {
+  const response = await fetch(`https://rates.example/${currency}`);
+  return Number(await response.text());
+}

@@ -1,0 +1,6 @@
+import { useState } from "react";
+export function Warm(props: { hot: boolean }) {
+  const [warm, setWarm] = useState(false);
+  if (props.hot) setWarm(true);
+  return <div>{warm ? "warm" : "cold"}</div>;
+}

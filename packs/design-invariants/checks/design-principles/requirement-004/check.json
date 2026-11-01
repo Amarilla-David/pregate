@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/design-principles/requirement-004",
+  "version": "1.0.0",
+  "area": "design-principles",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r004",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-004"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-004 requires current passing project verification: {symbol}."
+  }
+}

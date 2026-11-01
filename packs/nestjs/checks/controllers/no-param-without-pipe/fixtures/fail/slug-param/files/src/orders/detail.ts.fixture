@@ -1,0 +1,8 @@
+import { Controller, Get, Param } from "@nestjs/common";
+@Controller("orders")
+export class OrderDetail {
+  @Get(":slug")
+  getOne(@Param("slug") slug: string) {
+    return { slug };
+  }
+}

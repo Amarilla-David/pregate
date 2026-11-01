@@ -1,0 +1,5 @@
+export const theme = $state({ mode: "light" });
+
+$effect(() => {
+  localStorage.setItem("theme", theme.mode);
+});

@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/dependency-rule",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DEP-ENT-001",
+      "check": "architecture/dependency-rule/entity-imports-outer",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Clean Architecture (R. C. Martin, 2017)",
+        "locator": "ch. 22, The Dependency Rule",
+        "paraphrase": "Source dependencies point inward. Entities do not mention use cases, interface adapters, or frameworks."
+      },
+      "why": "An entity that names a use case or a framework cannot move to another application without dragging that outer ring along.",
+      "fixHint": "Keep the entity on its own types. Let the use case call the entity, and let the adapter implement a port the use case declared.",
+      "avoid": "A type-only import or import() of the outer ring is the same dependency.",
+      "examples": {
+        "pass": "pass/value-object",
+        "fail": "fail/imports-use-case"
+      }
+    },
+    {
+      "id": "DEP-UC-001",
+      "check": "architecture/dependency-rule/usecase-imports-outer",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Clean Architecture (R. C. Martin, 2017)",
+        "locator": "ch. 20-22, use cases and the dependency rule",
+        "paraphrase": "Use cases orchestrate entities. They do not import the web, the database, or a framework. Those details implement interfaces the use case owns."
+      },
+      "why": "A use case that names a web framework or a database client can only run where that detail runs.",
+      "fixHint": "Accept a port (repository, clock, gateway) as an argument. Implement the port in the adapter ring.",
+      "avoid": "Importing the detail through a barrel that still resolves to adapters/ or infra/ keeps the edge.",
+      "examples": {
+        "pass": "pass/calls-entity",
+        "fail": "fail/imports-adapter"
+      }
+    },
+    {
+      "id": "DEP-IA-001",
+      "check": "architecture/dependency-rule/adapter-imports-framework",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Clean Architecture (R. C. Martin, 2017)",
+        "locator": "ch. 22, The Clean Architecture (Interface Adapters; Frameworks and Drivers)",
+        "paraphrase": "Interface adapters convert data between the use cases and the outside world. The frameworks and drivers ring is the outermost circle: it depends on the adapters, never the reverse."
+      },
+      "why": "An adapter that imports the web or database glue in frameworks/ can only be built and tested with that glue present, so swapping the framework means rewriting the adapters too.",
+      "fixHint": "Let the frameworks ring call the controller or gateway and pass in what it needs. Declare the interface the adapter needs next to the adapter and implement it in frameworks/.",
+      "avoid": "A type-only import or import() of frameworks/ is the same dependency. Only folder segments named frameworks or frameworks-and-drivers are matched; package imports such as express belong to CA-DEP-002 when it is selected.",
+      "examples": {
+        "pass": "pass/controller-calls-use-case",
+        "fail": "fail/controller-imports-web-framework"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+import { Prisma } from "@prisma/client";
+import { prisma } from "~/server/db";
+
+export async function filter(name: string) {
+  return prisma.$queryRaw`SELECT id FROM "User" WHERE ${Prisma.raw(`name = '${name}'`)}`;
+}

@@ -1,0 +1,4 @@
+declare const prisma: { session: { deleteMany(args: { where: { userId: string } }): Promise<unknown> } };
+export async function revokeUserSessions(userId: string): Promise<void> {
+  await prisma.session.deleteMany({ where: { userId } });
+}

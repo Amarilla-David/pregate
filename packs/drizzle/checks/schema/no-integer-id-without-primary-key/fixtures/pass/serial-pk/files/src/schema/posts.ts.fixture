@@ -1,0 +1,4 @@
+export const posts = pgTable("posts", {
+  id: serial("id").primaryKey(),
+  authorId: integer("author_id").notNull(),
+});

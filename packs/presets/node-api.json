@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "node-api",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "path",
+      "path": "packs/typescript"
+    },
+    {
+      "ns": "node",
+      "kind": "path",
+      "path": "packs/node"
+    },
+    {
+      "ns": "express",
+      "kind": "path",
+      "path": "packs/express"
+    },
+    {
+      "ns": "postgres",
+      "kind": "path",
+      "path": "packs/postgres"
+    }
+  ],
+  "methodologies": [
+    "core/pregate-integrity",
+    "typescript/strict-types",
+    "typescript/async-results",
+    "typescript/discipline",
+    "typescript/named-exports",
+    "node/runtime",
+    "node/security",
+    "express/middleware",
+    "express/requests",
+    "postgres/client",
+    "postgres/safety",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "shadow",
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

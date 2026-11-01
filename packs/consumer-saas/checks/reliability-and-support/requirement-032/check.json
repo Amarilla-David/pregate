@@ -1,0 +1,27 @@
+{
+  "id": "consumer-saas/reliability-and-support/requirement-032",
+  "version": "1.0.0",
+  "area": "reliability-and-support",
+  "cardinality": "singleton",
+  "dimension": "consumer-saas.r032",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CONSUMER-032"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CONSUMER-032 requires current passing project verification: {symbol}."
+  }
+}

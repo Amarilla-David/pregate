@@ -1,0 +1,11 @@
+declare function Controller(prefix?: string): ClassDecorator;
+declare function Post(path?: string): MethodDecorator;
+declare function Res(opts?: { passthrough?: boolean }): ParameterDecorator;
+interface RawRes { status(c: number): RawRes; end(): void; }
+@Controller("session")
+export class SessionController {
+  @Post("logout")
+  logout(@Res({ passthrough: false }) res: RawRes): void {
+    res.status(204).end();
+  }
+}

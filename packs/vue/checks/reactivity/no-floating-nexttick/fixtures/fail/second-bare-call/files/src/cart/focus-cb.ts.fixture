@@ -1,0 +1,6 @@
+import { nextTick } from "vue";
+
+declare function focus(): void;
+export function focusInput(): void {
+  nextTick();
+}

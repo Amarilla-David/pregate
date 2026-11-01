@@ -1,0 +1,10 @@
+const dbModule = "../infra/" + "db";
+const db = require(dbModule);
+
+export async function driverFor(kind: string): Promise<unknown> {
+  return import(`../infra/drivers/${kind}`);
+}
+
+export function countOrders(): number {
+  return db.count("orders");
+}

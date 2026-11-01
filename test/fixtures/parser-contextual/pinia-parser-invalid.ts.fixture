@@ -1,0 +1,5 @@
+interface InvalidState {
+  _custom: {
+    abstract?:
+  }
+}

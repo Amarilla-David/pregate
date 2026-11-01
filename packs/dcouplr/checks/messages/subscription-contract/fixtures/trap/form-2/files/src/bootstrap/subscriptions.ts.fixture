@@ -1,0 +1,1 @@
+kernel.message.registerHandler((false as unknown as Handler));

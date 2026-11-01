@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/no-non-null-assertion",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.non-null",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "non-null",
+          "rule": {
+            "kind": "non_null_expression"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} asserts a value is non-null. Narrow it, or model the absence in the type."
+  }
+}

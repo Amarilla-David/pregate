@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "tools/build.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

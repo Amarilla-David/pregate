@@ -1,0 +1,15 @@
+import path from "node:path";
+import { Router } from "express";
+
+export const publicRouter = Router();
+
+publicRouter.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+publicRouter.get("/file/:name", (req, res, next) => {
+  const options = { root: path.join(__dirname, "public"), dotfiles: "deny" };
+  res.sendFile(req.params.name, options, (err) => {
+    if (err) next(err);
+  });
+});

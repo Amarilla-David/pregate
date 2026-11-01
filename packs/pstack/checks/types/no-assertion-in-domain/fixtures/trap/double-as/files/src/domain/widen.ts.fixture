@@ -1,0 +1,7 @@
+
+export function fromRow(row: Row): Order {
+  return row as unknown as Order;
+}
+
+interface Row { id: string }
+interface Order { id: string; total: number }

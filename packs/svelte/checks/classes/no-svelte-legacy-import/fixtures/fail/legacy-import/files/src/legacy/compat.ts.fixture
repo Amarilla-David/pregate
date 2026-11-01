@@ -1,0 +1,5 @@
+import { createEventDispatcher } from "svelte/legacy";
+
+export function kind(): string {
+  return "legacy";
+}

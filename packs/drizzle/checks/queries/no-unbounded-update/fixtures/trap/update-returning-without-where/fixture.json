@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/update-returning-trap.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "drizzle-update-returning-no-where",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Chaining .returning() onto db.update(table).set(...) without .where() still updates every row in the table."
+  }
+}

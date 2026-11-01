@@ -1,0 +1,5 @@
+addEventListener("message", function (event: MessageEvent) {
+  // A field named origin inside the payload is attacker data, not the sender's origin.
+  if (event.data.origin === "https://app.example.com") run(event.data.command);
+});
+declare function run(command: string): void;

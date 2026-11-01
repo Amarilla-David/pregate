@@ -1,0 +1,10 @@
+package orders
+
+import "testing"
+
+func BenchmarkRefund(b *testing.B) {
+	b.Skipf("slow on %s", "ci")
+	for i := 0; i < b.N; i++ {
+		Refund(10)
+	}
+}

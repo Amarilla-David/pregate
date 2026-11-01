@@ -1,0 +1,131 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "hexagonal-backend",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "architecture",
+      "kind": "path",
+      "path": "packs/architecture"
+    },
+    {
+      "ns": "typescript",
+      "kind": "path",
+      "path": "packs/typescript"
+    },
+    {
+      "ns": "ddd",
+      "kind": "library",
+      "version": "1.1.0"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "testing",
+      "kind": "library",
+      "version": "1.2.1"
+    }
+  ],
+  "methodologies": [
+    "architecture/clean-architecture",
+    "ddd/ddd-tactical",
+    "clean-code/clean-code",
+    "testing/tdd",
+    "core/pregate-integrity",
+    "architecture/hexagonal",
+    "architecture/cqrs",
+    "architecture/vertical-slice",
+    "architecture/modular-monolith",
+    "architecture/dependency-rule",
+    "architecture/anti-corruption",
+    "architecture/repository",
+    "architecture/layered",
+    "typescript/strict-types",
+    "typescript/async-results",
+    "typescript/named-exports",
+    "typescript/anti-evasion"
+  ],
+  "scope": {
+    "include": [
+      "src/**",
+      "test/**"
+    ],
+    "exclude": [
+      "src/infra/migrations/**"
+    ]
+  },
+  "generatedMarkers": [
+    "@generated",
+    "DO NOT EDIT"
+  ],
+  "enforcement": "enforce",
+  "layers": {
+    "domain": {
+      "paths": [
+        "src/domain/**"
+      ],
+      "mayImport": [],
+      "kind": "core"
+    },
+    "application": {
+      "paths": [
+        "src/application/**"
+      ],
+      "mayImport": [
+        "domain",
+        "ports"
+      ],
+      "kind": "core"
+    },
+    "ports": {
+      "paths": [
+        "src/application/ports/**"
+      ],
+      "mayImport": [
+        "domain"
+      ],
+      "kind": "port"
+    },
+    "infra": {
+      "paths": [
+        "src/infra/**"
+      ],
+      "mayImport": [
+        "domain",
+        "application",
+        "ports"
+      ],
+      "kind": "adapter"
+    },
+    "main": {
+      "paths": [
+        "src/main.ts"
+      ],
+      "mayImport": [
+        "*"
+      ],
+      "kind": "main"
+    }
+  },
+  "resolve": {
+    "fn.size": {
+      "use": "CC-FN-001",
+      "params": {
+        "max": 40
+      },
+      "note": "Handlers and mappers stay under 40 lines. Core already owns the dimension."
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

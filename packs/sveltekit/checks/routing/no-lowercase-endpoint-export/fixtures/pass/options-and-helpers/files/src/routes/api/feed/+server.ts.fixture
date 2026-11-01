@@ -1,0 +1,16 @@
+import { json } from "@sveltejs/kit";
+import { feedCache } from "$lib/server/feed";
+
+export const prerender = true;
+export const config = { runtime: "edge" };
+export const _cacheSeconds = 60;
+
+function get(key: string): string[] {
+  return feedCache.get(key) ?? [];
+}
+
+async function getFeed() {
+  return json(get("latest"), { headers: { "cache-control": `max-age=${_cacheSeconds}` } });
+}
+
+export { getFeed as GET };

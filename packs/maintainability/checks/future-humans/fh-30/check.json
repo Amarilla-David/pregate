@@ -1,0 +1,27 @@
+{
+  "id": "maintainability/future-humans/fh-30",
+  "version": "1.0.0",
+  "area": "future-humans",
+  "cardinality": "singleton",
+  "dimension": "maintainability.fh-30",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "FH-30"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "FH-30 requires current passing project verification: {symbol}."
+  }
+}

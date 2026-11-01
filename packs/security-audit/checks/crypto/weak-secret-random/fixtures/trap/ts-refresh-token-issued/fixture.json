@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/server/session.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "hook-scoped-guard",
+    "origin": "corpus",
+    "discovered": "2026-10-25",
+    "note": "refreshToken is exempt only inside a React hook, where it guards stale requests; issued by a server function it is a credential."
+  }
+}

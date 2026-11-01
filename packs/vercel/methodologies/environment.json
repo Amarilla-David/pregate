@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vercel/environment",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VERCEL-003",
+      "check": "vercel/environment/requirement-003",
+      "defaults": {
+        "verifier": "VERCEL-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/environment-variables; checked 2026-10-05; docs/features/vercel-pack.md, rule 3",
+        "paraphrase": "Each deployed environment and branch must receive only its reviewed environment-variable scope, including applicable branch overrides."
+      },
+      "why": "Each deployed environment and branch must receive only its reviewed environment-variable scope, including applicable branch overrides.",
+      "fixHint": "Bind VERCEL-003 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-003; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-004",
+      "check": "vercel/environment/requirement-004",
+      "defaults": {
+        "verifier": "VERCEL-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/environment-variables; checked 2026-10-05; docs/features/vercel-pack.md, rule 4",
+        "paraphrase": "A required environment-variable change must be verified in a new applicable deployment; a previous deployment must not be assumed to receive the change."
+      },
+      "why": "A required environment-variable change must be verified in a new applicable deployment; a previous deployment must not be assumed to receive the change.",
+      "fixHint": "Bind VERCEL-004 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-004; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

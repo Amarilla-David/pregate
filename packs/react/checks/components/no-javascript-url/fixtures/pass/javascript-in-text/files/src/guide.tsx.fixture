@@ -1,0 +1,10 @@
+export function Guide(props: { url: string; base: string }) {
+  return (
+    <article title="javascript: the good parts">
+      <a href="/guides/javascript">JavaScript guide</a>
+      <img src="/javascript-logo.png" alt="JavaScript" />
+      <a href={props.url}>Read more</a>
+      <a href={`${props.base}/javascript:intro`}>Intro</a>
+    </article>
+  );
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/commented-key.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-secret",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Commenting the key out leaves it in the file. Git still has the secret."
+  }
+}

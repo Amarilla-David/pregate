@@ -1,0 +1,2 @@
+const view = <Total />;
+expect(render(view).text).toBe("15");

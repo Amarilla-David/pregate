@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "mattpocock/design",
+  "version": "1.1.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MP-PARAMS-001",
+      "relations": [
+        {
+          "with": "clean-code/CC-FN-002",
+          "kind": "duplicates",
+          "why": "Both count parameters of TypeScript and JavaScript functions and share the fn.params dimension: CC-FN-002 denies above 3 and MP-PARAMS-001 warns above 4, so the warning only repeats a stricter denial.",
+          "settle": "Pick the adopted limit with \"resolve\": {\"fn.params\": {\"use\": \"clean-code/CC-FN-002\"}} or the mattpocock alias."
+        }
+      ],
+      "check": "mattpocock/interfaces/fn-max-params",
+      "defaults": {
+        "max": 4
+      },
+      "severity": "warn",
+      "source": {
+        "work": "Matt Pocock — Skills For Real Engineers",
+        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/codebase-design/SKILL.md — Designing for testability / Small surface area",
+        "paraphrase": "Reduce the inputs a caller must understand when choosing a module interface."
+      },
+      "why": "A wide function input surface makes calling and testing the function harder. Four inputs is this pack's starting calibration, not an upstream numeric rule or a measure of module depth.",
+      "fixHint": "Group inputs that form a genuine domain concept, or simplify the function's responsibility.",
+      "avoid": "This metric counts effective inputs, including destructuring, inline object leaves and tuple-rest slots. Named aggregate types are opaque. It applies to parsed functions/methods, including internal helpers; it does not identify public seams or measure leverage, semantic depth, method count, ordering constraints or error modes. Tune max and paths; do not pad an implementation or disguise unrelated inputs in an options bag.",
+      "examples": {
+        "pass": "pass/four",
+        "fail": "fail/five"
+      }
+    },
+    {
+      "id": "MP-ENUM-001",
+      "check": "mattpocock/types/no-enum",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Total TypeScript (Matt Pocock)",
+        "locator": "Enums Considered Harmful / Prefer as const and union types over TypeScript enums",
+        "paraphrase": "Avoid TypeScript enums in application code; use union types or as-const objects that do not emit runtime IIFEs or introduce nominal compatibility surprises."
+      },
+      "why": "TypeScript enums emit runtime objects, create reverse-mapping pitfalls for numeric enums, and require importing the enum symbol at every call site instead of passing plain literal values.",
+      "fixHint": "Replace the enum with a literal union (`type Status = 'pending' | 'paid'`) or an `as const` object (`const Status = { Pending: 'pending' } as const`).",
+      "avoid": "Both standard `enum` and `const enum` declarations are flagged as advisory warnings. Ambient `declare enum` declarations describing external packages are ignored.",
+      "examples": {
+        "pass": "pass/as-const-object",
+        "fail": "fail/numeric-enum"
+      }
+    }
+  ]
+}

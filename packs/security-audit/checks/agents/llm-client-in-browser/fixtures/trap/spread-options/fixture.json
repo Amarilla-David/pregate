@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/assistant.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "split-arguments",
+    "note": "An options object built apart from the constructor and a quoted key still ship the key to the browser.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

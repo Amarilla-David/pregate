@@ -1,0 +1,20 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "src/commented.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-only-select",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "A select block containing only comments still has zero communication or default cases and blocks forever."
+  }
+}

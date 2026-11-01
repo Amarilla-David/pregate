@@ -1,0 +1,8 @@
+
+export async function byId(id: string, pool: Pool): Promise<Row> {
+  const result = await pool.query<Row>("SELECT * FROM users WHERE id = " + id);
+  return result.rows[0];
+}
+
+interface Row { id: string }
+interface Pool { query<T>(sql: string): Promise<{ rows: T[] }> }

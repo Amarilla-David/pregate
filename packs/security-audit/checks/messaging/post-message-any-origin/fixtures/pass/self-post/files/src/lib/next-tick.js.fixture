@@ -1,0 +1,7 @@
+// Corpus look-alike (nextTick shims): window.postMessage delivers to the sending window itself.
+export function nextTick(run) {
+  queue.push(run);
+  window.postMessage("tick", "*");
+  globalThis.window.postMessage("tick", "*");
+}
+const queue = [];

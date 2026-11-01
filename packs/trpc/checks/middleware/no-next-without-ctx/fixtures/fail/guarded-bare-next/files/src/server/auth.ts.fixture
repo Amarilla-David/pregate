@@ -1,0 +1,3 @@
+import { t } from "./trpc";
+import { assertUser } from "./guards";
+export const authed = t.procedure.use(({ ctx, next }) => { assertUser(ctx); return next(); });

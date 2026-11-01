@@ -1,0 +1,9 @@
+import { redis } from "./client";
+
+export async function countSessions(): Promise<number> {
+  let total = 0;
+  for await (const key of redis.scanIterator({ MATCH: "session:*" })) {
+    total += 1;
+  }
+  return total;
+}

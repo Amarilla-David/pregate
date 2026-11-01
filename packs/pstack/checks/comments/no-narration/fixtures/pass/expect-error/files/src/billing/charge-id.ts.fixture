@@ -1,0 +1,5 @@
+
+// @ts-expect-error stripe types lag the pinned SDK by one field
+export function chargeId(value: { id: string }): string {
+  return value.id;
+}

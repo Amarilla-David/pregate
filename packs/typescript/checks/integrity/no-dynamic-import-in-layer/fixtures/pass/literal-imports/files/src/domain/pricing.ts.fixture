@@ -1,0 +1,7 @@
+const rules = require("./pricing-rules");
+
+export async function priceFor(sku: string): Promise<number> {
+  const { table } = await import("./price-table");
+  const { holidays } = await import(`./calendar`);
+  return (table[sku] ?? 0) * (holidays.length > 0 ? rules.holidayFactor : 1);
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/queries/drop-draft.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "subscript-write",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "db[\"delete\"] is the same write as db.delete. Bracket access does not make a query a command."
+  }
+}

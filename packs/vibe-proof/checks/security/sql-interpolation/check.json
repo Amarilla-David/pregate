@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/security/sql-interpolation",
+  "version": "1.0.1",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "security.sql-interpolation",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sql-interp",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^(query|execute|raw|unsafe)$"
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "kind": "arguments",
+                  "has": {
+                    "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                    "any": [
+                      { "matches": "sql-template" },
+                      {
+                        "matches": "transparent-wrapper",
+                        "has": {
+                          "matches": "sql-template",
+                          "stopBy": { "not": { "matches": "transparent-wrapper" } }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "utils": {
+            "sql-template": { "kind": "template_string", "has": { "kind": "template_substitution" } },
+            "transparent-wrapper": {
+              "any": [
+                { "kind": "parenthesized_expression" },
+                { "kind": "as_expression" },
+                { "kind": "satisfies_expression" },
+                { "kind": "non_null_expression" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} interpolates a value into the first SQL argument of a query, execute, raw, or unsafe call."
+  }
+}

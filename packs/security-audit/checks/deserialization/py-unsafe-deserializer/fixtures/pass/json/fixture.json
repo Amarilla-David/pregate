@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/cache.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

@@ -1,0 +1,5 @@
+
+export function label(isOpen: boolean): string {
+  if (isOpen) return "open";
+  return "closed";
+}

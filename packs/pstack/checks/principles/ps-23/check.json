@@ -1,0 +1,27 @@
+{
+  "id": "pstack/principles/ps-23",
+  "version": "1.0.0",
+  "area": "principles",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-23",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-23"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-23 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/tw/var-css-module.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "css-module",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A CSS module member looks typed and local, but the Tailwind scanner still sees no class candidate; opaque is opaque regardless of the module system."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/middleware/no-json-limit-missing",
+  "version": "1.0.0",
+  "area": "middleware",
+  "cardinality": "singleton",
+  "dimension": "express.json-limit",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "parser-without-limit",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "express\\.(json|urlencoded)$"
+            },
+            "not": {
+              "regex": "\\blimit\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} omits an explicit body size limit. Express defaults to 100kb; set an explicit limit only if the project requires a different policy."
+  }
+}

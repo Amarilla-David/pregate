@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "testing/tdd",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "TDD-FOCUS-001",
+      "check": "testing/testing/no-focused-tests",
+      "defaults": {
+        "paths": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/__tests__/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Test-Driven Development: By Example (K. Beck, 2002)",
+        "locator": "Part III, ch. 27, Testing Patterns (Clean Check-in)",
+        "paraphrase": "Before integrating, the whole suite runs and passes; a change that leaves only part of the suite running hides the failures in the rest."
+      },
+      "why": "A focused or skipped test silently switches off the rest of the suite for everyone who runs it.",
+      "fixHint": "Remove the focus or skip modifier and make the test pass; if it cannot pass yet, report that instead of hiding the test.",
+      "avoid": "Bracket access, aliases or destructuring of the focused function, and modifiers in the middle of a chain. Not reported: Playwright's runtime skip test.skip(condition, reason) called inside a test body, hook or describe callback, when the condition reads a runtime value (an identifier, member access, call or await) and the reason is a string; from a describe callback it conditionally skips the whole group, which is accepted. A top-level test.skip(cond, reason), a literal or always-true condition (true, 1, !0, !!1, an object, array, new expression, sequence, spread or function, also in parentheses or a cast), test.skip(title, fn), it.skip(...) and every .only stay reported. Known gaps: an always-true condition that still names a value (true || x, a const holding true) and Mocha's TDD-UI test.skip(titleVar, 'reason').",
+      "examples": {
+        "pass": "pass/plain-tests",
+        "fail": "fail/only-and-skip"
+      }
+    },
+    {
+      "id": "TDD-SKIP-001",
+      "check": "testing/testing/no-unconditional-skip",
+      "defaults": {
+        "paths": [
+          "**/test_*.py",
+          "**/*_test.py",
+          "**/*_test.go"
+        ]
+      },
+      "severity": "warn",
+      "source": {
+        "work": "Test-Driven Development: By Example (K. Beck, 2002)",
+        "locator": "Part III, ch. 27, Testing Patterns (Clean Check-in); pytest skipping docs https://docs.pytest.org/en/stable/how-to/skipping.html; Go testing package https://pkg.go.dev/testing#hdr-Skipping",
+        "paraphrase": "Before integrating, the whole suite runs and passes. pytest and Go both offer conditional skips for tests that cannot run in a given environment."
+      },
+      "why": "An unconditional skip in Python or Go hides a test from every run, so the suite reports green without checking that behavior.",
+      "fixHint": "Make the test pass and remove the skip. If it can only run in some environments, state the condition with skipif, skipUnless, a guarded pytest.skip() or if testing.Short() { t.Skip(...) }.",
+      "avoid": "Moving the skip into pytestmark, a unittest class decorator, self.skipTest() or a subtest closure, or swapping it for an always-true skipif.",
+      "examples": {
+        "pass": "pass/conditional-skips",
+        "fail": "fail/skip-decorator"
+      }
+    },
+    {
+      "id": "TDD-DEL-001",
+      "check": "testing/testing/assertions-no-decrease",
+      "defaults": {
+        "paths": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/__tests__/**"
+        ]
+      },
+      "severity": "ask",
+      "source": {
+        "work": "Test Desiderata (K. Beck, 2019)",
+        "locator": "the behavioral and predictive properties",
+        "paraphrase": "A test earns its keep by reacting to changes in behavior and by predicting whether the code works in production; a test that checks less predicts less."
+      },
+      "why": "Removing assertions to get a green run trades a visible failure for an invisible one.",
+      "fixHint": "Keep the assertions and change the production code; if the expected behavior really changed, ask the user and rewrite the assertion for the new behavior instead of deleting it.",
+      "avoid": "Commenting assertions out, deleting the test file, or moving the checks into code that never runs.",
+      "examples": {
+        "pass": "pass/assertion-added",
+        "fail": "fail/assertion-removed"
+      }
+    },
+    {
+      "id": "TEST-NOCATCH-001",
+      "check": "testing/testing/no-try-catch-in-test",
+      "defaults": {
+        "paths": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/__tests__/**"
+        ]
+      },
+      "severity": "warn",
+      "source": {
+        "work": "xUnit Test Patterns (G. Meszaros, 2007) and Jest / Vitest expect().toThrow documentation",
+        "locator": "Expected Exception Test / Avoid manual try-catch in tests",
+        "paraphrase": "Assert thrown exceptions and rejected promises through dedicated matcher APIs rather than wrapping the call in a manual try/catch block."
+      },
+      "why": "When a test wraps an operation in try/catch and asserts inside the catch block, a regression where the operation stops throwing skips the catch block and lets the test pass silently.",
+      "fixHint": "Use `expect(() => fn()).toThrow(...)` for synchronous throws or `await expect(promise).rejects.toThrow(...)` for async rejections.",
+      "avoid": "try/finally blocks without a catch clause (used for resource teardown) pass. Only try statements with a catch clause inside test() or it() callbacks are flagged.",
+      "examples": {
+        "pass": "pass/expect-to-throw",
+        "fail": "fail/manual-try-catch-in-test"
+      }
+    }
+  ]
+}

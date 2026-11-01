@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "vibe-proof-production",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "vibe-proof",
+      "kind": "path",
+      "path": "packs/vibe-proof"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "typescript",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "clean-code/clean-code",
+    "core/pregate-integrity",
+    "vibe-proof/secrets",
+    "vibe-proof/transport",
+    "vibe-proof/hygiene",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "enforce",
+  "overrides": {
+    "vibe-proof/VP-CONSOLE-001": {
+      "enforcement": "shadow",
+      "note": "Observe logging leftovers while secret and transport rules enforce."
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

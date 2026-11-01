@@ -1,0 +1,3 @@
+stage?.['addValidationPolicy']?.(/* policy */ (async () => true) as Policy);
+(stage.addVerificationPolicy)(function* () {});
+stage.addValidationPolicy(async () => true, ...extras);

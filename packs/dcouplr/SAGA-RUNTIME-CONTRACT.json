@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "upstreamVersion": "0.1.3-beta",
+  "requirements": [
+    {
+      "id": "DCP-SAGA-RUNTIME-001",
+      "statement": "A saga owner must register and validate the complete graph before start. Node identities and expected or previous step references must have one owner and an explicit meaning. Use of the deprecated structured-saga API must have a recorded version and replacement decision.",
+      "when": "The product uses DStructuredSaga or its public node and event-builder contracts. This pack must not force new adoption of a deprecated API.",
+      "verify": "Exercise the actual registered graph, including duplicate or missing references and registration after start. The pinned runtime validates join references to steps but does not validate previousStepId or wire nodes added while running. Joins cannot name another join as an expected step. Review the declaration's deprecation and the product's supported-version decision.",
+      "apiReferences": [{ "type": "DStructuredSaga", "members": ["constructor", "registerNode", "start"] }, { "type": "IStructuredSaga", "members": ["registerNode", "start"] }, { "type": "StructuredSagaNode" }, { "type": "IStructuredSagaStep", "members": ["stepId", "previousStepId"] }, { "type": "IStructuredSagaJoinStep", "members": ["stepId", "expectedStepIds"] }],
+      "source": "dist/index.mjs:3688-3764; dist/index.d.mts:251-315",
+      "canaries": ["saga registration after start is stored but has no input subscription", "saga previous step references are not validated at start", "saga join cannot refer to another join as an expected step"]
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-002",
+      "statement": "A saga boundary must validate authorization, organization scope, event identity and payload before admission. A matching sagaId must not be treated as authorization or proof that an internal step ran. Data shared with queued handlers must have explicit mutation ownership.",
+      "when": "An external, recovered or concurrently mutable event can reach a structured saga.",
+      "verify": "Reject wrong-organization, forged-source, malformed-context and invalid-payload events through the actual boundary. Verify exact saga identity and immutable or copied payload ownership. The pinned live matcher checks only a string sagaId; recovered events bypass that matcher. Its queue clone copies top-level context and saga context but shares payload and other nested values.",
+      "apiReferences": [{ "type": "IStructuredSagaContextRef" }, { "type": "ISagaEventContext" }, { "type": "IEvent", "members": ["payload", "ctx"] }],
+      "source": "dist/index.mjs:4029-4036,4072-4076,4240-4269; dist/index.d.mts:255-260; dist/index-C3YI4Tf9.d.mts:ISagaEventContext",
+      "canaries": ["saga input admits matching ID without validating source branch or step identity", "saga ignores input without its exact saga ID", "saga queue copy shares payload and nested context references", "saga recovered input is processed without live saga ID admission", "saga join accepts success signals for steps whose handlers never ran"]
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-003",
+      "statement": "A saga handler must complete its owned asynchronous work and return the declared outcome. It must use literal failure for an expected failed step, or an observed exception for an unexpected failure. Repeated delivery must not repeat an unsafe business effect.",
+      "when": "A registered structured-saga step performs a decision or effect.",
+      "verify": "Hold and reject actual step operations, verify success and failure signals, and test duplicate delivery, restart and replay with the product's effect idempotency key. Void means success in the pinned API; false and unknown values are also runtime successes and must not be used as failure signals. In-memory duplicate suppression ends when stop resets state.",
+      "apiReferences": [{ "type": "IStructuredSagaStep", "members": ["handler"] }, { "type": "StructuredSagaStepOutcome" }, { "type": "StructuredSagaStepState" }, { "type": "buildStructuredSagaSuccessEventType" }],
+      "source": "dist/index.mjs:3746-3751,4077-4117; dist/index.d.mts:252-254,261-270,293",
+      "canaries": ["saga handler void result is treated as success", "saga handler false result is treated as success", "saga handler unknown text result is treated as success", "saga handler exception is reported then follows failure compensation", "saga duplicate input is ignored until stop and restart reset its state"]
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-004",
+      "statement": "Each compensating effect must have an explicit failure, retry and idempotency policy. A checkpoint must define which successful effects are retained and which failed effects still need compensation. Compensation must not be assumed to be an atomic rollback.",
+      "when": "The graph has compensate, previousStepId or isCheckpoint behavior, or a join can compensate a completed branch.",
+      "verify": "Verify actual own-before-previous ordering, failure propagation and repeat safety. A succeeded checkpoint blocks a later compensation request, but a failed checkpoint still runs its own compensation. Reject a compensation promise and verify the owner's recovery policy: the pinned runtime can retain running state, remove the queued event and ignore later input without raising branch failure.",
+      "apiReferences": [{ "type": "IStructuredSagaStep", "members": ["compensate", "previousStepId", "isCheckpoint"] }, { "type": "buildStructuredSagaCompensationEventType" }, { "type": "StructuredSagaStepState" }],
+      "source": "dist/index.mjs:4093-4139,4199-4216; dist/index.d.mts:261-270,299",
+      "canaries": ["saga literal failure runs own compensation before branch failure and previous request", "saga succeeded step runs compensation", "saga succeeded checkpoint blocks compensation", "saga failed checkpoint still runs its own compensation", "saga compensation rejection leaves the step running and its later input ignored"]
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-005",
+      "statement": "A saga join must use trusted completion signals and a verified any or every branch policy. Winning, losing, failing and already completed branches must have explicit business outcomes. A join signal alone must not prove that its expected handlers ran.",
+      "when": "The graph registers a join or consumes structured-saga success, branch-failure or cancellation events.",
+      "verify": "Exercise distinct successes, duplicate or forged success, one or all failed branches, already succeeded losers and same-branch siblings. The pinned any join cancels a different idle branch but does not cancel an idle sibling in the winner's branch; an already succeeded loser can be compensated. Every failure cancels branches and requests compensation for recorded successes. Verify actual application effects and failure outputs, not only counter equality.",
+      "apiReferences": [{ "type": "IStructuredSagaJoinStep" }, { "type": "StructuredSagaJoinMode" }, { "type": "buildStructuredSagaBranchFailureEventType" }, { "type": "buildStructuredSagaBranchCancelEventType" }, { "type": "buildStructuredSagaSuccessEventType" }],
+      "source": "dist/index.mjs:4140-4198; dist/index.d.mts:271-280,293-299",
+      "canaries": ["saga every join resolves once after all distinct success signals", "saga join accepts success signals for steps whose handlers never ran", "saga any join cancels an idle sibling in a different branch", "saga any join does not cancel an idle sibling in the winner's branch", "saga any join compensates a sibling that succeeded before the join is processed", "saga every join failure compensates prior success and cancels later idle work", "saga any join permits another branch to win after one failure", "saga any join fails once only after all branches fail"]
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-006",
+      "statement": "A saga recovery owner must establish readiness and observe recovery failure before admitting business work. Calling start must not be treated as awaited recovery or a healthy readiness check.",
+      "when": "A saga starts or restarts with queued or stored work.",
+      "verify": "Hold and reject the actual recovery operation and verify the product's readiness barrier, failure observation and admission policy. The pinned start returns void, recovery rejection can become unhandled, and live input can be processed while recovery is pending. Validate recovered identity and data before any handler effect. Bind actual queue/adapter and owner inputs.",
+      "apiReferences": [{ "type": "DStructuredSaga", "members": ["start"] }, { "type": "IStructuredSaga", "members": ["start"] }, { "type": "IQueue", "members": ["recover"] }, { "type": "IQueuePersistence", "members": ["claimRecovery"] }],
+      "source": "dist/index.mjs:3726-3735,4029-4070; dist/index.d.mts:282-288,309-310",
+      "canaries": ["saga start returns before recovery and live input can run during recovery", "saga recovery rejection escapes start as an unhandled rejection", "saga recovered input is processed without live saga ID admission"]
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-007",
+      "statement": "A saga's durable-work and replay contract must verify actual storage selection, recovery, acknowledgement and business-effect idempotency. A configured persistence singleton or in-memory step state must not stand in for durable execution state.",
+      "when": "A saga must survive process loss, resume effects or share a queue identity across instances. A deliberately volatile custom queue needs an explicit loss policy.",
+      "verify": "Observe actual queue storage calls and restart/replay through the configured adapter. The pinned saga admits a built-in queue when a persistence singleton exists, but that queue's transient fallback does not select the singleton repository. Step and join states are in memory and reset on stop. Verify writer ownership, loss windows and idempotent effect keys; an empty queue is not proof that effects were committed once.",
+      "apiReferences": [{ "type": "ISystemDependencyFactories", "members": ["IQueue", "IQueuePersistence"] }, { "type": "IQueuePersistence" }, { "type": "StructuredSagaStepState" }],
+      "source": "dist/index.mjs:3746-3751,4039-4070,4270-4293; dist/index.d.mts:254,447-453",
+      "canaries": ["saga built-in queue accepts a persistence singleton without actually selecting its repository", "saga duplicate input is ignored until stop and restart reset its state"]
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-008",
+      "statement": "A saga lifecycle owner must stop new admission and await or explicitly reject in-flight effects before it reports shutdown. Cancellation, handler latency and queue saturation must have bounded named policies. A cancellation event or stop return must not be treated as an abort or completed drain.",
+      "when": "The product stops, cancels, times out or shuts down a running structured saga.",
+      "verify": "Hold actual handler work across stop and cancellation, and verify the caller's owned completion barrier, timeout and failure propagation. The pinned stop returns void and an in-flight handler can still emit success; queued cancellation cannot interrupt the handler ahead of it. Queue saturation rejects blocking delivery without running the handler. Include missing-await, lost-failure and unbounded-handler failing controls.",
+      "apiReferences": [{ "type": "DStructuredSaga", "members": ["stop"] }, { "type": "IStructuredSaga", "members": ["stop"] }, { "type": "IStructuredSagaStep", "members": ["handler"] }, { "type": "buildStructuredSagaBranchCancelEventType" }, { "type": "IQueue", "members": ["enqueue", "peek", "dequeue"] }],
+      "source": "dist/index.mjs:3737-3753,4039-4069,4119-4130; dist/index.d.mts:268,287-288,311-312",
+      "canaries": ["saga stop returns before an in-flight handler and its success signal", "saga cancellation queued behind a running handler does not abort or compensate it", "saga queue saturation returns a delivery error without running the handler"]
+    }
+  ]
+}

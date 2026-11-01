@@ -1,0 +1,15 @@
+import { prisma } from "~/server/db";
+
+export function transfer(from: string, to: string, amount: number) {
+  return prisma.$transaction(async (tx) => {
+    const sender = await tx.account.update({
+      data: { balance: { decrement: amount } },
+      where: { email: from },
+    });
+    if (sender.balance < 0) throw new Error(`${from} doesn't have enough to send ${amount}`);
+    return tx.account.update({
+      data: { balance: { increment: amount } },
+      where: { email: to },
+    });
+  });
+}

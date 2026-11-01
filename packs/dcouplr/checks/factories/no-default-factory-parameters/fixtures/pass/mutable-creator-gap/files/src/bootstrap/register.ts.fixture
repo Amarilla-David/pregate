@@ -1,0 +1,1 @@
+let creator = (input = {}, kernel) => input; stage.addFactoryMethod(creator);

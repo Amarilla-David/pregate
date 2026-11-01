@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "context": {
+    "scope": { "include": ["src/**"], "exclude": ["src/legacy/**"] },
+    "generatedMarkers": ["@generated"]
+  },
+  "target": "src/api/client.ts",
+  "before": "before/",
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }] }
+}

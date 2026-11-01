@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/chat.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  }
+}

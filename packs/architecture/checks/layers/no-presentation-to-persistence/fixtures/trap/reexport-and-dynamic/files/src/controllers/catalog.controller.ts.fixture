@@ -1,0 +1,6 @@
+export { CatalogDao } from "../dao/catalog.dao";
+
+export async function loadDao() {
+  const { CatalogDb } = await import("../db/catalog");
+  return new CatalogDb();
+}

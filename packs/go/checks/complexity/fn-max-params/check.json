@@ -1,0 +1,31 @@
+{
+  "id": "go/complexity/fn-max-params",
+  "version": "1.0.0",
+  "area": "complexity",
+  "cardinality": "singleton",
+  "dimension": "go.fn.params",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {
+    "max": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "metric",
+    "metric": "fn.params"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Function parameter count exceeds the selected limit."
+  }
+}

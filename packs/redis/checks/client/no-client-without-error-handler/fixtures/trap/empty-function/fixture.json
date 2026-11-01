@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/cache/fn-client.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-function-handler",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "function () {} swallows the error the same way an empty arrow does. The keyword form is not a real handler."
+  }
+}

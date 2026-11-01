@@ -1,0 +1,8 @@
+import fs from "node:fs";
+declare const app: { get(path: string, fn: (req: unknown, res: { send(b: string): void }) => void): void };
+export function mountReport(): void {
+  app.get("/report", (_req, res) => {
+    const data = fs.readFileSync("report.json", "utf8");
+    res.send(data);
+  });
+}

@@ -1,0 +1,4 @@
+declare const prisma: { user: { updateMany(args: { where: Record<string, never>; data: { active: boolean } }): Promise<unknown> } };
+export async function deactivateAll(): Promise<void> {
+  await prisma.user.updateMany({ where: {}, data: { active: false } });
+}

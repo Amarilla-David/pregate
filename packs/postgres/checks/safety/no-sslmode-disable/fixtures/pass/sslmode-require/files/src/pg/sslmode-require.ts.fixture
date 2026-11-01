@@ -1,0 +1,2 @@
+
+export const cs: string = process.env.DATABASE_URL + "?sslmode=require";

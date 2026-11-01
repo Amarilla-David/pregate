@@ -1,0 +1,8 @@
+
+export async function charge(stripe: Stripe): Promise<void> {
+  await stripe.charges.create({ amount: 1200, currency: "usd" });
+}
+
+interface Stripe {
+  charges: { create(body: object): Promise<void> };
+}

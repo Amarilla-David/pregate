@@ -1,0 +1,7 @@
+
+export async function ping(id: string, client: Client): Promise<void> {
+  log(`ping ${id}`, await client.query("SELECT 1"));
+}
+
+declare function log(message: string, value: unknown): void;
+interface Client { query(sql: string): Promise<unknown> }

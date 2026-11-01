@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/exports/no-export-star",
+  "version": "1.0.0",
+  "area": "exports",
+  "cardinality": "singleton",
+  "dimension": "typescript.export-star",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "star-export",
+          "rule": {
+            "kind": "export_statement",
+            "regex": "^\\s*export\\s*\\*"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} re-exports a whole module with export *. Name the bindings it re-exports."
+  }
+}

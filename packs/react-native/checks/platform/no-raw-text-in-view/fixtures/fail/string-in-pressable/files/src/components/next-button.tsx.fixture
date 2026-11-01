@@ -1,0 +1,5 @@
+import { Pressable } from "react-native";
+
+export function NextButton({ onPress }: { onPress: () => void }) {
+  return <Pressable onPress={onPress}>{"Continue"}</Pressable>;
+}

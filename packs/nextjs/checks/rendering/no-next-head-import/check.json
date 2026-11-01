@@ -1,0 +1,83 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/rendering/no-next-head-import",
+  "version": "1.0.1",
+  "area": "rendering",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-next-head-import",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "next-head-import",
+          "files": [
+            "app/**/*",
+            "src/app/**/*"
+          ],
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^next/head$",
+            "inside": {
+              "kind": "string",
+              "any": [
+                {
+                  "inside": {
+                    "field": "source",
+                    "any": [
+                      {
+                        "kind": "import_statement"
+                      },
+                      {
+                        "kind": "export_statement"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  },
+                  "inside": {
+                    "kind": "arguments",
+                    "inside": {
+                      "kind": "call_expression",
+                      "has": {
+                        "field": "function",
+                        "any": [
+                          {
+                            "kind": "import"
+                          },
+                          {
+                            "kind": "identifier",
+                            "regex": "^require$"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports next/head from an App Router file. Export metadata from a page or layout instead."
+  }
+}

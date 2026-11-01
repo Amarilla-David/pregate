@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/Settings.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "env-service-role",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Reading the key from process.env does not make it an anon key. A SERVICE_ROLE value in client-reachable code ships the RLS bypass to the browser."
+  }
+}

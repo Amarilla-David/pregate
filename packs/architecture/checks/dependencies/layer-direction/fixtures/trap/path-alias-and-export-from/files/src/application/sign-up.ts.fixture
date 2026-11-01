@@ -1,0 +1,10 @@
+import { sendWelcome } from "@/infra/mailer";
+import { User } from "@/domain/user";
+
+export * from "../infra/mail-templates";
+
+export async function signUp(email: string): Promise<User> {
+  const user = new User(email);
+  await sendWelcome(user.email);
+  return user;
+}

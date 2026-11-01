@@ -1,0 +1,5 @@
+builder['declareIntent']('ORDER')[`addFactoryMethod`](() => ({}));
+((builder.declareIntent('ORDER') as Step)!).addVerificationPolicy();
+builder?.addMandatoryInputFields?.({})?.register?.();
+(builder.addFactoryMethod(() => ({})) satisfies Stage).addValidationPolicy();
+builder.addFactoryMethod(() => ({})).createOnly().register();

@@ -1,0 +1,19 @@
+{
+  "language": "typescript",
+  "target": "src/application/order.ts",
+  "before": null,
+  "params": {
+    "allow": []
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      },
+      {
+        "line": 4
+      }
+    ]
+  }
+}

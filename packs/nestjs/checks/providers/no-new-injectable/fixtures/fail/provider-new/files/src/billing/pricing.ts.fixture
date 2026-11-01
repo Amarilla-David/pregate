@@ -1,0 +1,9 @@
+import { Injectable } from "@nestjs/common";
+import { PricingProvider } from "./pricing.provider";
+@Injectable()
+export class BillingRunner {
+  run() {
+    const p = new PricingProvider();
+    return p.quote();
+  }
+}

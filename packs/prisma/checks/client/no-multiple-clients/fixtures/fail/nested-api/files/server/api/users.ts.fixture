@@ -1,0 +1,6 @@
+import { PrismaClient } from "@prisma/client";
+
+export async function list() {
+  const db = new PrismaClient();
+  return db.user.findMany({ take: 20 });
+}

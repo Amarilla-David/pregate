@@ -1,0 +1,7 @@
+import { reactive } from "vue";
+
+const state = reactive({ items: [] as string[] });
+
+export function addItem(item: string): void {
+  state.items.push(item);
+}

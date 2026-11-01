@@ -1,0 +1,5 @@
+
+// Load the invoice and return its total.
+export function total(cents: number): number {
+  return cents;
+}

@@ -1,0 +1,7 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/policy.ts",
+  "before": null,
+  "params": { "paths": ["src/**"] },
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }] }
+}

@@ -1,0 +1,133 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "conflicts": [],
+  "id": "nestjs/controllers",
+  "invariants": [
+    {
+      "avoid": "Injecting the service but still calling new on a second helper inside the handler is the same bypass.",
+      "check": "nestjs/controllers/no-controller-business-logic",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/direct-service-new",
+        "pass": "pass/constructor-injection"
+      },
+      "fixHint": "Declare the provider as a constructor parameter with private readonly and call it through this.",
+      "id": "NEST-CTRL-001",
+      "relations": [
+        {
+          "with": "typescript/TS-LEGACY-005",
+          "kind": "contradicts",
+          "why": "NEST-CTRL-001 tells controllers to receive providers as private readonly constructor parameters, and TS-LEGACY-005 denies constructor parameter properties.",
+          "settle": "Nest also injects plain constructor parameters: declare the field and assign it in the constructor body to satisfy both, or exclude Nest controllers and providers from TS-LEGACY-005."
+        }
+      ],
+      "severity": "deny",
+      "source": {
+        "locator": "controllers and providers with constructor injection",
+        "paraphrase": "Controllers handle HTTP and delegate domain work to providers, which the injector supplies through the constructor.",
+        "work": "NestJS documentation, Controllers"
+      },
+      "why": "A manually constructed provider skips scope, lifecycle hooks, and test doubles, so the handler runs a different object than the module built."
+    },
+    {
+      "avoid": "@Get with a name like getCreatedOrders still starts with get, which is a read verb and is fine.",
+      "check": "nestjs/controllers/no-verb-mismatch",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/get-create",
+        "pass": "pass/post-create"
+      },
+      "fixHint": "Pair create/update/delete/remove names with @Post/@Put/@Patch/@Delete, or rename the method to what the GET returns.",
+      "id": "NEST-VERB-001",
+      "severity": "deny",
+      "source": {
+        "locator": "route decorators @Get @Post @Put @Delete",
+        "paraphrase": "Each route decorator declares the HTTP method. The handler name should read as that operation.",
+        "work": "NestJS documentation, Controllers"
+      },
+      "why": "A GET handler named create lies in logs, traces, and generated clients, and reviewers approve a read that writes."
+    },
+    {
+      "avoid": "Returning an object with a status field is a payload, not this rule. Only res.status(NNN) matches.",
+      "check": "nestjs/controllers/no-explicit-status-enum",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/status-200",
+        "pass": "pass/http-code"
+      },
+      "fixHint": "Return the value and set @HttpCode(HttpStatus.CREATED), or throw an HttpException built from HttpStatus.",
+      "id": "NEST-CODE-001",
+      "relations": [
+        {
+          "with": "typescript/TS-THROW-001",
+          "kind": "contradicts",
+          "why": "NEST-CODE-001 directs error responses to a thrown HttpException, and TS-THROW-001 denies throws inside methods of an exported controller class.",
+          "settle": "Exclude **/*.controller.ts from TS-THROW-001: Nest maps a thrown HttpException to the response. Keep TS-THROW-001 on services and domain code."
+        }
+      ],
+      "severity": "deny",
+      "source": {
+        "locator": "@HttpCode and HttpStatus enum",
+        "paraphrase": "Status codes have named enum members. @HttpCode sets the code without touching the response object.",
+        "work": "NestJS documentation, Controllers"
+      },
+      "why": "A bare 200 hides whether the author meant OK, and res.status locks the handler to Express instead of the framework reply."
+    },
+    {
+      "avoid": "A filled @UseGuards(JwtAuthGuard) is the fix, not a second empty decorator on the same handler.",
+      "check": "nestjs/controllers/no-empty-useguards",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/empty-method-guards",
+        "pass": "pass/guarded-list"
+      },
+      "fixHint": "Pass the guard class, for example @UseGuards(JwtAuthGuard), or delete the decorator.",
+      "id": "NEST-GUARD-001",
+      "severity": "deny",
+      "source": {
+        "locator": "authorization with @UseGuards",
+        "paraphrase": "Guards decide who reaches a route. @UseGuards takes the guard classes that run before the handler.",
+        "work": "NestJS documentation, Guards"
+      },
+      "why": "An empty @UseGuards() reads as protected in review while enforcing nothing, so the route ships open."
+    },
+    {
+      "avoid": "@Param() with no key reads the whole params object and needs no pipe. Only a named key without a pipe matches.",
+      "check": "nestjs/controllers/no-param-without-pipe",
+      "defaults": {},
+      "examples": {
+        "fail": "fail/bare-id-param",
+        "pass": "pass/piped-id-param"
+      },
+      "fixHint": "Add the pipe inline: @Param(\"id\", ParseIntPipe) id: number, or ParseUUIDPipe for uuid routes.",
+      "id": "NEST-PARSE-001",
+      "severity": "off",
+      "source": {
+        "locator": "pipes with @Param and ParseIntPipe",
+        "paraphrase": "Route values arrive as strings. A pipe such as ParseIntPipe converts and rejects them before the handler.",
+        "work": "NestJS documentation, Pipes"
+      },
+      "why": "The route value may intentionally be a string. This check cannot tell when conversion is required."
+    },
+    {
+      "id": "NEST-PASSTHROUGH-001",
+      "check": "nestjs/controllers/no-raw-res-without-passthrough",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "NestJS documentation, Controllers (docs.nestjs.com)",
+        "locator": "https://docs.nestjs.com/controllers#library-specific-approach",
+        "paraphrase": "Injecting @Res() or @Response() puts the handler in library-specific mode and disables Nest interceptors and @HttpCode unless { passthrough: true } is passed."
+      },
+      "why": "Without { passthrough: true }, Nest stops serializing the return value, skips response interceptors, and hangs if the handler returns a value without manually calling res.send().",
+      "fixHint": "Pass @Res({ passthrough: true }) so you can set cookies or headers while letting Nest send the returned value through its standard pipeline.",
+      "avoid": "Handlers that legitimately stream a raw response must disable this rule for that route. Options passed through a variable are not evaluated.",
+      "examples": {
+        "pass": "pass/passthrough-true",
+        "fail": "fail/bare-res"
+      }
+    }
+  ],
+  "status": "complete",
+  "version": "1.2.0"
+}

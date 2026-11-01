@@ -1,0 +1,38 @@
+{
+  "name": "python-starter",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "python",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "python/quality"
+  ],
+  "enforcement": "shadow",
+  "scope": {
+    "include": [
+      "**"
+    ],
+    "exclude": [
+      "vendor/**",
+      "dist/**",
+      "build/**",
+      ".venv/**",
+      "venv/**",
+      "__pycache__/**",
+      "node_modules/**"
+    ]
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

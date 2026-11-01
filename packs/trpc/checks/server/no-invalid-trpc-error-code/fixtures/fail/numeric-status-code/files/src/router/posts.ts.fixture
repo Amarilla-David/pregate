@@ -1,0 +1,4 @@
+declare class TRPCError extends Error { constructor(opts: { code: unknown; message?: string }); }
+export function missingPost(): never {
+  throw new TRPCError({ code: 404, message: "Not found" });
+}

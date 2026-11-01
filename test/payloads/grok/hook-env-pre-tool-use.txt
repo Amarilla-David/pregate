@@ -1,0 +1,5 @@
+CLAUDE_PROJECT_DIR=/home/user/project/
+GROK_HOOK_EVENT=pre_tool_use
+GROK_HOOK_NAME=global/capture:pre_tool_use[0].hooks[0]
+GROK_SESSION_ID=00000000-0000-4000-8000-000000000001
+GROK_WORKSPACE_ROOT=/home/user/project/

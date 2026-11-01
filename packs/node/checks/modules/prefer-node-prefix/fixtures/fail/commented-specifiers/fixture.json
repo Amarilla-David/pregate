@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mod/commented.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 2 }, { "line": 3 }] }
+}

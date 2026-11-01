@@ -1,0 +1,11 @@
+import Redis from "ioredis";
+
+const sub = new Redis();
+const pub = new Redis();
+
+sub.subscribe("chat:lobby");
+sub.on("message", (channel, message) => console.log(channel, message));
+
+setInterval(() => {
+  pub.publish("chat:lobby", JSON.stringify({ at: Date.now() }));
+}, 1000);

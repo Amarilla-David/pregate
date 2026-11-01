@@ -1,0 +1,82 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/execution/go-shell-string",
+  "version": "1.0.0",
+  "area": "execution",
+  "cardinality": "singleton",
+  "dimension": "security-audit.execution.go-shell-command",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "go": [
+        {
+          "id": "shell-dash-c-built-string",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^exec\\.Command(?:Context)?$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "all": [
+                    {
+                      "has": {
+                        "kind": "interpreted_string_literal",
+                        "regex": "^\"(?:/usr)?(?:/bin/)?(?:(?:ba|z|da|k)?sh|cmd(?:\\.exe)?)\"$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "interpreted_string_literal",
+                        "regex": "^\"(?:-c|/[cC])\"$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "call_expression",
+                            "has": {
+                              "field": "function",
+                              "regex": "^fmt\\.Sprintf$"
+                            }
+                          },
+                          {
+                            "kind": "binary_expression",
+                            "has": {
+                              "field": "operator",
+                              "regex": "^\\+$"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} runs a shell with a command built from a value. Call the program directly with exec.Command(name, args...) so the value cannot add shell syntax."
+  }
+}

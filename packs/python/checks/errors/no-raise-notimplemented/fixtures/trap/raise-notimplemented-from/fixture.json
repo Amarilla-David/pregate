@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/chained.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "chained-raise-notimplemented",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Chaining with `from err` still attempts to raise the NotImplemented singleton constant rather than NotImplementedError."
+  }
+}

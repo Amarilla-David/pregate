@@ -1,0 +1,4 @@
+declare const SessionModel: { deleteMany(filter: { userId: string }): Promise<unknown> };
+export async function deleteUserSessions(userId: string): Promise<void> {
+  await SessionModel.deleteMany({ userId });
+}

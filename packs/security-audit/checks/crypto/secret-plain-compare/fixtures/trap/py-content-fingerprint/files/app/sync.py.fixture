@@ -1,0 +1,11 @@
+import inspect
+
+
+def unchanged(fn, cert, other, signature, sha, expected_hash):
+    if str(inspect.signature(fn)) == signature or cert.digital_signature == other.digital_signature:
+        return sha.hexdigest() == expected_hash
+    return False
+
+
+def verify(request, computed):
+    return computed == request.headers["X-Signature"]

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/models/no-schema-any",
+  "version": "1.0.0",
+  "area": "models",
+  "cardinality": "singleton",
+  "dimension": "mongodb.models.schema-strict",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "schema-strict",
+          "rule": {
+            "kind": "pair",
+            "regex": "\\bstrict\\s*:\\s*false"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} disables Mongoose strict mode. Undeclared paths will be stored silently; declare them on the schema or drop them."
+  }
+}

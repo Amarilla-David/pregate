@@ -1,0 +1,3 @@
+import { redis } from "./client";
+
+redis.on("ready", () => {});

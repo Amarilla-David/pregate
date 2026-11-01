@@ -1,0 +1,4 @@
+addEventListener("message", (event: MessageEvent) => {
+  postMessage(resize(event.data.width));
+});
+declare function resize(width: number): number;

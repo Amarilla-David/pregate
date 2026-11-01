@@ -1,0 +1,10 @@
+export function canApprove(amount: number, verified: boolean, active: boolean): boolean {
+  if (active) {
+    if (verified) {
+      if (amount < 10000) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

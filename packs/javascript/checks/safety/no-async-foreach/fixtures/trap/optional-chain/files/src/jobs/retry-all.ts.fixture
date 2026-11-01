@@ -1,0 +1,9 @@
+interface Job {
+  retry(): Promise<void>;
+}
+
+export function retryAll(jobs: Job[] | undefined): void {
+  jobs?.forEach(async (job) => {
+    await job.retry();
+  });
+}

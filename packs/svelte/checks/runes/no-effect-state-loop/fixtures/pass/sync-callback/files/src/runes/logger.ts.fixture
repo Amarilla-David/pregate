@@ -1,0 +1,5 @@
+const count = $state(0);
+
+$effect(() => {
+  console.log(count);
+});

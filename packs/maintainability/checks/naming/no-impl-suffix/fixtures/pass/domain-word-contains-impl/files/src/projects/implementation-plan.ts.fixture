@@ -1,0 +1,11 @@
+export class ImplementationPlan {
+  constructor(readonly milestones: string[]) {}
+}
+
+export class DentalImplant {
+  constructor(readonly tooth: number) {}
+}
+
+export function sortImpl(values: number[]): number[] {
+  return [...values].sort((a, b) => a - b);
+}

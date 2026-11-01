@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/api/sync.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "request-handler-initialize-app",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Calling initializeApp(config) inside an async handler throws on the second request unless guarded by getApps()."
+  }
+}

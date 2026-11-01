@@ -1,0 +1,5 @@
+window.addEventListener("message", (event: MessageEvent) => {
+  if (window === window.top) return;
+  run(event["data"]);
+});
+declare function run(command: string): void;

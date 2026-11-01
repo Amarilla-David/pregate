@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/client.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "client-instance",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "An httpx client instance method with verify=False on its own line disables verification like the module function."
+  }
+}

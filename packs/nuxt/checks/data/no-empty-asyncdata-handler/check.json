@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/data/no-empty-asyncdata-handler",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nuxt.empty-asyncdata-handler",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "empty-asyncdata-handler",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^(useAsyncData|useLazyAsyncData)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "any": [
+                      {
+                        "kind": "arrow_function"
+                      },
+                      {
+                        "kind": "function_expression"
+                      }
+                    ],
+                    "has": {
+                      "field": "body",
+                      "kind": "statement_block",
+                      "not": {
+                        "has": {
+                          "stopBy": {
+                            "any": [
+                              {
+                                "kind": "arrow_function"
+                              },
+                              {
+                                "kind": "function_expression"
+                              },
+                              {
+                                "kind": "function_declaration"
+                              },
+                              {
+                                "kind": "method_definition"
+                              }
+                            ]
+                          },
+                          "kind": "return_statement",
+                          "regex": "^return\\b\\s*[^\\s;]"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes useAsyncData a handler that never returns a value. Return the fetched data, or true after a store action, so the payload is not refetched on the client."
+  }
+}

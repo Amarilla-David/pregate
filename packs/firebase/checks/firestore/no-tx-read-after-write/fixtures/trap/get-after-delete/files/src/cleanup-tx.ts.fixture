@@ -1,0 +1,8 @@
+interface Tx { get(ref: string): Promise<unknown>; delete(ref: string): void; }
+declare function runTransaction(db: unknown, fn: (t: Tx) => Promise<void>): Promise<void>;
+export async function archiveDoc(db: unknown, oldRef: string, auditRef: string): Promise<void> {
+  await runTransaction(db, async (t) => {
+    t.delete(oldRef);
+    await t.get(auditRef);
+  });
+}

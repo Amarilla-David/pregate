@@ -1,0 +1,14 @@
+import { render, screen } from "@testing-library/react";
+import { createPortal, flushSync } from "react-dom";
+import { Dialog } from "./dialog";
+
+test("opens the dialog", () => {
+  flushSync(() => {
+    render(<Dialog open />);
+  });
+  expect(screen.getByRole("dialog")).toBeTruthy();
+});
+
+export function Overlay(props: { node: HTMLElement }) {
+  return createPortal(<div role="presentation" />, props.node);
+}

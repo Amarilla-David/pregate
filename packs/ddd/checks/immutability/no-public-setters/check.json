@@ -1,0 +1,257 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "ddd/immutability/no-public-setters",
+  "version": "1.0.0",
+  "area": "immutability",
+  "cardinality": "singleton",
+  "dimension": "immutability.setters",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "public-setter",
+          "utils": {
+            "this-member": {
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "object",
+                    "kind": "this"
+                  }
+                },
+                {
+                  "kind": "subscript_expression",
+                  "has": {
+                    "field": "object",
+                    "kind": "this"
+                  }
+                }
+              ]
+            },
+            "this-assignment": {
+              "kind": "assignment_expression",
+              "has": {
+                "field": "left",
+                "matches": "this-member"
+              }
+            },
+            "assigns-parameter": {
+              "kind": "assignment_expression",
+              "all": [
+                {
+                  "has": {
+                    "field": "left",
+                    "matches": "this-member"
+                  }
+                },
+                {
+                  "has": {
+                    "field": "right",
+                    "kind": "identifier",
+                    "pattern": "$P"
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "kind": "method_definition"
+                          },
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "function_expression"
+                          }
+                        ]
+                      },
+                      {
+                        "any": [
+                          {
+                            "has": {
+                              "field": "parameters",
+                              "has": {
+                                "stopBy": "end",
+                                "any": [
+                                  {
+                                    "kind": "identifier"
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier_pattern"
+                                  }
+                                ],
+                                "pattern": "$P"
+                              }
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "parameter",
+                              "pattern": "$P"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "setter-body": {
+              "kind": "statement_block",
+              "has": {
+                "kind": "expression_statement",
+                "has": {
+                  "matches": "assigns-parameter"
+                }
+              },
+              "not": {
+                "has": {
+                  "not": {
+                    "any": [
+                      {
+                        "regex": "^[{}]$"
+                      },
+                      {
+                        "kind": "comment"
+                      },
+                      {
+                        "kind": "empty_statement"
+                      },
+                      {
+                        "kind": "expression_statement",
+                        "has": {
+                          "matches": "this-assignment"
+                        }
+                      },
+                      {
+                        "kind": "return_statement",
+                        "has": {
+                          "kind": "this"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "non-public": {
+              "any": [
+                {
+                  "has": {
+                    "kind": "accessibility_modifier",
+                    "regex": "^(private|protected)$"
+                  }
+                },
+                {
+                  "has": {
+                    "field": "name",
+                    "kind": "private_property_identifier"
+                  }
+                }
+              ]
+            },
+            "accessor": {
+              "has": {
+                "regex": "^[gs]et$",
+                "not": {
+                  "kind": "property_identifier"
+                }
+              }
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "method_definition",
+                "has": {
+                  "regex": "^set$",
+                  "not": {
+                    "kind": "property_identifier"
+                  }
+                },
+                "not": {
+                  "matches": "non-public"
+                }
+              },
+              {
+                "kind": "method_definition",
+                "not": {
+                  "any": [
+                    {
+                      "matches": "non-public"
+                    },
+                    {
+                      "matches": "accessor"
+                    },
+                    {
+                      "has": {
+                        "field": "name",
+                        "regex": "^constructor$"
+                      }
+                    }
+                  ]
+                },
+                "has": {
+                  "field": "body",
+                  "matches": "setter-body"
+                }
+              },
+              {
+                "kind": "public_field_definition",
+                "not": {
+                  "matches": "non-public"
+                },
+                "has": {
+                  "field": "value",
+                  "any": [
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    }
+                  ],
+                  "has": {
+                    "field": "body",
+                    "any": [
+                      {
+                        "matches": "setter-body"
+                      },
+                      {
+                        "matches": "assigns-parameter"
+                      },
+                      {
+                        "kind": "parenthesized_expression",
+                        "has": {
+                          "matches": "assigns-parameter"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "x-note": "Structural, not by name: a public set accessor, or a public method or function-valued field whose body only copies its parameters into fields (optionally returning this). The parameter is bound per assignment, so statement order and destructured parameters do not matter."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is a public setter: it writes caller input straight into the object's state."
+  }
+}

@@ -1,0 +1,7 @@
+package client
+
+import "log"
+
+func Warn() {
+	log.Print("never set InsecureSkipVerify: true in production")
+}

@@ -1,0 +1,9 @@
+package: tree-sitter-python@0.25.0
+url: https://registry.npmjs.org/tree-sitter-python/-/tree-sitter-python-0.25.0.tgz
+tarball-sha256: 63b76b3fa8181fd79eaad4abcdb21e2babcb504dbfc7710a89934fa456d26096
+source: https://github.com/tree-sitter/tree-sitter-python/tree/v0.25.0
+license: MIT
+modified: no; LICENSE and published WASM copied byte for byte.
+files:
+d724405ce238a22c0d35769c5a36b386ad5958192efe8bbb304fb2896254575f  LICENSE
+16108b50df4ee9a30168794252ab55e7c93bfc5765d7fa0aa3e335752c515f47  tree-sitter-python.wasm

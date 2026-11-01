@@ -1,0 +1,1289 @@
+{
+  "$schema": "../../schema/methodology.v1.json",
+  "id": "core/software-invariants",
+  "version": "1.1.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "CORE-INV-001",
+      "check": "core/invariants/reason-for-change",
+      "defaults": {
+        "verifier": "CORE-INV-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 1",
+        "paraphrase": "Divide the system by the reason for change, not by the technology. Put in one module the parts that change together for the same reason. Do not mix display logic, decision logic, and storage logic in one module."
+      },
+      "why": "Divide the system by the reason for change, not by the technology. Put in one module the parts that change together for the same reason. Do not mix display logic, decision logic, and storage logic in one module.",
+      "fixHint": "Bind CORE-INV-001 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-001. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-002",
+      "check": "core/invariants/cohesion-and-coupling",
+      "defaults": {
+        "verifier": "CORE-INV-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 2; docs/features/core-maintainability-update.md, request 2",
+        "paraphrase": "Keep related parts together. Keep unrelated parts separate. A dependency must be as small as possible. A module must not know the internal parts of another module. A change in one module does not force a change in an unrelated module."
+      },
+      "why": "Keep related parts together. Keep unrelated parts separate. A dependency must be as small as possible. A module must not know the internal parts of another module. A change in one module does not force a change in an unrelated module.",
+      "fixHint": "Bind CORE-INV-002 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-002. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-003",
+      "check": "core/invariants/information-hiding",
+      "defaults": {
+        "verifier": "CORE-INV-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 3; docs/features/core-maintainability-update.md, request 3; docs/features/core-maintainability-update.md, request 12; docs/features/core-maintainability-update.md, request 13; docs/features/core-maintainability-update.md, request 41",
+        "paraphrase": "Hide the parts that can change. The public contract must be stable. The representation, the algorithm, the storage, and the supplier must be private. A caller must depend only on the contract. Modules talk only through a stable interface. The product does not expose an internal type on a public boundary. A contract at a boundary is written and current. A public interface has current documentation."
+      },
+      "why": "Hide the parts that can change. The public contract must be stable. The representation, the algorithm, the storage, and the supplier must be private. A caller must depend only on the contract. Modules talk only through a stable interface. The product does not expose an internal type on a public boundary. A contract at a boundary is written and current. A public interface has current documentation.",
+      "fixHint": "Bind CORE-INV-003 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-003. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-004",
+      "check": "core/invariants/observable-contract",
+      "defaults": {
+        "verifier": "CORE-INV-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 4",
+        "paraphrase": "Each observable behavior becomes a contract. For this reason, keep each contract small."
+      },
+      "why": "Each observable behavior becomes a contract. For this reason, keep each contract small.",
+      "fixHint": "Bind CORE-INV-004 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-004. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-005",
+      "check": "core/invariants/stable-dependencies",
+      "defaults": {
+        "verifier": "CORE-INV-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 5",
+        "paraphrase": "Dependencies must point to the stable part. Code that changes frequently must not be a dependency of code that changes rarely. A concrete part that changes must depend on a stable abstraction. Do not do the opposite."
+      },
+      "why": "Dependencies must point to the stable part. Code that changes frequently must not be a dependency of code that changes rarely. A concrete part that changes must depend on a stable abstraction. Do not do the opposite.",
+      "fixHint": "Bind CORE-INV-005 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-005. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-006",
+      "check": "core/invariants/evidenced-abstraction",
+      "defaults": {
+        "verifier": "CORE-INV-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 6",
+        "paraphrase": "Make an abstraction only when two real implementations exist, or when a change already occurred."
+      },
+      "why": "Make an abstraction only when two real implementations exist, or when a change already occurred.",
+      "fixHint": "Bind CORE-INV-006 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-006. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-007",
+      "check": "core/invariants/single-change-reason",
+      "defaults": {
+        "verifier": "CORE-INV-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 7; docs/features/core-maintainability-update.md, request 1; docs/features/core-maintainability-update.md, request 45",
+        "paraphrase": "Give each unit one reason for change. This rule applies to a function, a module, a process, and a service. If two different forces change the same unit, divide the unit. Each module has one responsibility. A function does one job."
+      },
+      "why": "Give each unit one reason for change. This rule applies to a function, a module, a process, and a service. If two different forces change the same unit, divide the unit. Each module has one responsibility. A function does one job.",
+      "fixHint": "Bind CORE-INV-007 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-007. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-008",
+      "check": "core/invariants/explicit-dependencies",
+      "defaults": {
+        "verifier": "CORE-INV-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 8",
+        "paraphrase": "Make each dependency explicit. Do not use hidden global state. Do not use hidden context. Put the dependency in the signature or in the construction graph. If a dependency is not in the signature, the caller must not use it."
+      },
+      "why": "Make each dependency explicit. Do not use hidden global state. Do not use hidden context. Put the dependency in the signature or in the construction graph. If a dependency is not in the signature, the caller must not use it.",
+      "fixHint": "Bind CORE-INV-008 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-008. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-009",
+      "check": "core/invariants/collaborator-knowledge",
+      "defaults": {
+        "verifier": "CORE-INV-009"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 9",
+        "paraphrase": "A unit must use only the parts that it receives, the parts that it makes, or the parts that it owns. A unit must not go through the internal structure of a collaborator to reach a third unit."
+      },
+      "why": "A unit must use only the parts that it receives, the parts that it makes, or the parts that it owns. A unit must not go through the internal structure of a collaborator to reach a third unit.",
+      "fixHint": "Bind CORE-INV-009 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-009. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-010",
+      "check": "core/invariants/composition",
+      "defaults": {
+        "verifier": "CORE-INV-010"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 10",
+        "paraphrase": "Use composition to reuse behavior. Do not use an inheritance tree to reuse behavior. Use inheritance only for a real \"is-a\" relation in the domain that will not break."
+      },
+      "why": "Use composition to reuse behavior. Do not use an inheritance tree to reuse behavior. Use inheritance only for a real \"is-a\" relation in the domain that will not break.",
+      "fixHint": "Bind CORE-INV-010 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-010. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-011",
+      "check": "core/invariants/narrow-interfaces",
+      "defaults": {
+        "verifier": "CORE-INV-011"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 11",
+        "paraphrase": "Keep interfaces narrow. A caller must not depend on operations that it does not call. A large contract is coupling."
+      },
+      "why": "Keep interfaces narrow. A caller must not depend on operations that it does not call. A large contract is coupling.",
+      "fixHint": "Bind CORE-INV-011 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-011. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-012",
+      "check": "core/invariants/source-of-truth",
+      "defaults": {
+        "verifier": "CORE-INV-012"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 12",
+        "paraphrase": "Keep one source of truth for each fact. This rule applies to knowledge and to decisions. It does not apply to similar text. If two parts change for different reasons, you can duplicate the form."
+      },
+      "why": "Keep one source of truth for each fact. This rule applies to knowledge and to decisions. It does not apply to similar text. If two parts change for different reasons, you can duplicate the form.",
+      "fixHint": "Bind CORE-INV-012 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-012. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-013",
+      "check": "core/invariants/domain-validation",
+      "defaults": {
+        "verifier": "CORE-INV-013"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 13",
+        "paraphrase": "Boundary validation can repeat a domain rule. The domain must not depend on the boundary. The domain must keep its own rules."
+      },
+      "why": "Boundary validation can repeat a domain rule. The domain must not depend on the boundary. The domain must keep its own rules.",
+      "fixHint": "Bind CORE-INV-013 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-013. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-014",
+      "check": "core/invariants/valid-state",
+      "defaults": {
+        "verifier": "CORE-INV-014"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 14",
+        "paraphrase": "Do not make an invalid state possible. The domain must keep its invariants at construction and at each state change. Do not put invariants only in comments. If an order cannot ship with no lines, that state must not exist as a value."
+      },
+      "why": "Do not make an invalid state possible. The domain must keep its invariants at construction and at each state change. Do not put invariants only in comments. If an order cannot ship with no lines, that state must not exist as a value.",
+      "fixHint": "Bind CORE-INV-014 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-014. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-015",
+      "check": "core/invariants/shared-immutability",
+      "defaults": {
+        "verifier": "CORE-INV-015"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 15; docs/features/core-maintainability-update.md, request 5",
+        "paraphrase": "Use immutable data for shared data. Data that crosses a thread, a process, or a time boundary must be a value. Keep mutation local, explicit, and short. Shared mutable data can cause a race. The product does not share mutable state across a module boundary."
+      },
+      "why": "Use immutable data for shared data. Data that crosses a thread, a process, or a time boundary must be a value. Keep mutation local, explicit, and short. Shared mutable data can cause a race. The product does not share mutable state across a module boundary.",
+      "fixHint": "Bind CORE-INV-015 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-015. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-016",
+      "check": "core/invariants/explicit-time-and-identity",
+      "defaults": {
+        "verifier": "CORE-INV-016"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 16",
+        "paraphrase": "Make time and identity data, not hidden context. Pass \"now\", \"caller\", and \"version\" as arguments or as parts of the message. A result must not depend on a hidden clock or on a hidden singleton."
+      },
+      "why": "Make time and identity data, not hidden context. Pass \"now\", \"caller\", and \"version\" as arguments or as parts of the message. A result must not depend on a hidden clock or on a hidden singleton.",
+      "fixHint": "Bind CORE-INV-016 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-016. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-017",
+      "check": "core/invariants/command-query-effects",
+      "defaults": {
+        "verifier": "CORE-INV-017"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 17",
+        "paraphrase": "Separate a command from a query when the effect is important. An operation that returns a value must not change observable state. An operation that changes state must not be the source of a value that the caller uses to decide. Exception: if the domain action is \"reserve and return the quota\", the effect and the result are the same decision. Document this exception."
+      },
+      "why": "Separate a command from a query when the effect is important. An operation that returns a value must not change observable state. An operation that changes state must not be the source of a value that the caller uses to decide. Exception: if the domain action is \"reserve and return the quota\", the effect and the result are the same decision. Document this exception.",
+      "fixHint": "Bind CORE-INV-017 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-017. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-018",
+      "check": "core/invariants/domain-language",
+      "defaults": {
+        "verifier": "CORE-INV-018"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 18; docs/features/core-maintainability-update.md, request 46",
+        "paraphrase": "Use the domain language for module names, operation names, and data names. Do not use framework names for these items. Keep technical translation at the boundary. A name in a module follows one rule."
+      },
+      "why": "Use the domain language for module names, operation names, and data names. Do not use framework names for these items. Keep technical translation at the boundary. A name in a module follows one rule.",
+      "fixHint": "Bind CORE-INV-018 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-018. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-019",
+      "check": "core/invariants/invariant-failure",
+      "defaults": {
+        "verifier": "CORE-INV-019"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 19",
+        "paraphrase": "Fail immediately when an invariant is broken or when the configuration is unknown. Report an impossible state, an unknown flag, or a broken contract at the source. Do not continue with a silent default. A silent default turns a defect into later corruption."
+      },
+      "why": "Fail immediately when an invariant is broken or when the configuration is unknown. Report an impossible state, an unknown flag, or a broken contract at the source. Do not continue with a silent default. A silent default turns a defect into later corruption.",
+      "fixHint": "Bind CORE-INV-019 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-019. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-020",
+      "check": "core/invariants/failure-classification",
+      "defaults": {
+        "verifier": "CORE-INV-020"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 20",
+        "paraphrase": "Separate a programmer failure from an expected failure. Stop and record a programmer failure. For an expected failure (timeout, rate limit, network loss, dependency down), use an explicit policy: retry, degrade, or reject. Do not retry a validation error. Do not retry an effect that is not idempotent."
+      },
+      "why": "Separate a programmer failure from an expected failure. Stop and record a programmer failure. For an expected failure (timeout, rate limit, network loss, dependency down), use an explicit policy: retry, degrade, or reject. Do not retry a validation error. Do not retry an effect that is not idempotent.",
+      "fixHint": "Bind CORE-INV-020 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-020. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-021",
+      "check": "core/invariants/idempotency",
+      "defaults": {
+        "verifier": "CORE-INV-021"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 21",
+        "paraphrase": "Each operation that can run more than one time must be idempotent, or it must have an idempotency key. Queues, webhooks, clients with retry, and jobs that stop in the middle deliver the work at least one time. Do not promise global exactly-once delivery. Build \"one effect for this key\" with a unique constraint and a stored result."
+      },
+      "why": "Each operation that can run more than one time must be idempotent, or it must have an idempotency key. Queues, webhooks, clients with retry, and jobs that stop in the middle deliver the work at least one time. Do not promise global exactly-once delivery. Build \"one effect for this key\" with a unique constraint and a stored result.",
+      "fixHint": "Bind CORE-INV-021 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-021. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-022",
+      "check": "core/invariants/remote-call-budget",
+      "defaults": {
+        "verifier": "CORE-INV-022"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 22",
+        "paraphrase": "Do not trust a remote part. Each call outside the process must have a timeout, a retry limit, and a defined behavior when the peer does not answer. Without a timeout, there is no isolation. The failure of the peer becomes your failure."
+      },
+      "why": "Do not trust a remote part. Each call outside the process must have a timeout, a retry limit, and a defined behavior when the peer does not answer. Without a timeout, there is no isolation. The failure of the peer becomes your failure.",
+      "fixHint": "Bind CORE-INV-022 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-022. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-023",
+      "check": "core/invariants/failure-isolation",
+      "defaults": {
+        "verifier": "CORE-INV-023"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 23",
+        "paraphrase": "Do not let a failure cascade. A boundary must isolate the failure with a budget, a bulkhead, a fast reject, or a queue. Do not retry without a limit against a dependency that is down."
+      },
+      "why": "Do not let a failure cascade. A boundary must isolate the failure with a budget, a bulkhead, a fast reject, or a queue. Do not retry without a limit against a dependency that is down.",
+      "fixHint": "Bind CORE-INV-023 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-023. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-024",
+      "check": "core/invariants/effects-at-boundaries",
+      "defaults": {
+        "verifier": "CORE-INV-024"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 24; docs/features/core-maintainability-update.md, request 4; docs/features/core-maintainability-update.md, request 6; docs/features/core-maintainability-update.md, request 7; docs/features/core-maintainability-update.md, request 47",
+        "paraphrase": "Keep external effects explicit and at the boundary. Do not hide persistence, network, clock, random values, or I/O inside a domain decision. The decision must be a function of data. A different part must apply the effect. Business rules live in the domain layer. The user interface does not contain a business rule. The database client does not contain a business rule. The product does not hide a side effect."
+      },
+      "why": "Keep external effects explicit and at the boundary. Do not hide persistence, network, clock, random values, or I/O inside a domain decision. The decision must be a function of data. A different part must apply the effect. Business decisions must have an explicit domain owner; no folder name or architectural style is required. A user-interface adapter must delegate business decisions to their domain owner. A database adapter must apply domain decisions, not own them. The product does not hide a side effect.",
+      "fixHint": "Bind CORE-INV-024 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-024. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-025",
+      "check": "core/invariants/concurrency-conflicts",
+      "defaults": {
+        "verifier": "CORE-INV-025"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 25",
+        "paraphrase": "Name the conflict rule for concurrent writes. Use a total order, a version, a unique constraint, or a commutative operation. \"Last write wins\" is valid only when the domain says so. Two writers on the same fact with no conflict rule are a defect."
+      },
+      "why": "Name the conflict rule for concurrent writes. Use a total order, a version, a unique constraint, or a commutative operation. \"Last write wins\" is valid only when the domain says so. Two writers on the same fact with no conflict rule are a defect.",
+      "fixHint": "Bind CORE-INV-025 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-025. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-026",
+      "check": "core/invariants/demonstrated-need",
+      "defaults": {
+        "verifier": "CORE-INV-026"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 26",
+        "paraphrase": "Do not build a part that you cannot show you need. You can use a clear name and a clean boundary. Do not add a second protocol, a plugin system, or an extra layer \"for later\". Add an abstraction at the third real repetition, or when the change already occurred."
+      },
+      "why": "Do not build a part that you cannot show you need. You can use a clear name and a clean boundary. Do not add a second protocol, a plugin system, or an extra layer \"for later\". Add an abstraction at the third real repetition, or when the change already occurred.",
+      "fixHint": "Bind CORE-INV-026 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-026. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-027",
+      "check": "core/invariants/sufficient-simplicity",
+      "defaults": {
+        "verifier": "CORE-INV-027"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 27",
+        "paraphrase": "Use the simplest design that meets the current constraints. Simple means the smallest number of concepts, states, and failure modes. If a simpler design breaks an invariant or a current requirement, that design is incomplete."
+      },
+      "why": "Use the simplest design that meets the current constraints. Simple means the smallest number of concepts, states, and failure modes. If a simpler design breaks an invariant or a current requirement, that design is incomplete.",
+      "fixHint": "Bind CORE-INV-027 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-027. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-028",
+      "check": "core/invariants/replaceable-modules",
+      "defaults": {
+        "verifier": "CORE-INV-028"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 28; docs/features/core-maintainability-update.md, request 18; docs/features/core-maintainability-update.md, request 19",
+        "paraphrase": "Design each module so that you can delete it. A replaceable module has a small contract, one owner, and no caller that knows its internal parts. Code that you cannot delete is a cost of change. An external service sits behind an interface. The product can replace that service without a rewrite of the domain."
+      },
+      "why": "Design each module so that you can delete it. A replaceable module has a small contract, one owner, and no caller that knows its internal parts. Code that you cannot delete is a cost of change. An external service sits behind an interface. The product can replace that service without a rewrite of the domain.",
+      "fixHint": "Bind CORE-INV-028 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-028. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-029",
+      "check": "core/invariants/vertical-slices",
+      "defaults": {
+        "verifier": "CORE-INV-029"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 29; docs/features/core-maintainability-update.md, request 27; docs/features/core-maintainability-update.md, request 30",
+        "paraphrase": "Evolve the design with vertical slices, not with complete horizontal layers. Each increment must cross the real path: input, decision, and effect. Keep the fitness tests green. An architecture that exists only in a diagram has already diverged. Tests run before a merge. A fitness check guards each key architecture rule."
+      },
+      "why": "Evolve the design with vertical slices, not with complete horizontal layers. Each increment must cross the real path: input, decision, and effect. Keep the fitness tests green. An architecture that exists only in a diagram has already diverged. Tests run before a merge. A fitness check guards each key architecture rule.",
+      "fixHint": "Bind CORE-INV-029 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-029. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-030",
+      "check": "core/invariants/observed-change-axis",
+      "defaults": {
+        "verifier": "CORE-INV-030"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 30",
+        "paraphrase": "Prepare for a change only in the direction that you already see. This applies to an axis that already moved, for example the payment supplier or the report schema. Do not turn every part into a strategy for symmetry."
+      },
+      "why": "Prepare for a change only in the direction that you already see. This applies to an axis that already moved, for example the payment supplier or the report schema. Do not turn every part into a strategy for symmetry.",
+      "fixHint": "Bind CORE-INV-030 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-030. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-031",
+      "check": "core/invariants/explicit-compatibility",
+      "defaults": {
+        "verifier": "CORE-INV-031"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 31; docs/features/core-maintainability-update.md, request 8; docs/features/core-maintainability-update.md, request 9; docs/features/core-maintainability-update.md, request 10; docs/features/core-maintainability-update.md, request 11",
+        "paraphrase": "Make compatibility an explicit decision. If you do not control the consumers of a contract, version the contract or add fields. Do not break the contract. If you control all consumers, change and migrate them together. Two truths cost more. A public interface has a version. A breaking change increments the version. The product has a written deprecation policy. The product supports the previous public version during the deprecation window."
+      },
+      "why": "Make compatibility an explicit decision. If you do not control the consumers of a contract, version the contract or add fields. Do not break the contract. If you control all consumers, change and migrate them together. Two truths cost more. An externally consumed public contract must have an explicit version; controlled consumers can migrate together under the original compatibility rule. An incompatible change to an externally consumed public contract must increment its version. An externally consumed public contract must have a written deprecation policy with scope, notice and support windows. The previous externally consumed public version must remain supported throughout its stated deprecation window.",
+      "fixHint": "Bind CORE-INV-031 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-031. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-032",
+      "check": "core/invariants/clear-code",
+      "defaults": {
+        "verifier": "CORE-INV-032"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 32",
+        "paraphrase": "Prefer clear code to clever code. Persons read code more often than they write it. A trick that saves lines and hides an invariant costs more than the obvious form."
+      },
+      "why": "Prefer clear code to clever code. Persons read code more often than they write it. A trick that saves lines and hides an invariant costs more than the obvious form.",
+      "fixHint": "Bind CORE-INV-032 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-032. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-033",
+      "check": "core/invariants/predictable-names",
+      "defaults": {
+        "verifier": "CORE-INV-033"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 33",
+        "paraphrase": "The name must predict the behavior. An operation with the name \"save\" must not send mail, must not recalculate tax, and must not delete rows. Use the domain language to decrease the translation between the business and the code."
+      },
+      "why": "The name must predict the behavior. An operation with the name \"save\" must not send mail, must not recalculate tax, and must not delete rows. Use the domain language to decrease the translation between the business and the code.",
+      "fixHint": "Bind CORE-INV-033 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-033. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-034",
+      "check": "core/invariants/abstraction-level",
+      "defaults": {
+        "verifier": "CORE-INV-034"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 34",
+        "paraphrase": "Use one level of abstraction in each unit. A function must not mix business policy, byte arithmetic, SQL, and date format. Mixed levels force the reader to change focus on each line."
+      },
+      "why": "Use one level of abstraction in each unit. A function must not mix business policy, byte arithmetic, SQL, and date format. Mixed levels force the reader to change focus on each line.",
+      "fixHint": "Bind CORE-INV-034 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-034. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-035",
+      "check": "core/invariants/least-power",
+      "defaults": {
+        "verifier": "CORE-INV-035"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 35",
+        "paraphrase": "Use the least powerful mechanism that solves the problem. A general rule engine for two conditions is borrowed complexity."
+      },
+      "why": "Use the least powerful mechanism that solves the problem. A general rule engine for two conditions is borrowed complexity.",
+      "fixHint": "Bind CORE-INV-035 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-035. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-036",
+      "check": "core/invariants/named-policies",
+      "defaults": {
+        "verifier": "CORE-INV-036"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 36; docs/features/core-maintainability-update.md, request 24; docs/features/core-maintainability-update.md, request 34",
+        "paraphrase": "Give each constant and each policy a name and a location. A magic number, an inline timeout, or a threshold copied in four places is a decision with no owner. Keep the policy in one place and inject it. The product does not hard-code an environment value in source. Configuration is separate from code."
+      },
+      "why": "Give each constant and each policy a name and a location. A magic number, an inline timeout, or a threshold copied in four places is a decision with no owner. Keep the policy in one place and inject it. The product does not hard-code an environment value in source. Configuration is separate from code.",
+      "fixHint": "Bind CORE-INV-036 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-036. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-037",
+      "check": "core/invariants/dead-code",
+      "defaults": {
+        "verifier": "CORE-INV-037"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 37; docs/features/core-maintainability-update.md, request 44",
+        "paraphrase": "Delete dead code and dead configuration paths. A branch that no one activates is a defect surface and a reading cost. If you cannot delete it, a dependency exists. Make that dependency explicit. Dead code is removed."
+      },
+      "why": "Delete dead code and dead configuration paths. A branch that no one activates is a defect surface and a reading cost. If you cannot delete it, a dependency exists. Make that dependency explicit. Dead code is removed.",
+      "fixHint": "Bind CORE-INV-037 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-037. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-038",
+      "check": "core/invariants/minimum-privilege",
+      "defaults": {
+        "verifier": "CORE-INV-038"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 38",
+        "paraphrase": "Give the minimum privilege by default. A component, a credential, or a user must receive only the access that the operation needs. The default must be closed. An open permission must be a recorded decision."
+      },
+      "why": "Give the minimum privilege by default. A component, a credential, or a user must receive only the access that the operation needs. The default must be closed. An open permission must be a recorded decision.",
+      "fixHint": "Bind CORE-INV-038 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-038. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-039",
+      "check": "core/invariants/boundary-validation",
+      "defaults": {
+        "verifier": "CORE-INV-039"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 39",
+        "paraphrase": "Do not trust input that crosses a boundary. Validate each external data item at the boundary: shape, range, size, and encoding. External sources are the user, the queue, the file, and the other service. The internal part can assume admitted data, and it must still keep its invariants."
+      },
+      "why": "Do not trust input that crosses a boundary. Validate each external data item at the boundary: shape, range, size, and encoding. External sources are the user, the queue, the file, and the other service. The internal part can assume admitted data, and it must still keep its invariants.",
+      "fixHint": "Bind CORE-INV-039 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-039. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-040",
+      "check": "core/invariants/secret-isolation",
+      "defaults": {
+        "verifier": "CORE-INV-040"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 40; docs/features/core-maintainability-update.md, request 48",
+        "paraphrase": "Do not put secrets in the code or in the log. Credentials, tokens, and keys must come from a configuration channel that is separate from the artifact. A log must not write a payload that can contain a secret. A secret does not live in source code."
+      },
+      "why": "Do not put secrets in the code or in the log. Credentials, tokens, and keys must come from a configuration channel that is separate from the artifact. A log must not write a payload that can contain a secret. A secret does not live in source code.",
+      "fixHint": "Bind CORE-INV-040 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-040. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-041",
+      "check": "core/invariants/decision-authorization",
+      "defaults": {
+        "verifier": "CORE-INV-041"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 41",
+        "paraphrase": "Do authorization on the server that makes the decision, not on the screen. A hidden button is not access control. The operation that changes state must check identity, scope, and state again."
+      },
+      "why": "Do authorization on the server that makes the decision, not on the screen. A hidden button is not access control. The operation that changes state must check identity, scope, and state again.",
+      "fixHint": "Bind CORE-INV-041 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-041. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-042",
+      "check": "core/invariants/closed-failure",
+      "defaults": {
+        "verifier": "CORE-INV-042"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 42",
+        "paraphrase": "Fail closed. If authentication, authorization, or integrity is not certain, the operation must not occur. A permissive default turns a configuration defect into an incident."
+      },
+      "why": "Fail closed. If authentication, authorization, or integrity is not certain, the operation must not occur. A permissive default turns a configuration defect into an incident.",
+      "fixHint": "Bind CORE-INV-042 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-042. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-043",
+      "check": "core/invariants/boundary-observability",
+      "defaults": {
+        "verifier": "CORE-INV-043"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 43; docs/features/core-maintainability-update.md, request 36; docs/features/core-maintainability-update.md, request 37",
+        "paraphrase": "If you cannot observe a behavior, you cannot operate it. Each relevant boundary must emit the data that answers these questions: what occurred, to whom, with which result, and in which time. Emit a correlation identity, the decision, and the error class. A log of all data is not observation. It is noise. A failure writes a structured log. The product measures latency, errors, and saturation."
+      },
+      "why": "If you cannot observe a behavior, you cannot operate it. Each relevant boundary must emit the data that answers these questions: what occurred, to whom, with which result, and in which time. Emit a correlation identity, the decision, and the error class. A log of all data is not observation. It is noise. A failure writes a structured log. The product measures latency, errors, and saturation.",
+      "fixHint": "Bind CORE-INV-043 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-043. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-044",
+      "check": "core/invariants/isolated-verification",
+      "defaults": {
+        "verifier": "CORE-INV-044"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 44; docs/features/core-maintainability-update.md, request 26",
+        "paraphrase": "You must be able to assert behavior without the full system. Test a domain decision with data. Test a boundary against the contract. A module that you can verify only in a full environment has no boundary. Each critical path has an automated test."
+      },
+      "why": "You must be able to assert behavior without the full system. Test a domain decision with data. Test a boundary against the contract. A module that you can verify only in a full environment has no boundary. Each critical path has an automated test.",
+      "fixHint": "Bind CORE-INV-044 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-044. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-045",
+      "check": "core/invariants/startup-validation",
+      "defaults": {
+        "verifier": "CORE-INV-045"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 45",
+        "paraphrase": "Invalid configuration must stop the start. An unknown value, a bad port, or a missing secret must stop the boot. A start with silent defaults that fails after one hour is an announced incident."
+      },
+      "why": "Invalid configuration must stop the start. An unknown value, a bad port, or a missing secret must stop the boot. A start with silent defaults that fails after one hour is an announced incident.",
+      "fixHint": "Bind CORE-INV-045 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-045. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-046",
+      "check": "core/invariants/latency-isolation",
+      "defaults": {
+        "verifier": "CORE-INV-046"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 46",
+        "paraphrase": "Slow work must not block the fast path. An operation with a latency budget must not do unbounded I/O, unbounded calculation, or a wait for a report. Separate the work by budget."
+      },
+      "why": "Slow work must not block the fast path. An operation with a latency budget must not do unbounded I/O, unbounded calculation, or a wait for a report. Separate the work by budget.",
+      "fixHint": "Bind CORE-INV-046 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-046. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-047",
+      "check": "core/invariants/resource-budgets",
+      "defaults": {
+        "verifier": "CORE-INV-047"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 47; docs/features/core-maintainability-update.md, request 35",
+        "paraphrase": "Put cost in a budget, not in a hope. CPU, memory, connections, payload size, and query cardinality must have an explicit limit. An unbounded query is a capacity incident that waits for traffic. The product can scale a bottleneck without a full rewrite."
+      },
+      "why": "Put cost in a budget, not in a hope. CPU, memory, connections, payload size, and query cardinality must have an explicit limit. An unbounded query is a capacity incident that waits for traffic. A measured bottleneck must be scalable without rewriting domain decisions or unrelated modules. Preserve contracts and budgets; do not add speculative distribution.",
+      "fixHint": "Bind CORE-INV-047 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-047. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-048",
+      "check": "core/invariants/repeatable-migrations",
+      "defaults": {
+        "verifier": "CORE-INV-048"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/inputs/core-invariants-48.md, rule 48; docs/features/core-maintainability-update.md, request 21; docs/features/core-maintainability-update.md, request 22; docs/features/core-maintainability-update.md, request 23",
+        "paraphrase": "A data migration is part of the change. If the contract or the schema changes, a forward path must exist. If external consumers exist, a compatibility path must also exist. You must be able to run the path more than one time without corruption. A schema change has a migration. A migration is reversible, or the plan states that it is forward-only. The product can read old data during a rollout."
+      },
+      "why": "A data migration is part of the change. If the contract or the schema changes, a forward path must exist. If external consumers exist, a compatibility path must also exist. You must be able to run the path more than one time without corruption. A schema change has a migration. A migration is reversible, or the plan states that it is forward-only. The product can read old data during a rollout.",
+      "fixHint": "Bind CORE-INV-048 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-048. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-049",
+      "check": "core/invariants/pinned-dependencies",
+      "defaults": {
+        "verifier": "CORE-INV-049"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 14",
+        "paraphrase": "The product pins each dependency version."
+      },
+      "why": "Each resolved dependency version must be pinned through the ecosystem's explicit manifest or dependency lock.",
+      "fixHint": "Bind CORE-INV-049 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-049. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-050",
+      "check": "core/invariants/locked-build",
+      "defaults": {
+        "verifier": "CORE-INV-050"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 15",
+        "paraphrase": "The build uses a lockfile."
+      },
+      "why": "The build must use the ecosystem's committed dependency lock or equivalent deterministic dependency record; a locked rebuild must preserve resolution.",
+      "fixHint": "Bind CORE-INV-050 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-050. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-051",
+      "check": "core/invariants/dependency-update-schedule",
+      "defaults": {
+        "verifier": "CORE-INV-051"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 16",
+        "paraphrase": "The product updates dependencies on a stated schedule."
+      },
+      "why": "Dependencies must be updated on an owned, stated schedule, with dated update records.",
+      "fixHint": "Bind CORE-INV-051 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-051. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-052",
+      "check": "core/invariants/vulnerability-fix-window",
+      "defaults": {
+        "verifier": "CORE-INV-052"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 17",
+        "paraphrase": "The build fails if a known high-risk defect stays past the fix window."
+      },
+      "why": "The build must reject a known high-risk dependency defect after the project's stated fix window. Use dated authoritative vulnerability evidence.",
+      "fixHint": "Bind CORE-INV-052 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-052. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-053",
+      "check": "core/invariants/supported-runtime",
+      "defaults": {
+        "verifier": "CORE-INV-053"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 20",
+        "paraphrase": "The product does not depend on an unsupported runtime."
+      },
+      "why": "The product must use a supported runtime. Verify declared versions against dated authoritative support evidence.",
+      "fixHint": "Bind CORE-INV-053 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-053. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-054",
+      "check": "core/invariants/standard-value-facilities",
+      "defaults": {
+        "verifier": "CORE-INV-054"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 25",
+        "paraphrase": "Time, money, and locale use a standard library."
+      },
+      "why": "Time, money and locale must use supported standard facilities appropriate to precision, time zones and locale. Do not add a dependency when supported ecosystem facilities satisfy the requirement.",
+      "fixHint": "Bind CORE-INV-054 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-054. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-055",
+      "check": "core/invariants/defect-regression",
+      "defaults": {
+        "verifier": "CORE-INV-055"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 28",
+        "paraphrase": "A defect fix adds a test that fails before the fix."
+      },
+      "why": "A defect fix adds a test that fails before the fix.",
+      "fixHint": "Bind CORE-INV-055 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-055. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-056",
+      "check": "core/invariants/static-analysis-merge-gate",
+      "defaults": {
+        "verifier": "CORE-INV-056"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 29",
+        "paraphrase": "Static analysis runs before a merge."
+      },
+      "why": "Static analysis runs before a merge.",
+      "fixHint": "Bind CORE-INV-056 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-056. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-057",
+      "check": "core/invariants/release-rollback",
+      "defaults": {
+        "verifier": "CORE-INV-057"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 31",
+        "paraphrase": "A release has a rollback."
+      },
+      "why": "A release has a rollback.",
+      "fixHint": "Bind CORE-INV-057 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-057. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-058",
+      "check": "core/invariants/controlled-risk-flags",
+      "defaults": {
+        "verifier": "CORE-INV-058"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 32",
+        "paraphrase": "A risky feature can ship behind a flag."
+      },
+      "why": "An identified risky feature must have a controlled safe-release flag with tested enable and disable behavior. Do not introduce speculative flags without a relevant risk.",
+      "fixHint": "Bind CORE-INV-058 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-058. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-059",
+      "check": "core/invariants/automated-deployment",
+      "defaults": {
+        "verifier": "CORE-INV-059"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 33",
+        "paraphrase": "A deployment is automated."
+      },
+      "why": "A deployment is automated.",
+      "fixHint": "Bind CORE-INV-059 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-059. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-060",
+      "check": "core/invariants/operational-runbooks",
+      "defaults": {
+        "verifier": "CORE-INV-060"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 38",
+        "paraphrase": "A common operational task has a runbook."
+      },
+      "why": "A common operational task has a runbook.",
+      "fixHint": "Bind CORE-INV-060 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-060. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-061",
+      "check": "core/invariants/alert-ownership",
+      "defaults": {
+        "verifier": "CORE-INV-061"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 39",
+        "paraphrase": "An alert has an owner."
+      },
+      "why": "An alert has an owner.",
+      "fixHint": "Bind CORE-INV-061 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-061. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-062",
+      "check": "core/invariants/architecture-decision-record",
+      "defaults": {
+        "verifier": "CORE-INV-062"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 40",
+        "paraphrase": "An architecture decision has a written record and a reason."
+      },
+      "why": "An architecture decision has a written record and a reason.",
+      "fixHint": "Bind CORE-INV-062 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-062. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-063",
+      "check": "core/invariants/reproducible-onboarding",
+      "defaults": {
+        "verifier": "CORE-INV-063"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 42",
+        "paraphrase": "A new engineer can build and run the product from the written steps."
+      },
+      "why": "A new engineer can build and run the product from the written steps.",
+      "fixHint": "Bind CORE-INV-063 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-063. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CORE-INV-064",
+      "check": "core/invariants/debt-ownership",
+      "defaults": {
+        "verifier": "CORE-INV-064"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software and maintainability invariants",
+        "locator": "docs/features/core-maintainability-update.md, request 43",
+        "paraphrase": "Technical debt has an owner and a target date."
+      },
+      "why": "Technical debt has an owner and a target date.",
+      "fixHint": "Bind CORE-INV-064 to a project fitness function that tests every applicable condition in this requirement and documents its coverage and invalid controls. Review the binding as a contract change, then run pregate fitness run CORE-INV-064. Repair a failed verification. For dated runtime, vulnerability or operational facts, review an explicit maxAgeMs and inspect current authoritative evidence. A human can explicitly disable the requirement if it does not apply.",
+      "avoid": "A passing unrelated test, stale receipts, silence or a syntax-only approximation do not prove the full requirement. Verification is bounded by the human-reviewed command and rationale; inspect what it tests. Missing verification is unverified, not compliant. Packs never supply executable fitness commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

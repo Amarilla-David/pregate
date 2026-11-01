@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/schema/no-relation-without-fields",
+  "version": "1.0.0",
+  "area": "schema",
+  "cardinality": "singleton",
+  "dimension": "drizzle.relation-fields",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "relation-fields",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "regex": "^relations\\s*\\("
+              },
+              {
+                "regex": "\\bone\\s*\\("
+              }
+            ],
+            "not": {
+              "regex": "\\bfields\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} declares a one() relation with no fields and references. Pass { fields, references } so the join has columns."
+  }
+}

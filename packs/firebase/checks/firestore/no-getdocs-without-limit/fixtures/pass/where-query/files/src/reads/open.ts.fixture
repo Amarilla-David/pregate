@@ -1,0 +1,6 @@
+import { getDocs, query, where } from "firebase/firestore";
+
+export async function loadOpen(col: ColRef, toItem: Mapper): Promise<Item[]> {
+  const snap = await getDocs(query(col, where("status", "==", "open")));
+  return snap.docs.map((d) => toItem(d.data()));
+}

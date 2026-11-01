@@ -1,0 +1,12 @@
+import os
+import subprocess
+
+SOUND_FILE = "/usr/share/sounds/beep.wav"
+GIT_REPOSITORY = "https://example.com/repo.git"
+UPDATE_CMD = "git pull"
+
+os.system("afplay '%s' 2>/dev/null" % SOUND_FILE)
+subprocess.Popen("git checkout . && git pull %s HEAD" % GIT_REPOSITORY, shell=True)
+subprocess.Popen(f"git fetch {GIT_REPOSITORY}", shell=True)
+subprocess.run("git clone {} out".format(GIT_REPOSITORY), shell=True)
+subprocess.run(UPDATE_CMD, shell=True)

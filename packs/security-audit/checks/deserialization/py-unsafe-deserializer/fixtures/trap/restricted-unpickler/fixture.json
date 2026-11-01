@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/cache.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 12
+      }
+    ]
+  },
+  "trap": {
+    "family": "restricted-subclass",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "Subclassing Unpickler to restrict find_class is the documented mitigation, so only the direct call is a finding."
+  }
+}

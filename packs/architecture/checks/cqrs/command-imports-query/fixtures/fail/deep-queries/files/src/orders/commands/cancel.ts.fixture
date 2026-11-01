@@ -1,0 +1,6 @@
+
+import { view } from "../../queries/order-view";
+
+export function cancel(id: string): string {
+  return view.name;
+}

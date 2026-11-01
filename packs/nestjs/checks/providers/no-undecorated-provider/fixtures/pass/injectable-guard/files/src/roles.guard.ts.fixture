@@ -1,0 +1,8 @@
+declare function Injectable(): ClassDecorator;
+export interface CanActivate { canActivate(ctx: unknown): boolean; }
+@Injectable()
+export class RolesGuard implements CanActivate {
+  canActivate(_ctx: unknown): boolean {
+    return true;
+  }
+}

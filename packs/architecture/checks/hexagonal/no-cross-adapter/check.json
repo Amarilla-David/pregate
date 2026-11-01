@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/hexagonal/no-cross-adapter",
+  "version": "1.0.0",
+  "area": "hexagonal",
+  "cardinality": "singleton",
+  "dimension": "hexagonal.cross-adapter",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "adapter-edge",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "(^|/)((adapters/)?(out|secondary|persistence|driven)|repositories)(/|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "**/adapters/in/**",
+            "**/adapters/primary/**",
+            "**/adapters/driving/**",
+            "**/adapters/http/**",
+            "**/adapters/rest/**",
+            "**/adapters/controllers/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports an output adapter directly from an input adapter, bypassing domain ports and application use cases."
+  }
+}

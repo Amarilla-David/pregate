@@ -1,0 +1,12 @@
+export function shippingRate(weightGrams: number): number {
+  return weightGrams * 2;
+}
+
+/**
+ * Computes the old flat shipping rate.
+ *
+ * @deprecated
+ */
+export function flatRate(weightGrams: number): number {
+  return shippingRate(weightGrams);
+}

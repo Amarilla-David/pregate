@@ -1,0 +1,16 @@
+package tools
+
+import (
+	"fmt"
+	"os/exec"
+)
+
+func Grep(pattern string) *exec.Cmd {
+	safe := exec.Command("sh", "-c", "grep -r \"$1\" .", "sh", pattern)
+	_ = safe
+	return exec.Command(
+		"bash",
+		"-c",
+		fmt.Sprintf("grep -r %q .", pattern),
+	)
+}

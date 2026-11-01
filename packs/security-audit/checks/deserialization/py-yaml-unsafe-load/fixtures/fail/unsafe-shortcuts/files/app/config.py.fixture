@@ -1,0 +1,9 @@
+import yaml
+
+
+def read_plugin(stream):
+    return yaml.unsafe_load(stream)
+
+
+def read_profile(stream):
+    return yaml.full_load(stream)

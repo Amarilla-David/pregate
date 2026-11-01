@@ -1,0 +1,5 @@
+// biome-ignore lint/suspicious/noExplicitAny: legacy input
+export function adapt(input: any): string {
+  // pregate-disable-next-line
+  return String(input).trim();
+}

@@ -1,0 +1,10 @@
+
+export async function byId(id: string, pool: Pool, all: boolean): Promise<unknown> {
+  return pool.query(all ? "SELECT * FROM users" : "SELECT * FROM users WHERE id = " + id);
+}
+
+export async function byIdConfig(id: string, pool: Pool, all: boolean): Promise<unknown> {
+  return pool.query({ text: all ? "SELECT * FROM users" : `SELECT * FROM users WHERE id = ${id}` });
+}
+
+interface Pool { query(sql: string | { text: string }): Promise<unknown> }

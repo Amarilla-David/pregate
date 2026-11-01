@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/secure-development/requirement-040",
+  "version": "1.0.0",
+  "area": "secure-development",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r040",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-040"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-040 requires current passing project verification: {symbol}."
+  }
+}

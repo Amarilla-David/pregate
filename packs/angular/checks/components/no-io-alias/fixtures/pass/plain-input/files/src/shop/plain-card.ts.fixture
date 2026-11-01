@@ -1,0 +1,5 @@
+import { Component, Input } from "@angular/core";
+@Component({ selector: "app-item", styleUrl: "./item.css" })
+export class ItemCard {
+  @Input() label = "";
+}

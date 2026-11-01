@@ -1,0 +1,12 @@
+export function sameKind(a, b, expected) {
+  const label = "kind: " + typeof a;
+  if (typeof a === typeof b) {
+    return typeof a === expected;
+  }
+  switch (typeof a) {
+    case "symbol":
+      return false;
+    default:
+      return label.length > 0;
+  }
+}

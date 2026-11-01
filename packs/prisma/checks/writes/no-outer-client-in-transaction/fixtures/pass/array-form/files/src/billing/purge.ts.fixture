@@ -1,0 +1,9 @@
+import { prisma } from "~/server/db";
+
+export async function purge(userId: string) {
+  await prisma.$transaction([
+    prisma.post.deleteMany({ where: { authorId: userId } }),
+    prisma.user.delete({ where: { id: userId } }),
+  ]);
+  await prisma.auditLog.create({ data: { action: "purge", userId } });
+}

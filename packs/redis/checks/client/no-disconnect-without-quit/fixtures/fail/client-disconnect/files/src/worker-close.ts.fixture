@@ -1,0 +1,4 @@
+declare const client: { disconnect(): Promise<void> };
+export async function closeClient(): Promise<void> {
+  await client.disconnect();
+}

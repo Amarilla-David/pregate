@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/http/no-http-client-module",
+  "version": "1.0.0",
+  "area": "http",
+  "cardinality": "singleton",
+  "dimension": "angular.http-client-module",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "deprecated-http-module",
+          "rule": {
+            "any": [
+              { "kind": "import_specifier" },
+              { "kind": "export_specifier" }
+            ],
+            "has": {
+              "field": "name",
+              "regex": "^(HttpClientModule|HttpClientTestingModule|HttpClientXsrfModule|HttpClientJsonpModule)$"
+            },
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                { "kind": "import_statement" },
+                { "kind": "export_statement" }
+              ],
+              "regex": "['\"]@angular/common/http(/testing)?['\"]"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is a deprecated HttpClient NgModule. Register HttpClient with provideHttpClient() (or provideHttpClientTesting() in tests) instead."
+  }
+}

@@ -1,0 +1,2 @@
+import { useEffect } from 'react';
+useEffect(() => { setTimeout(async () => { await save(); }, 0); }, []);

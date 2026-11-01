@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "context": {
+    "scope": { "include": ["src/**"], "exclude": ["src/legacy/**"] },
+    "generatedMarkers": ["@generated"]
+  },
+  "target": "src/orders/average.ts",
+  "before": null,
+  "expect": { "verdict": "pass" }
+}

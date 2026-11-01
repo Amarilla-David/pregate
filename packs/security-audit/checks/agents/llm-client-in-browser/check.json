@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/agents/llm-client-in-browser",
+  "version": "1.0.0",
+  "area": "agents",
+  "cardinality": "singleton",
+  "dimension": "security-audit.agents.browser-provider-key",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "llm-client-in-browser",
+          "rule": {
+            "kind": "pair",
+            "any": [
+              {
+                "regex": "^[\"']?dangerouslyAllowBrowser[\"']?\\s*:\\s*true$"
+              },
+              {
+                "regex": "(?i)^[\"']anthropic-dangerous-direct-browser-access[\"']\\s*:\\s*[\"'`]?true[\"'`]?$"
+              }
+            ]
+          },
+          "ignores": [
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} lets an LLM SDK client run in the browser, which ships the provider key to every visitor. Call the provider from a server route instead."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "language": "typescript",
+  "params": {
+    "paths": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "**/__tests__/**",
+      "test/**",
+      "tests/**"
+    ]
+  },
+  "target": "test/orders.test.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "strict-equality",
+    "origin": "forge",
+    "discovered": "2026-10-06",
+    "note": "Changing the equality matcher does not give the test an independent expected result."
+  }
+}

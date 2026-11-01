@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/mode.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

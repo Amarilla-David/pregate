@@ -1,0 +1,6 @@
+
+export async function markPaid(id: string, prisma: Prisma): Promise<void> {
+  await prisma.invoice.update({ where: { id }, data: { status: "paid" } });
+}
+
+interface Prisma { invoice: { update(q: unknown): Promise<void> } }

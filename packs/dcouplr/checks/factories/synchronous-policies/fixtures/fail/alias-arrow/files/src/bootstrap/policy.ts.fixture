@@ -1,0 +1,3 @@
+const check = async () => true;
+const alias = check;
+stage.addValidationPolicy(alias);

@@ -1,0 +1,27 @@
+{
+  "id": "vercel/recovery/requirement-014",
+  "version": "1.0.0",
+  "area": "recovery",
+  "cardinality": "singleton",
+  "dimension": "vercel.r014",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "VERCEL-014"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "VERCEL-014 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,5 @@
+import { BillingModel } from "../../modules/billing";
+
+export function formatBilling(b: BillingModel): string {
+  return b.id;
+}

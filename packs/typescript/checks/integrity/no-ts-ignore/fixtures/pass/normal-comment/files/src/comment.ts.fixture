@@ -1,0 +1,2 @@
+// Ignore this warning in docs; @ts-ignore is discussed in prose here
+const n: number = 42;

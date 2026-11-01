@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "server/api/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "context-alias",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Renaming the request scope to context still exports request state. The word event is not the rule; the exported scope is."
+  }
+}

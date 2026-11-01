@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react/components/no-array-index-key",
+  "version": "1.0.1",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "react.array-index-key",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "react-index-key"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses an array index as a React key without a proved fixed positional placeholder list. Use stable data identity for dynamic or data-bearing lists."
+  }
+}

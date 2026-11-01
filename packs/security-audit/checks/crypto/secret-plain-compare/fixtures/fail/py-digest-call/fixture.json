@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/session.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      },
+      {
+        "line": 7
+      }
+    ]
+  }
+}

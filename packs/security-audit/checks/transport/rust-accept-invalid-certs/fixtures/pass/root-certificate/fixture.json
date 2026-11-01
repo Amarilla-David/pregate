@@ -1,0 +1,9 @@
+{
+  "language": "rust",
+  "params": {},
+  "target": "src/client.rs",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

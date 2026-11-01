@@ -1,0 +1,6 @@
+import { useState } from "react";
+export function Stuck() {
+  const [n, setN] = useState(0);
+  setN(n + 1);
+  return <div>{n}</div>;
+}

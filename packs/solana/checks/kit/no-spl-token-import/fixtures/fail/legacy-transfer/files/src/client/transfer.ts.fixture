@@ -1,0 +1,8 @@
+import { createTransferInstruction, getAssociatedTokenAddress } from "@solana/spl-token";
+import type { PublicKey } from "@solana/web3.js";
+
+export async function buildTransfer(mint: PublicKey, from: PublicKey, to: PublicKey, amount: bigint) {
+  const source = await getAssociatedTokenAddress(mint, from);
+  const destination = await getAssociatedTokenAddress(mint, to);
+  return createTransferInstruction(source, destination, from, amount);
+}

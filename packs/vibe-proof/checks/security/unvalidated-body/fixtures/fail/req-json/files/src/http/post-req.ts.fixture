@@ -1,0 +1,7 @@
+
+export async function postInvoice(req: Req): Promise<Response> {
+  const body = await req.json();
+  return new Response(String(body));
+}
+
+interface Req { json(): Promise<unknown> }

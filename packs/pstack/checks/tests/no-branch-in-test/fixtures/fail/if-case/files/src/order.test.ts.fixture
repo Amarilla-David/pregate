@@ -1,0 +1,3 @@
+test("discount", () => {
+  if (vip) expect(price()).toBe(10);
+});

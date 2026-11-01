@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/webhooks/verify.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "null-and-literal-guard",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "Guards against null, undefined, empty strings or literal algorithm names are not secret comparisons; comparing two secret operands is."
+  }
+}

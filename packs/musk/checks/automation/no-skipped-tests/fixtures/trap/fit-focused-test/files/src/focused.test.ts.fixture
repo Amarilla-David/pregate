@@ -1,0 +1,5 @@
+declare const fit: any;
+
+fit("legacy focused test", () => {
+  // focused
+});

@@ -1,0 +1,9 @@
+import path from "node:path";
+import { Router } from "express";
+
+export const docsRouter = Router();
+const rootDir = path.join(__dirname, "docs");
+
+docsRouter.get("/docs/:page", (req, res, next) => {
+  res.sendFile(path.resolve(rootDir, req.params.page), (err) => next(err));
+});

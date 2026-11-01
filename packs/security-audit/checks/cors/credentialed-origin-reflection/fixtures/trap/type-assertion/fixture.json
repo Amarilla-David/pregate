@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/server/middleware.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "type-assertion",
+    "note": "A cast or non-null assertion around the request Origin still reflects it.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/saga-runtime",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-SAGA-RUNTIME-001",
+      "check": "dcouplr/saga-runtime/requirement-001",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3688-3764; dist/index.d.mts:251-315",
+        "paraphrase": "A saga owner must register and validate the complete graph before start. Node identities and expected or previous step references must have one owner and an explicit meaning. Use of the deprecated structured-saga API must have a recorded version and replacement decision."
+      },
+      "why": "A saga owner must register and validate the complete graph before start. Node identities and expected or previous step references must have one owner and an explicit meaning. Use of the deprecated structured-saga API must have a recorded version and replacement decision. The product uses DStructuredSaga or its public node and event-builder contracts. This pack must not force new adoption of a deprecated API.",
+      "fixHint": "Exercise the actual registered graph, including duplicate or missing references and registration after start. The pinned runtime validates join references to steps but does not validate previousStepId or wire nodes added while running. Joins cannot name another join as an expected step. Review the declaration's deprecation and the product's supported-version decision. Bind DCP-SAGA-RUNTIME-001 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-001.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-002",
+      "check": "dcouplr/saga-runtime/requirement-002",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:4029-4036,4072-4076,4240-4269; dist/index.d.mts:255-260; dist/index-C3YI4Tf9.d.mts:ISagaEventContext",
+        "paraphrase": "A saga boundary must validate authorization, organization scope, event identity and payload before admission. A matching sagaId must not be treated as authorization or proof that an internal step ran. Data shared with queued handlers must have explicit mutation ownership."
+      },
+      "why": "A saga boundary must validate authorization, organization scope, event identity and payload before admission. A matching sagaId must not be treated as authorization or proof that an internal step ran. Data shared with queued handlers must have explicit mutation ownership. An external, recovered or concurrently mutable event can reach a structured saga.",
+      "fixHint": "Reject wrong-organization, forged-source, malformed-context and invalid-payload events through the actual boundary. Verify exact saga identity and immutable or copied payload ownership. The pinned live matcher checks only a string sagaId; recovered events bypass that matcher. Its queue clone copies top-level context and saga context but shares payload and other nested values. Bind DCP-SAGA-RUNTIME-002 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-002.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-003",
+      "check": "dcouplr/saga-runtime/requirement-003",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3746-3751,4077-4117; dist/index.d.mts:252-254,261-270,293",
+        "paraphrase": "A saga handler must complete its owned asynchronous work and return the declared outcome. It must use literal failure for an expected failed step, or an observed exception for an unexpected failure. Repeated delivery must not repeat an unsafe business effect."
+      },
+      "why": "A saga handler must complete its owned asynchronous work and return the declared outcome. It must use literal failure for an expected failed step, or an observed exception for an unexpected failure. Repeated delivery must not repeat an unsafe business effect. A registered structured-saga step performs a decision or effect.",
+      "fixHint": "Hold and reject actual step operations, verify success and failure signals, and test duplicate delivery, restart and replay with the product's effect idempotency key. Void means success in the pinned API; false and unknown values are also runtime successes and must not be used as failure signals. In-memory duplicate suppression ends when stop resets state. Bind DCP-SAGA-RUNTIME-003 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-003.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-004",
+      "check": "dcouplr/saga-runtime/requirement-004",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:4093-4139,4199-4216; dist/index.d.mts:261-270,299",
+        "paraphrase": "Each compensating effect must have an explicit failure, retry and idempotency policy. A checkpoint must define which successful effects are retained and which failed effects still need compensation. Compensation must not be assumed to be an atomic rollback."
+      },
+      "why": "Each compensating effect must have an explicit failure, retry and idempotency policy. A checkpoint must define which successful effects are retained and which failed effects still need compensation. Compensation must not be assumed to be an atomic rollback. The graph has compensate, previousStepId or isCheckpoint behavior, or a join can compensate a completed branch.",
+      "fixHint": "Verify actual own-before-previous ordering, failure propagation and repeat safety. A succeeded checkpoint blocks a later compensation request, but a failed checkpoint still runs its own compensation. Reject a compensation promise and verify the owner's recovery policy: the pinned runtime can retain running state, remove the queued event and ignore later input without raising branch failure. Bind DCP-SAGA-RUNTIME-004 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-004.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-005",
+      "check": "dcouplr/saga-runtime/requirement-005",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:4140-4198; dist/index.d.mts:271-280,293-299",
+        "paraphrase": "A saga join must use trusted completion signals and a verified any or every branch policy. Winning, losing, failing and already completed branches must have explicit business outcomes. A join signal alone must not prove that its expected handlers ran."
+      },
+      "why": "A saga join must use trusted completion signals and a verified any or every branch policy. Winning, losing, failing and already completed branches must have explicit business outcomes. A join signal alone must not prove that its expected handlers ran. The graph registers a join or consumes structured-saga success, branch-failure or cancellation events.",
+      "fixHint": "Exercise distinct successes, duplicate or forged success, one or all failed branches, already succeeded losers and same-branch siblings. The pinned any join cancels a different idle branch but does not cancel an idle sibling in the winner's branch; an already succeeded loser can be compensated. Every failure cancels branches and requests compensation for recorded successes. Verify actual application effects and failure outputs, not only counter equality. Bind DCP-SAGA-RUNTIME-005 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-005.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-006",
+      "check": "dcouplr/saga-runtime/requirement-006",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3726-3735,4029-4070; dist/index.d.mts:282-288,309-310",
+        "paraphrase": "A saga recovery owner must establish readiness and observe recovery failure before admitting business work. Calling start must not be treated as awaited recovery or a healthy readiness check."
+      },
+      "why": "A saga recovery owner must establish readiness and observe recovery failure before admitting business work. Calling start must not be treated as awaited recovery or a healthy readiness check. A saga starts or restarts with queued or stored work.",
+      "fixHint": "Hold and reject the actual recovery operation and verify the product's readiness barrier, failure observation and admission policy. The pinned start returns void, recovery rejection can become unhandled, and live input can be processed while recovery is pending. Validate recovered identity and data before any handler effect. Bind actual queue/adapter and owner inputs. Bind DCP-SAGA-RUNTIME-006 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-006.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-007",
+      "check": "dcouplr/saga-runtime/requirement-007",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3746-3751,4039-4070,4270-4293; dist/index.d.mts:254,447-453",
+        "paraphrase": "A saga's durable-work and replay contract must verify actual storage selection, recovery, acknowledgement and business-effect idempotency. A configured persistence singleton or in-memory step state must not stand in for durable execution state."
+      },
+      "why": "A saga's durable-work and replay contract must verify actual storage selection, recovery, acknowledgement and business-effect idempotency. A configured persistence singleton or in-memory step state must not stand in for durable execution state. A saga must survive process loss, resume effects or share a queue identity across instances. A deliberately volatile custom queue needs an explicit loss policy.",
+      "fixHint": "Observe actual queue storage calls and restart/replay through the configured adapter. The pinned saga admits a built-in queue when a persistence singleton exists, but that queue's transient fallback does not select the singleton repository. Step and join states are in memory and reset on stop. Verify writer ownership, loss windows and idempotent effect keys; an empty queue is not proof that effects were committed once. Bind DCP-SAGA-RUNTIME-007 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-007.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-SAGA-RUNTIME-008",
+      "check": "dcouplr/saga-runtime/requirement-008",
+      "defaults": {
+        "verifier": "DCP-SAGA-RUNTIME-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3737-3753,4039-4069,4119-4130; dist/index.d.mts:268,287-288,311-312",
+        "paraphrase": "A saga lifecycle owner must stop new admission and await or explicitly reject in-flight effects before it reports shutdown. Cancellation, handler latency and queue saturation must have bounded named policies. A cancellation event or stop return must not be treated as an abort or completed drain."
+      },
+      "why": "A saga lifecycle owner must stop new admission and await or explicitly reject in-flight effects before it reports shutdown. Cancellation, handler latency and queue saturation must have bounded named policies. A cancellation event or stop return must not be treated as an abort or completed drain. The product stops, cancels, times out or shuts down a running structured saga.",
+      "fixHint": "Hold actual handler work across stop and cancellation, and verify the caller's owned completion barrier, timeout and failure propagation. The pinned stop returns void and an in-flight handler can still emit success; queued cancellation cannot interrupt the handler ahead of it. Queue saturation rejects blocking delivery without running the handler. Include missing-await, lost-failure and unbounded-handler failing controls. Bind DCP-SAGA-RUNTIME-008 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-SAGA-RUNTIME-008.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

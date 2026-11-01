@@ -1,0 +1,6 @@
+const count = $state(0);
+const doubled = $derived(count * 2);
+
+export function value(): number {
+  return doubled;
+}

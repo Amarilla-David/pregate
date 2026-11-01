@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/search.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "scoped-directive",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Moving 'use client' into the component body keeps it first in that block, but the client boundary is module-level only, so the file stays on the server."
+  }
+}

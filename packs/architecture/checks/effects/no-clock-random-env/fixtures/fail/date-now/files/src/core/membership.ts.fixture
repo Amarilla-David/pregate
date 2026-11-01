@@ -1,0 +1,7 @@
+export interface Membership {
+  readonly expiresAt: number;
+}
+
+export function isExpired(membership: Membership): boolean {
+  return Date.now() >= membership.expiresAt;
+}

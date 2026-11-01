@@ -1,0 +1,11 @@
+{
+  "language": "typescript",
+  "params": {
+    "max": 1
+  },
+  "target": "src/billing/invoice.ts",
+  "before": "before/",
+  "expect": {
+    "verdict": "pass"
+  }
+}

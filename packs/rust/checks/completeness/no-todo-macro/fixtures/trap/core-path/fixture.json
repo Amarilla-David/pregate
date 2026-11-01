@@ -1,0 +1,20 @@
+{
+  "language": "rust",
+  "params": {},
+  "target": "src/a.rs",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "core-path",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A fully qualified core::todo! is the same placeholder."
+  }
+}

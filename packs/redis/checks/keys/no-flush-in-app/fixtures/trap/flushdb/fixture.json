@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/cache/reset-lower.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "flushdb",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "ioredis spells it flushdb in lowercase. Casing does not make the wipe safe; both spellings are covered."
+  }
+}

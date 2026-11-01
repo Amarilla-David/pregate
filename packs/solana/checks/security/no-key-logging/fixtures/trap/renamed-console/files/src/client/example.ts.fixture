@@ -1,0 +1,2 @@
+const audit = console;
+audit.debug(wallet.secretKey);

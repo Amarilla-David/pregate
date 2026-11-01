@@ -1,0 +1,13 @@
+import { pool } from "./pool";
+
+export async function signup(email: string) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query("INSERT INTO users(email) VALUES ($1)", [email]);
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  }
+}

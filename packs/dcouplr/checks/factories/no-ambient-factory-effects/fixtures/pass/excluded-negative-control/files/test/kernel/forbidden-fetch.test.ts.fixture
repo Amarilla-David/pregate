@@ -1,0 +1,4 @@
+test("the kernel rejects a factory that reaches for fetch", () => {
+  kernel.addFactoryMethod(() => ({ load: () => fetch("/forbidden") }));
+  expect(() => kernel.resolve("Probe")).toThrow();
+});

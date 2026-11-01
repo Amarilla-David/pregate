@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/schema/no-integer-id-without-primary-key",
+  "version": "1.0.0",
+  "area": "schema",
+  "cardinality": "singleton",
+  "dimension": "drizzle.integer-id-pk",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "integer-id-pk",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "regex": "^pgTable\\s*\\("
+              },
+              {
+                "any": [
+                  {
+                    "regex": "\\b(serial|bigserial|smallserial|integer|bigint|smallint)\\s*\\(\\s*[\"']id[\"']"
+                  },
+                  {
+                    "regex": "(^|[\\s{,])id\\s*:\\s*(serial|bigserial|smallserial|integer|bigint|smallint)\\s*\\("
+                  }
+                ]
+              }
+            ],
+            "not": {
+              "regex": "\\bprimaryKey\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} defines a pgTable whose integer or serial id has no primaryKey. Chain .primaryKey() onto the id column."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/vertical-slice",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SLICE-EDGE-001",
+      "check": "architecture/slices/no-sibling-internals",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Vertical slice architecture (J. Bogard)",
+        "locator": "feature folders and public surface",
+        "paraphrase": "A feature owns its handlers, model, and persistence. Another feature talks to it through the entry the slice chooses to expose, not through its private files."
+      },
+      "why": "A slice that uses a neighbor's private folders breaks when that neighbor renames its insides, and the public entry stops being the only contract.",
+      "fixHint": "Import the other feature from its folder entry (../orders or ../orders/index) and keep the private folders unimported.",
+      "avoid": "export * from the sibling internal path publishes the same private modules.",
+      "examples": {
+        "pass": "pass/public-entry",
+        "fail": "fail/sibling-internal"
+      }
+    }
+  ]
+}

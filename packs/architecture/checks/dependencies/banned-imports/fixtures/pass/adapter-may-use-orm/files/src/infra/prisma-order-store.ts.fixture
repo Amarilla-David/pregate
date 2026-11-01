@@ -1,0 +1,10 @@
+import { PrismaClient } from "@prisma/client";
+import type { Order } from "../domain/order";
+
+export class PrismaOrderStore {
+  constructor(private readonly db: PrismaClient) {}
+
+  async save(order: Order): Promise<void> {
+    await this.db.order.create({ data: { id: order.id } });
+  }
+}

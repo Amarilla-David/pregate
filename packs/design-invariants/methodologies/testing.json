@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "design-invariants/testing",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DESIGN-038",
+      "check": "design-invariants/testing/requirement-038",
+      "defaults": {
+        "verifier": "DESIGN-038"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software design invariants",
+        "locator": "docs/features/design-invariants-pack.md, rule 38",
+        "paraphrase": "The project has automated unit tests and integration tests, and an end-to-end test where smaller tests cannot see the behavior."
+      },
+      "why": "The project has automated unit tests and integration tests, and an end-to-end test where smaller tests cannot see the behavior.",
+      "fixHint": "Bind DESIGN-038 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run DESIGN-038; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DESIGN-039",
+      "check": "design-invariants/testing/requirement-039",
+      "defaults": {
+        "verifier": "DESIGN-039"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software design invariants",
+        "locator": "docs/features/design-invariants-pack.md, rule 39",
+        "paraphrase": "An automated test is fast, isolated, and repeatable. It does not depend on order, another test's clock, or a shared mutable fixture it does not own."
+      },
+      "why": "An automated test is fast, isolated, and repeatable. It does not depend on order, another test's clock, or a shared mutable fixture it does not own.",
+      "fixHint": "Bind DESIGN-039 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run DESIGN-039; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DESIGN-040",
+      "check": "design-invariants/testing/requirement-040",
+      "defaults": {
+        "verifier": "DESIGN-040"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software design invariants",
+        "locator": "docs/features/design-invariants-pack.md, rule 40",
+        "paraphrase": "A unit test separates arrange, act, and assert."
+      },
+      "why": "A unit test separates arrange, act, and assert.",
+      "fixHint": "Bind DESIGN-040 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run DESIGN-040; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DESIGN-041",
+      "check": "design-invariants/testing/requirement-041",
+      "defaults": {
+        "verifier": "DESIGN-041"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software design invariants",
+        "locator": "docs/features/design-invariants-pack.md, rule 41",
+        "paraphrase": "Where the team uses test-first for a change, a failing test exists before the production change that makes it pass."
+      },
+      "why": "Where the team uses test-first for a change, a failing test exists before the production change that makes it pass.",
+      "fixHint": "Bind DESIGN-041 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run DESIGN-041; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DESIGN-042",
+      "check": "design-invariants/testing/requirement-042",
+      "defaults": {
+        "verifier": "DESIGN-042"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software design invariants",
+        "locator": "docs/features/design-invariants-pack.md, rule 42",
+        "paraphrase": "A complex invariant the project selects for generative testing has a property test that fails on a violating input."
+      },
+      "why": "A complex invariant the project selects for generative testing has a property test that fails on a violating input.",
+      "fixHint": "Bind DESIGN-042 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run DESIGN-042; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DESIGN-043",
+      "check": "design-invariants/testing/requirement-043",
+      "defaults": {
+        "verifier": "DESIGN-043"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software design invariants",
+        "locator": "docs/features/design-invariants-pack.md, rule 43",
+        "paraphrase": "The main branch's continuous integration is green for the checks the project requires."
+      },
+      "why": "The main branch's continuous integration is green for the checks the project requires.",
+      "fixHint": "Bind DESIGN-043 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run DESIGN-043; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

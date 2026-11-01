@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "musk-algorithm",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "musk",
+      "kind": "path",
+      "path": "packs/musk"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "typescript",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "clean-code/clean-code",
+    "core/pregate-integrity",
+    "musk/algorithm",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "enforce"
+}

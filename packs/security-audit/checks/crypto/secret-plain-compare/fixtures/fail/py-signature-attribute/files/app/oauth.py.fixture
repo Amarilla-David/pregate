@@ -1,0 +1,7 @@
+def authenticate(request, computed):
+    return request.headers.get("X-Hub-Signature-256") != computed
+
+
+def verify_mac(key, body, given):
+    expected_mac = hmac.new(key, body, "sha256").digest()
+    return given == expected_mac

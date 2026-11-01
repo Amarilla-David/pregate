@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/tests/test-has-assertion",
+  "version": "1.0.0",
+  "area": "tests",
+  "cardinality": "singleton",
+  "dimension": "tests.assertion-present",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "test-body",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^(it|test)$"
+            },
+            "not": {
+              "has": {
+                "stopBy": "end",
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "regex": "^(expect|assert)(\\.|$)"
+                }
+              }
+            }
+          },
+          "files": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            "**/*.test.tsx",
+            "**/*.spec.tsx",
+            "**/__tests__/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is a test with no expect or assert call. A test that cannot fail does not prove the behavior."
+  }
+}

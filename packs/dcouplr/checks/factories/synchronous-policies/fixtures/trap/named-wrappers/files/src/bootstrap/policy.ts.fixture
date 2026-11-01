@@ -1,0 +1,2 @@
+const check = ((async () => true) satisfies Policy);
+(stage['addValidationPolicy'] as Setter)?.(/* first */ (check as Policy), ...extra);

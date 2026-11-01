@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/dependency-rule/usecase-imports-outer",
+  "version": "1.0.0",
+  "area": "dependency-rule",
+  "cardinality": "singleton",
+  "dimension": "dependency.usecase-outer",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "import-edge",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "(^|/)(interface-adapters|frameworks|adapters|infra)(/|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "**/use-cases/**",
+            "**/usecases/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports an adapter or framework from a use case. Use cases depend inward, on entities and ports."
+  }
+}

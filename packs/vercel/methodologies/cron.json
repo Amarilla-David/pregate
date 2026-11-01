@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vercel/cron",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VERCEL-007",
+      "check": "vercel/cron/requirement-007",
+      "defaults": {
+        "verifier": "VERCEL-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/cron-jobs/manage-cron-jobs; checked 2026-10-05; docs/features/vercel-pack.md, rule 7",
+        "paraphrase": "A protected cron endpoint must check its configured secret on the server and reject a missing or incorrect authorization value before effects."
+      },
+      "why": "A protected cron endpoint must check its configured secret on the server and reject a missing or incorrect authorization value before effects.",
+      "fixHint": "Bind VERCEL-007 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-007; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-008",
+      "check": "vercel/cron/requirement-008",
+      "defaults": {
+        "verifier": "VERCEL-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/cron-jobs/manage-cron-jobs; checked 2026-10-05; docs/features/vercel-pack.md, rule 8",
+        "paraphrase": "A cron operation must handle overlapping runs and duplicate invocations without an unintended repeated or conflicting effect."
+      },
+      "why": "A cron operation must handle overlapping runs and duplicate invocations without an unintended repeated or conflicting effect.",
+      "fixHint": "Bind VERCEL-008 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-008; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-009",
+      "check": "vercel/cron/requirement-009",
+      "defaults": {
+        "verifier": "VERCEL-009"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/cron-jobs/manage-cron-jobs; checked 2026-10-05; docs/features/vercel-pack.md, rule 9",
+        "paraphrase": "A cron operation must have a policy for missed runs and failed invocations; it must not assume automatic retries or exactly-once delivery."
+      },
+      "why": "A cron operation must have a policy for missed runs and failed invocations; it must not assume automatic retries or exactly-once delivery.",
+      "fixHint": "Bind VERCEL-009 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-009; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

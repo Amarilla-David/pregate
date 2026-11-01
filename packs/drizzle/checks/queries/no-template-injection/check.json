@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/queries/no-template-injection",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "drizzle.where-string",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "where-string",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\.where$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "^\\([\"'`]"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes a raw string to where. Filter with eq, and, or over columns, or a parameterized sql`` fragment."
+  }
+}

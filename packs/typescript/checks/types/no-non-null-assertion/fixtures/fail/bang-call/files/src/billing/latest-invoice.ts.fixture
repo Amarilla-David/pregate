@@ -1,0 +1,4 @@
+
+export function latest(invoices: { id: string }[]): string {
+  return invoices.find((invoice) => invoice.id.length > 0)!.id;
+}

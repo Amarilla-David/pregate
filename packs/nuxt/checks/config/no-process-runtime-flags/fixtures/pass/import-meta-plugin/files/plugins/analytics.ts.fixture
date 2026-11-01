@@ -1,0 +1,10 @@
+declare function startAnalytics(id: string): void;
+
+export default defineNuxtPlugin(() => {
+  if (import.meta.client) {
+    startAnalytics("site-1");
+  }
+  if (import.meta.dev) {
+    console.info("analytics plugin loaded");
+  }
+});

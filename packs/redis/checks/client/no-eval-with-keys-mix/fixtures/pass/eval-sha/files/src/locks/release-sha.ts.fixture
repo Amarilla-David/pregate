@@ -1,0 +1,6 @@
+import { redis } from "./client";
+
+export async function releaseTwice(script: string, sha: string): Promise<void> {
+  await redis.scriptLoad(script);
+  await redis.evalSha(sha, 0);
+}

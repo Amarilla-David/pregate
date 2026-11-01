@@ -1,0 +1,10 @@
+
+export function label(status: string): string {
+  if (status === "open") {
+    return "open";
+  } else if (status === "paid") {
+    return "paid";
+  } else {
+    return "closed";
+  }
+}

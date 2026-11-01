@@ -1,0 +1,5 @@
+import { Text } from "react-native";
+
+export function Go(): unknown {
+  return (<button onClick={f}><Text>go</Text></button>);
+}

@@ -1,0 +1,3 @@
+stage.addValidationPolicy(() => true);
+stage.addValidationPolicy(() => ({ valid: false, msg: 'rejected' }));
+stage.addValidationPolicy(() => ({ valid: true, msg: void 0 }));

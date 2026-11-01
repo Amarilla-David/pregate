@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mattpocock/tests/no-self-equality",
+  "version": "1.0.0",
+  "area": "tests",
+  "cardinality": "singleton",
+  "dimension": "tests.self-equality",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "self-equality",
+          "rule": {
+            "any": [
+              {
+                "pattern": "expect($VALUE).toBe($VALUE)"
+              },
+              {
+                "pattern": "expect($VALUE).toEqual($VALUE)"
+              },
+              {
+                "pattern": "expect($VALUE).toStrictEqual($VALUE)"
+              }
+            ]
+          },
+          "constraints": {
+            "VALUE": {
+              "any": [
+                {
+                  "kind": "identifier"
+                },
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} compares a value with itself. Assert an independently established expected result."
+  }
+}

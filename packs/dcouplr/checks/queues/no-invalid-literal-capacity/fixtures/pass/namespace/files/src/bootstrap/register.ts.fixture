@@ -1,0 +1,1 @@
+kernel.dependencies.resolve(system.DependencyKeys.IQueue, { persistence: { aotMs: 1e3, maxPendingOps: 2 } });

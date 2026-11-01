@@ -1,0 +1,8 @@
+export function inspect(x: number): number {
+  if (x === 0) {
+    console.log("zero");
+    return 0;
+  } else {
+    return x * 10;
+  }
+}

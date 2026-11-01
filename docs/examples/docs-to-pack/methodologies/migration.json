@@ -1,0 +1,21 @@
+{
+  "id": "docs-demo/migration",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [{
+    "id": "DOCS-IMPORT-001",
+    "check": "docs-demo/dependencies/no-retired-imports",
+    "defaults": { "packages": ["legacy-web-kit"], "paths": ["src/**"] },
+    "severity": "warn",
+    "source": {
+      "work": "Fictional web-kit migration guide",
+      "locator": "Revision 1, retired package policy; docs/examples/docs-to-pack/README.md",
+      "paraphrase": "Migrated source imports modern-web-kit instead of the retired legacy-web-kit or its subpaths."
+    },
+    "why": "Keep migrated code on the supported library API.",
+    "fixHint": "Replace the dependency with the supported API and verify the affected behavior with tests.",
+    "avoid": "Do not hide the same package behind require, a dynamic import or a subpath.",
+    "examples": { "pass": "pass/modern", "fail": "fail/retired" }
+  }]
+}

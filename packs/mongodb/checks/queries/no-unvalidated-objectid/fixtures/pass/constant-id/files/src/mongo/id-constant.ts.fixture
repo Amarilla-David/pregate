@@ -1,0 +1,4 @@
+import { ObjectId } from "mongodb";
+export function seed(): void {
+  const oid = new ObjectId("507f1f77bcf86cd799439011");
+}

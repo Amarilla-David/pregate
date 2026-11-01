@@ -1,0 +1,25 @@
+{
+  "id": "go/dependencies/layer-direction",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "singleton",
+  "dimension": "go.deps.layers",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "layer-edge"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: The import reaches a layer this core is not allowed to depend on."
+  }
+}

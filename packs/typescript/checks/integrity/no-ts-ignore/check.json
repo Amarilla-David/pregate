@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/integrity/no-ts-ignore",
+  "version": "1.0.0",
+  "area": "integrity",
+  "cardinality": "singleton",
+  "dimension": "types.ts-ignore",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "ts-ignore-comment",
+          "rule": {
+            "kind": "comment",
+            "regex": "^(?://|/\\*+)\\s*@ts-ignore\\b"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} suppresses compiler diagnostics with @ts-ignore. Use @ts-expect-error with a reason, or fix the type signature."
+  }
+}

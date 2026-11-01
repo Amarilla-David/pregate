@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/ui/list.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

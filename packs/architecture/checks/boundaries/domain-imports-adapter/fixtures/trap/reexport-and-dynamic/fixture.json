@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/domain/tax.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      },
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "reexport-or-import",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "export type and import() still name the adapter. The edge is the specifier, not the import keyword."
+  }
+}

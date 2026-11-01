@@ -1,0 +1,27 @@
+{
+  "id": "agent-practices/domain-ownership/requirement-014",
+  "version": "1.0.0",
+  "area": "domain-ownership",
+  "cardinality": "singleton",
+  "dimension": "agent-practices.r014",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PRACTICE-014"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PRACTICE-014 requires current passing project verification: {symbol}."
+  }
+}

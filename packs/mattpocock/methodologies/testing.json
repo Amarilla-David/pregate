@@ -1,0 +1,113 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "mattpocock/testing",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MP-SELF-001",
+      "check": "mattpocock/tests/no-self-equality",
+      "defaults": {
+        "paths": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/__tests__/**",
+          "test/**",
+          "tests/**"
+        ]
+      },
+      "severity": "warn",
+      "source": {
+        "work": "Matt Pocock — Skills For Real Engineers",
+        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/SKILL.md — Anti-patterns / Tautological",
+        "paraphrase": "An assertion needs an independent expected result; comparing an identifier or scalar literal with itself supplies none."
+      },
+      "why": "A positive equality assertion against the same stable expression cannot detect an incorrect result.",
+      "fixHint": "Call the behavior under test and compare its result with an independently established expected value.",
+      "avoid": "Only direct expect(...).toBe/toEqual/toStrictEqual calls with the same identifier or scalar literal are covered. Calls, property getters, objects, negated assertions, modifiers, aliases, bracket access and recomputation through another variable are outside this slice. A custom local expect may match by name.",
+      "examples": {
+        "pass": "pass/public-result",
+        "fail": "fail/same-identifier"
+      }
+    },
+    {
+      "id": "MP-MOCK-001",
+      "check": "mattpocock/tests/no-internal-module-mock",
+      "defaults": {
+        "paths": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/__tests__/**",
+          "test/**",
+          "tests/**"
+        ]
+      },
+      "severity": "warn",
+      "source": {
+        "work": "Matt Pocock — Skills For Real Engineers",
+        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/mocking.md — When to Mock",
+        "paraphrase": "Use real owned modules in tests and substitute dependencies at system boundaries."
+      },
+      "why": "Replacing a relative module can couple the test to internal wiring rather than behavior at its agreed seam.",
+      "fixHint": "Exercise the owned module through its interface and inject a boundary adapter when substitution is necessary.",
+      "avoid": "This is a review warning for literal relative specifiers in vi/jest.mock, doMock, unstable_mockModule and Bun-style mock.module. A relative file can be a legitimate system adapter; review that case. Package/path aliases, computed paths, imports renamed from mock, bracket calls and spyOn are not resolved. Factory mocks remain covered by the module specifier.",
+      "examples": {
+        "pass": "pass/external-package",
+        "fail": "fail/relative-module"
+      }
+    },
+    {
+      "id": "MP-CALLS-001",
+      "check": "mattpocock/tests/no-call-count-or-order",
+      "defaults": {
+        "paths": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/__tests__/**",
+          "test/**",
+          "tests/**"
+        ]
+      },
+      "severity": "warn",
+      "source": {
+        "work": "Matt Pocock — Skills For Real Engineers",
+        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/tests.md — Bad Tests / Red flags",
+        "paraphrase": "Prefer observed results at the tested interface over assertions about collaborator call counts or ordering."
+      },
+      "why": "Internal call counts and order often change during a refactor that preserves the user's result.",
+      "fixHint": "Assert the returned value or the state visible through the interface. Keep count/order assertions only when they are part of the boundary contract.",
+      "avoid": "Only named count/order matchers on a receiver starting with expect(...) are recognized, including .not/.resolves chains. toHaveBeenCalledWith is allowed because an external protocol may require particular arguments. This check cannot distinguish internal collaboration from observable delivery count or ordering; aliases, bracket access and custom matchers are outside scope.",
+      "examples": {
+        "pass": "pass/result",
+        "fail": "fail/call-count"
+      }
+    },
+    {
+      "id": "MP-MOCK-BRANCH-001",
+      "check": "mattpocock/tests/no-conditional-mock",
+      "defaults": {
+        "paths": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/__tests__/**",
+          "test/**",
+          "tests/**"
+        ]
+      },
+      "severity": "warn",
+      "source": {
+        "work": "Matt Pocock — Skills For Real Engineers",
+        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/mocking.md — Designing for Mockability / Prefer SDK-style interfaces",
+        "paraphrase": "Each boundary mock should provide a specific response rather than select response shapes through conditional logic."
+      },
+      "why": "A branching mock duplicates endpoint routing or production decisions, making the setup harder to trust.",
+      "fixHint": "Use operation-specific boundary methods with explicit responses. Review intentional protocol state machines before changing them.",
+      "avoid": "Only if/switch/ternary syntax nested in an inline arrow/function argument to vi.fn or jest.fn is detected, including branches in nested callback code. Named callback implementations, mockImplementation chains, Bun mock(), logical operators and helpers are outside scope. Stateful protocol fakes can legitimately branch.",
+      "examples": {
+        "pass": "pass/fixed-response",
+        "fail": "fail/conditional-response"
+      }
+    }
+  ]
+}

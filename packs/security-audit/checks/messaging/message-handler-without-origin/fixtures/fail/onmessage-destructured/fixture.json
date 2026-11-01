@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/receiver.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  }
+}

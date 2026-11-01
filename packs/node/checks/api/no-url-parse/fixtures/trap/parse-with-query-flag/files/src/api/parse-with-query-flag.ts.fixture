@@ -1,0 +1,5 @@
+import url from "node:url";
+
+export function query(u: string): unknown {
+  return url.parse(u, true).query;
+}

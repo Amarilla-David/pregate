@@ -1,0 +1,158 @@
+{
+  "id": "rust/quality",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "RUST-FN-001",
+      "check": "rust/complexity/fn-max-lines",
+      "defaults": {
+        "max": 45
+      },
+      "severity": "warn",
+      "source": {
+        "work": "PREGATE Rust source policies",
+        "locator": "rust.fn.lines, revision 1",
+        "paraphrase": "Function size exceeds the selected source-code limit."
+      },
+      "why": "Function size exceeds the selected source-code limit.",
+      "fixHint": "Extract a cohesive operation and preserve behavior with relevant tests.",
+      "avoid": "Do not compress statements or split a coherent operation arbitrarily.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "RUST-FN-002",
+      "check": "rust/complexity/fn-max-params",
+      "defaults": {
+        "max": 4
+      },
+      "severity": "warn",
+      "source": {
+        "work": "PREGATE Rust source policies",
+        "locator": "rust.fn.params, revision 1",
+        "paraphrase": "Function parameter count exceeds the selected limit."
+      },
+      "why": "Function parameter count exceeds the selected limit.",
+      "fixHint": "Review whether the inputs describe a cohesive domain value.",
+      "avoid": "Do not hide unrelated inputs in a generic map. Receivers do not count; tuple inputs count each element.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "RUST-NEST-001",
+      "check": "rust/control/max-nesting",
+      "defaults": {
+        "max": 2
+      },
+      "severity": "warn",
+      "source": {
+        "work": "PREGATE Rust source policies",
+        "locator": "rust.control.nesting, revision 1",
+        "paraphrase": "Source control-flow nesting exceeds the selected limit."
+      },
+      "why": "Source control-flow nesting exceeds the selected limit.",
+      "fixHint": "Use an early return or name a cohesive inner operation.",
+      "avoid": "Do not hide nesting in macro token trees; this check measures source AST, not expanded code.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "RUST-GLOB-001",
+      "check": "rust/dependencies/no-wildcard-use",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "PREGATE Rust source policies",
+        "locator": "rust.deps.wildcard, revision 1",
+        "paraphrase": "A wildcard use obscures the owner of an identifier."
+      },
+      "why": "A wildcard use obscures the owner of an identifier.",
+      "fixHint": "Use named imports, or document a deliberate prelude or DSL exception.",
+      "avoid": "Do not copy definitions to avoid an import. Reviewed preludes can remain an explicit exception.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "RUST-STATE-001",
+      "check": "rust/state/no-mutable-static",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "PREGATE Rust source policies",
+        "locator": "rust.state.mutable-static, revision 1",
+        "paraphrase": "A mutable static needs an explicit synchronization and safety policy."
+      },
+      "why": "A mutable static needs an explicit synchronization and safety policy.",
+      "fixHint": "Prefer a value or a synchronized owner; review FFI and low-level requirements.",
+      "avoid": "Do not replace a mutable static with hidden unsafe global storage.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "RUST-DBG-001",
+      "check": "rust/debug/no-dbg-macro",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Rust standard library documentation, macro std::dbg",
+        "locator": "https://doc.rust-lang.org/std/macro.dbg.html",
+        "paraphrase": "dbg! is a debugging tool; avoid keeping uses of it in version control, other than in tests and similar. Production debug output belongs to facilities such as the log crate's debug! macro."
+      },
+      "why": "dbg! writes file, line and value to stderr on every call, so a leftover one leaks values into production output.",
+      "fixHint": "Delete the dbg! and keep its inner expression, or replace it with a log or tracing macro at debug level.",
+      "avoid": "Do not move the call behind an alias, std::dbg! or a #[cfg(not(test))] block. Tests, benches, examples and #[cfg(test)] modules are not checked.",
+      "examples": {
+        "pass": "pass/log-macro",
+        "fail": "fail/value"
+      }
+    },
+    {
+      "id": "RUST-TODO-001",
+      "check": "rust/completeness/no-todo-macro",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Rust standard library documentation, macros std::todo and std::unimplemented",
+        "locator": "https://doc.rust-lang.org/std/macro.todo.html; https://doc.rust-lang.org/std/macro.unimplemented.html",
+        "paraphrase": "todo! indicates unfinished code and conveys an intent to implement it later; unimplemented! makes no such claim. Both panic when reached."
+      },
+      "why": "todo! compiles and type-checks, so a path that looks finished panics the first time it runs.",
+      "fixHint": "Implement the path, return an error the caller can handle, or use unimplemented! with a message when the operation is deliberately not provided.",
+      "avoid": "Do not swap todo! for panic!(\"todo\"), an empty default value or core::todo!.",
+      "examples": {
+        "pass": "pass/implemented",
+        "fail": "fail/body"
+      }
+    },
+    {
+      "id": "RUST-UNIMPL-001",
+      "check": "rust/completeness/no-unimplemented-macro",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Rust Standard Library Documentation",
+        "locator": "https://doc.rust-lang.org/std/macro.unimplemented.html",
+        "paraphrase": "unimplemented!() indicates unfinished or unimplemented code that panics at runtime when reached."
+      },
+      "why": "Leaving unimplemented!() in executable production code creates latent panics on unexplored branches.",
+      "fixHint": "Complete the implementation or return a Result::Err value that callers can handle.",
+      "avoid": "Do not deploy code containing active unimplemented!(), std::unimplemented!() or core::unimplemented!() branches.",
+      "examples": {
+        "pass": "pass/complete-fn",
+        "fail": "fail/unimplemented-call"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      },
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "parenthesized-negative-bytes",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Parentheses, a minus sign or a bytes prefix leave the operand a literal, and CPython still warns."
+  }
+}

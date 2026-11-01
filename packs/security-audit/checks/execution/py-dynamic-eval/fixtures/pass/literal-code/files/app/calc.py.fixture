@@ -1,0 +1,3 @@
+def version():
+    exec("import sys")
+    return eval("1 + 1")

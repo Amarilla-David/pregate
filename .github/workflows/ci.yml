@@ -1,0 +1,245 @@
+# PREGATE's own CI (ARCHITECTURE §2, §8): typecheck, unit tests, the release build for every target,
+# the end-to-end suite on the compiled binary, and the gate on this repository's own change.
+name: CI
+on:
+  push:
+    branches: [main, 'ci/**']
+  workflow_dispatch:
+  pull_request:
+jobs:
+  dcouplr-source:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - name: Verify pack canaries against the pinned published runtime
+        run: bun scripts/dcouplr-source-probe.ts --fetch
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      candidate_ready: ${{ steps.candidate.outcome == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - name: Install test shells
+        run: sudo apt-get update && sudo apt-get install -y zsh
+      - name: Isolate runtime homes
+        run: |
+          root=/private/tmp/claude-501/pregate-ci
+          sudo mkdir -p "$root"
+          sudo chown "$(id -u):$(id -g)" "$root"
+          for entry in HOME:home XDG_DATA_HOME:data XDG_STATE_HOME:state XDG_CONFIG_HOME:config TMPDIR:tmp CODEX_HOME:codex GROK_HOME:grok; do
+            path="$root/${entry#*:}"
+            mkdir -p "$path"
+            echo "${entry%%:*}=$path" >> "$GITHUB_ENV"
+          done
+      - run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Documentation matches CLI and rule manifests
+        run: |
+          bun scripts/core-invariants.ts --check
+          bun scripts/readiness-packs.ts --check
+          bun scripts/dcouplr-delivery-rules.ts --check
+          bun scripts/source-invariants.ts --check
+          bun scripts/invariant-coverage.ts --check
+          bun scripts/docs-reference.ts --check
+      - name: Unit tests
+        run: bun test --path-ignore-patterns 'test/e2e.test.ts'
+      - name: End to end
+        run: bun test test/e2e.test.ts
+      # Catalog fixtures, all platform archives, both installers and SHA256SUMS.
+      - name: Build
+        run: bun run build
+      - uses: actions/upload-artifact@v4
+        id: candidate
+        with:
+          name: release-candidate
+          if-no-files-found: error
+          path: |
+            dist/pregate-*.tar.gz
+            dist/pregate-*.zip
+            dist/install.sh
+            dist/install.ps1
+            dist/SHA256SUMS
+      # A push that creates the branch has 0000000 as its before, and a force push may name a commit
+      # that is gone: the base is then the merge base with main or, failing that, the first commit.
+      - name: Dogfooding
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -eu
+          if ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            BASE=$(git merge-base origin/main HEAD 2>/dev/null || git rev-list --max-parents=0 HEAD | tail -n 1)
+          fi
+          dist/pregate-*-linux-x64/pregate check --ratchet --base "$BASE"
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - name: Isolate runtime homes
+        shell: pwsh
+        run: |
+          $root = 'C:/private/tmp/claude-501/pregate-ci'
+          $paths = @{ HOME='home'; USERPROFILE='home'; LOCALAPPDATA='data'; APPDATA='config'; XDG_DATA_HOME='data'; XDG_STATE_HOME='state'; XDG_CONFIG_HOME='config'; TMPDIR='tmp'; TEMP='tmp'; TMP='tmp'; CODEX_HOME='codex'; GROK_HOME='grok' }
+          foreach ($entry in $paths.GetEnumerator()) {
+            $path = "$root/$($entry.Value)"
+            New-Item -ItemType Directory -Path $path -Force | Out-Null
+            "$($entry.Key)=$path" >> $env:GITHUB_ENV
+          }
+          # Without AppData\Local under USERPROFILE, PowerShell writes this cache into its working directory.
+          "PSModuleAnalysisCachePath=$root/powershell-module-analysis-cache" >> $env:GITHUB_ENV
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - name: Documentation matches CLI and rule manifests
+        run: |
+          bun scripts/core-invariants.ts --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          bun scripts/readiness-packs.ts --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          bun scripts/dcouplr-delivery-rules.ts --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          bun scripts/source-invariants.ts --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          bun scripts/invariant-coverage.ts --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          bun scripts/docs-reference.ts --check
+      - name: Verify native runtime and onboarding
+        run: bun test test/runtime.test.ts test/onboard.test.ts
+      - name: Native Windows bootstrap
+        run: bun test test/windows-distribution.e2e.test.ts
+      # These four suites execute POSIX shell fixtures. Native Windows equivalents are in
+      # supervisor.e2e and windows-distribution.e2e; all other unit/Git/adapter suites run here.
+      - name: Unit and native end-to-end tests
+        id: windows-suite
+        # Each file gets a fresh global object; deadlines and the selected tests stay unchanged.
+        run: bun test --isolate --path-ignore-patterns 'test/{launcher.e2e,machine.e2e,dist.e2e,e2e}.test.ts'
+      # Preserve the full-suite failure. Independent fresh processes help distinguish
+      # a repeatable product defect from an accumulated test-runtime failure.
+      - name: Diagnose failing Windows suites in fresh processes
+        if: failure() && steps.windows-suite.outcome == 'failure'
+        shell: pwsh
+        run: |
+          bun --version
+          git --version
+          foreach ($suite in @('audit', 'library', 'onboard', 'packs', 'ratchet', 'state')) {
+            Write-Output "Fresh-process diagnostic: test/$suite.test.ts"
+            bun test "test/$suite.test.ts"
+            Write-Output "Diagnostic exit code: $LASTEXITCODE"
+          }
+          exit 0
+      - run: bun src/main.ts rules test catalog
+      - name: Windows archive
+        run: bun run scripts/build.ts windows-x64
+      - name: Dogfooding
+        shell: pwsh
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git cat-file -e "$env:BASE^{commit}" 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            $env:BASE = git merge-base origin/main HEAD 2>$null
+            if ($LASTEXITCODE -ne 0) { $env:BASE = git rev-list --max-parents=0 HEAD | Select-Object -Last 1 }
+          }
+          bun src/main.ts check --ratchet --base $env:BASE
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+  windows-bootstrap:
+    needs: test
+    # Collect native evidence for a built candidate even if its later self-gate fails.
+    # The original failing job still blocks admission; publication is unchanged.
+    if: ${{ !cancelled() && needs.test.outputs.candidate_ready == 'true' }}
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-candidate
+          path: C:/private/tmp/claude-501/pregate-cross/download
+      - name: Bootstrap the Linux-built Windows release
+        shell: pwsh
+        run: |
+          $root = 'C:/private/tmp/claude-501/pregate-cross'
+          $paths = @{ HOME='home'; USERPROFILE='home'; LOCALAPPDATA='data'; APPDATA='config'; XDG_DATA_HOME='data'; XDG_STATE_HOME='state'; XDG_CONFIG_HOME='config'; TMPDIR='tmp'; TEMP='tmp'; TMP='tmp'; CODEX_HOME='codex'; GROK_HOME='grok' }
+          foreach ($entry in $paths.GetEnumerator()) {
+            $path = "$root/$($entry.Value)"
+            New-Item -ItemType Directory -Path $path -Force | Out-Null
+            [Environment]::SetEnvironmentVariable($entry.Key, $path, 'Process')
+          }
+          # Without AppData\Local under USERPROFILE, PowerShell writes this cache into its working directory.
+          [Environment]::SetEnvironmentVariable('PSModuleAnalysisCachePath', "$root/powershell-module-analysis-cache", 'Process')
+          $download = "$root/download"
+          $archive = Get-ChildItem "$download/pregate-*-windows-x64.zip" | Select-Object -First 1
+          $version = $archive.Name -replace '^pregate-(.+)-windows-x64.zip$', '$1'
+          foreach ($name in @($archive.Name, 'install.ps1')) {
+            $line = Get-Content "$download/SHA256SUMS" | Where-Object { $_ -match ('  ' + [regex]::Escape($name) + '$') } | Select-Object -First 1
+            if (!$line -or (Get-FileHash "$download/$name" -Algorithm SHA256).Hash -ine $line.Substring(0,64)) { throw "Checksum mismatch: $name" }
+          }
+          $env:PREGATE_ARCHIVE = $archive.FullName
+          $env:PREGATE_SHA256 = (Get-FileHash $archive.FullName -Algorithm SHA256).Hash
+          & "$download/install.ps1" -Version $version
+          $cli = "$env:XDG_DATA_HOME/pregate/bin/pregate.cmd"
+          if ((& $cli --version) -notlike "pregate $version (core *)") { throw 'Installed version mismatch' }
+          & $cli update --engine $version
+          if ($LASTEXITCODE -ne 0) { throw 'Engine update failed' }
+          & $cli update --version $version
+          if ($LASTEXITCODE -ne 0) { throw 'Update failed' }
+          & $cli uninstall --purge
+          if ($LASTEXITCODE -ne 0) { throw 'Uninstall failed' }
+          for ($n = 0; $n -lt 100 -and (Test-Path "$env:XDG_DATA_HOME/pregate"); $n++) { Start-Sleep -Milliseconds 50 }
+          if (Test-Path "$env:XDG_DATA_HOME/pregate") { throw 'Deferred uninstall failed' }
+  native-release:
+    needs: test
+    if: ${{ !cancelled() && needs.test.outputs.candidate_ready == 'true' }}
+    uses: ./.github/workflows/native-release.yml
+    permissions:
+      contents: read
+  # Latency informs here (ARCHITECTURE §8, O31): the p95 ≤ 150 ms budget holds on the reference
+  # development machine, and a shared runner with 2 vCPU lands several times above it. The table goes
+  # to the job summary; a miss is a warning, and only a hook that objects fails the step.
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - name: Isolate runtime homes
+        run: |
+          root=/private/tmp/claude-501/pregate-bench
+          sudo mkdir -p "$root"
+          sudo chown "$(id -u):$(id -g)" "$root"
+          for entry in HOME:home XDG_DATA_HOME:data XDG_STATE_HOME:state XDG_CONFIG_HOME:config TMPDIR:tmp CODEX_HOME:codex GROK_HOME:grok; do
+            path="$root/${entry#*:}"
+            mkdir -p "$path"
+            echo "${entry%%:*}=$path" >> "$GITHUB_ENV"
+          done
+      - run: bun install --frozen-lockfile
+      # shell: bash adds pipefail, so a bench that crashes still fails the step through the tee.
+      - name: Latency (informs)
+        shell: bash
+        run: |
+          bun run bench --inform | tee bench.txt
+          if grep -q '^Over budget' bench.txt; then
+            echo "::warning title=Latency (informs)::$(grep '^Over budget' bench.txt) on this runner; the budget is the reference machine's (ARCHITECTURE O31)"
+          fi

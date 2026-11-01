@@ -1,0 +1,4 @@
+const fetcher = jest.fn(function(endpoint) {
+  if (endpoint === "/orders") return orders;
+  return customers;
+});

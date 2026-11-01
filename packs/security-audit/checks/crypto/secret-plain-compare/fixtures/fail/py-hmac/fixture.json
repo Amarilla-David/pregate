@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/webhooks.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      },
+      {
+        "line": 7
+      }
+    ]
+  }
+}

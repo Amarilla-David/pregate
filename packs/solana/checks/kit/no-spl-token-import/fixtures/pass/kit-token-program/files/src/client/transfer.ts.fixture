@@ -1,0 +1,10 @@
+import type { Address, TransactionSigner } from "@solana/kit";
+import { findAssociatedTokenPda, getTransferInstruction, TOKEN_PROGRAM_ADDRESS } from "@solana-program/token";
+import { TOKEN_2022_PROGRAM_ADDRESS } from "@solana-program/token-2022";
+
+export const TOKEN_PROGRAMS = [TOKEN_PROGRAM_ADDRESS, TOKEN_2022_PROGRAM_ADDRESS];
+
+export async function buildTransfer(mint: Address, owner: TransactionSigner, destination: Address, amount: bigint) {
+  const [source] = await findAssociatedTokenPda({ mint, owner: owner.address, tokenProgram: TOKEN_PROGRAM_ADDRESS });
+  return getTransferInstruction({ source, destination, authority: owner, amount });
+}

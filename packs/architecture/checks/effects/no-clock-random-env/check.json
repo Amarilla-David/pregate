@@ -1,0 +1,461 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/effects/no-clock-random-env",
+  "version": "1.0.0",
+  "area": "effects",
+  "cardinality": "singleton",
+  "dimension": "effects.nondeterminism",
+  "minSeverity": null,
+  "params": {
+    "allow": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\.[A-Za-z_$][A-Za-z0-9_$]*)+$"
+      }
+    }
+  },
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "nondeterministic-source",
+          "utils": {
+            "function-like": {
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "generator_function_declaration"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "method_definition"
+                }
+              ]
+            },
+            "scope": {
+              "any": [
+                {
+                  "kind": "program"
+                },
+                {
+                  "kind": "statement_block"
+                },
+                {
+                  "kind": "switch_body"
+                },
+                {
+                  "kind": "for_statement"
+                },
+                {
+                  "kind": "for_in_statement"
+                },
+                {
+                  "kind": "catch_clause"
+                },
+                {
+                  "matches": "function-like"
+                }
+              ]
+            },
+            "boundary": {
+              "any": [
+                {
+                  "matches": "scope"
+                },
+                {
+                  "kind": "ambient_declaration"
+                }
+              ]
+            },
+            "destructuring": {
+              "any": [
+                {
+                  "kind": "object_pattern"
+                },
+                {
+                  "kind": "array_pattern"
+                },
+                {
+                  "kind": "pair_pattern"
+                },
+                {
+                  "kind": "object_assignment_pattern"
+                },
+                {
+                  "kind": "assignment_pattern"
+                },
+                {
+                  "kind": "rest_pattern"
+                }
+              ]
+            },
+            "local-import": {
+              "not": {
+                "has": {
+                  "regex": "^type$"
+                }
+              },
+              "inside": {
+                "stopBy": "end",
+                "kind": "import_statement",
+                "has": {
+                  "field": "source",
+                  "regex": "^[\"']\\.\\.?/"
+                },
+                "not": {
+                  "has": {
+                    "regex": "^type$"
+                  }
+                }
+              }
+            },
+            "not-a-default": {
+              "not": {
+                "inside": {
+                  "field": "right",
+                  "any": [
+                    {
+                      "kind": "assignment_pattern"
+                    },
+                    {
+                      "kind": "object_assignment_pattern"
+                    }
+                  ]
+                }
+              }
+            },
+            "binding-slot": {
+              "all": [
+                {
+                  "matches": "not-a-default"
+                },
+                {
+                  "any": [
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "name",
+                        "any": [
+                          {
+                            "kind": "variable_declarator"
+                          },
+                          {
+                            "kind": "function_declaration"
+                          },
+                          {
+                            "kind": "generator_function_declaration"
+                          },
+                          {
+                            "kind": "function_expression"
+                          },
+                          {
+                            "kind": "generator_function"
+                          },
+                          {
+                            "kind": "class_declaration"
+                          },
+                          {
+                            "kind": "abstract_class_declaration"
+                          },
+                          {
+                            "kind": "enum_declaration",
+                            "not": {
+                              "has": {
+                                "regex": "^const$"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "pattern",
+                        "any": [
+                          {
+                            "kind": "required_parameter"
+                          },
+                          {
+                            "kind": "optional_parameter"
+                          }
+                        ],
+                        "inside": {
+                          "kind": "formal_parameters",
+                          "inside": {
+                            "field": "parameters",
+                            "matches": "function-like"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "parameter",
+                        "any": [
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "catch_clause"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "left",
+                        "kind": "for_in_statement",
+                        "has": {
+                          "field": "kind",
+                          "regex": "^(const|let|var)$"
+                        }
+                      }
+                    },
+                    {
+                      "inside": {
+                        "field": "alias",
+                        "kind": "import_specifier",
+                        "matches": "local-import"
+                      }
+                    },
+                    {
+                      "inside": {
+                        "field": "name",
+                        "kind": "import_specifier",
+                        "not": {
+                          "has": {
+                            "field": "alias",
+                            "kind": "identifier"
+                          }
+                        },
+                        "matches": "local-import"
+                      }
+                    },
+                    {
+                      "inside": {
+                        "any": [
+                          {
+                            "kind": "import_clause"
+                          },
+                          {
+                            "kind": "namespace_import"
+                          }
+                        ],
+                        "matches": "local-import"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "declares": {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "function_declaration"
+                        },
+                        {
+                          "kind": "generator_function_declaration"
+                        }
+                      ]
+                    },
+                    {
+                      "has": {
+                        "field": "name",
+                        "pattern": "$G"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "identifier"
+                        },
+                        {
+                          "kind": "type_identifier"
+                        },
+                        {
+                          "kind": "shorthand_property_identifier_pattern"
+                        }
+                      ]
+                    },
+                    {
+                      "pattern": "$G"
+                    },
+                    {
+                      "matches": "binding-slot"
+                    }
+                  ]
+                }
+              ]
+            },
+            "not-the-global": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "inside": {
+                    "field": "name",
+                    "kind": "import_specifier",
+                    "has": {
+                      "field": "alias",
+                      "kind": "identifier"
+                    },
+                    "matches": "local-import"
+                  }
+                },
+                {
+                  "kind": "identifier",
+                  "matches": "not-a-default",
+                  "inside": {
+                    "stopBy": {
+                      "not": {
+                        "matches": "destructuring"
+                      }
+                    },
+                    "field": "pattern",
+                    "any": [
+                      {
+                        "kind": "required_parameter"
+                      },
+                      {
+                        "kind": "optional_parameter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "identifier"
+                        },
+                        {
+                          "kind": "shorthand_property_identifier"
+                        }
+                      ]
+                    },
+                    {
+                      "pattern": "$G"
+                    },
+                    {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "scope",
+                        "has": {
+                          "stopBy": {
+                            "matches": "boundary"
+                          },
+                          "matches": "declares"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "rule": {
+            "all": [
+              {
+                "any": [
+                  {
+                    "any": [
+                      {
+                        "kind": "identifier"
+                      },
+                      {
+                        "kind": "shorthand_property_identifier"
+                      }
+                    ],
+                    "regex": "^(Date|Temporal|process|Bun|Deno|performance|fetch|randomUUID|getRandomValues|randomBytes|randomInt|randomFill|randomFillSync)$",
+                    "not": {
+                      "inside": {
+                        "kind": "nested_type_identifier"
+                      }
+                    }
+                  },
+                  {
+                    "any": [
+                      {
+                        "kind": "identifier",
+                        "regex": "^(Math|crypto|globalThis|window|global|self)$"
+                      },
+                      {
+                        "kind": "meta_property"
+                      }
+                    ],
+                    "not": {
+                      "inside": {
+                        "field": "object",
+                        "kind": "member_expression",
+                        "has": {
+                          "field": "property",
+                          "not": {
+                            "regex": "^(random|randomUUID|getRandomValues|randomBytes|randomInt|randomFill|randomFillSync|Date|Temporal|process|Bun|Deno|performance|fetch|env|Math|crypto|globalThis|window|global|self)$"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "not": {
+                  "matches": "not-the-global"
+                }
+              }
+            ]
+          },
+          "x-note": "Any value reference to the global counts, not only calls: aliases, destructuring, bracket access and globalThis reach the same source. Bun, Deno and fetch are globals with effects that no banned import can see. Math, crypto, import.meta and the global objects are allowed only as the object of a member access to something else (Math.max, crypto.subtle, import.meta.url); a global object reached through another one (globalThis.window) is the global again. Type positions are type_identifier and never match; the namespace of a qualified type (Temporal.Instant) is an identifier and is skipped. A name the file binds is not the global: not-the-global walks the enclosing scopes outward and, in each, looks for a parameter, variable, destructured name, function, class, non-const enum or import from a relative module bound there without entering nested scopes, so a parameter named window in one function leaves the global window in another reported. A declare, a type-only import, a parameter of a function type, a namespace or const enum (either may emit no value), a for-of or for-in target without const, let or var (it assigns the global) and an import from a package or builtin (randomInt from node:crypto) bind nothing that replaces the effect; a var hoisted out of a nested block is not seen (a false deny, the safe direction). params.allow lists qualified references the project declares pure (Bun.Glob, Bun.JSONC): a match is dropped when the member chain it heads starts with an entry (new Bun.Glob(x)); the bare global, an alias, destructuring, bracket access and a longer name (Bun.Globber) stay denied."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reads the clock, randomness, the environment, the process or the network."
+  }
+}

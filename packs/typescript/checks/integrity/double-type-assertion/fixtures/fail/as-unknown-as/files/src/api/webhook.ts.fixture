@@ -1,0 +1,5 @@
+type Payment = { id: string; cents: number };
+
+export function paymentFrom(body: Record<string, string>): Payment {
+  return body as unknown as Payment;
+}

@@ -1,0 +1,16 @@
+import { Component, effect, inject, input } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { interval } from "rxjs";
+import { OrdersService } from "./orders.service";
+
+@Component({ selector: "app-orders", templateUrl: "./orders.component.html" })
+export class OrdersComponent {
+  private readonly service = inject(OrdersService);
+  readonly filter = input("");
+  ticks = 0;
+
+  constructor() {
+    interval(1000).pipe(takeUntilDestroyed()).subscribe(() => this.ticks++);
+    effect(() => this.service.search(this.filter()));
+  }
+}

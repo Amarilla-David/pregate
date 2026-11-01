@@ -1,0 +1,7 @@
+import { initTRPC } from "@trpc/server";
+
+const t = initTRPC.create({ isDev: true, isServer: true });
+
+export const testRouter = t.router({
+  ping: t.procedure.query(() => "pong"),
+});

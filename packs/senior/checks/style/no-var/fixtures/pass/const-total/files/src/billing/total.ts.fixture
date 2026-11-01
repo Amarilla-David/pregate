@@ -1,0 +1,5 @@
+
+export function total(lines: number[]): number {
+  const sum = lines.reduce((acc, line) => acc + line, 0);
+  return sum;
+}

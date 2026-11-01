@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "tailwind/classes/no-bare-class-variable",
+  "version": "1.0.0",
+  "area": "classes",
+  "cardinality": "singleton",
+  "dimension": "tailwind.no-bare-class-variable",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-class-variable",
+          "rule": {
+            "any": [
+              {
+                "regex": "^className=\\{[A-Za-z_$][A-Za-z0-9_$]*\\}$"
+              },
+              {
+                "regex": "^className=\\{[A-Za-z_$][\\w$]*(\\.[A-Za-z_$][\\w$]*)+\\}$"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes a fully dynamic variable as className. Use full class literals or clsx/cn with literal arguments."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/domain/flag.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "export-flag",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Exporting a variable named flag lacks domain meaning."
+  }
+}

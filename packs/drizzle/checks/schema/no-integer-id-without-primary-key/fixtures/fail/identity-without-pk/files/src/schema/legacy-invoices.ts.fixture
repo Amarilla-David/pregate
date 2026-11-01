@@ -1,0 +1,4 @@
+export const invoices = pgTable("invoices", {
+  id: integer().generatedAlwaysAsIdentity(),
+  amount: integer().notNull(),
+});

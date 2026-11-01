@@ -1,0 +1,23 @@
+{
+  "language": "python",
+  "params": {
+    "max": 2
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4,
+        "measured": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "mixed-controls",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "This alternate syntax or resolver context still violates the observable condition."
+  }
+}

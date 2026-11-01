@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/supabase/index.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "barrel-reexport",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The barrel hides the deprecated package behind a local module, so callers import from ./lib/supabase and never name it, but the re-export still loads auth-helpers."
+  }
+}

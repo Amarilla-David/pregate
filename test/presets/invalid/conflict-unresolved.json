@@ -1,0 +1,40 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "local",
+        "kind": "path",
+        "path": ".pregate/rules"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/clean-code",
+      "local/team"
+    ],
+    "layers": {
+      "domain": {
+        "paths": [
+          "src/domain/**"
+        ],
+        "mayImport": [],
+        "kind": "core"
+      }
+    }
+  },
+  "errors": [
+    "unresolved conflict in dimension \"fn.params\": example/CC-FN-002 {\"max\":3} deny vs local/TEAM-FN-001 {\"max\":5} deny. Suggestion from local/team: Handlers take a command plus ports. Add to the preset \"resolve\": {\"fn.params\": {\"use\": \"local/team\"}}, or set the value in \"overrides\"."
+  ]
+}

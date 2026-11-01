@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/auth/no-currentuser-without-nullcheck",
+  "version": "1.0.0",
+  "area": "auth",
+  "cardinality": "singleton",
+  "dimension": "firebase.auth.currentuser-nullcheck",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "currentuser-chain",
+          "rule": {
+            "kind": "member_expression",
+            "regex": "\\.currentUser\\s*\\.\\w+"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} chains off auth.currentUser, which is null when signed out. Assign it first and return early on null, or listen with onAuthStateChanged."
+  }
+}

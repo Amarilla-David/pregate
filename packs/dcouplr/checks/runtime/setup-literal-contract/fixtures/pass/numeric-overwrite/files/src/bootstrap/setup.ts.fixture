@@ -1,0 +1,2 @@
+startDcouplrInspector(app, {maxEvents: Infinity, maxEvents: 2});
+startDcouplrInspector(app, {maxEvents: Infinity, maxEvents});

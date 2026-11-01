@@ -1,0 +1,5 @@
+import { UserContext } from "../features/auth";
+
+export function logWithContext(ctx: UserContext) {
+  console.log(ctx.userId);
+}

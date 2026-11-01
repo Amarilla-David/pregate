@@ -1,0 +1,4 @@
+declare const PublicKey: { findProgramAddressSync(seeds: Uint8Array[], programId: unknown): [unknown, number] };
+export function findVault(seeds: Uint8Array[], programId: unknown): [unknown, number] {
+  return PublicKey.findProgramAddressSync(seeds, programId);
+}

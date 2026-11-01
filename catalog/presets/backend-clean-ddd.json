@@ -1,0 +1,120 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "backend-clean-ddd",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "architecture",
+      "kind": "library",
+      "version": "1.3.0"
+    },
+    {
+      "ns": "ddd",
+      "kind": "library",
+      "version": "1.1.0"
+    },
+    {
+      "ns": "testing",
+      "kind": "library",
+      "version": "1.2.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "clean-code/clean-code",
+    "architecture/clean-architecture",
+    "ddd/ddd-tactical",
+    "testing/tdd",
+    "core/pregate-integrity",
+    "typescript/anti-evasion"
+  ],
+  "scope": {
+    "include": [
+      "src/**",
+      "test/**"
+    ],
+    "exclude": [
+      "src/infra/migrations/**"
+    ]
+  },
+  "generatedMarkers": [
+    "@generated",
+    "DO NOT EDIT"
+  ],
+  "enforcement": "enforce",
+  "layers": {
+    "domain": {
+      "paths": [
+        "src/domain/**"
+      ],
+      "mayImport": [],
+      "kind": "core"
+    },
+    "application": {
+      "paths": [
+        "src/application/**"
+      ],
+      "mayImport": [
+        "domain",
+        "ports"
+      ],
+      "kind": "core"
+    },
+    "ports": {
+      "paths": [
+        "src/application/ports/**"
+      ],
+      "mayImport": [
+        "domain"
+      ],
+      "kind": "port"
+    },
+    "infra": {
+      "paths": [
+        "src/infra/**"
+      ],
+      "mayImport": [
+        "domain",
+        "application",
+        "ports"
+      ],
+      "kind": "adapter"
+    },
+    "main": {
+      "paths": [
+        "src/main.ts"
+      ],
+      "mayImport": [
+        "*"
+      ],
+      "kind": "main"
+    }
+  },
+  "resolve": {
+    "fn.size": {
+      "use": "CC-FN-001",
+      "params": {
+        "max": 40
+      },
+      "note": "Moderate size for handlers and mappers; the counterweight against fragmentation is the Avoid text."
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

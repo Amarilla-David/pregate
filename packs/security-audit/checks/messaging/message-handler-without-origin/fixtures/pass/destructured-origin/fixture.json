@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/receiver.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

@@ -1,0 +1,5 @@
+import { orders$ } from "./orders";
+import { take } from "rxjs";
+export function firstOrder(): void {
+  orders$.pipe(take(1)).toPromise();
+}

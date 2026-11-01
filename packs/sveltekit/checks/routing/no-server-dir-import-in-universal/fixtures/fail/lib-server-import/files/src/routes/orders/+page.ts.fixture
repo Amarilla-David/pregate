@@ -1,0 +1,7 @@
+import { db } from "$lib/server/db";
+import type { PageLoad } from "./$types";
+
+export const load: PageLoad = async () => {
+  const orders = await db.orders.findMany();
+  return { orders };
+};

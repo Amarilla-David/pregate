@@ -1,0 +1,4 @@
+export function focusDialog() {
+  const el = document.getElementById("dialog-root");
+  return el;
+}

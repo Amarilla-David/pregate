@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "node/runtime",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "NODE-SYNC-001",
+      "check": "node/io/no-sync-io",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, blocking versus non-blocking calls",
+        "locator": "overview of blocking code",
+        "paraphrase": "Sync filesystem and child-process calls block the event loop until they finish. Server code uses the async variants."
+      },
+      "why": "A sync call stops every request on that process while the disk or child answers.",
+      "fixHint": "Use the promises variant and await it, or move the work off the request path.",
+      "avoid": "Destructuring the function off its module still blocks. A helper whose name ends in Sync is still this call.",
+      "examples": {
+        "pass": "pass/async-read",
+        "fail": "fail/member-sync"
+      }
+    },
+    {
+      "id": "NODE-EXIT-001",
+      "check": "node/process/no-process-exit",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, process exit codes",
+        "locator": "process.exitCode versus exit",
+        "paraphrase": "Libraries report failure by throwing or setting the exit code. Only the entry point decides when the process ends."
+      },
+      "why": "A library that exits kills the host CLI, test runner, or server without cleanup.",
+      "fixHint": "Throw, return a failure, or set process.exitCode and return.",
+      "avoid": "Reading the exit code first does not excuse calling exit. A branch around the call is still a call.",
+      "examples": {
+        "pass": "pass/throw-error",
+        "fail": "fail/direct-exit"
+      }
+    },
+    {
+      "id": "NODE-ENV-001",
+      "check": "node/process/no-env-assign",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, process.env",
+        "locator": "environment mutation",
+        "paraphrase": "The environment is input to the process. Code reads it at startup and never rewrites it at runtime."
+      },
+      "why": "A write changes every module in the process and leaks between tests.",
+      "fixHint": "Read the value into a local and pass it down. Keep test overrides in the test setup.",
+      "avoid": "Bracket access is the same write. A defaulting operator still assigns.",
+      "examples": {
+        "pass": "pass/env-read",
+        "fail": "fail/env-write"
+      }
+    },
+    {
+      "id": "NODE-PREFIX-001",
+      "check": "node/modules/prefer-node-prefix",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, builtin modules",
+        "locator": "node: prefix",
+        "paraphrase": "Builtin imports carry the node: prefix so they cannot be confused with packages on disk."
+      },
+      "why": "A bare specifier resolves against packages first, so a new dependency can shadow the builtin.",
+      "fixHint": "Write the specifier with the node: prefix, including subpaths.",
+      "avoid": "A dynamic import needs the prefix too. A similarly named package is not the builtin.",
+      "examples": {
+        "pass": "pass/node-prefix",
+        "fail": "fail/bare-fs"
+      }
+    },
+    {
+      "id": "NODE-BUF-001",
+      "check": "node/io/no-buffer-ctor",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, Buffer",
+        "locator": "deprecated constructor",
+        "paraphrase": "The Buffer constructor is deprecated because a number argument leaves memory uninitialized. Factories state the intent."
+      },
+      "why": "A size argument can expose old heap contents to the next reader.",
+      "fixHint": "Use the from factory for data and alloc for zeroed memory.",
+      "avoid": "A comment naming the factory does not replace the call. A size argument is still this constructor.",
+      "examples": {
+        "pass": "pass/buffer-from",
+        "fail": "fail/new-buffer"
+      }
+    },
+    {
+      "id": "NODE-URL-001",
+      "check": "node/api/no-url-parse",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, legacy URL API",
+        "locator": "url.parse deprecation",
+        "paraphrase": "The legacy parser is frozen and kept for compatibility. New code parses with the WHATWG URL class."
+      },
+      "why": "The legacy shape differs from the standard URL, so parsing moves behavior callers do not expect.",
+      "fixHint": "Construct a URL and read its fields.",
+      "avoid": "Passing the query flag stays on the legacy parser. Another parse function is not this call.",
+      "examples": {
+        "pass": "pass/new-url",
+        "fail": "fail/legacy-parse"
+      }
+    }
+  ]
+}

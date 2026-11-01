@@ -1,0 +1,23 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "local",
+        "kind": "path",
+        "path": ".pregate/rules"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": []
+  },
+  "errors": [
+    "sources: exactly one builtin source \"core\" is required, found 0"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/runes/no-inspect-in-prod",
+  "version": "1.0.0",
+  "area": "runes",
+  "cardinality": "singleton",
+  "dimension": "svelte.inspect-prod",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "inspect-call",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^\\$inspect(\\.trace)?$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls $inspect. $inspect is a development helper; remove it before shipping."
+  }
+}

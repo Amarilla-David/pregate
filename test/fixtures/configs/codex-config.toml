@@ -1,0 +1,45 @@
+approvals_reviewer = "user"
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+notify = [ "/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended" ]
+personality = "pragmatic"
+service_tier = "default"
+
+[desktop]
+keepRemoteControlAwakeWhilePluggedIn = true
+preventSleepWhileRunning = true
+
+[desktop.open-in-target-preferences]
+global = "fileManager"
+
+[desktop.open-in-target-preferences.perPath]
+"/Users/user/Desktop/MarkOS.md Marketing Fraccional" = "fileManager"
+
+[features]
+goals = true
+multi_agent = true
+prevent_idle_sleep = true
+terminal_resize_reflow = true
+
+[projects."/Users/user/Desktop/ARK/v1"]
+trust_level = "trusted"
+
+[hooks.state]
+
+[hooks.state."/Users/user/Desktop/ARK/v1/.codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:0d4f1b0c3a9e5c6b7a8d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d"
+
+[hooks.state."/Users/user/Desktop/ARK/v1/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:1e5a2c1d4b0f6d7c8b9e0f1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e"
+
+[hooks.state."browser@openai-bundled:plugin.json#hooks[0]:stop:0:0"]
+trusted_hash = "sha256:2f6b3d2e5c1a7e8d9c0f1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f"
+
+[hooks.state."/Users/user/.codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:3a7c4e3f6d2b8f9e0d1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f70"
+
+[hooks.state."/Users/user/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:4b8d5f4a7e3c9a0f1e2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7081"
+
+[hooks.state."/Users/user/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:5c9e6a5b8f4d0b1a2f3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192"

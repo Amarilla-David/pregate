@@ -1,0 +1,27 @@
+{
+  "id": "vercel/environment/requirement-003",
+  "version": "1.0.0",
+  "area": "environment",
+  "cardinality": "singleton",
+  "dimension": "vercel.r003",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "VERCEL-003"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "VERCEL-003 requires current passing project verification: {symbol}."
+  }
+}

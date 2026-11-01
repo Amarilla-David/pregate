@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "design-invariants/performance-and-data",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DESIGN-044",
+      "check": "design-invariants/performance-and-data/requirement-044",
+      "defaults": {
+        "verifier": "DESIGN-044"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied software design invariants",
+        "locator": "docs/features/design-invariants-pack.md, rule 44",
+        "paraphrase": "The structure used on a hot access path matches that path's dominant reads and writes."
+      },
+      "why": "The structure used on a hot access path matches that path's dominant reads and writes.",
+      "fixHint": "Bind DESIGN-044 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run DESIGN-044; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

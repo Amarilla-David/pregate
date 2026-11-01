@@ -1,0 +1,2 @@
+import { Html } from "next/document";
+export const doc = Html;

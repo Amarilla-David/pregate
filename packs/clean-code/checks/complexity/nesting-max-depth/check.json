@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "clean-code/complexity/nesting-max-depth",
+  "version": "1.0.0",
+  "area": "complexity",
+  "cardinality": "singleton",
+  "dimension": "clean-code.control.nesting",
+  "minSeverity": null,
+  "params": {
+    "max": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "metric",
+    "metric": "control.nesting"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} has {measured} levels of control-flow nesting (limit {limit}). Extract nested branches or use early returns."
+  }
+}

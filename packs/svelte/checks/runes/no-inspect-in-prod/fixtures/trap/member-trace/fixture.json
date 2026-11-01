@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/runes/traced.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "member-trace",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "The member form $inspect.trace routes through the same dev helper. Qualifying the call does not make it program output."
+  }
+}

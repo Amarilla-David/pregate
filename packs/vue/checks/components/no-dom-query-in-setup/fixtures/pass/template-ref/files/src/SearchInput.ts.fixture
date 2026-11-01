@@ -1,0 +1,5 @@
+import { onMounted, useTemplateRef } from "vue";
+export function useSearchFocus() {
+  const input = useTemplateRef<HTMLInputElement>("search");
+  onMounted(() => input.value?.focus());
+}

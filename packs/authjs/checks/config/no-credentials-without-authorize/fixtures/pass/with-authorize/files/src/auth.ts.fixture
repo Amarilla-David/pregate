@@ -1,0 +1,12 @@
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+
+export const { auth } = NextAuth({
+  providers: [
+    Credentials({
+      name: "Passwords",
+      credentials: { username: {}, password: {} },
+      authorize: async (credentials) => lookupUser(credentials),
+    }),
+  ],
+});

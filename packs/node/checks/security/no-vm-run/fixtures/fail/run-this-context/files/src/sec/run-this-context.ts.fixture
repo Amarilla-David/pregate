@@ -1,0 +1,5 @@
+import vm from "node:vm";
+
+export function run(code: string): unknown {
+  return vm.runInThisContext(code);
+}

@@ -1,0 +1,4 @@
+export { event } from "../utils/request-state";
+export default defineEventHandler(() => {
+  return { ok: true };
+});

@@ -1,0 +1,96 @@
+import { beforeAll, expect, test } from "bun:test";
+import { proposedScope, recommendPacks } from "../src/scan-command.ts";
+import { detectStack, scopeCoverage } from "../src/onboard.ts";
+import { grammars } from "../src/gate.ts";
+
+beforeAll(grammars);
+
+test("scan uses exact dependency facts from root and workspace manifests, without inferred compliance", () => {
+  const files = { "package.json": '{"dependencies":{"reactive-helper":"1.0.0"}}',
+    "packages/web/package.json": '{"dependencies":{"react":"19.0.0","@trpc/server":"11.0.0"},"devDependencies":{"vitest":"4.0.0"}}' };
+  const selected = recommendPacks(files, ["TypeScript", "Go"]);
+  expect(selected.map((item) => item.ns)).toEqual(["go", "react", "testing", "trpc", "typescript"]);
+  expect(selected.find((item) => item.ns === "react")!.reasons).toEqual(["packages/web/package.json declares react"]);
+  expect(recommendPacks({}, ["Rust"])).toEqual([{ ns: "rust", methodologies: ["rust/quality"],
+    reasons: ["Rust source or Cargo metadata detected; source AST only, no macro expansion or compiler proof"] }]);
+  expect(recommendPacks({}, ["Ruby"])).toEqual([]);
+  expect(() => recommendPacks({ "package.json": "{broken" }, [])).toThrow();
+});
+
+test("scan recognizes exact Vue peer dependencies and confines recommendations to their owning workspace", () => {
+  const files = { "package.json": '{"peerDependencies":{"vue-helper":"1.0.0"}}',
+    "packages/store/package.json": '{"peerDependencies":{"vue":"^3.5.0"}}',
+    "packages/site/package.json": '{"dependencies":{"react":"19.0.0"}}' };
+  const vue = recommendPacks(files, ["TypeScript"]).find(item => item.ns === "vue")!;
+  expect(vue.methodologies).toEqual(["vue/reactivity", "vue/sfc"]);
+  expect(vue.reasons).toEqual(["packages/store/package.json declares vue"]);
+  expect(vue.scope).toEqual({ include: ["packages/store/**"], exclude: [] });
+  expect(recommendPacks({ "package.json": files["package.json"]! }, []).some(item => item.ns === "vue")).toBe(false);
+});
+
+test("proposed scope uses the initial recipe and detected roots without hiding unsupported files or activating a contract", () => {
+  const files = { "app/page.tsx": "export const page = 1;\n", "components/Form.rb": "", "src/generated/client.ts": "export const client = 1;\n" };
+  const stack = detectStack(files), scope = proposedScope(files, stack), coverage = scopeCoverage(files, scope);
+  expect(scope.include).toContain("app/**");
+  expect(scope.exclude).toContain("src/**/generated/**");
+  expect(coverage).toMatchObject({ inventoried: 2, inScope: 1, sourceLikeInventoried: 3 });
+  expect(coverage.excluded).toEqual(["src/generated/client.ts"]);
+  expect(coverage.unsupported).toEqual(["components/Form.rb"]);
+});
+
+test("frameworks declared only as devDependencies are not suggested; test runners still suggest testing", () => {
+  const files = { "package.json": '{"dependencies":{"ky":"1.0.0"},"devDependencies":{"express":"5.0.0","vitest":"4.0.0"}}' };
+  const selected = recommendPacks(files, ["TypeScript"]);
+  expect(selected.some(item => item.ns === "express")).toBe(false);
+  expect(selected.find(item => item.ns === "testing")!.methodologies).toEqual(["testing/tdd"]);
+  expect(recommendPacks({ "package.json": '{"peerDependencies":{"express":"5.0.0"}}' }, []).some(item => item.ns === "express")).toBe(true);
+});
+
+test("token, CORS and LLM SDK dependencies suggest the client-and-agents hardening policy only", () => {
+  for (const dep of ["jsonwebtoken", "jose", "cors", "openai", "@anthropic-ai/sdk", "ai"]) {
+    const security = recommendPacks({ "package.json": JSON.stringify({ dependencies: { [dep]: "1.0.0" } }) }, []).find(item => item.ns === "security-audit");
+    expect(security?.methodologies, dep).toEqual(["security-audit/client-and-agents"]);
+  }
+  expect(recommendPacks({ "package.json": '{"devDependencies":{"jose":"5.0.0"}}' }, []).some(item => item.ns === "security-audit")).toBe(false);
+});
+
+test("obvious-sinks is suggested only where one of its checks reads a source file", () => {
+  expect(recommendPacks({ "cmd/server/main.go": "" }, ["Go"]).find(item => item.ns === "security-audit")).toEqual({
+    ns: "security-audit", methodologies: ["security-audit/obvious-sinks"], reasons: ["security-audit/obvious-sinks checks apply to 1 source file"] });
+  expect(recommendPacks({ "cmd/server/main.go": "" }, ["Go"], ["security-audit/obvious-sinks"]).some(item => item.ns === "security-audit")).toBe(false);
+});
+
+test("obvious-sinks needs evidence: a non-TypeScript production language, a production sink import or a security dependency", () => {
+  const sinks = (files: Record<string, string>, languages: string[]) => recommendPacks(files, languages).find(item => item.ns === "security-audit")?.methodologies;
+  expect(sinks({ "src/a.ts": 'import { readFile } from "node:fs";\nconst crypto = 1;\n' }, ["TypeScript"])).toBeUndefined();
+  expect(sinks({ "src/a.ts": 'import { createHash } from "node:crypto";\n' }, ["TypeScript"])).toEqual(["security-audit/obvious-sinks"]);
+  expect(sinks({ "src/a.js": 'const { exec } = require("child_process");\n' }, ["JavaScript"])).toEqual(["security-audit/obvious-sinks"]);
+  expect(sinks({ "src/a.ts": "", "src/a.test.ts": 'import { load } from "js-yaml";\n' }, ["TypeScript"])).toBeUndefined();
+  expect(sinks({ "src/a.ts": 'import type { KeyObject } from "node:crypto";\n', "src/env.d.ts": 'import { KeyObject } from "crypto";\n' }, ["TypeScript"])).toBeUndefined();
+  expect(sinks({ "app/main.py": "" }, ["Python"])).toEqual(["security-audit/obvious-sinks"]);
+  expect(sinks({ "package.json": '{"devDependencies":{"js-yaml":"4.0.0","jose":"5.0.0"}}', "src/a.ts": "" }, ["TypeScript"])).toBeUndefined();
+  expect(sinks({ "package.json": '{"dependencies":{"jose":"5.0.0"}}', "src/a.ts": "" }, ["TypeScript"])).toEqual(["security-audit/client-and-agents", "security-audit/obvious-sinks"]);
+});
+
+test("layered folders suggest the language's architecture methodology with layers from the real folders", () => {
+  const files = { "src/domain/order.ts": "", "src/infra/db.ts": "" };
+  const architecture = recommendPacks(files, ["TypeScript"]).find(item => item.ns === "architecture")!;
+  expect(architecture.methodologies).toEqual(["architecture/clean-architecture"]);
+  expect(architecture.reasons).toEqual(["Layered folders detected: src/domain, src/infra. Layer paths come from these folders; review them."]);
+  expect(architecture.layers).toEqual({ domain: { paths: ["src/domain/**"], mayImport: [], kind: "core" },
+    infra: { paths: ["src/infra/**"], mayImport: ["domain"], kind: "adapter" } });
+  expect(recommendPacks(files, ["TypeScript"], ["architecture/functional-core-imperative-shell"]).some(item => item.ns === "architecture")).toBe(false);
+  expect(recommendPacks({ "src/domain/order.ts": "" }, ["TypeScript"]).some(item => item.ns === "architecture")).toBe(false);
+  const python = recommendPacks({ "app/domain/order.py": "", "app/infra/db.py": "" }, ["Python"]).find(item => item.ns === "python")!;
+  expect(python.methodologies).toEqual(["python/quality", "python/architecture"]);
+  expect(Object.keys(python.layers!)).toEqual(["domain", "infra"]);
+});
+
+test("clean-code and testing are suggested only where their checks read real source", () => {
+  const withTests = recommendPacks({ "app/service.py": "", "tests/test_service.py": "" }, ["Python"]);
+  expect(withTests.map(item => item.ns)).toEqual(["python", "security-audit", "testing"]);
+  expect(withTests.find(item => item.ns === "testing")!).toMatchObject({ methodologies: ["testing/tdd"], reasons: ["testing/tdd checks apply to 1 source file"] });
+  expect(recommendPacks({ "main.py": "" }, ["Python"]).map(item => item.ns)).toEqual(["python", "security-audit"]);
+  expect(recommendPacks({ "src/a.ts": "" }, ["TypeScript"]).map(item => item.ns)).toEqual(["clean-code", "typescript"]);
+  expect(recommendPacks({ "src/a.ts": "", "src/a.test.ts": "" }, ["TypeScript"], ["clean-code/clean-code", "testing/tdd", "security-audit/obvious-sinks"]).map(item => item.ns)).toEqual(["typescript"]);
+});

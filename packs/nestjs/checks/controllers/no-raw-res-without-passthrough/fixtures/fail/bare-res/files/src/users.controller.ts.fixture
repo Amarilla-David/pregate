@@ -1,0 +1,11 @@
+declare function Controller(prefix?: string): ClassDecorator;
+declare function Get(path?: string): MethodDecorator;
+declare function Res(opts?: { passthrough?: boolean }): ParameterDecorator;
+interface RawRes { json(v: unknown): void; }
+@Controller("users")
+export class UsersController {
+  @Get()
+  findAll(@Res() res: RawRes): void {
+    res.json([]);
+  }
+}

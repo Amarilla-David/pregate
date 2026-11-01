@@ -1,0 +1,11 @@
+export interface Proc {
+  readonly argv: readonly string[];
+}
+
+export function args(proc: Proc): readonly string[] {
+  return proc.argv.slice(2);
+}
+
+export function verbose(argv: readonly string[]): boolean {
+  return argv.includes("--verbose") || process.argv.includes("--verbose");
+}

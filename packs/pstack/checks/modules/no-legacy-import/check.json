@@ -1,0 +1,92 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/modules/no-legacy-import",
+  "version": "1.0.1",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "modules.legacy",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "legacy-import",
+          "rule": {
+            "any": [
+              {
+                "kind": "string"
+              },
+              {
+                "kind": "template_string"
+              }
+            ],
+            "all": [
+              {
+                "regex": "^[\"'`](\\.{1,2}/|[@~]/|#)"
+              },
+              {
+                "regex": "(\\.legacy|/legacy)(/|\\$\\{|[\"'`]$)"
+              },
+              {
+                "any": [
+                  {
+                    "inside": {
+                      "kind": "import_statement",
+                      "field": "source"
+                    }
+                  },
+                  {
+                    "inside": {
+                      "kind": "import_require_clause",
+                      "field": "source"
+                    }
+                  },
+                  {
+                    "inside": {
+                      "kind": "export_statement",
+                      "field": "source"
+                    }
+                  },
+                  {
+                    "nthChild": 1,
+                    "inside": {
+                      "kind": "arguments",
+                      "inside": {
+                        "kind": "call_expression",
+                        "any": [
+                          {
+                            "has": {
+                              "field": "function",
+                              "kind": "import"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "function",
+                              "regex": "^require$"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a legacy module. Migrate the caller and delete the old path."
+  }
+}

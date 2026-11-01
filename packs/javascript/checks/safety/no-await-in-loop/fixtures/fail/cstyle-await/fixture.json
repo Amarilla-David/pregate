@@ -1,0 +1,1 @@
+{"language": "typescript","params": {},"target": "src/batch/indexed.ts","before": null,"expect": {"verdict": "fail","violations": [{"line": 3}]},"$schema": "../../../../../../../schema/fixture.v1.json"}

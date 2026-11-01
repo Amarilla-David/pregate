@@ -1,0 +1,1 @@
+{"language":"typescript","params":{},"target":"src/order.test.ts","before":null,"expect":{"verdict":"fail","violations":[{"line":2}]},"trap":{"family":"switch-in-test","origin":"forge","discovered":"2026-10-03","note":"A switch in the test body is still conditional test logic, even without an if keyword."}}

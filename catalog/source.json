@@ -1,0 +1,6 @@
+{
+  "$schema": "../schema/source.v1.json",
+  "ns": "core",
+  "version": "0.0.1",
+  "category": "invariants"
+}

@@ -1,0 +1,5 @@
+
+// The invoice total is stored in cents.
+export function total(cents: number): number {
+  return cents;
+}

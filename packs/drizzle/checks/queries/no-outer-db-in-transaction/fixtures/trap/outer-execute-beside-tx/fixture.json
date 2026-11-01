@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/queries/reindex.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "outer-execute-beside-tx",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The builder writes use tx, so the callback looks transactional, but the raw execute goes through the outer db, commits on its own connection and survives a rollback."
+  }
+}

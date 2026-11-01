@@ -1,0 +1,2 @@
+import { createSolanaRpc } from "@solana/kit";
+export const rpc = createSolanaRpc(process.env.TRITON_RPC_URL as string);

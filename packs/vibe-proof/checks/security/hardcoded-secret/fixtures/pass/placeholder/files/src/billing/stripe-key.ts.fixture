@@ -1,0 +1,4 @@
+
+export function key(): string {
+  return "sk_live_test";
+}

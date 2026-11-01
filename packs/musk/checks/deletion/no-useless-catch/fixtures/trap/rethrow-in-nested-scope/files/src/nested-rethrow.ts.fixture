@@ -1,0 +1,11 @@
+declare function validate(item: string): void;
+
+export function processItem(item: string): void {
+  if (item.length > 0) {
+    try {
+      validate(item);
+    } catch (error) {
+      throw error;
+    }
+  }
+}

@@ -1,0 +1,1 @@
+const render = vi.fn((flag) => flag ? <Total /> : <Empty />);

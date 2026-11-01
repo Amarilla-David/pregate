@@ -1,0 +1,8 @@
+declare const redis: { get(key: string): Promise<string | null> };
+export async function loadMany(keys: string[]): Promise<(string | null)[]> {
+  const out: (string | null)[] = [];
+  for (const key of keys) {
+    out.push(await redis.get(key));
+  }
+  return out;
+}

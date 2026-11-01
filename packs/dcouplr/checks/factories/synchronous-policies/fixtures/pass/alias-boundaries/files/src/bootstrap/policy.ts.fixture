@@ -1,0 +1,14 @@
+function multipleAliases() {
+  const check = async () => true, alias = check, second = alias;
+  stage.addValidationPolicy(second);
+}
+function shadowedAlias() {
+  const check = async () => true, alias = check;
+  { const alias = () => true; stage.addValidationPolicy(alias); }
+}
+function replacedAlias() {
+  const check = async () => true;
+  let alias = check;
+  alias = () => true;
+  stage.addValidationPolicy(alias);
+}

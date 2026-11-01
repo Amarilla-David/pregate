@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/edge/no-direct-fetch-to-functions",
+  "version": "1.0.0",
+  "area": "edge",
+  "cardinality": "singleton",
+  "dimension": "supabase.direct-fetch-to-functions",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "direct-functions-fetch",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^fetch$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "functions/v1"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} fetches a functions/v1 URL directly. Use supabase.functions.invoke() so auth headers travel with the call."
+  }
+}

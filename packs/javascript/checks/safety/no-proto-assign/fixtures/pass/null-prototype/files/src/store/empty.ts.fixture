@@ -1,0 +1,3 @@
+const o = Object.create(null);
+
+export const store = o;

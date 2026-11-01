@@ -1,0 +1,23 @@
+{
+  "language": "go",
+  "params": {
+    "max": 4
+  },
+  "target": "src/a.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2,
+        "measured": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "closure",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "This alternate syntax or resolver context still violates the observable condition."
+  }
+}

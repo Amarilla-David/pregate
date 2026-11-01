@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/api/parse-with-query-flag.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "query-flag",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Passing true for query parsing does not move off the legacy parser. Use the URL class."
+  }
+}

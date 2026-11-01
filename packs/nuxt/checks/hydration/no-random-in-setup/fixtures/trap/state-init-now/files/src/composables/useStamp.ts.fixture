@@ -1,0 +1,4 @@
+export function useStamp(): unknown {
+  const created = useState("stamp", () => Date.now());
+  return created;
+}

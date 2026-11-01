@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/client/trpc.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "transformer-no-length",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A transformer changes payload encoding, not URL length. Batching can still exceed the URL limit without maxURLLength."
+  }
+}

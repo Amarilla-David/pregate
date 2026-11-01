@@ -1,0 +1,11 @@
+import type { Payments } from "../ports/payments";
+
+export class PayInvoice {
+  constructor(private readonly payments: Payments) {}
+
+  async execute(invoiceId: string): Promise<void> {
+    await this.payments.pay(invoiceId);
+  }
+
+  preview = (invoiceId: string): Promise<number> => this.payments.quote(invoiceId);
+}

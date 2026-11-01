@@ -1,0 +1,1 @@
+admission.addFactoryMethod(() => ({ run: () => fetch('/order') }));

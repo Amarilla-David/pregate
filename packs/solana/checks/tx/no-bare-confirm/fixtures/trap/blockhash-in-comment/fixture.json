@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/client/example.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "blockhash-in-comment",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Comments cannot provide the confirmation strategy."
+  }
+}

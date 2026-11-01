@@ -1,0 +1,4 @@
+import { OrdersService } from "./orders.service";
+export function buildOrdersService(em: unknown): OrdersService {
+  return new OrdersService(em);
+}

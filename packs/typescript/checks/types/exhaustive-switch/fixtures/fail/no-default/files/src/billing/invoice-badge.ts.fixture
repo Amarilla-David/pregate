@@ -1,0 +1,9 @@
+
+export function badge(status: "open" | "paid"): string {
+  switch (status) {
+    case "open":
+      return "Open";
+    case "paid":
+      return "Paid";
+  }
+}

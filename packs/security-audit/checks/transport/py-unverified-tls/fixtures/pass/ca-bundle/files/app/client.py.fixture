@@ -1,0 +1,8 @@
+import httpx
+import requests
+
+
+def fetch(url):
+    a = requests.get(url, verify="/etc/ssl/internal-ca.pem", timeout=5)
+    b = httpx.Client(verify=True)
+    return a, b

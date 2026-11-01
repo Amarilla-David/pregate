@@ -1,0 +1,106 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "billing-backend",
+  "version": "1.0.0",
+  "engine": "0.1.0",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.1.0"
+    },
+    {
+      "ns": "local",
+      "kind": "path",
+      "path": ".pregate/rules"
+    },
+    {
+      "ns": "example",
+      "kind": "library",
+      "version": "0.1.0"
+    }
+  ],
+  "methodologies": [
+    "local/team",
+    "example/tdd",
+    "example/functional-core-imperative-shell",
+    "example/clean-code",
+    "example/clean-architecture"
+  ],
+  "scope": {
+    "include": [
+      "src/**",
+      "test/**"
+    ],
+    "exclude": [
+      "src/infra/migrations/**"
+    ]
+  },
+  "generatedMarkers": [
+    "@generated"
+  ],
+  "enforcement": "shadow",
+  "layers": {
+    "domain": {
+      "paths": [
+        "src/domain/**"
+      ],
+      "mayImport": [],
+      "kind": "core"
+    },
+    "application": {
+      "paths": [
+        "src/application/**"
+      ],
+      "mayImport": [
+        "domain"
+      ],
+      "kind": "core"
+    },
+    "infra": {
+      "paths": [
+        "src/infra/**"
+      ],
+      "mayImport": [
+        "domain",
+        "application"
+      ],
+      "kind": "adapter"
+    }
+  },
+  "resolve": {
+    "fn.params": {
+      "use": "local/team",
+      "params": {
+        "max": 4
+      },
+      "note": "Handlers take a command plus three ports."
+    }
+  },
+  "overrides": {
+    "CA-DEP-002": "warn",
+    "example/testing/no-focused-tests": {
+      "params": {
+        "exclude": [
+          "test/legacy/**"
+        ]
+      }
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  },
+  "loop": {
+    "maxStopBlocks": 1,
+    "escalate": "stop"
+  },
+  "failMode": "closed",
+  "coexist": {
+    "arkgate": {
+      "ownedByArkgate": [
+        "CA-DEP-002"
+      ],
+      "config": "ark.config.json"
+    }
+  }
+}

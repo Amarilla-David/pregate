@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/process/no-env-assign",
+  "version": "1.0.0",
+  "area": "process",
+  "cardinality": "singleton",
+  "dimension": "node.no-env-assign",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "env-assign",
+          "rule": {
+            "any": [
+              {
+                "kind": "assignment_expression",
+                "has": {
+                  "field": "left",
+                  "regex": "^process\\.env(\\.|\\[)"
+                }
+              },
+              {
+                "kind": "augmented_assignment_expression",
+                "has": {
+                  "field": "left",
+                  "regex": "^process\\.env(\\.|\\[)"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} mutates the process environment. Read the value instead."
+  }
+}

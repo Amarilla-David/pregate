@@ -1,0 +1,5 @@
+import { exitApp } from "./shutdown";
+
+export function quit(): void {
+  exitApp();
+}

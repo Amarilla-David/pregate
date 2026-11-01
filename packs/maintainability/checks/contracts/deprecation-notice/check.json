@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/contracts/deprecation-notice",
+  "version": "1.0.0",
+  "area": "contracts",
+  "cardinality": "singleton",
+  "dimension": "contracts.deprecation-notice",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-deprecated",
+          "rule": {
+            "kind": "comment",
+            "regex": "^/\\*\\*([\\s\\S]*\\n)?[ \\t*]*@deprecated[\\s*]*(\\*/$|@[A-Za-z])",
+            "not": {
+              "regex": "@deprecated[\\s*]*@see\\b"
+            }
+          },
+          "x-note": "A JSDoc @deprecated block tag at the start of a doc line whose content is empty: the comment ends or the next block tag starts. A following @see counts as the replacement pointer. Line comments are not honored by TypeScript tooling and are ignored."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} marks an API @deprecated without saying what replaces it or when it goes away."
+  }
+}

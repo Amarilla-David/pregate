@@ -1,0 +1,202 @@
+{
+  "$schema": "../schema/preset.v1.json",
+  "name": "pregate",
+  "version": "0.1.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "architecture",
+      "kind": "library",
+      "version": "1.3.0"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "testing",
+      "kind": "library",
+      "version": "1.2.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "architecture/functional-core-imperative-shell",
+    "clean-code/clean-code",
+    "testing/tdd",
+    "core/pregate-integrity",
+    "typescript/anti-evasion"
+  ],
+  "scope": {
+    "include": [
+      "src/**",
+      "test/**",
+      "scripts/**",
+      "eval/**"
+    ],
+    "exclude": [
+      "vendor/**"
+    ]
+  },
+  "layers": {
+    "core": {
+      "paths": [
+        "src/types.ts",
+        "src/harness/**",
+        "src/capabilities.ts",
+        "src/register.ts",
+        "src/reconstruct.ts",
+        "src/paths.ts",
+        "src/ts.ts",
+        "src/languages.ts",
+        "src/language-facts.ts",
+        "src/rust-facts.ts",
+        "src/rust-resolve.ts",
+        "src/match.ts",
+        "src/resolve.ts",
+        "src/module-resolve.ts",
+        "src/evaluate.ts",
+        "src/ratchet.ts",
+        "src/decide.ts",
+        "src/message.ts",
+        "src/shell.ts",
+        "src/schema.ts",
+        "src/compile.ts",
+        "src/fixtures.ts",
+        "src/fitness.ts",
+        "src/refactor-plan.ts",
+        "src/enforcement.ts",
+        "src/dependencies.ts",
+        "src/contract.ts",
+        "src/onboard.ts",
+        "src/report.ts",
+        "src/feedback.ts",
+        "src/audit.ts",
+        "src/dispute.ts",
+        "src/issue.ts",
+        "src/product.ts",
+        "src/pack-template.ts",
+        "src/pack-compose.ts",
+        "src/windows-command.ts",
+        "schema/*.v1.json",
+        "src/fitness-plan.ts",
+        "src/python-inspection.ts",
+        "src/markers.ts",
+        "src/drizzle-query.ts",
+        "src/interval-cleanup.ts",
+        "src/react-index-key.ts",
+        "src/credential-literal.ts",
+        "src/sarif.ts"
+      ],
+      "mayImport": [],
+      "kind": "core"
+    },
+    "shell": {
+      "paths": [
+        "src/main.ts",
+        "src/gate.ts",
+        "src/assets.ts",
+        "src/library.ts",
+        "src/library-assets.ts",
+        "src/disk.ts",
+        "src/fixture-replay.ts",
+        "src/inertia.ts",
+        "src/state.ts",
+        "src/state-lease.ts",
+        "src/storage.ts",
+        "src/storage-command.ts",
+        "src/storage-recovery.ts",
+        "src/issue-submission.ts",
+        "src/git.ts",
+        "src/cli.ts",
+        "src/guided.ts",
+        "src/guided-terminal.ts",
+        "src/guided-review.ts",
+        "src/guided-update.ts",
+        "src/status.ts",
+        "src/install.ts",
+        "src/machine.ts",
+        "src/release-download.ts",
+        "src/demo-command.ts",
+        "src/demo-run.ts",
+        "src/demo-samples.ts",
+        "src/consent.ts",
+        "src/versions.ts",
+        "src/approval.ts",
+        "src/approval-command.ts",
+        "src/proposal.ts",
+        "src/pending-review.ts",
+        "src/init.ts",
+        "src/scan-command.ts",
+        "src/skill.ts",
+        "src/report-command.ts",
+        "src/feedback-command.ts",
+        "src/fitness-command.ts",
+        "src/fitness-candidates.ts",
+        "src/audit-command.ts",
+        "src/audit-cache.ts",
+        "src/dispute-command.ts",
+        "src/issue-command.ts",
+        "src/recorded.ts",
+        "src/pack-command.ts",
+        "src/project-updates.ts",
+        "src/packs.ts",
+        "src/platform.ts",
+        "src/supervisor.ts",
+        "src/progress.ts",
+        "src/workspace.ts",
+        "src/catalog-discovery.ts",
+        "src/project-discovery.ts",
+        "src/session-command.ts",
+        "src/contract-diagnostic.ts",
+        "src/dependency-cache.ts",
+        "src/rules-draft-command.ts",
+        "src/embedded.ts",
+        "src/rules-add-command.ts"
+      ],
+      "mayImport": [
+        "core"
+      ],
+      "kind": "adapter"
+    }
+  },
+  "overrides": {
+    "CC-FN-001": {
+      "params": {
+        "max": 45,
+        "exclude": [
+          "test/**/*.test.ts"
+        ]
+      },
+      "note": "Measured over src/ (795 functions: p95 18 lines, p99 30). The five above 30 are dispatch loops and tables that read best whole: the shell lexer (shell.lex 45, shell.readWord 41), the Rust-to-JS regex translation (match.translate 37), the command dispatch (shell.run 35) and the cursor walk that copies the tree (match.tree 34); cutting them would scatter one state machine over fragments. Test files are out: fn.lines counts nested callbacks into their container on purpose, so a bun:test describe measures the sum of the tests it registers."
+    },
+    "CC-FN-002": {
+      "params": {
+        "max": 5
+      },
+      "note": "Pure core with explicit dependencies; anything needing more inputs takes a named type from types.ts (DecideInput, Host)."
+    },
+    "FCIS-IO-002": {
+      "params": {
+        "allow": [
+          "Bun.Glob",
+          "Bun.JSONC",
+          "Bun.TOML",
+          "Bun.deepEquals",
+          "Date.parse"
+        ]
+      },
+      "note": "Glob matching, JSONC/TOML parsing and deep equality are pure functions of their arguments; the rest of Bun stays denied in the core. TOML parsing inspects supplied Cargo manifest bytes without executing Cargo or reading the filesystem. Fitness expiry parses an explicit receipt timestamp with Date.parse; the caller injects now. Qualified permission keeps Date.now, no-argument construction and aliases denied."
+    }
+  }
+}

@@ -1,0 +1,4 @@
+declare const orders: { deleteMany(filter: Record<string, never>, opts: { session: unknown }): Promise<unknown> };
+export async function wipeInSession(session: unknown): Promise<void> {
+  await orders.deleteMany({}, { session });
+}

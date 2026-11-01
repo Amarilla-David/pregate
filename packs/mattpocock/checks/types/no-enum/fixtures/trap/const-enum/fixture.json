@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/priority.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "const-enum-declaration",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "A const enum declaration is still an enum_declaration with nominal and isolatedModules caveats."
+  }
+}

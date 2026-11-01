@@ -1,0 +1,11 @@
+interface Schema {
+  alterTable(name: string, change: (table: { string(column: string): void; dropColumn(column: string): void }) => void): Promise<void>;
+}
+
+export async function up(schema: Schema): Promise<void> {
+  await schema.alterTable("invoices", (table) => table.string("status"));
+}
+
+export async function down(schema: Schema): Promise<void> {
+  await schema.alterTable("invoices", (table) => table.dropColumn("status"));
+}

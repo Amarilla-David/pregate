@@ -1,0 +1,8 @@
+"use client";
+import { usePathname, useRouter } from "next/navigation";
+
+export function Nav() {
+  const router = useRouter();
+  const pathname = usePathname();
+  return <button onClick={() => router.push("/")}>{pathname}</button>;
+}

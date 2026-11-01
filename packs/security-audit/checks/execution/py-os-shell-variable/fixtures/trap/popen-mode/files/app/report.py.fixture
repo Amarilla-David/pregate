@@ -1,0 +1,6 @@
+import os
+
+
+def read(command):
+    with os.popen(command, "r") as out:
+        return out.read()

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/saga-runtime/requirement-006",
+  "version": "1.0.0",
+  "area": "saga-runtime",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.saga-runtime.r006",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DCP-SAGA-RUNTIME-006"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DCP-SAGA-RUNTIME-006 requires current passing project saga-runtime verification: {symbol}."
+  }
+}

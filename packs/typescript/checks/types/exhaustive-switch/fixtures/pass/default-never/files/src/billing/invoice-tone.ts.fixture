@@ -1,0 +1,13 @@
+
+export function tone(status: "open" | "paid"): string {
+  switch (status) {
+    case "open":
+      return "open";
+    case "paid":
+      return "paid";
+    default: {
+      const leftover: never = status;
+      return leftover;
+    }
+  }
+}

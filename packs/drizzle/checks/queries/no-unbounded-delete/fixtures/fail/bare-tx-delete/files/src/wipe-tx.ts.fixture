@@ -1,0 +1,5 @@
+declare const tx: { delete(t: unknown): Promise<unknown> };
+declare const auditLogs: unknown;
+export async function clearAudit(): Promise<void> {
+  await tx.delete(auditLogs);
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/queries/no-unbounded-find",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "mongodb.queries.unbounded-find",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unbounded-find",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "\\.find\\s*\\(",
+            "not": {
+              "regex": "\\.limit\\s*\\("
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls find() with no limit in the same statement. Add .limit(n) so one request cannot stream the whole collection."
+  }
+}

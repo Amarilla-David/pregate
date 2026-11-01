@@ -1,0 +1,8 @@
+import { Controller, Get, Query } from "@nestjs/common";
+@Controller("orders")
+export class OrdersSearch {
+  @Get("search")
+  updateSearch(@Query("q") q: string) {
+    return { q };
+  }
+}

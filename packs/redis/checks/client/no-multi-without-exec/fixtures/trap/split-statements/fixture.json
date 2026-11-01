@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/tx/split-tx.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "split-statements",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "exec in a later statement is invisible to this single-statement rule. Chain exec (or discard) onto the multi call."
+  }
+}

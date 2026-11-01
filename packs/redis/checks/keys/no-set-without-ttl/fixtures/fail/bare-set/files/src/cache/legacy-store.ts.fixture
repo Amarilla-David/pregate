@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function saveSession(id: string, data: string): Promise<void> {
+  await redis.set(`session:${id}`, data);
+}

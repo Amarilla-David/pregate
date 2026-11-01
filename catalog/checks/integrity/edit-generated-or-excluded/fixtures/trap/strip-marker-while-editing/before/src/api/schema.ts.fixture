@@ -1,0 +1,2 @@
+// @generated from schema.graphql
+export type Order = { id: string; total: number };

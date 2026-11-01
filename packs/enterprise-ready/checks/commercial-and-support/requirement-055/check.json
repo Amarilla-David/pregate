@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/commercial-and-support/requirement-055",
+  "version": "1.0.0",
+  "area": "commercial-and-support",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r055",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-055"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-055 requires current passing project verification: {symbol}."
+  }
+}

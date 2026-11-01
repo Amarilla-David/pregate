@@ -1,0 +1,17 @@
+import type { Invoices } from "./invoices";
+
+export class InvoiceHandler {
+  constructor(private readonly invoices: Invoices) {}
+
+  create(id: string): Promise<void> {
+    return this.invoices.create(id);
+  }
+
+  cancel(id: string): Promise<void> {
+    return this.invoices.cancel(id);
+  }
+
+  resend(id: string): Promise<void> {
+    return this.invoices.resend(id);
+  }
+}

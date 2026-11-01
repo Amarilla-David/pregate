@@ -1,0 +1,6 @@
+export function cleanup(files, remove) {
+  files.forEach(async function (file) {
+    await remove(file);
+  });
+  return files.length;
+}

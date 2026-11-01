@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "javascript/safety/valid-typeof",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "javascript.valid-typeof",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "invalid-typeof-string",
+          "rule": {
+            "kind": "binary_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "operator",
+                  "regex": "^[!=]==?$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "all": [
+                      {
+                        "has": {
+                          "field": "left",
+                          "kind": "unary_expression",
+                          "regex": "^typeof\\b"
+                        }
+                      },
+                      {
+                        "has": {
+                          "field": "right",
+                          "matches": "unknown-type-name"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "all": [
+                      {
+                        "has": {
+                          "field": "right",
+                          "kind": "unary_expression",
+                          "regex": "^typeof\\b"
+                        }
+                      },
+                      {
+                        "has": {
+                          "field": "left",
+                          "matches": "unknown-type-name"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "utils": {
+            "unknown-type-name": {
+              "any": [
+                {
+                  "kind": "string",
+                  "not": {
+                    "regex": "^[\"'](undefined|object|boolean|number|bigint|string|symbol|function)[\"']$"
+                  }
+                },
+                {
+                  "kind": "template_string",
+                  "not": {
+                    "any": [
+                      {
+                        "has": {
+                          "kind": "template_substitution"
+                        }
+                      },
+                      {
+                        "regex": "^`(undefined|object|boolean|number|bigint|string|symbol|function)`$"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} compares typeof with a string typeof never returns, so the branch is dead. Use undefined, object, boolean, number, bigint, string, symbol or function."
+  }
+}

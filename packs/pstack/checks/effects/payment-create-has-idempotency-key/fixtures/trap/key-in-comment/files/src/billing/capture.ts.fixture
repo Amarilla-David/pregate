@@ -1,0 +1,9 @@
+
+export async function capture(stripe: Stripe, id: string): Promise<void> {
+  // idempotencyKey is applied by the gateway wrapper
+  await stripe.charges.capture(id);
+}
+
+interface Stripe {
+  charges: { capture(id: string): Promise<void> };
+}

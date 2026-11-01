@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/old-seo.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "runtime-loader",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "require is a runtime loader the import ban still sees. Moving the specifier out of an import statement does not leave the Pages Router behind."
+  }
+}

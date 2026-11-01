@@ -1,0 +1,5 @@
+import fs from "fs";
+
+export function hasFs(): boolean {
+  return typeof fs.exists === "function";
+}

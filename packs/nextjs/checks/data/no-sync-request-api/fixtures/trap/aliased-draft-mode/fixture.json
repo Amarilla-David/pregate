@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "app/blog/page.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "aliased-import",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Renaming draftMode on import hides the API name, but preview() is still the next/headers Promise read synchronously; the function is async yet the call is not awaited."
+  }
+}

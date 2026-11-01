@@ -1,0 +1,5 @@
+import { inArray } from "drizzle-orm";
+import { users } from "./schema";
+const ids = ["a"];
+other.from(ids);
+const rows = db.select().from(users).where(inArray(users.id, ids));

@@ -1,0 +1,1 @@
+export function Cta() { return <a className="btn" href="/signup">Join</a>; }

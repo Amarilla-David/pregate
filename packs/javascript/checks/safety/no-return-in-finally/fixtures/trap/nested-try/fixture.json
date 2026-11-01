@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/files/close-all.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 13
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-try",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A return in a catch nested inside finally still completes the outer finally and discards the outer try's error."
+  }
+}

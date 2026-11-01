@@ -1,0 +1,6 @@
+
+import { Invoice } from "../domain/invoice";
+
+export function pay(invoice: Invoice, amount: number): Invoice {
+  return invoice;
+}

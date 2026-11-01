@@ -1,0 +1,27 @@
+{
+  "id": "next-website/data-and-cache/requirement-019",
+  "version": "1.0.0",
+  "area": "data-and-cache",
+  "cardinality": "singleton",
+  "dimension": "next-website.r019",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "NEXT-WEBSITE-019"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "NEXT-WEBSITE-019 requires current passing project verification: {symbol}."
+  }
+}

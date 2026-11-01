@@ -1,0 +1,7 @@
+export function notify(iframeRef: { current: HTMLIFrameElement | null }, payload: object): void {
+  // Arguments split across lines are still one call.
+  iframeRef.current?.contentWindow?.postMessage(
+    payload,
+    `*`,
+  );
+}

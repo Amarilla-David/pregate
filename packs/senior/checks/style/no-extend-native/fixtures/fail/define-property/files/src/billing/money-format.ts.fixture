@@ -1,0 +1,4 @@
+
+Object.defineProperty(Number.prototype, "money", {
+  get() { return `$${this.toFixed(2)}`; },
+});

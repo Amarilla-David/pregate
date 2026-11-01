@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "testing/testing/assertions-no-decrease",
+  "version": "1.0.0",
+  "area": "testing",
+  "cardinality": "singleton",
+  "dimension": "tests.assertions",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "diff",
+    "op": "no-decrease",
+    "count": {
+      "pattern": {
+        "id": "assertion-call",
+        "rule": {
+          "kind": "call_expression",
+          "has": {
+            "field": "function",
+            "any": [
+              {
+                "kind": "identifier",
+                "regex": "^(expect|assert\\w*)$"
+              },
+              {
+                "kind": "member_expression",
+                "has": {
+                  "field": "object",
+                  "kind": "identifier",
+                  "regex": "^(expect|assert)$"
+                }
+              }
+            ]
+          }
+        },
+        "x-note": "One per assertion call: expect(x) counts, the matcher chained on it does not; assert, assertEquals and assert.equal count."
+      }
+    }
+  },
+  "phase": [
+    "pre",
+    "stop"
+  ],
+  "feedback": {
+    "message": "This test file now has {measured} assertions; at the start of the session it had {limit}."
+  }
+}

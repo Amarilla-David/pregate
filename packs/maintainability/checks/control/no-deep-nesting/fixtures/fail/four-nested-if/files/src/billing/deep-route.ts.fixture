@@ -1,0 +1,11 @@
+export function deepRoute(a: boolean, b: boolean, c: boolean, d: boolean): void {
+  if (a) {
+    if (b) {
+      if (c) {
+        if (d) {
+          console.log("deep");
+        }
+      }
+    }
+  }
+}

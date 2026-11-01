@@ -1,0 +1,9 @@
+export function computeDiscount(total: number, isVip: boolean): number {
+  if (total <= 0) {
+    return 0;
+  }
+  if (!isVip) {
+    return Math.min(total * 0.05, 10);
+  }
+  return Math.min(total * 0.15, 50);
+}

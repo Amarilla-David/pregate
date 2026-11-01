@@ -1,0 +1,4 @@
+interface Res { cookie(name: string, val: string, opts?: Record<string, unknown>): void; }
+export function issueCookie(res: Res, token: string): void {
+  res.cookie("sid", token, { httpOnly: true, secure: true, sameSite: "lax" });
+}

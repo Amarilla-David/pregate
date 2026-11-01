@@ -1,0 +1,6 @@
+
+export function count(orders: string[]): number {
+  var found = 0;
+  for (var i = 0; i < orders.length; i++) found += 1;
+  return found;
+}

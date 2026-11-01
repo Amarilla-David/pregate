@@ -1,0 +1,13 @@
+import { z } from "zod";
+import { listPosts } from "../posts/list-posts";
+import { publicProcedure, router } from "../trpc";
+
+export const postRouter = router({
+  list: publicProcedure.query(({ ctx }) => listPosts(ctx.db)),
+  latest: publicProcedure
+    .input(z.object({ take: z.number().int().max(20) }))
+    .query(async ({ ctx, input }) => {
+      const posts = await listPosts(ctx.db);
+      return posts.slice(0, input.take);
+    }),
+});

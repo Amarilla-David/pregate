@@ -1,0 +1,52 @@
+{
+  "id": "go/context/context-first",
+  "version": "1.0.0",
+  "area": "context",
+  "cardinality": "singleton",
+  "dimension": "go.context.first-parameter",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "go": [
+        {
+          "id": "context-not-first",
+          "rule": {
+            "kind": "parameter_declaration",
+            "has": {
+              "field": "type",
+              "regex": "^context\\s*\\.\\s*Context$"
+            },
+            "inside": {
+              "kind": "parameter_list"
+            },
+            "follows": {
+              "stopBy": "end",
+              "kind": "parameter_declaration",
+              "not": {
+                "has": {
+                  "field": "type",
+                  "regex": "^(\\*\\s*testing\\s*\\.\\s*(T|B|F)|testing\\s*\\.\\s*TB)$"
+                }
+              }
+            }
+          },
+          "x-note": "A context.Context parameter after another parameter of a function, method, closure, function type or interface method. A leading *testing.T, *testing.B, *testing.F or testing.TB is the test-helper convention and does not count."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: context.Context is not the first parameter."
+  }
+}

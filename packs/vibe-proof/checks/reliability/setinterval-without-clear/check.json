@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/reliability/setinterval-without-clear",
+  "version": "1.0.1",
+  "area": "reliability",
+  "cardinality": "singleton",
+  "dimension": "reliability.interval-clear",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "interval-cleanup"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} starts an interval without a matching local or named-container handle read by clearInterval in this module. Add a cleanup path for that handle; syntactic evidence does not prove lifecycle execution."
+  }
+}

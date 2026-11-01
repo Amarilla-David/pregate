@@ -1,0 +1,10 @@
+
+function assertPositive(total: number): void {
+  if (total < 0) throw new Error("negative");
+}
+
+export function pay(invoice: Invoice): string {
+  return invoice.id;
+}
+
+interface Invoice { id: string }

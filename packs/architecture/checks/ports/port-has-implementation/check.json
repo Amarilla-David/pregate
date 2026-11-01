@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/ports/port-has-implementation",
+  "version": "1.0.0",
+  "area": "ports",
+  "cardinality": "singleton",
+  "dimension": "ports.no-implementation",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "port-impl",
+          "rule": {
+            "any": [
+              {
+                "kind": "class_declaration"
+              },
+              {
+                "kind": "abstract_class_declaration"
+              },
+              {
+                "kind": "function_declaration"
+              },
+              {
+                "kind": "function_expression"
+              },
+              {
+                "kind": "arrow_function"
+              }
+            ]
+          },
+          "files": [
+            "**/ports/**",
+            "**/port/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is an implementation inside a port module. A port is a type the adapter implements elsewhere."
+  }
+}

@@ -1,0 +1,8 @@
+import random
+
+
+def pick_winners(users, n):
+    return random.sample(users, n)
+
+
+token_count = len(random_words)

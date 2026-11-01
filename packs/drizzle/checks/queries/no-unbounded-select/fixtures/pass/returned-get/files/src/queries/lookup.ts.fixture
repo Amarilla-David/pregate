@@ -1,0 +1,3 @@
+export function lookup(db) {
+  return db.select().from(users).where(eq(users.key, key)).get();
+}

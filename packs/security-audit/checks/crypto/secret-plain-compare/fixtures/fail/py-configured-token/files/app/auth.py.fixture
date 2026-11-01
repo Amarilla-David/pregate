@@ -1,0 +1,5 @@
+def lookup(token):
+    preset_token = get_app_config("PRESET_ADMIN_TOKEN")
+    if preset_token and token == preset_token:
+        return "admin"
+    return None

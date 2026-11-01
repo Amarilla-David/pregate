@@ -1,0 +1,9 @@
+interface Props {
+  oncancel: (reason: string) => void;
+}
+
+let { oncancel }: Props = $props();
+
+export function abort(): void {
+  oncancel("user");
+}

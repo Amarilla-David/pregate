@@ -1,0 +1,8 @@
+import pytest
+
+pytestmark = [pytest.mark.slow, pytest.mark.skip(reason="until the API is back")]
+
+
+def test_sync():
+    pytest.skip("not yet")
+    assert sync() == "done"

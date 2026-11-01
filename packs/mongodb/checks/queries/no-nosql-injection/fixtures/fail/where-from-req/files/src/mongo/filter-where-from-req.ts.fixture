@@ -1,0 +1,6 @@
+import type { Col } from "./db";
+export async function list(col: Col, req: Req): Promise<void> {
+  await col.find({ $where: req.filter });
+}
+
+interface Req { filter: string }

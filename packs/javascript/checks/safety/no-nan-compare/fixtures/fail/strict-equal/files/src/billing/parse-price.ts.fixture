@@ -1,0 +1,7 @@
+export function parsePrice(raw: string): number | null {
+  const price = Number(raw);
+  if (price === NaN) {
+    return null;
+  }
+  return price;
+}

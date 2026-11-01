@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["**/use-cases/**", "**/*.use-case.ts"], "max": 1 },
+  "target": "src/application/use-cases/register-user.ts",
+  "before": null,
+  "expect": { "verdict": "pass" }
+}

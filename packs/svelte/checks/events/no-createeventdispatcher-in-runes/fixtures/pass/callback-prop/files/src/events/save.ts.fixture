@@ -1,0 +1,5 @@
+let { onsave } = $props();
+
+export function commit(): void {
+  onsave();
+}

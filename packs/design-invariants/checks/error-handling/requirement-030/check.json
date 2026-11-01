@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/error-handling/requirement-030",
+  "version": "1.0.0",
+  "area": "error-handling",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r030",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-030"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-030 requires current passing project verification: {symbol}."
+  }
+}

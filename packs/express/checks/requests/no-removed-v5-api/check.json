@@ -1,0 +1,194 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-removed-v5-api",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.removed-v5-api",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "removed-v5-api",
+          "rule": {
+            "kind": "call_expression",
+            "any": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^(app|router|[A-Za-z_$][\\w$]*Router)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^del$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^(req|request)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(param|acceptsCharset|acceptsEncoding|acceptsLanguage)$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^(res|response)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^sendfile$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "object",
+                            "regex": "^(res|response)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(redirect|location)$"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "regex": "^\\(\\s*[\"'`]back[\"'`]\\s*\\)$"
+                    }
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "object",
+                            "regex": "^(res|response)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(send|json|jsonp)$"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "regex": "^\\(\\s*\\d+\\s*\\)$"
+                    }
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "object",
+                            "regex": "^(res|response)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(send|json|jsonp|redirect)$"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "has": {
+                        "nthChild": {
+                          "position": 2,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "kind": "number"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses an Express 4 signature that Express 5 removed. Use the Express 5 form: app.delete, req.params/body/query, res.sendFile, res.sendStatus, res.status(code).send(body) or res.redirect(status, url)."
+  }
+}

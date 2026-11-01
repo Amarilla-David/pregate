@@ -1,0 +1,56 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/navigation/no-navigate-concat",
+  "version": "1.0.0",
+  "area": "navigation",
+  "cardinality": "singleton",
+  "dimension": "react-native.no-navigate-concat",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "navigate-concat",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\.navigate$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "regex": "\\+"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "regex": "\\$\\{"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds a route name by concatenation. Navigate with a literal route name and pass values as params."
+  }
+}

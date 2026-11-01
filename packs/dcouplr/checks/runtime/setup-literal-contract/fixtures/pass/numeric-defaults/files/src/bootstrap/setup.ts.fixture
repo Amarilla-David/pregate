@@ -1,0 +1,3 @@
+startDcouplrInspector(app, {port: 0, maxEvents: 0});
+startDcouplrInspector(app, {maxEvents: 2});
+startDcouplrInspector(app, {maxEvents: undefined});

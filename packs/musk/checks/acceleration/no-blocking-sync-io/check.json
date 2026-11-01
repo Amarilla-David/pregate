@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "musk/acceleration/no-blocking-sync-io",
+  "version": "1.0.0",
+  "area": "acceleration",
+  "cardinality": "singleton",
+  "dimension": "acceleration.sync-io",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "blocking-sync-io",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^((fs|child_process)\\.)?(readFileSync|writeFileSync|appendFileSync|execSync|readdirSync|copyFileSync|rmSync|mkdirSync)$"
+            }
+          },
+          "ignores": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            "**/*.test.tsx",
+            "**/*.spec.tsx",
+            "**/__tests__/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses synchronous blocking I/O. Step 4 (Musk): accelerate cycle time by using non-blocking asynchronous APIs."
+  }
+}

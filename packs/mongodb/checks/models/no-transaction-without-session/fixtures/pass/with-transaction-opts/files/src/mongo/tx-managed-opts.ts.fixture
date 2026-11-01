@@ -1,0 +1,4 @@
+import type { ClientSession } from "mongodb";
+export async function run(s: ClientSession, work: () => Promise<void>): Promise<void> {
+  await s.withTransaction(work, { readConcern: { level: "snapshot" } });
+}

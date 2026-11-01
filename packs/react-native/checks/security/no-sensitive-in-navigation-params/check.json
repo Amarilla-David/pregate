@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/security/no-sensitive-in-navigation-params",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "react-native.no-sensitive-in-navigation-params",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sensitive-nav-param",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\.navigate$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "(?i)password|secret|token|cardnumber|cvv|credentials?"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes secret-shaped data as a navigation param. Params persist in navigation state: pass an id and load the value server-side."
+  }
+}

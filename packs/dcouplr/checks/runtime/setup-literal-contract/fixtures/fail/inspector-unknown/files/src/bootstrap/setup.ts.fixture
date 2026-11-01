@@ -1,0 +1,1 @@
+setupDcouplr({charEncoding: 'UTF-8', inspector: {debgConsole: false}});

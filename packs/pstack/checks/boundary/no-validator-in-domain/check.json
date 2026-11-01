@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/boundary/no-validator-in-domain",
+  "version": "1.0.0",
+  "area": "boundary",
+  "cardinality": "singleton",
+  "dimension": "boundary.validator",
+  "minSeverity": null,
+  "params": {
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "banned-import"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a validator into the domain. Parse at the boundary and pass a domain type in."
+  }
+}

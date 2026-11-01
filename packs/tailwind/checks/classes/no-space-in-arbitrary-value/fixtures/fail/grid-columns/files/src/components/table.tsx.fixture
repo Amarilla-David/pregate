@@ -1,0 +1,8 @@
+export function Table() {
+  return (
+    <div className="grid grid-cols-[1fr 2fr] gap-4">
+      <span>Name</span>
+      <span>Value</span>
+    </div>
+  );
+}

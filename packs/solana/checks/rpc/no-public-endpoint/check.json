@@ -1,0 +1,85 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "solana/rpc/no-public-endpoint",
+  "version": "1.0.1",
+  "area": "rpc",
+  "cardinality": "singleton",
+  "dimension": "solana.rpc-public-endpoint",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "public-endpoint",
+          "rule": {
+            "any": [
+              {
+                "kind": "string",
+                "regex": "api\\.(mainnet-beta|devnet|testnet)\\.solana\\.com"
+              },
+              {
+                "kind": "template_string",
+                "regex": "api\\.(mainnet-beta|devnet|testnet)\\.solana\\.com"
+              }
+            ]
+          }
+        },
+        {
+          "id": "split-public-endpoint",
+          "rule": {
+            "pattern": "$PREFIX + $HOST"
+          },
+          "constraints": {
+            "PREFIX": {
+              "regex": "^[\"']https?://api\\.[\"']$"
+            },
+            "HOST": {
+              "regex": "^[\"'](mainnet-beta|devnet|testnet)\\.solana\\.com/?[\"']$"
+            }
+          }
+        },
+        {
+          "id": "interpolated-public-endpoint",
+          "rule": {
+            "kind": "template_string",
+            "regex": "api\\.\\$\\{\\s*[\"'](mainnet-beta|devnet|testnet)[\"']\\s*\\}\\.solana\\.com"
+          }
+        },
+        {
+          "id": "joined-public-endpoint",
+          "rule": {
+            "pattern": "[$SCHEME, $PREFIX, $CLUSTER, $SUFFIX].join($SEPARATOR)"
+          },
+          "constraints": {
+            "SCHEME": {
+              "regex": "^[\"']https?://[\"']$"
+            },
+            "PREFIX": {
+              "regex": "^[\"']api\\.[\"']$"
+            },
+            "CLUSTER": {
+              "regex": "^[\"'](mainnet-beta|devnet|testnet)[\"']$"
+            },
+            "SUFFIX": {
+              "regex": "^[\"']\\.solana\\.com/?[\"']$"
+            },
+            "SEPARATOR": {
+              "regex": "^[\"'][\"']$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} hardcodes a public Solana endpoint. Read the RPC URL (Triton) from the environment; the public endpoint falls over during the demo."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/auth.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 8
+      },
+      {
+        "line": 9
+      }
+    ]
+  }
+}

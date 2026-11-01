@@ -1,0 +1,20 @@
+export class Shipment {
+  private carrier = "";
+  private tracking = "";
+  private touchedAt = 0;
+
+  constructor(readonly id: string, private readonly clock: () => number) {}
+
+  updateCarrier(carrier: string): void {
+    this.touchedAt = this.clock();
+    this.carrier = carrier;
+  }
+
+  updateTracking({ tracking }: { tracking: string }): void {
+    this.tracking = tracking;
+  }
+
+  touch(): void {
+    this.touchedAt = this.clock();
+  }
+}

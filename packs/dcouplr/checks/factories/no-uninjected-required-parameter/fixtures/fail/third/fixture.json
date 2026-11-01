@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/register.ts",
+  "before": null,
+  "params": {},
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+export function Out() { return <a href="https://example.com" data-example={'<a href="/about">example</a>'}>External</a>; }

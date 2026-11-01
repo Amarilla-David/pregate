@@ -1,0 +1,3 @@
+import { t, publicProcedure } from "./trpc";
+import { z } from "zod";
+export const userRouter = t.router({ update: publicProcedure.input(z.object({ name: z.string() })).mutation(async ({ input }) => db.user.update(input)).output(z.object({ id: z.string() })) });

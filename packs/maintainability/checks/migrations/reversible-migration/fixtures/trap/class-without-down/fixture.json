@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/migrations/Migration20261009.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "optional-down",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Migration base classes that make down optional let a class compile with only up; a local named downtime does not count as down."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript", "params": {}, "target": "src/queries/lookup.ts", "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }] },
+  "trap": { "family": "unrelated-bound", "origin": "forge", "discovered": "2026-10-07", "note": "Another query's single-row execution does not bound this select." }
+}

@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function purge(id: string) {
+  return prisma.$executeRaw("DELETE FROM users WHERE id = " + id);
+}

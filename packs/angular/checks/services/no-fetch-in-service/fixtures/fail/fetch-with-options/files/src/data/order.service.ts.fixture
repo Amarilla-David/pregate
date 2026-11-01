@@ -1,0 +1,7 @@
+import { Injectable } from "@angular/core";
+@Injectable({ providedIn: "root" })
+export class OrderService {
+  loadOrder(url: string): Promise<unknown> {
+    return fetch(url, { method: "GET" });
+  }
+}

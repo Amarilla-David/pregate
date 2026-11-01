@@ -1,0 +1,65 @@
+package: tree-sitter-typescript@0.23.2
+url: https://registry.npmjs.org/tree-sitter-typescript/-/tree-sitter-typescript-0.23.2.tgz
+tarball-sha256: 0fdf63c35930a75885145d75ee63cb879da2d49db9bfe454bd8e60b08ba778a1
+source: https://github.com/tree-sitter/tree-sitter-typescript/tree/v0.23.2
+license: MIT
+modified: yes. grammar.patch applies with `patch -p1` to package/ of the tarball (common/define-grammar.js,
+  common/scanner.h). After generating both dialects, apply lexer.patch with `patch -p1` in package/;
+  both WASM files are rebuilt from these patched sources. LICENSE is byte for byte.
+build: tree-sitter-cli@0.24.4 (the version 0.23.2 pins) with tree-sitter-javascript@0.23.1;
+  `tree-sitter generate` in typescript/ and tsx/, then `patch -p1 < lexer.patch` in package/,
+  then what `tree-sitter build --wasm` runs in
+  emscripten/emsdk:3.1.64 (linux/amd64): emcc -o output.wasm -Os -s WASM=1 -s SIDE_MODULE=2
+  -s TOTAL_MEMORY=33554432 -s NODEJS_CATCH_EXIT=0 -s EXPORTED_FUNCTIONS=["_tree_sitter_<dialect>"]
+  -fno-exceptions -fvisibility=hidden -I . scanner.c parser.c (run in <dialect>/src).
+reproducible: the same toolchain on the unpatched tarball yields its published WASM byte for byte
+  (tree-sitter-typescript.wasm 778025db5a8b..., tree-sitter-tsx.wasm 79e5da75ea62...), so the patch
+  is the only difference. The patched build passes the 112 tests of upstream test/corpus at v0.23.2.
+patch: valid TypeScript that 0.23.2 parses as ERROR (O18), each change and where it comes from:
+  - generic tagged template, sql<Row[]>`SELECT ...`: own; the tree upstream PRs #342/#350 expect,
+    whose rule breaks `f<T>()`
+  - `typeof import("x")` in a call's type arguments: own (type query wins over the call expression)
+  - `import("x").T[]`: own
+  - inline import member types in generic call arguments, including arrays and unions (issue #18):
+    own. Two explicit conflicts retain both type and expression paths until the surrounding
+    syntax decides. Generic calls keep their type_arguments; runtime import calls, indexed
+    accesses and less-than comparisons retain their expression trees. Source bytes, UTF-16
+    offsets and ERROR/MISSING handling are unchanged; malformed controls still fail closed.
+  - bare `&` in JSX text: upstream PR #371 (open)
+  - bare `&` in JSX attribute strings: own (scanner, reusing the character reference check of #371)
+  - member `in?:` after a member without semicolon: own (scanner)
+  - `a < -1, b`: own (the `-1` literal type no longer wins over the unary expression up front)
+  - `i < unique.length`: own (`unique` joins the reserved identifiers)
+  - newline before a generic type member: own (automatic semicolon insertion before `<`
+    when no expression binary operator is valid). Generic expression continuations remain
+    expressions; newline-separated type arguments rejected by TypeScript remain errors.
+  - `export type * from` and `export type * as Name from`: own (type-only wildcard exports
+    require a source; named type export clauses keep their optional source).
+  - a nested generic function type as a call's first type argument, `f<<T>(value: T) => T>()`:
+    own bounded external lookahead distinguishes its generic-function arrow from a shift
+    expression. The token end stays after the first `<`; the grammar validates the full type.
+    Direct calls and whitespace/newline continuations are covered. Lookahead has a 4096-step
+    budget, handles quoted text/comments within generics/parameters, and does not claim full
+    TypeScript equivalence or support for every intervening-trivia form.
+  - literal NUL in strings, templates, regexes, comments and JSX text: own. The external scanner
+    uses lexer->eof(lexer) instead of testing lookahead == 0; lexer.patch changes 26 generated
+    negative character-class guards per dialect from lookahead != 0 to !eof. The pinned grammars
+    do not explicitly exclude NUL in these classes. Raw input, token text and spans are preserved.
+    See docs/research/typescript-nul-parser.md for reproduction and remaining syntax limits.
+  - explicit type-parameter variance (`in`, `out`, `in out`): own, matching TypeScript 4.7's
+    optional variance annotation syntax. The annotation precedes the named type parameter;
+    constraints/defaults and const type parameters retain their existing shape. Both dialects
+    have valid, malformed and import-location controls; the 112 upstream corpus tests pass.
+  - contextual identifiers `using` and `abstract`: own. Both join the reserved-identifier
+    alternatives so typed method parameters (including multiline signatures) and optional
+    object properties keep identifier/property_identifier nodes. Existing `using` assignment
+    and abstract class/member productions are unchanged; missing-type controls still error.
+  Not fixed: a generic tagged template after
+  await or a prefix unary operator (-, !, typeof, void) parses as a call of that operator, as f<T>()
+  already did in 0.23.2.
+files:
+b94a054856b70d37594227f57cdb0d9f3e78ceef12229965e7a353febad5057b  tree-sitter-typescript.wasm
+4b4373dc0b06d0da33c30edddf0de0ebed42d4c8300a52c5773cb90562e8fff3  tree-sitter-tsx.wasm
+3d9928538243f2edcf175cceb208633e11f3b660cbc5517ac8cf04c8ac97b932  grammar.patch
+ecf93f4fa9427c469a66ba2d99a2ace9fa15e07ee6ec149e488ce49df37b19ff  lexer.patch
+49bf33cf78ef5897e4e161ce1517df7de1ae5042a65b6bcfd44401e0fc606559  LICENSE

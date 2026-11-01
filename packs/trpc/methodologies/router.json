@@ -1,0 +1,135 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "trpc/router",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "TRPC-PROC-001",
+      "check": "trpc/router/no-unprotected-procedure",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "tRPC documentation, authorization and public procedures",
+        "locator": "publicProcedure versus middleware-guarded procedures",
+        "paraphrase": "Public mutations are supported; publicProcedure.mutation is used in the official procedures guide. Authorization depends on the product."
+      },
+      "why": "Sign-up, contact, and other intentionally public writes exist. The builder name alone cannot establish an authorization defect.",
+      "fixHint": "Build the mutation on protectedProcedure (or your authed procedure) so the caller is authenticated before the write runs.",
+      "avoid": "This rule sees the builder chain only: publicProcedure followed by .mutation in one chain. It does not read the auth model, so a protectedProcedure that checks nothing is outside what the tree can see. Keep one procedure per chain statement.",
+      "examples": {
+        "pass": "pass/protected-mutation",
+        "fail": "fail/public-mutation"
+      }
+    },
+    {
+      "id": "TRPC-INPUT-001",
+      "check": "trpc/router/no-missing-input-validator",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "tRPC documentation, input validation with zod",
+        "locator": "procedure input validators",
+        "paraphrase": "Input validators are needed when a procedure accepts input; no-input procedures are valid."
+      },
+      "why": "A procedure that accepts no input does not need an input validator, so missing .input alone is not a violation.",
+      "fixHint": "Add .input(z.object({ ... })) before .query or .mutation describing exactly the fields the resolver reads.",
+      "avoid": "The rule matches each builder chain on its own: a validated chain elsewhere in the file does not cover this one. .use(middleware) is not input validation. Keep one procedure per chain statement.",
+      "examples": {
+        "pass": "pass/validated-query",
+        "fail": "fail/unvalidated-query"
+      }
+    },
+    {
+      "id": "TRPC-OUTPUT-001",
+      "check": "trpc/router/no-missing-output-validator",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "tRPC documentation, output validation",
+        "locator": "procedure output validators",
+        "paraphrase": "Output validation is optional; tRPC infers a mutation's result type from its resolver."
+      },
+      "why": "Requiring .output on every mutation is a policy choice, not a framework invariant.",
+      "fixHint": "Add .output(schema) between .input and .mutation describing the value the mutation returns.",
+      "avoid": "The validator must come before .mutation; .output placed after the mutation does not declare the contract. Queries are out of scope for this rule.",
+      "examples": {
+        "pass": "pass/mutation-with-output",
+        "fail": "fail/mutation-no-output"
+      }
+    },
+    {
+      "id": "TRPC-MUT-001",
+      "check": "trpc/router/no-query-mutation-side-effect",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "tRPC documentation, queries versus mutations",
+        "locator": "query handlers must be read-only",
+        "paraphrase": "Query resolvers only read. Any create, update, delete, insert, upsert, or save belongs in a mutation, which the client caches differently."
+      },
+      "why": "Clients cache and refetch queries freely. A write hidden in a query runs again on every refetch and corrupts state.",
+      "fixHint": "Move the write into a .mutation procedure and leave the .query to read the data the mutation changed.",
+      "avoid": "The rule matches write method names (create, update, delete, insert, upsert, save) inside a .query chain kept on one line. A read helper with one of these names is a false positive; rename it.",
+      "examples": {
+        "pass": "pass/pure-query",
+        "fail": "fail/create-in-query"
+      }
+    },
+    {
+      "id": "TRPC-SELFCALL-001",
+      "check": "trpc/router/no-caller-in-procedure",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "tRPC documentation, server side calls",
+        "locator": "https://trpc.io/docs/server/server-side-calls",
+        "paraphrase": "createCaller should not be used to call procedures from within other procedures; extract the shared logic into a function and call it from each procedure."
+      },
+      "why": "A caller built inside a resolver creates context again and reruns every middleware and validator for work the outer procedure already authorized.",
+      "fixHint": "Move the shared logic into a plain function that takes ctx (or ctx.db) and call it from both procedures.",
+      "avoid": "router.createCaller(ctx), createCaller(ctx) from createCallerFactory, and createCallerFactory(router)(ctx) are the same call. Callers built outside a .query, .mutation or .subscription resolver, such as server components or scripts, are allowed.",
+      "examples": {
+        "pass": "pass/shared-function",
+        "fail": "fail/router-create-caller"
+      }
+    },
+    {
+      "id": "TRPC-CODE-001",
+      "check": "trpc/server/no-invalid-trpc-error-code",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "tRPC documentation, Error Handling (trpc.io)",
+        "locator": "https://trpc.io/docs/server/error-handling#error-codes",
+        "paraphrase": "TRPCError requires a predefined TRPC_ERROR_CODE_KEY string such as BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, or NOT_FOUND rather than numeric HTTP statuses or custom strings."
+      },
+      "why": "Passing a numeric HTTP status (404) or an invented string ('UNAUTHENTICATED') falls back to INTERNAL_SERVER_ERROR (500) and breaks client error handling.",
+      "fixHint": "Replace the code with the matching official tRPC error code string (such as 'UNAUTHORIZED', 'FORBIDDEN', 'NOT_FOUND', or 'BAD_REQUEST').",
+      "avoid": "Only literal string, template, or numeric values on the code property of new TRPCError({...}) are checked. Imported constants or variables are not resolved.",
+      "examples": {
+        "pass": "pass/valid-codes",
+        "fail": "fail/numeric-status-code"
+      }
+    },
+    {
+      "id": "TRPC-RET-NEXT-001",
+      "check": "trpc/middleware/no-unreturned-next",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "tRPC documentation, Middlewares (trpc.io)",
+        "locator": "https://trpc.io/docs/server/middlewares",
+        "paraphrase": "A tRPC middleware must return the result of calling next() (or await next(), inspect the result, and return it) so the procedure response and context reach the caller."
+      },
+      "why": "Calling next() as a bare statement discards the procedure's resolved output and returns undefined to the tRPC runtime.",
+      "fixHint": "Return next({ ctx }) directly, or assign const result = await next({ ctx }) and return result afterwards.",
+      "avoid": "Express middleware (which takes (req, res, next) and calls bare next()) should not be registered via t.middleware.",
+      "examples": {
+        "pass": "pass/return-next",
+        "fail": "fail/bare-next-statement"
+      }
+    }
+  ]
+}

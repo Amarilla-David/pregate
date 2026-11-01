@@ -1,0 +1,8 @@
+interface Client { query(sql: string): Promise<unknown>; release(): void; }
+export async function pingDb(client: Client): Promise<void> {
+  try {
+    await client.query("SELECT 1");
+  } finally {
+    client.release();
+  }
+}

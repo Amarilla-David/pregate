@@ -1,0 +1,26 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [],
+    "overrides": {
+      "core/integrity/double-type-assertion": "warn"
+    }
+  },
+  "errors": [
+    "core/EVA-CAST-001: severity warn is below the minimum deny of core/integrity/double-type-assertion"
+  ]
+}

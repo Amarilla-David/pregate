@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-sync-in-handlers",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.sync-in-handler",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sync-io-in-handler",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^(readFileSync|writeFileSync|appendFileSync|readdirSync|statSync|unlinkSync|mkdirSync|rmSync|copyFileSync)$"
+                  }
+                },
+                {
+                  "kind": "identifier",
+                  "regex": "^(readFileSync|writeFileSync|appendFileSync|readdirSync|statSync|unlinkSync|mkdirSync|rmSync|copyFileSync)$"
+                }
+              ]
+            },
+            "inside": {
+              "stopBy": "end",
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "kind": "member_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "object",
+                      "regex": "^(app|router)$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "property",
+                      "regex": "^(get|post|put|patch|delete|all|use)$"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} runs synchronous filesystem I/O inside an Express handler. Use fs/promises so the event loop stays unblocked across concurrent requests."
+  }
+}

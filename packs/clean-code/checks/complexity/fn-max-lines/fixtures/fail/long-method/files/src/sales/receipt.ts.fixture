@@ -1,0 +1,22 @@
+type Line = { sku: string; quantity: number; price: number };
+
+export class Receipt {
+  constructor(private readonly lines: Line[]) {}
+
+  render(): string {
+    const out: string[] = [];
+    out.push("RECEIPT");
+    let total = 0;
+    for (const line of this.lines) {
+      const amount = line.quantity * line.price;
+      total += amount;
+      out.push(`${line.sku} x${line.quantity} ${amount}`);
+    }
+    out.push("-".repeat(20));
+    out.push(`TOTAL ${total}`);
+    if (total === 0) {
+      out.push("(empty)");
+    }
+    return out.join("\n");
+  }
+}

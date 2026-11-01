@@ -1,0 +1,27 @@
+{
+  "id": "consumer-saas/privacy-and-data-rights/requirement-016",
+  "version": "1.0.0",
+  "area": "privacy-and-data-rights",
+  "cardinality": "singleton",
+  "dimension": "consumer-saas.r016",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CONSUMER-016"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CONSUMER-016 requires current passing project verification: {symbol}."
+  }
+}

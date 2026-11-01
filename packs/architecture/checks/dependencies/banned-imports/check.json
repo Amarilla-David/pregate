@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/dependencies/banned-imports",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "multi",
+  "dimension": "deps.packages",
+  "minSeverity": null,
+  "params": {
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "banned-import"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a package this layer may not use."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "$schema": "../../schema/source.v1.json",
+  "ns": "node",
+  "category": "library",
+  "version": "1.2.1"
+}

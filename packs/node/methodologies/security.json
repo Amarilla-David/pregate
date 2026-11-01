@@ -1,0 +1,107 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "node/security",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "NODE-EXEC-001",
+      "check": "node/security/no-exec-sync",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, child processes",
+        "locator": "synchronous process creation",
+        "paraphrase": "Sync subprocess calls block the loop and often run through a shell. Server code spawns async without a shell."
+      },
+      "why": "A sync call freezes the process, and a shell string lets input become commands.",
+      "fixHint": "Use the async spawn or execFile variant with an argument list.",
+      "avoid": "The execFile variant without a shell still blocks. Destructuring the call does not change it.",
+      "examples": {
+        "pass": "pass/async-spawn",
+        "fail": "fail/exec-sync-call"
+      }
+    },
+    {
+      "id": "NODE-VM-001",
+      "check": "node/security/no-vm-run",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, vm module",
+        "locator": "vm is not a security boundary",
+        "paraphrase": "The vm module runs code in a new context but is not a sandbox. Untrusted code does not go through it."
+      },
+      "why": "Context code escapes to the host process, so a string that reaches it runs with full access.",
+      "fixHint": "Remove the evaluation path. Parse data with a parser instead of running it.",
+      "avoid": "Compiling without running still compiles untrusted code. Creating a context alone is not this call.",
+      "examples": {
+        "pass": "pass/create-context",
+        "fail": "fail/run-new-context"
+      }
+    },
+    {
+      "id": "NODE-EXEC-002",
+      "check": "node/security/no-exec-interpolation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, child processes",
+        "locator": "https://nodejs.org/api/child_process.html#child_processexeccommand-options-callback",
+        "paraphrase": "exec runs the command string in a shell. Never pass unsanitized user input to it: shell metacharacters can trigger arbitrary command execution."
+      },
+      "why": "A value spliced into the command string is parsed by the shell, so a file name such as a.png; rm -rf / runs a second command.",
+      "fixHint": "Call execFile or spawn with the program name and an argument array, so the value stays one argument.",
+      "avoid": "Concatenation with + is the same as a template literal. A fixed command string is fine. execSync is reported by NODE-EXEC-001. exec wrapped by promisify under another name is not seen.",
+      "examples": {
+        "pass": "pass/exec-file-args",
+        "fail": "fail/template-command"
+      }
+    },
+    {
+      "id": "NODE-CIPHER-001",
+      "relations": [
+        {
+          "with": "security-audit/SA-ECB-001",
+          "kind": "duplicates",
+          "why": "createCipher or createDecipher with an ECB algorithm literal is reported by both rules.",
+          "settle": "Keep both: NODE-CIPHER-001 flags the removed key derivation, SA-ECB-001 the mode. createCipheriv with aes-256-gcm satisfies both."
+        }
+      ],
+      "check": "node/security/no-create-cipher",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js documentation, deprecated APIs",
+        "locator": "https://nodejs.org/api/deprecations.html#DEP0106",
+        "paraphrase": "crypto.createCipher and crypto.createDecipher are End-of-Life and removed in Node.js 22. They use MD5 without salt as the key derivation and a static IV."
+      },
+      "why": "The call throws on current Node.js, and on older versions the derived key and IV are weak, so the ciphertext is easier to break.",
+      "fixHint": "Derive a key with crypto.scrypt or pbkdf2 and a random salt, then use createCipheriv or createDecipheriv with a random IV.",
+      "avoid": "createCipheriv and createDecipheriv are the replacements and are allowed. Reading the function by string key is the same call.",
+      "examples": {
+        "pass": "pass/cipheriv",
+        "fail": "fail/create-cipher"
+      }
+    },
+    {
+      "id": "NODE-EXISTS-001",
+      "check": "node/security/no-fs-exists",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Node.js File System Documentation",
+        "locator": "DEP0007 / fs.exists",
+        "paraphrase": "fs.exists() is an anti-pattern because it introduces a time-of-check to time-of-use vulnerability."
+      },
+      "why": "Checking for file existence before opening or reading introduces a TOCTOU race condition where another process can delete or swap the file.",
+      "fixHint": "Open, read, or write the file directly and handle errors (e.g. ENOENT) in the catch block or error callback.",
+      "avoid": "Do not call fs.exists or fs.existsSync before fs.readFile or fs.open, including via destructured existsSync.",
+      "examples": {
+        "pass": "pass/direct-read",
+        "fail": "fail/exists-check"
+      }
+    }
+  ]
+}

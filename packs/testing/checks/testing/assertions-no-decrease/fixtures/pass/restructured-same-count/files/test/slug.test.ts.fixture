@@ -1,0 +1,13 @@
+import { expect, it } from "bun:test";
+import { slugify } from "../src/slug";
+
+it.each([
+  ["Hello", "hello"],
+  ["a b", "a-b"],
+])("slugifies %s", (input, expected) => {
+  expect(slugify(input)).toBe(expected);
+});
+
+it("keeps digits", () => {
+  expect(slugify("v2")).toBe("v2");
+});

@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/transport/go-insecure-skip-verify",
+  "version": "1.0.0",
+  "area": "transport",
+  "cardinality": "singleton",
+  "dimension": "security-audit.transport.go-certificate-verification",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "go": [
+        {
+          "id": "insecure-skip-verify-literal",
+          "rule": {
+            "kind": "keyed_element",
+            "regex": "^InsecureSkipVerify\\s*:\\s*true$"
+          }
+        },
+        {
+          "id": "insecure-skip-verify-assignment",
+          "rule": {
+            "kind": "assignment_statement",
+            "regex": "\\.InsecureSkipVerify\\s*=\\s*true$"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} turns off TLS certificate verification. Verify the peer, or trust a specific CA through RootCAs."
+  }
+}

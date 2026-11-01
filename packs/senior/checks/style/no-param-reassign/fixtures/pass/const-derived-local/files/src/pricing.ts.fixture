@@ -1,0 +1,4 @@
+export function normalizePrice(amount: number): number {
+  const clamped = amount < 0 ? 0 : amount;
+  return clamped * 100;
+}

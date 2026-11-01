@@ -1,0 +1,6 @@
+
+import { Pool } from "pg";
+
+export function watch(pool: Pool, logger: { error(e: unknown): void }): void {
+  pool.on("error", (e) => logger.error(e));
+}

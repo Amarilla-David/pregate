@@ -1,0 +1,2 @@
+import { Head as PageHead } from "next/head";
+export const head = PageHead;

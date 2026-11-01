@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/main.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      }
+    ]
+  },
+  "trap": {
+    "family": "other-run",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "asyncio.run accepts debug=True for loop diagnostics without a browser debugger; an app attribute on self still starts one."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lowercase-tx.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "lowercase-begin-transaction-without-rollback",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Lowercase client.query('begin transaction') still opens a PostgreSQL transaction that poisons the pooled client if catch omits ROLLBACK."
+  }
+}

@@ -1,0 +1,8 @@
+export function Terms(props: { accepted: boolean; onToggle: () => void }) {
+  return (
+    <label>
+      <input type="checkbox" checked={props.accepted} onClick={props.onToggle} />
+      I accept the terms
+    </label>
+  );
+}

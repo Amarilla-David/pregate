@@ -1,0 +1,8 @@
+import { prisma } from "~/server/db";
+
+export async function rename(id: string, name: string) {
+  await prisma.$transaction(async (tx) => {
+    await tx.user.update({ where: { id }, data: { name } });
+    await prisma.$executeRaw`UPDATE "Search" SET label = ${name} WHERE user_id = ${id}`;
+  });
+}

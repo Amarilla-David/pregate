@@ -1,0 +1,4 @@
+declare const t: { middleware(fn: (opts: { ctx: { userId: string }; next: (o?: unknown) => Promise<unknown> }) => Promise<unknown>): unknown };
+export const authed = t.middleware(({ ctx, next }) => {
+  return next({ ctx: { userId: ctx.userId } });
+});

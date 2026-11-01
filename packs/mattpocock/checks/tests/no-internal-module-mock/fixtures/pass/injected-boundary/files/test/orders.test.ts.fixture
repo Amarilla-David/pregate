@@ -1,0 +1,3 @@
+const gateway = { charge: vi.fn().mockResolvedValue({ id: "paid" }) };
+const result = checkout(cart, gateway);
+expect(result.id).toBe("paid");

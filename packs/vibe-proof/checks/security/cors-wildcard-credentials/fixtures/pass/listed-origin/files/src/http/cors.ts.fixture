@@ -1,0 +1,2 @@
+
+export const cors = { origin: "https://billing.example", credentials: true };

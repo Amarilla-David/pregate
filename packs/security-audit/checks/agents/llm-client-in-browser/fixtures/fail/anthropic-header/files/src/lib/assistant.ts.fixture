@@ -1,0 +1,7 @@
+export async function ask(key: string, body: string): Promise<Response> {
+  return fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "x-api-key": key, "anthropic-dangerous-direct-browser-access": "true" },
+    body,
+  });
+}

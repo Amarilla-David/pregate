@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-raw-interpolation",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.sql-concat",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "raw-concat",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\$(queryRaw|executeRaw)\\b"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "\\+"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds a raw query with string concatenation, which bypasses parameterization. Use the template form so each value becomes a bound parameter."
+  }
+}

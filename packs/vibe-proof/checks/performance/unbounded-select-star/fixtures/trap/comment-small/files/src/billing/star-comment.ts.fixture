@@ -1,0 +1,7 @@
+
+export async function list(db: Db): Promise<unknown> {
+  // table is small
+  return db.query("select * from invoices");
+}
+
+interface Db { query(sql: string): Promise<unknown> }

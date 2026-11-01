@@ -1,0 +1,39 @@
+{
+  "id": "go/dependencies/no-ioutil",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "singleton",
+  "dimension": "go.deps.ioutil",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "go": [
+        {
+          "id": "ioutil",
+          "rule": {
+            "kind": "import_spec",
+            "has": {
+              "field": "path",
+              "regex": "^[\"`]io/ioutil[\"`]$"
+            }
+          },
+          "x-note": "The literal import path, quoted or raw, with any local name including _ and dot."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: io/ioutil is deprecated; use the same function from io or os."
+  }
+}

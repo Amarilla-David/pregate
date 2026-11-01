@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/direct-pda.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "destructured-create-program-address",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Calling destructured createProgramAddressSync directly without the PublicKey receiver still bypasses canonical bump search."
+  }
+}

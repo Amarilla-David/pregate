@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "redis/keys/no-set-without-ttl",
+  "version": "1.0.0",
+  "area": "keys",
+  "cardinality": "singleton",
+  "dimension": "redis.set-requires-ttl",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "set-without-ttl",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.set\\s*\\(",
+            "not": {
+              "regex": "\\b(EX|PX|EXAT|PXAT|KEEPTTL|NX|XX)\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sets a key with no visible expiry. Pass EX/PX or use setEx."
+  }
+}

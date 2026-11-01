@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/forward.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "legacy-reexport",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Re-exporting the old module keeps the compatibility layer in the graph. The caller did not move."
+  }
+}

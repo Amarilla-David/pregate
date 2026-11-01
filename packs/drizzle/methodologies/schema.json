@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "drizzle/schema",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DRIZ-TABLE-001",
+      "check": "drizzle/schema/no-table-without-primary-key",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, PostgreSQL table definition",
+        "locator": "pgTable with primaryKey on the id column",
+        "paraphrase": "Give every pgTable an explicit primary key on its id column. A text or uuid id without primaryKey is a heap with no identity: updates and deletes have no row to aim at."
+      },
+      "why": "Without a primary key, two rows can share an id and no constraint stops them. Deletes and updates by id hit an arbitrary row.",
+      "fixHint": "Chain .primaryKey() onto the id column, or declare the composite key the domain needs.",
+      "avoid": "The rule recognizes text(\"id\") and uuid(\"id\") without primaryKey. serial(\"id\") and integer(\"id\") without primaryKey, and a key declared on a differently named column, are shapes this rule does not see.",
+      "examples": {
+        "pass": "pass/pk-text",
+        "fail": "fail/text-id"
+      }
+    },
+    {
+      "id": "DRIZ-TABLE-002",
+      "check": "drizzle/schema/no-integer-id-without-primary-key",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Drizzle ORM documentation, PostgreSQL column types and indexes & constraints",
+        "locator": "serial, integer identity columns and primaryKey; https://orm.drizzle.team/docs/column-types/pg and https://orm.drizzle.team/docs/indexes-constraints#primary-key",
+        "paraphrase": "Declare the primary key explicitly with .primaryKey() or a composite primaryKey(). serial and identity columns only generate values; neither adds a primary key constraint."
+      },
+      "why": "An auto-incrementing id looks like an identity, but without a primary key nothing stops a manual insert or a restored backup from duplicating it, and updates by id can hit several rows.",
+      "fixHint": "Chain .primaryKey() onto the id column, as in integer().primaryKey().generatedAlwaysAsIdentity(), or declare the composite key in the table's third argument.",
+      "avoid": "unique() or generatedAlwaysAsIdentity() is not a primary key. The rule reads pgTable calls whose id column, named \"id\" or keyed id:, is serial, bigserial, smallserial, integer, bigint or smallint; any primaryKey in the table passes. text and uuid ids belong to DRIZ-TABLE-001.",
+      "examples": {
+        "pass": "pass/serial-pk",
+        "fail": "fail/serial-id"
+      }
+    },
+    {
+      "id": "DRIZ-TZ-001",
+      "check": "drizzle/schema/no-timestamp-without-mode",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, timestamp column",
+        "locator": "timestamp with the mode and withTimezone options",
+        "paraphrase": "Declare how a timestamp crosses the boundary: mode date, string, or number, and withTimezone where the domain needs it. A bare timestamp leaves the driver to guess, and two drivers guess differently."
+      },
+      "why": "A timestamp with no mode shifts by the session timezone on read or write. Events move by hours and nobody touched them.",
+      "fixHint": "Pass { mode: \"date\" } (or string/number), and add withTimezone: true when the instant must carry its zone.",
+      "avoid": "Other options such as precision or defaultNow do not satisfy the rule; only mode or withTimezone counts. date columns are a different type this rule does not see.",
+      "examples": {
+        "pass": "pass/mode-date",
+        "fail": "fail/no-options"
+      }
+    },
+    {
+      "id": "DRIZ-REL-002",
+      "check": "drizzle/schema/no-relation-without-fields",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, relations",
+        "locator": "relations with one(), fields, and references",
+        "paraphrase": "A one() relation must name its fields and references so the join has columns to use. one() with no fields, or with an empty config, declares a relation that points nowhere."
+      },
+      "why": "A dangling relation compiles and fails at query time, or joins on a guess. The error arrives in production, not at definition.",
+      "fixHint": "Pass { fields: [...], references: [...] } to one(), or use many() when the other side needs no key.",
+      "avoid": "many() without fields passes: only one() needs the key pair. A fields array that names the wrong columns still passes; the rule checks presence, not correctness.",
+      "examples": {
+        "pass": "pass/one-with-fields",
+        "fail": "fail/one-without-fields"
+      }
+    }
+  ]
+}

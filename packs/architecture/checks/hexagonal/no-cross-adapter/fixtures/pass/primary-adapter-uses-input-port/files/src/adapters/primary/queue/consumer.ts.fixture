@@ -1,0 +1,5 @@
+import { ProcessPaymentPort } from "../../../application/ports/in/process-payment";
+
+export class PaymentConsumer {
+  constructor(private readonly port: ProcessPaymentPort) {}
+}

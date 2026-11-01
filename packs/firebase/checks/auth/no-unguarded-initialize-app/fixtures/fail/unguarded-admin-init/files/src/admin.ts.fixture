@@ -1,0 +1,4 @@
+declare const admin: { initializeApp(cfg?: unknown): unknown };
+export const createAdmin = () => {
+  return admin.initializeApp();
+};

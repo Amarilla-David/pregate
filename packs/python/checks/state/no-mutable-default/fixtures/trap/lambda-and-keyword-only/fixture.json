@@ -1,0 +1,23 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      },
+      {
+        "line": 7
+      }
+    ]
+  },
+  "trap": {
+    "family": "lambda-and-keyword-only",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A lambda default and a keyword-only collections default are still evaluated once and shared."
+  }
+}

@@ -1,0 +1,4 @@
+export function swapValues(a: number, b: number): [number, number] {
+  const temp = a;
+  return [b, temp];
+}

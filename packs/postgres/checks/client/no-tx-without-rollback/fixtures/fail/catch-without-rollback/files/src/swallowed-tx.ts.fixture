@@ -1,0 +1,12 @@
+interface Client { query(sql: string): Promise<unknown>; release(): void; }
+export async function saveOrder(client: Client): Promise<void> {
+  try {
+    await client.query("BEGIN");
+    await client.query("INSERT INTO orders VALUES (1)");
+    await client.query("COMMIT");
+  } catch (err) {
+    throw err;
+  } finally {
+    client.release();
+  }
+}

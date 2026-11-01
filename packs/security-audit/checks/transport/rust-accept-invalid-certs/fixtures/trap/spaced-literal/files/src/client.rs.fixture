@@ -1,0 +1,6 @@
+pub fn client() -> reqwest::blocking::Client {
+    let builder = reqwest::blocking::Client::builder();
+    builder.danger_accept_invalid_certs(
+        true
+    ).build().unwrap()
+}

@@ -1,0 +1,123 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "authjs/config/no-credentials-database-session",
+  "version": "1.0.0",
+  "area": "config",
+  "cardinality": "singleton",
+  "dimension": "authjs.credentials-database-session",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "credentials-database-session",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "kind": "identifier",
+              "regex": "^Credentials(Provider)?$"
+            },
+            "inside": {
+              "kind": "array",
+              "inside": {
+                "kind": "pair",
+                "regex": "^[\"']?providers[\"']?\\s*:",
+                "inside": {
+                  "kind": "object",
+                  "any": [
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "regex": "^[\"']?session[\"']?\\s*:",
+                        "has": {
+                          "field": "value",
+                          "kind": "object",
+                          "has": {
+                            "kind": "pair",
+                            "regex": "^[\"']?strategy[\"']?\\s*:\\s*[\"'`]database[\"'`]"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "all": [
+                        {
+                          "has": {
+                            "any": [
+                              {
+                                "kind": "pair",
+                                "regex": "^[\"']?adapter[\"']?\\s*:"
+                              },
+                              {
+                                "kind": "shorthand_property_identifier",
+                                "regex": "^adapter$"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "not": {
+                            "has": {
+                              "any": [
+                                {
+                                  "kind": "spread_element"
+                                },
+                                {
+                                  "kind": "shorthand_property_identifier",
+                                  "regex": "^session$"
+                                },
+                                {
+                                  "kind": "pair",
+                                  "regex": "^[\"']?session[\"']?\\s*:",
+                                  "not": {
+                                    "has": {
+                                      "field": "value",
+                                      "kind": "object",
+                                      "not": {
+                                        "has": {
+                                          "any": [
+                                            {
+                                              "kind": "pair",
+                                              "regex": "^[\"']?strategy[\"']?\\s*:"
+                                            },
+                                            {
+                                              "kind": "shorthand_property_identifier",
+                                              "regex": "^strategy$"
+                                            },
+                                            {
+                                              "kind": "spread_element"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is a Credentials provider in a config whose sessions are database sessions. Credentials sign-in only works with session: { strategy: \"jwt\" }."
+  }
+}

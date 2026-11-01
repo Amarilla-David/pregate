@@ -1,0 +1,1 @@
+saga.registerNode({ stepId: 'one', ...configuredNode });

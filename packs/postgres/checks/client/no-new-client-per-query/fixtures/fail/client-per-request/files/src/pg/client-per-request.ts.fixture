@@ -1,0 +1,9 @@
+
+import { Client } from "pg";
+
+export async function countUsers(): Promise<number> {
+  const client = new Client(process.env.DATABASE_URL);
+  await client.connect();
+  const res = await client.query("SELECT count(*) FROM users");
+  return Number(res.rows[0]);
+}

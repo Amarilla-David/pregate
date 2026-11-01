@@ -1,0 +1,3 @@
+export function Card({ v }: { v: string }) {
+  return <div style={{ ["--x"]: v }} />;
+}

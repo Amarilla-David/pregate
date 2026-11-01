@@ -1,0 +1,56 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/queries/no-sql-concat",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "drizzle.raw-concat",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sql-concat",
+          "rule": {
+            "kind": "call_expression",
+            "any": [
+              {
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "regex": "\\.execute$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "regex": "[\"'`]\\s*\\+|\\+\\s*[\"'`]"
+                    }
+                  }
+                ]
+              },
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\bsql\\.raw$"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} concatenates a value into SQL or passes it through sql.raw. Use the query builder or a parameterized sql`` template."
+  }
+}

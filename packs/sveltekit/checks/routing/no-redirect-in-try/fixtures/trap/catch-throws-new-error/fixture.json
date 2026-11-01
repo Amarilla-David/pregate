@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/admin/+page.server.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "catch-throws-other-error",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The catch looks like it rethrows, but it throws a new 500 error, so the redirect is still swallowed and replaced by an error page."
+  }
+}

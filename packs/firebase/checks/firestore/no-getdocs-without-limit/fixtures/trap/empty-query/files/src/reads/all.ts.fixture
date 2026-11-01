@@ -1,0 +1,6 @@
+import { getDocs, query } from "firebase/firestore";
+
+export async function loadEverything(col: ColRef, toItem: Mapper): Promise<Item[]> {
+  const snap = await getDocs(query(col));
+  return snap.docs.map((d) => toItem(d.data()));
+}

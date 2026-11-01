@@ -1,0 +1,92 @@
+{
+  "id": "python/state/no-mutable-default",
+  "version": "1.0.0",
+  "area": "state",
+  "cardinality": "singleton",
+  "dimension": "python.state.mutable-default",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "mutable-default",
+          "utils": {
+            "mutable-value": {
+              "any": [
+                {
+                  "kind": "list"
+                },
+                {
+                  "kind": "dictionary"
+                },
+                {
+                  "kind": "set"
+                },
+                {
+                  "kind": "list_comprehension"
+                },
+                {
+                  "kind": "dictionary_comprehension"
+                },
+                {
+                  "kind": "set_comprehension"
+                },
+                {
+                  "kind": "call",
+                  "has": {
+                    "field": "function",
+                    "any": [
+                      {
+                        "kind": "identifier",
+                        "regex": "^(list|dict|set|bytearray|defaultdict|deque|OrderedDict|Counter)$"
+                      },
+                      {
+                        "kind": "attribute",
+                        "regex": "^collections\\s*\\.\\s*(defaultdict|deque|OrderedDict|Counter)$"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "default_parameter"
+              },
+              {
+                "kind": "typed_default_parameter"
+              }
+            ],
+            "has": {
+              "field": "value",
+              "matches": "mutable-value"
+            },
+            "not": {
+              "has": {
+                "field": "name",
+                "regex": "^_"
+              }
+            }
+          },
+          "x-note": "The default is evaluated once, when def or lambda runs, so every call shares one list, dict or set. A parameter whose name starts with an underscore is the documented private-cache idiom and stays allowed. Tuples, strings, frozensets, None and other constructors pass."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: A mutable default is created once and shared by every call."
+  }
+}

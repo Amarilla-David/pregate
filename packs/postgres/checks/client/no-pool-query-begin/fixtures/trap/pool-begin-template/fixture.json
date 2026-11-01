@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/pg/pool-begin-template.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-begin",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Backticks do not move BEGIN onto a dedicated client. pool.query(`BEGIN`) still runs the transaction on a random pooled connection."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/style/no-with",
+  "version": "1.0.0",
+  "area": "style",
+  "cardinality": "singleton",
+  "dimension": "style.with",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "with-stmt",
+          "rule": {
+            "kind": "with_statement"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses with. Name the object."
+  }
+}

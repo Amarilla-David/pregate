@@ -1,0 +1,5 @@
+export { config } from "./config.server";
+
+export async function load() {
+	return { ok: true };
+}

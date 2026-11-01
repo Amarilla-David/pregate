@@ -1,0 +1,4 @@
+export function apiUrl(): string {
+  const x = process.env.API_URL;
+  return x ?? "http://localhost";
+}

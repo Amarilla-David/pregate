@@ -1,0 +1,7 @@
+import { createCipheriv } from "node:crypto";
+
+const label = "aes-256-ecb is not allowed";
+
+export function seal(algorithm: string, key: Buffer, iv: Buffer) {
+  return createCipheriv(algorithm, key, iv);
+}

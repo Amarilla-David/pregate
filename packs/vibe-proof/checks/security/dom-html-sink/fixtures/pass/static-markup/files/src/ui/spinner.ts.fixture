@@ -1,0 +1,10 @@
+export function showSpinner(slot: HTMLElement, busy: boolean): void {
+  slot.innerHTML = "";
+  slot.innerHTML = busy ? `<span class="spinner" aria-hidden="true"></span>` : "";
+  slot.insertAdjacentHTML("beforeend", "<span class=\"sr-only\">Loading</span>");
+}
+
+export function snapshot(slot: HTMLElement): string {
+  const markup = slot.innerHTML;
+  return markup.trim();
+}

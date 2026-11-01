@@ -1,0 +1,27 @@
+{
+  "id": "agent-practices/launch-safety/requirement-003",
+  "version": "1.0.0",
+  "area": "launch-safety",
+  "cardinality": "singleton",
+  "dimension": "agent-practices.r003",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PRACTICE-003"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PRACTICE-003 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,13 @@
+import { graphql, HttpResponse } from "msw";
+import { render, screen } from "@testing-library/react";
+import { server } from "./server";
+import { UserCard } from "./UserCard";
+
+describe("UserCard", () => {
+  it("renders the user", async () => {
+    server.use(graphql.query("GetUser", () => HttpResponse.json({ data: { name: "Ada" } })));
+    const total = 1 + 2;
+    render(<UserCard label={`Ada ${total}`} />);
+    expect(await screen.findByText("Ada 3")).toBeTruthy();
+  });
+});

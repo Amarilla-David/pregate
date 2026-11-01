@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/no-constructor-param-property",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "typescript.param-property",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "param-property",
+          "rule": {
+            "kind": "method_definition",
+            "regex": "^constructor\\b",
+            "has": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "accessibility_modifier"
+                },
+                {
+                  "kind": "required_parameter",
+                  "regex": "\\breadonly\\b"
+                },
+                {
+                  "kind": "optional_parameter",
+                  "regex": "\\breadonly\\b"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} declares a constructor parameter property. Declare the field and assign it in the body."
+  }
+}

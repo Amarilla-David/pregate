@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/shop/__init__.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

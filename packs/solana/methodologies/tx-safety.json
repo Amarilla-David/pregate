@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "solana/tx-safety",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SOL-TX-001",
+      "check": "solana/tx/no-tx-version-string",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "client page, reading transactions",
+        "paraphrase": "Reads pass maxSupportedTransactionVersion as the integer 1."
+      },
+      "why": "The RPC reads maxSupportedTransactionVersion as a number; the string is silently not 1. Static syntax cannot prove values or provenance across helpers and imports; see BACKLOG.md for this rule's uncaught flow and warning default.",
+      "fixHint": "Pass the integer 1, not the string.",
+      "avoid": "String(1) or a template that renders the digit as text.",
+      "examples": {
+        "pass": "pass/number-one",
+        "fail": "fail/string-one"
+      }
+    },
+    {
+      "id": "SOL-TX-002",
+      "check": "solana/tx/no-bare-confirm",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "practices (SOLANA-RULES.md), client and transactions",
+        "paraphrase": "Signatures confirm against a fresh blockhash, and a timeout looks before it resends."
+      },
+      "why": "A blockhash is valid for about 150 blocks; confirming a bare signature cannot tell a lost reply from a landed transaction, and resending blind double-pays. Static syntax cannot prove values or provenance across helpers and imports; see BACKLOG.md for this rule's uncaught flow and warning default.",
+      "fixHint": "Keep { blockhash, lastValidBlockHeight }, confirm against it with an explicit compute budget, and on timeout check the signature status before resending.",
+      "avoid": "Retrying send in the catch block without looking the first signature up.",
+      "examples": {
+        "pass": "pass/with-blockhash",
+        "fail": "fail/sig-only"
+      }
+    }
+  ]
+}

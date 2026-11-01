@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mongo/agg-function.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "function-stage",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "$function hides the JavaScript inside a $project. The body still runs as server-side JS per document."
+  }
+}

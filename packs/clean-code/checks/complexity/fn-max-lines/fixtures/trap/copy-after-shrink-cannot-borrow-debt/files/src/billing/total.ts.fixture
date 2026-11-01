@@ -1,0 +1,7 @@
+export function total(): number { return 0; }
+
+export function invoiceTotal(prices: number[]): number {
+  const subtotal = prices.reduce((sum, price) => sum + price, 0);
+  const tax = subtotal * 0.2;
+  return subtotal + tax;
+}

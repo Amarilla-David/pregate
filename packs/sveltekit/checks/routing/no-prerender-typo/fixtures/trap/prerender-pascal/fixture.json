@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/docs/+page.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "case-typo",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "PreRender reads like a real page option, but only the exact lowercase prerender is honored. Any other casing is a dead export the router silently ignores."
+  }
+}

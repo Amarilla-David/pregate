@@ -1,0 +1,14 @@
+declare function loadOrders(): Promise<string[]>;
+
+export function useUser() {
+  return useAsyncData("user", () => $fetch<{ id: string }>("/api/user"));
+}
+
+export function useOrders() {
+  return useAsyncData(loadOrders, {
+    default: () => [],
+    getCachedData(key, nuxtApp) {
+      return nuxtApp.payload.data[key];
+    },
+  });
+}

@@ -1,0 +1,18 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/sagas.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  }
+}

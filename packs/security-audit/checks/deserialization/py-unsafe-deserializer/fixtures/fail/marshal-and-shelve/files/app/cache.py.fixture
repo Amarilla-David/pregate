@@ -1,0 +1,8 @@
+import marshal
+import shelve
+
+
+def restore(path, data):
+    code = marshal.loads(data)
+    db = shelve.open(path)
+    return code, db

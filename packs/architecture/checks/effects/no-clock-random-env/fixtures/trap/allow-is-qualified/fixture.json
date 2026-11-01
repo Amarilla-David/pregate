@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["@layers:core"], "allow": ["Bun.Glob"] },
+  "context": {
+    "layers": {
+      "core": { "paths": ["src/core/**"], "mayImport": [], "kind": "core" },
+      "shell": { "paths": ["src/shell/**"], "mayImport": ["core"], "kind": "adapter" }
+    }
+  },
+  "target": "src/core/glob.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 2 }, { "line": 6 }, { "line": 7 }, { "line": 8 }] },
+  "trap": {
+    "family": "indirect-reference",
+    "origin": "corpus",
+    "discovered": "2026-10-02",
+    "note": "With Bun.Glob allowed, the rest of Bun comes back through the bare global, an alias, destructuring, bracket access, a longer name that shares the prefix and a sibling member."
+  }
+}

@@ -1,0 +1,6 @@
+declare function getApps(): unknown[];
+declare function getApp(): unknown;
+declare function initializeApp(cfg: Record<string, string>): unknown;
+export function getFirebaseApp(cfg: Record<string, string>): unknown {
+  return getApps().length > 0 ? getApp() : initializeApp(cfg);
+}

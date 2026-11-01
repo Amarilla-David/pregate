@@ -1,0 +1,27 @@
+{
+  "id": "pstack/principles/ps-16",
+  "version": "1.0.0",
+  "area": "principles",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-16",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-16"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-16 requires current passing project verification: {symbol}."
+  }
+}

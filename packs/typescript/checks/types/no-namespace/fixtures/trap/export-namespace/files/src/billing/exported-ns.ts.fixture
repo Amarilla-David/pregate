@@ -1,0 +1,4 @@
+
+export namespace Billing {
+  export const currency = "USD";
+}

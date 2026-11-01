@@ -1,0 +1,4 @@
+declare const usersCollection: { deleteMany(filter: Record<string, never>): Promise<unknown> };
+export async function clearUsers(): Promise<void> {
+  await usersCollection.deleteMany({});
+}

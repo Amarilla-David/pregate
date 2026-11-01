@@ -1,0 +1,4 @@
+interface Res { cookie(name: string, val: string, opts?: Record<string, unknown>): void; }
+export function setTokenCookie(response: Res, token: string): void {
+  response.cookie("token", token, { httpOnly: true, secure: false });
+}

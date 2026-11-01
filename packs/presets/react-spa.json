@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "react-spa",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "path",
+      "path": "packs/typescript"
+    },
+    {
+      "ns": "react",
+      "kind": "path",
+      "path": "packs/react"
+    },
+    {
+      "ns": "tailwind",
+      "kind": "path",
+      "path": "packs/tailwind"
+    }
+  ],
+  "methodologies": [
+    "core/pregate-integrity",
+    "typescript/strict-types",
+    "typescript/discipline",
+    "typescript/named-exports",
+    "react/hooks",
+    "react/components",
+    "tailwind/classes",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "shadow",
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

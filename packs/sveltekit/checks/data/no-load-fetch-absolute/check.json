@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/data/no-load-fetch-absolute",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.load-fetch-absolute",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "absolute-load-fetch",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^fetch$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "https?://"
+                }
+              }
+            ]
+          },
+          "files": [
+            "src/routes/**/*.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} fetches an absolute URL from a route load file. Use a relative path so the request stays on the serving origin."
+  }
+}

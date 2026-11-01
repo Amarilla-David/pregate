@@ -1,0 +1,5 @@
+import ast
+
+
+def parse(expr):
+    return ast.literal_eval(expr)

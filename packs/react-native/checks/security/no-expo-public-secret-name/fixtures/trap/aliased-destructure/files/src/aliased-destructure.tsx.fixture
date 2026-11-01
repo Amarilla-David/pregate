@@ -1,0 +1,5 @@
+const { EXPO_PUBLIC_AUTH_SECRET: authSecret } = process.env;
+
+export function sign(): string {
+  return authSecret;
+}

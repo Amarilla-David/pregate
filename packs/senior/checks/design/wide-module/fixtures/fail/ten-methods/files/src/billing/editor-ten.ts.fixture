@@ -1,0 +1,13 @@
+interface Order { id: string }
+export class InvoiceEditor {
+  step0(order: Order): string { return order.id; }
+  step1(order: Order): string { return order.id; }
+  step2(order: Order): string { return order.id; }
+  step3(order: Order): string { return order.id; }
+  step4(order: Order): string { return order.id; }
+  step5(order: Order): string { return order.id; }
+  step6(order: Order): string { return order.id; }
+  step7(order: Order): string { return order.id; }
+  step8(order: Order): string { return order.id; }
+  step9(order: Order): string { return order.id; }
+}

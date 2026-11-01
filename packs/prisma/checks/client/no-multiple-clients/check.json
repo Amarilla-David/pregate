@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-multiple-clients",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.client-singleton",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "route-new-client",
+          "rule": {
+            "kind": "new_expression",
+            "regex": "\\bnew\\s+PrismaClient\\s*\\("
+          },
+          "files": [
+            "**/route.ts",
+            "**/+server.ts",
+            "server/api/**",
+            "src/server/api/**",
+            "**/api/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} constructs a PrismaClient inside a request handler file. Import the shared singleton from the server db module instead."
+  }
+}

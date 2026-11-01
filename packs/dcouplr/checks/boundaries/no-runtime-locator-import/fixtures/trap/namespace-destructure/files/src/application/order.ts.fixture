@@ -1,0 +1,3 @@
+import * as d from 'dcouplr';
+const { getDcouplr: get } = d;
+export const kernel = get();

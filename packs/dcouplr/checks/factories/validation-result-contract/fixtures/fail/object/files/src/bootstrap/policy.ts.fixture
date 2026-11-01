@@ -1,0 +1,3 @@
+stage.addValidationPolicy(() => ({ valid: 1 }));
+stage.addValidationPolicy(() => ({ msg: 'no valid field' }));
+stage.addValidationPolicy(() => ({ valid: false, msg: null }));

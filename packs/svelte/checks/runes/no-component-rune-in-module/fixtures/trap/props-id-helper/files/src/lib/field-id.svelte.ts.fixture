@@ -1,0 +1,4 @@
+export function fieldIds(name: string) {
+  const uid = $props.id();
+  return { input: `${uid}-${name}`, label: `${uid}-${name}-label` };
+}

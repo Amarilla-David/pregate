@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/pg/empty-function.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-function-handler",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "function () {} swallows the pool error exactly like () => {}. Spelling the callback as a function expression does not handle anything."
+  }
+}

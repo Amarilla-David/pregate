@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "typescript/discipline",
+  "version": "1.0.2",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "TS-RET-001",
+      "check": "typescript/types/require-return-on-export",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Effective TypeScript (D. Vanderkam)",
+        "locator": "type annotations on exported signatures",
+        "paraphrase": "An exported signature is a contract other modules compile against. Its return type should be written, not inferred."
+      },
+      "why": "An inferred return type leaks implementation detail into the boundary. Renaming an internal helper silently changes every importer's type.",
+      "fixHint": "Annotate the return type on the exported function or arrow function.",
+      "avoid": "Marking the function async does not replace a return type. The promise still publishes an untyped boundary.",
+      "examples": {
+        "pass": "pass/typed-function",
+        "fail": "fail/untyped-function"
+      }
+    },
+    {
+      "id": "TS-AWAIT-001",
+      "relations": [
+        {
+          "with": "nextjs",
+          "kind": "idiom",
+          "why": "Next.js server actions must be async functions even when they do not await anything.",
+          "settle": "Exclude the files that declare server actions (for example **/actions.ts or app/**/actions/**) from TS-AWAIT-001."
+        }
+      ],
+      "check": "typescript/async/no-async-without-await",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook, async functions",
+        "locator": "async without await",
+        "paraphrase": "An async function that never awaits wraps its result for no reason. Either the suspension is missing or async is decoration."
+      },
+      "why": "A needless async hides whether the function suspends. Callers await a value that was already there.",
+      "fixHint": "Remove async when nothing suspends, or await the asynchronous work the function performs.",
+      "avoid": "Mentioning await in a comment does not suspend the function. Only an await expression counts.",
+      "examples": {
+        "pass": "pass/awaited",
+        "fail": "fail/async-no-await"
+      }
+    },
+    {
+      "id": "TS-STAR-001",
+      "check": "typescript/exports/no-export-star",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "TypeScript handbook, modules",
+        "locator": "barrel re-exports",
+        "paraphrase": "A barrel should name what it republishes. A star re-export publishes bindings the barrel never reviewed."
+      },
+      "why": "Adding an export to the source module silently widens every star barrel above it, including name collisions across barrels.",
+      "fixHint": "List the re-exported bindings by name in the barrel file.",
+      "avoid": "Aliasing the star to a namespace still republishes every binding it does not name.",
+      "examples": {
+        "pass": "pass/named-reexport",
+        "fail": "fail/star-barrel"
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+export async function photoNames(listRef: ListRef): Promise<string[]> {
+  const page = await listAll(listRef);
+  return page.items.map((i) => i.name);
+}

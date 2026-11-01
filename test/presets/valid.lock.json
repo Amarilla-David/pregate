@@ -1,0 +1,357 @@
+{
+  "core": "0.1.0",
+  "coreHash": "053870c4967d495cf115a1918cb99d29ce88811d9447a7488abbdf5df1c9ee92",
+  "enforcement": "shadow",
+  "engine": "0.1.0",
+  "generatedMarkers": [
+    "@generated"
+  ],
+  "layers": {
+    "application": {
+      "kind": "core",
+      "mayImport": [
+        "domain"
+      ],
+      "paths": [
+        "src/application/**"
+      ]
+    },
+    "domain": {
+      "kind": "core",
+      "mayImport": [],
+      "paths": [
+        "src/domain/**"
+      ]
+    },
+    "infra": {
+      "kind": "adapter",
+      "mayImport": [
+        "domain",
+        "application"
+      ],
+      "paths": [
+        "src/infra/**"
+      ]
+    }
+  },
+  "lockVersion": 1,
+  "loop": {
+    "allowAsk": true,
+    "maxDenialsPerFileRule": 3,
+    "maxDenialsPerTurn": 15,
+    "maxDetailedViolations": 5,
+    "maxStopBlocks": 1,
+    "noProgressLimit": 2
+  },
+  "ownedByArkgate": [
+    "example/CA-DEP-002"
+  ],
+  "preset": {
+    "methodologies": [
+      "core/pregate-integrity",
+      "example/clean-architecture",
+      "example/clean-code",
+      "example/functional-core-imperative-shell",
+      "example/tdd",
+      "local/team"
+    ],
+    "name": "billing-backend",
+    "version": "1.0.0"
+  },
+  "presetHash": "7b01337d57b3563f73f8a4afdc3aecdf643e5cc7d61e5d1ac74a4898c29cac29",
+  "ratchet": "no-new",
+  "rules": [
+    {
+      "aliases": [
+        "core/EVA-CAST-001",
+        "local/TEAM-CAST-001"
+      ],
+      "check": "core/integrity/double-type-assertion@1.0.0",
+      "enforcement": "enforce",
+      "id": "core/EVA-CAST-001",
+      "impl": {
+        "kind": "pattern",
+        "patterns": {
+          "typescript": [
+            {
+              "id": "cast",
+              "rule": {
+                "kind": "as_expression"
+              }
+            }
+          ]
+        }
+      },
+      "integrity": true,
+      "origin": {
+        "enforcement": "core",
+        "severity": "alias"
+      },
+      "params": {
+        "exclude": [],
+        "paths": [
+          "**"
+        ]
+      },
+      "phases": [
+        "pre",
+        "stop",
+        "commit",
+        "ci"
+      ],
+      "severity": "deny",
+      "text": {
+        "avoid": "Avoid EVA-CAST-001.",
+        "fix": "Fix EVA-CAST-001.",
+        "message": "{symbol} breaks {rule}.",
+        "source": "A Book (2008), ch. 3",
+        "why": "Why EVA-CAST-001."
+      }
+    },
+    {
+      "aliases": [
+        "core/EVA-DYN-001"
+      ],
+      "check": "core/integrity/no-dynamic-import-in-layer@1.0.0",
+      "enforcement": "enforce",
+      "id": "core/EVA-DYN-001",
+      "impl": {
+        "kind": "pattern",
+        "patterns": {
+          "typescript": [
+            {
+              "id": "dynamic",
+              "rule": {
+                "kind": "as_expression"
+              }
+            }
+          ]
+        }
+      },
+      "integrity": true,
+      "origin": {
+        "enforcement": "core",
+        "params.paths": "alias",
+        "severity": "alias"
+      },
+      "params": {
+        "exclude": [],
+        "paths": [
+          "src/domain/**",
+          "src/application/**",
+          "src/infra/**"
+        ]
+      },
+      "phases": [
+        "pre",
+        "stop",
+        "commit",
+        "ci"
+      ],
+      "severity": "deny",
+      "text": {
+        "avoid": "Avoid EVA-DYN-001.",
+        "fix": "Fix EVA-DYN-001.",
+        "message": "{symbol} breaks {rule}.",
+        "source": "A Book (2008), ch. 3",
+        "why": "Why EVA-DYN-001."
+      }
+    },
+    {
+      "aliases": [
+        "example/CA-DEP-002"
+      ],
+      "check": "example/dependencies/banned-imports@1.0.0",
+      "enforcement": "shadow",
+      "id": "example/CA-DEP-002",
+      "impl": {
+        "kind": "primitive",
+        "primitive": "banned-import"
+      },
+      "integrity": false,
+      "origin": {
+        "enforcement": "preset",
+        "params.packages": "alias",
+        "params.paths": "alias",
+        "severity": "overrides.CA-DEP-002"
+      },
+      "params": {
+        "exclude": [],
+        "packages": [
+          "@prisma/client"
+        ],
+        "paths": [
+          "src/domain/**",
+          "src/application/**"
+        ]
+      },
+      "phases": [
+        "pre",
+        "stop",
+        "commit",
+        "ci"
+      ],
+      "severity": "warn",
+      "text": {
+        "avoid": "Avoid CA-DEP-002.",
+        "fix": "Fix CA-DEP-002.",
+        "message": "{symbol} breaks {rule}.",
+        "source": "A Book (2008), ch. 3",
+        "why": "Why CA-DEP-002."
+      }
+    },
+    {
+      "aliases": [
+        "example/FCIS-IO-001",
+        "local/TEAM-IO-001"
+      ],
+      "check": "example/dependencies/banned-imports@1.0.0",
+      "enforcement": "shadow",
+      "id": "example/FCIS-IO-001",
+      "impl": {
+        "kind": "primitive",
+        "primitive": "banned-import"
+      },
+      "integrity": false,
+      "origin": {
+        "enforcement": "preset",
+        "params.packages": "alias",
+        "params.paths": "alias",
+        "severity": "alias"
+      },
+      "params": {
+        "exclude": [],
+        "packages": [
+          "fs"
+        ],
+        "paths": [
+          "src/domain/**",
+          "src/application/**"
+        ]
+      },
+      "phases": [
+        "pre",
+        "stop",
+        "commit",
+        "ci"
+      ],
+      "severity": "deny",
+      "text": {
+        "avoid": "Avoid FCIS-IO-001.",
+        "fix": "Fix FCIS-IO-001.",
+        "message": "{symbol} breaks {rule}.",
+        "source": "A Book (2008), ch. 3",
+        "why": "Why FCIS-IO-001."
+      }
+    },
+    {
+      "aliases": [
+        "example/TDD-FOCUS-001"
+      ],
+      "check": "example/testing/no-focused-tests@1.0.0",
+      "enforcement": "shadow",
+      "id": "example/TDD-FOCUS-001",
+      "impl": {
+        "kind": "pattern",
+        "patterns": {
+          "typescript": [
+            {
+              "id": "only",
+              "rule": {
+                "kind": "as_expression"
+              }
+            },
+            {
+              "id": "skip",
+              "rule": {
+                "kind": "as_expression"
+              }
+            }
+          ]
+        }
+      },
+      "integrity": false,
+      "origin": {
+        "enforcement": "preset",
+        "params.exclude": "overrides.example/testing/no-focused-tests",
+        "severity": "alias"
+      },
+      "params": {
+        "exclude": [
+          "test/legacy/**",
+          "test/fixtures/**"
+        ],
+        "paths": [
+          "**/*.test.ts"
+        ]
+      },
+      "phases": [
+        "pre",
+        "stop",
+        "commit",
+        "ci"
+      ],
+      "severity": "deny",
+      "text": {
+        "avoid": "Avoid TDD-FOCUS-001.",
+        "fix": "Fix TDD-FOCUS-001.",
+        "message": "{symbol} breaks {rule}.",
+        "source": "A Book (2008), ch. 3",
+        "why": "Why TDD-FOCUS-001."
+      }
+    },
+    {
+      "aliases": [
+        "local/TEAM-FN-001"
+      ],
+      "check": "example/complexity/fn-max-params@1.0.0",
+      "enforcement": "shadow",
+      "id": "local/TEAM-FN-001",
+      "impl": {
+        "kind": "primitive",
+        "metric": "fn.params",
+        "primitive": "metric"
+      },
+      "integrity": false,
+      "origin": {
+        "enforcement": "preset",
+        "params.max": "resolve.fn.params",
+        "severity": "alias"
+      },
+      "params": {
+        "exclude": [],
+        "max": 4,
+        "paths": [
+          "**"
+        ]
+      },
+      "phases": [
+        "pre",
+        "stop",
+        "commit",
+        "ci"
+      ],
+      "severity": "deny",
+      "text": {
+        "avoid": "Avoid TEAM-FN-001.",
+        "fix": "Fix TEAM-FN-001.",
+        "message": "{symbol} breaks {rule}.",
+        "source": "A Book (2008), ch. 3",
+        "why": "Why TEAM-FN-001."
+      }
+    }
+  ],
+  "scope": {
+    "exclude": [
+      "src/infra/migrations/**"
+    ],
+    "include": [
+      "src/**",
+      "test/**"
+    ]
+  },
+  "sourceDirs": [
+    ".pregate/rules"
+  ],
+  "sourcesHash": "a8113991d7ed8acf00832f7bbd94cb750bca40e41bd1288f0b360f7aab3b9375"
+}

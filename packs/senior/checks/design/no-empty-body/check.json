@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/design/no-empty-body",
+  "version": "1.0.0",
+  "area": "design",
+  "cardinality": "singleton",
+  "dimension": "design.empty-body",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "empty-body",
+          "rule": {
+            "kind": "statement_block",
+            "regex": "^\\{\\s*(//[^\\n]*|/\\*[\\s\\S]*\\*/)?\\s*\\}$",
+            "inside": {
+              "field": "body",
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "method_definition"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ]
+            },
+            "not": {
+              "inside": {
+                "stopBy": "neighbor",
+                "kind": "method_definition",
+                "regex": "^constructor\\b"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} has an empty body. Implement it or delete it."
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/security/no-exec-interpolation",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "node.no-exec-interpolation",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "exec-interpolation",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "any": [
+                    {
+                      "kind": "identifier",
+                      "regex": "^exec$"
+                    },
+                    {
+                      "kind": "member_expression",
+                      "regex": "^(child_process|childProcess|cp)\\.exec$"
+                    }
+                  ]
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "any": [
+                      {
+                        "kind": "template_string",
+                        "has": {
+                          "kind": "template_substitution"
+                        }
+                      },
+                      {
+                        "kind": "binary_expression",
+                        "has": {
+                          "stopBy": "end",
+                          "any": [
+                            {
+                              "kind": "identifier"
+                            },
+                            {
+                              "kind": "template_substitution"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds a shell command string from values for exec. Call execFile or spawn with the program and an argument array."
+  }
+}

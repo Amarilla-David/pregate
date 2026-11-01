@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/webhooks/verify.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

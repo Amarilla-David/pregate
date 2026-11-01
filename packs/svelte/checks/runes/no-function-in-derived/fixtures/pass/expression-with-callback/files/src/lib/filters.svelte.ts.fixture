@@ -1,0 +1,10 @@
+declare function byName(a: string, b: string): number;
+declare function byDate(a: string, b: string): number;
+
+export function createFilters(all: string[]) {
+  let query = $state("");
+  let sortByDate = $state(false);
+  const visible = $derived(all.filter((name) => name.includes(query)));
+  const compare = $derived(sortByDate ? byDate : byName);
+  return { get visible() { return visible; }, get compare() { return compare; } };
+}

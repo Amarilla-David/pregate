@@ -1,0 +1,8 @@
+import { Text, View as Box } from "react-native";
+
+export default function Cart({ items }: { items: string[] }) {
+  if (items.length === 0) {
+    return <Box style={{ padding: 24 }}>{`Your cart is empty`}</Box>;
+  }
+  return <Box>{items.map((item) => <Text key={item}>{item}</Text>)}</Box>;
+}

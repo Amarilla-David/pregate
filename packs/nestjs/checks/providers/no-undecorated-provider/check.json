@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nestjs/providers/no-undecorated-provider",
+  "version": "1.0.0",
+  "area": "providers",
+  "cardinality": "singleton",
+  "dimension": "nestjs.undecorated-provider",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "undecorated-nest-provider",
+          "rule": {
+            "kind": "class_declaration",
+            "has": {
+              "kind": "class_heritage",
+              "has": {
+                "kind": "implements_clause",
+                "regex": "\\b(CanActivate|NestInterceptor|PipeTransform|ExceptionFilter)\\b"
+              }
+            },
+            "not": {
+              "any": [
+                {
+                  "has": {
+                    "kind": "decorator",
+                    "regex": "^@(Injectable|Catch)\\b"
+                  }
+                },
+                {
+                  "inside": {
+                    "kind": "export_statement",
+                    "has": {
+                      "kind": "decorator",
+                      "regex": "^@(Injectable|Catch)\\b"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} implements a Nest lifecycle interface without @Injectable() or @Catch(). Decorate the class so the DI container can resolve its dependencies."
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/performance/unbounded-find-many",
+  "version": "1.0.0",
+  "area": "performance",
+  "cardinality": "singleton",
+  "dimension": "performance.unbounded-find",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "find-many",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "\\.findMany$|\\[[\"']findMany[\"']\\]$"
+            },
+            "not": {
+              "has": {
+                "field": "arguments",
+                "regex": "\\b(take|limit|cursor)\\b"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls findMany with no take, limit, or cursor."
+  }
+}

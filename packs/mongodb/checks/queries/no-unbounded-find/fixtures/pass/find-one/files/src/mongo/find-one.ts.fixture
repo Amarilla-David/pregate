@@ -1,0 +1,4 @@
+import type { Col } from "./db";
+export async function get(col: Col, email: string): Promise<void> {
+  await col.findOne({ email });
+}

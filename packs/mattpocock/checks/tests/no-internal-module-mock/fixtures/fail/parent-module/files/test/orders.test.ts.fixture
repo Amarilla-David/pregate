@@ -1,0 +1,1 @@
+jest.doMock("../orders", () => ({ total: () => 0 }));

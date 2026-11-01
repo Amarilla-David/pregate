@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/vault/fields.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

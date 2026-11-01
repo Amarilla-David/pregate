@@ -1,0 +1,2 @@
+
+export const url = "postgres://billing:s3cret-token@db.internal/invoices";

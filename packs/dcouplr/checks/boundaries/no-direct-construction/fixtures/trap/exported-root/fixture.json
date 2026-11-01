@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "target": "src/services/order.ts",
+  "before": null,
+  "params": {},
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "exported-factory-root",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "An exported creator can be invoked by other modules; local registration does not establish exclusive managed root ownership."
+  }
+}

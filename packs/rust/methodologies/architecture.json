@@ -1,0 +1,30 @@
+{
+  "id": "rust/architecture",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "RUST-LAYER-001",
+      "check": "rust/dependencies/layer-direction",
+      "defaults": {
+        "paths": [
+          "@layers:core"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE Rust source policies",
+        "locator": "rust.deps.layers, revision 1",
+        "paraphrase": "The reference reaches a layer this core cannot depend on."
+      },
+      "why": "The reference reaches a layer this core cannot depend on.",
+      "fixHint": "Depend on a declared port and wire the adapter at the application boundary.",
+      "avoid": "Do not hide an adapter behind a pub-use facade, alias or canonical qualified path.",
+      "examples": {
+        "pass": "pass/port",
+        "fail": "fail/adapter"
+      }
+    }
+  ]
+}

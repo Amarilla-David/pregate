@@ -1,0 +1,8 @@
+import { Controller, Post, Body } from "@nestjs/common";
+@Controller("orders")
+export class OrdersCreator {
+  @Post()
+  create(@Body() dto: unknown) {
+    return { created: true, dto };
+  }
+}

@@ -1,0 +1,9 @@
+export function usePrices(ids: string[]) {
+  const prices = ref<number[]>([]);
+  useAsyncData("prices", async () => {
+    prices.value = await Promise.all(ids.map(async (id) => {
+      return $fetch<number>(`/api/prices/${id}`);
+    }));
+  });
+  return { prices };
+}

@@ -1,0 +1,6 @@
+import { storeToRefs } from "pinia";
+import { useCartStore } from "./store";
+
+const { count } = storeToRefs(useCartStore());
+
+export { count };

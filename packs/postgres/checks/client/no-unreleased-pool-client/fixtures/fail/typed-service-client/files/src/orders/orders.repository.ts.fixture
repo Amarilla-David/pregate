@@ -1,0 +1,11 @@
+import type { Pool, PoolClient } from "pg";
+
+export class OrdersRepository {
+  constructor(private readonly pool: Pool) {}
+
+  async open(customerId: number) {
+    const conn: PoolClient = await this.pool.connect();
+    const res = await conn.query("SELECT id FROM orders WHERE customer_id = $1 AND closed_at IS NULL", [customerId]);
+    return res.rows;
+  }
+}

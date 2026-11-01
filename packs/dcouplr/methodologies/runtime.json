@@ -1,0 +1,124 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/runtime",
+  "version": "1.5.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-SETUP-001",
+      "check": "dcouplr/runtime/setup-literal-contract",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published public types and runtime; explicit PREGATE literal-configuration and finite inspector-budget policy",
+        "locator": "dist/index.d.mts ISystemDependencyFactories/ISetupDcouplrConfig, lines 178–218; dist/index-C3YI4Tf9.d.mts IDFactory, lines 771–779, inspector options, lines 938–959; dist/index.mjs withVerifiedFactoryOutput, buildSystemDependencies, validateKernelFactoryInput and setupDcouplr, lines 3377–3386, 3480–3622; dist/inspector/index.mjs startDcouplrInspector and resolveDebugConsoleOptions",
+        "paraphrase": "Setup and inspector options use the public keys and types. Inspector numeric options must be finite. Each supplied system override is an IDFactory with a string __semanticIdentifier and synchronous callable create."
+      },
+      "why": "Invalid literal bootstrap options or factories reject initialization/resolution or are silently ignored. Missing charEncoding and factory identifiers are tolerated by this runtime but violate the public required-field contracts. Unknown literal keys can hide a misspelled setting. Async/generator create returns do not satisfy the synchronous system-factory output contracts. Infinity and NaN event budgets disable bounded retention; a negative infinite budget discards every event.",
+      "fixHint": "Supply charEncoding and use the public setup fields and types. Use only Logger, EventBus, MessageBus, DCast, IQueue, IQueuePersistence, MessageBrokerAdapter and EventBrokerAdapter system overrides. Each supplied factory needs a string __semanticIdentifier and synchronous callable create; its output must satisfy that system contract. Inspector host/instanceId/path are strings, port/maxEvents are finite numbers, and captureOnStart/announce/enabled are booleans. Use object options for startDcouplrInspector; only setup's inspector also accepts a boolean. Choose mode and ephemeral for the actual runtime; keep dynamic configurations, output behavior and inspector access/resource limits under a project verifier. Use only supported forbiddenElements.",
+      "avoid": "Reserved setupDcouplr/startDcouplrInspector call-name policy in reviewed paths, not import/receiver identity or whole-program setup/get order. Direct identifier/dot/literal-bracket calls and transparent wrappers are checked. Plain object fields use the last duplicate key at configuration, system-override, factory, inspector and debug-console levels; optional undefined, shorthand and dynamic values stay valid or unresolved. Spread/computed/getter/method/prototype/escaped-key configurations are deferred. Direct inspector options follow the second argument, unless the first is a spread. Known wrong literal field types, bigint numeric values and unknown keys reject; absent options and optional fields remain valid. Direct Infinity/NaN, Number.POSITIVE_INFINITY/NEGATIVE_INFINITY/NaN and globalThis.Infinity/NaN reject, including literal brackets and unary/value wrappers. A binding containing Infinity, NaN, Number or globalThis anywhere in the file, escaped binding text, or with defers those global predicates conservatively; this is not lexical resolution. Arithmetic, overflow literals, aliases, wrapped receivers, dynamic global changes, integer/range validity and class field values remain unresolved. Compatible static inspector/debug-console class options remain unresolved. Network binding, actual production mode, authorization, lifecycle and complete recording limits remain unverified. Literal factories check required __semanticIdentifier/create and known invalid types, including async/generator creators. The identifier need not equal a reserved system key: dictionary registration owns that key. Static class factories can satisfy the public structural contract and remain unresolved. Named/aliased factory shape, indirect asynchronous creators, actual output member/behavior contracts and escaped or dynamic enum strings are unresolved. Omitting ephemeral remains valid: the pinned setup path forwards undefined, so this rule does not promise the documented true default or broker delivery guarantees.",
+      "examples": { "pass": "pass/explicit", "fail": "fail/invalid-mode" }
+    },
+    {
+      "id": "DCP-SETTINGS-001",
+      "check": "dcouplr/runtime/immutable-system-settings",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published runtime SettingsGate and DKernel",
+        "locator": "dist/index.mjs SettingsGate.setSetting and DKernel resolvedConfig/systemConfig, lines 1870–1920",
+        "paraphrase": "Bootstrap settings and instanceId are system-owned and must not be overwritten through settings.setSetting."
+      },
+      "why": "The runtime refuses to overwrite a key in its system configuration even when its bootstrap value is undefined. Mode, encoding, delivery settings, forbidden elements and instance identity belong to setup.",
+      "fixHint": "Set system options once in setupDcouplr. Use settings.setSetting only for application runtime keys and read system values with getSetting/getMode.",
+      "avoid": "Direct settings.setSetting receiver-shape policy in reviewed paths, not inferred IDKernel types. Covers the five pinned system keys with dot/literal-bracket/optional calls, transparent wrappers and literal keys. Detached settings/setter aliases, dynamic/escaped keys, custom bootstrap fields and unrelated receiver identities remain unresolved. The rule does not prohibit application-owned settings or prove setup occurs exactly once.",
+      "examples": { "pass": "pass/runtime-key", "fail": "fail/mode" }
+    },
+    {
+      "id": "DCP-KERNEL-001",
+      "check": "dcouplr/runtime/no-kernel-admission",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published runtime; explicit PREGATE project policy",
+        "locator": "dist/index.mjs SystemDependencyKeys, DcouplrInternal constructor and #warnIfKernelIsRegisteredThroughAdmission, lines 675–689, 768–840, 1068–1071",
+        "paraphrase": "DKERNEL is bootstrap-owned runtime infrastructure and must not be registered through public dependency admission."
+      },
+      "why": "Public kernel admission can reject as a duplicate or create a second kernel registration while managed factories still receive the bootstrap kernel. The runtime warns that this infrastructure is bootstrap-owned.",
+      "fixHint": "Remove the DKERNEL admission. Configure the supported system factories at setup and receive IDKernel as the factory's injected second argument.",
+      "avoid": "Reserved method/key policy in the selected paths, not receiver-type inference. Direct fluent register/registerSingleton/registerForce/registerSingletonForce chains cover literal DKERNEL and direct DependencyKeys.Kernel access, dot/literal-bracket/optional calls, parentheses and transparent as/satisfies/non-null wrappers. Only receiver links are followed; nested callbacks, arguments, strings and createOnly are not registrations. Tests have no ownership exemption. Named handles, function/key aliases, computed/escaped names, arbitrary chain methods and bootstrap order remain unresolved. Review narrower paths if an unrelated API uses the same reserved names. Runtime warnings and partial admission do not establish a safe kernel replacement.",
+      "examples": { "pass": "pass/create-only", "fail": "fail/kernel-singleton" }
+    },
+    {
+      "id": "DCP-FORCE-001",
+      "check": "dcouplr/runtime/no-force-admission-in-production",
+      "defaults": {
+        "paths": ["src/**"],
+        "exclude": ["**/*.test.*", "**/*.spec.*", "**/test/**", "**/tests/**", "**/__tests__/**"]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published runtime; explicit PREGATE project policy",
+        "locator": "dist/index.mjs DcouplrInternal.#internalRegisterForce/#internalRegisterSingletonForce/#assertTestMode, lines 1047–1062",
+        "paraphrase": "Force admission is available only when the runtime mode is test."
+      },
+      "why": "Production replacement bypasses normal duplicate-ownership checks and the runtime rejects it outside test mode.",
+      "fixHint": "Use register/registerSingleton in production. Keep force replacement in reviewed test modules with mode: test.",
+      "avoid": "Explicit method-name policy reserves registerForce/registerSingletonForce calls in the reviewed production paths; it does not infer receiver types. Dot, optional and unescaped literal bracket/template calls are covered. A project with an unrelated API of the same name must narrow paths or review an exception. Detached function aliases, computed names, escaped literals and actual runtime mode are not resolved; an excluded test file does not prove test mode.",
+      "examples": { "pass": "pass/regular", "fail": "fail/force" }
+    },
+    {
+      "id": "DCP-TEST-001",
+      "check": "dcouplr/runtime/no-test-helper-in-production",
+      "defaults": {
+        "paths": [
+          "src/**"
+        ],
+        "exclude": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/test/**",
+          "**/tests/**",
+          "**/__tests__/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "dist/index.mjs resetDcouplrForTesting/getDcouplrForTesting",
+        "paraphrase": "Production code must not import dcouplr test reset or test runtime helpers."
+      },
+      "why": "Production code must not import dcouplr test reset or test runtime helpers.",
+      "fixHint": "Keep test helpers in test modules. Initialize the production runtime once at the application boundary.",
+      "avoid": "Value named imports and direct namespace dot/bracket references and object destructuring are checked. Type-only imports, shadowed namespaces, legitimate bootstrap and excluded test files are admitted. Namespace aliases, computed members, dynamic/CommonJS imports and re-export barrels remain gaps; nested-block var hoisting remains conservative.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "DCP-EXPORTS-001",
+      "check": "dcouplr/runtime/no-private-package-imports",
+      "defaults": {
+        "packages": [
+          "dcouplr/dist",
+          "dcouplr/src"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "package.json exports: '.', './eslint', './inspector'",
+        "paraphrase": "Import dcouplr through its public package exports, not internal source or distribution paths."
+      },
+      "why": "Import dcouplr through its public package exports, not internal source or distribution paths.",
+      "fixHint": "Use dcouplr, dcouplr/eslint or dcouplr/inspector. Receive IDKernel through the factory instead of trying to import its private implementation.",
+      "avoid": "Closed package export paths are verified for the pinned 0.1.3-beta package. New package versions require renewed source review.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    }
+  ]
+}

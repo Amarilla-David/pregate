@@ -1,0 +1,9 @@
+type User = { email: string };
+
+export function userFrom(row: object): User {
+  return (row as unknown) as User;
+}
+
+export function usersFrom(rows: object[]): User[] {
+  return ((rows as any)) as User[];
+}

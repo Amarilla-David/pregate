@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function announcePayment(receiptId: string): Promise<void> {
+  await redis.publish("billing:paid", receiptId);
+}

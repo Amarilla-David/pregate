@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/entities/tax-policy.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "dynamic-outer",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "import() of an adapter is still an outward dependency from the entity ring."
+  }
+}

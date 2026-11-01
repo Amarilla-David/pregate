@@ -1,0 +1,3 @@
+export function tenantOrder(db: Firestore, tenant: string, id: string): DocRef {
+  return doc(db, "tenants/" + tenant + "/orders/" + id);
+}

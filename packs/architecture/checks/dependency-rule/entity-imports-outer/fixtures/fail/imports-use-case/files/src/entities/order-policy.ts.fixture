@@ -1,0 +1,6 @@
+
+import { placeOrder } from "../use-cases/place-order";
+
+export function policy(): string {
+  return placeOrder.name;
+}

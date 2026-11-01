@@ -1,0 +1,38 @@
+{
+  "id": "go/dependencies/no-dot-import",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "singleton",
+  "dimension": "go.deps.dot-import",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "go": [
+        {
+          "id": "dot",
+          "rule": {
+            "kind": "import_spec",
+            "has": {
+              "kind": "dot",
+              "field": "name"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: A dot import obscures the package owning an identifier."
+  }
+}

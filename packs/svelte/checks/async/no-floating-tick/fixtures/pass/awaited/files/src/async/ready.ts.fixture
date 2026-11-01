@@ -1,0 +1,5 @@
+import { tick } from "svelte";
+
+export async function settled(): Promise<void> {
+  await tick();
+}

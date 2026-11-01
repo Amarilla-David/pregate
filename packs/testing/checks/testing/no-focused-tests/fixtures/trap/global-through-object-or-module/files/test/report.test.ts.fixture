@@ -1,0 +1,20 @@
+import { describe, expect, it } from "bun:test";
+import { xdescribe } from "./support/globals";
+import { render } from "../src/report";
+
+const fit = globalThis.fit;
+const { xit } = globalThis as any;
+const { fdescribe: focus } = require("@jest/globals");
+
+describe("report", () => {
+  fit("renders the totals", () => {
+    expect(render().total).toBe(3);
+  });
+
+  it("renders the rows", async () => {
+    let xtest;
+    ({ xtest } = await import("@jest/globals"));
+    const only = (window as any)["fit"];
+    expect(render().rows).toHaveLength(2);
+  });
+});

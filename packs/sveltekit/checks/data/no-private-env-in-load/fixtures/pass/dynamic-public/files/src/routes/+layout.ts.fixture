@@ -1,0 +1,5 @@
+import { env } from "$env/dynamic/public";
+
+export async function load() {
+	return { base: env.PUBLIC_BASE };
+}

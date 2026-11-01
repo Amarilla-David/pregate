@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+const tx = redis.multi();
+tx.set("session:1", "data");
+await tx.exec();

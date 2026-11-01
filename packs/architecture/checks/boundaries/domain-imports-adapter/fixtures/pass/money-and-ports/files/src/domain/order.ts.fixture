@@ -1,0 +1,7 @@
+
+import { Money } from "./money";
+import type { Clock } from "../ports/clock";
+
+export function price(order: { total: Money }, clock: Clock): Money {
+  return order.total;
+}

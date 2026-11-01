@@ -1,0 +1,4 @@
+declare const AuditModel: { deleteMany(): Promise<unknown> };
+export async function clearAudit(): Promise<void> {
+  await AuditModel.deleteMany();
+}

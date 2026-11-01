@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/raw.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "open-close-form",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "The open-plus-close form is still an img element. The rule reads the opening tag, so dropping the self-closing slash does not hide it."
+  }
+}

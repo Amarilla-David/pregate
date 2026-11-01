@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/bad.svelte.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "direct-derived-async-arrow",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Passing an async arrow directly to $derived(async () => ...) stores an async function instead of a reactive value."
+  }
+}

@@ -1,0 +1,1 @@
+export function go(router: { push: (u: string) => void }) { router.push("/home"); }

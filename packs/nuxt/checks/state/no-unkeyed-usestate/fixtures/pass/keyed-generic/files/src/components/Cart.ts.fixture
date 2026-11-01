@@ -1,0 +1,4 @@
+export function useCount(): unknown {
+  const count = useState<number>("count", () => 0);
+  return count;
+}

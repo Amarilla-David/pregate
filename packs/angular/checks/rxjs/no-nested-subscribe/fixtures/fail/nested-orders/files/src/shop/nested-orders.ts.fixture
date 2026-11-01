@@ -1,0 +1,10 @@
+import { users$ } from "./users";
+import { orders$ } from "./orders";
+import { show } from "./screen";
+export function loadOrders(): void {
+  users$.subscribe((u) => {
+    orders$.subscribe((o) => {
+      show(o, u);
+    });
+  });
+}

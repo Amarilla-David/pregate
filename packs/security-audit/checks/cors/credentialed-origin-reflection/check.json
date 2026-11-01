@@ -1,0 +1,245 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/cors/credentialed-origin-reflection",
+  "version": "1.0.0",
+  "area": "cors",
+  "cardinality": "singleton",
+  "dimension": "security-audit.cors.credentialed-origin",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "credentialed-origin-reflection",
+          "rule": {
+            "any": [
+              {
+                "kind": "object",
+                "all": [
+                  {
+                    "has": {
+                      "kind": "pair",
+                      "regex": "^[\"']?origin[\"']?\\s*:\\s*true$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "kind": "pair",
+                      "regex": "^[\"']?credentials[\"']?\\s*:\\s*true$"
+                    }
+                  },
+                  {
+                    "inside": {
+                      "stopBy": "end",
+                      "kind": "program",
+                      "has": {
+                        "stopBy": "end",
+                        "any": [
+                          {
+                            "kind": "identifier"
+                          },
+                          {
+                            "kind": "property_identifier"
+                          },
+                          {
+                            "kind": "string"
+                          }
+                        ],
+                        "regex": "(?i)cors"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "call_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "kind": "member_expression",
+                      "has": {
+                        "field": "property",
+                        "regex": "^(?:setHeader|header|set|append)$"
+                      }
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "all": [
+                        {
+                          "has": {
+                            "nthChild": 1,
+                            "matches": "allow-origin-name"
+                          }
+                        },
+                        {
+                          "has": {
+                            "nthChild": 2,
+                            "matches": "request-origin"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "matches": "credentialed-unguarded"
+                  }
+                ]
+              },
+              {
+                "kind": "pair",
+                "all": [
+                  {
+                    "has": {
+                      "field": "key",
+                      "matches": "allow-origin-name"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "value",
+                      "matches": "request-origin"
+                    }
+                  },
+                  {
+                    "matches": "credentialed-unguarded"
+                  }
+                ]
+              }
+            ]
+          },
+          "utils": {
+            "allow-origin-name": {
+              "kind": "string",
+              "regex": "(?i)^[\"']access-control-allow-origin[\"']$"
+            },
+            "request-origin": {
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "regex": "(?i)\\.headers\\??\\.origin$"
+                },
+                {
+                  "kind": "subscript_expression",
+                  "regex": "(?i)\\.headers\\??\\.?\\[\\s*[\"'`]origin[\"'`]\\s*\\]$"
+                },
+                {
+                  "kind": "call_expression",
+                  "regex": "(?i)\\.(?:get|header)\\(\\s*[\"'`]origin[\"'`]\\s*\\)$"
+                },
+                {
+                  "kind": "binary_expression",
+                  "has": {
+                    "field": "left",
+                    "matches": "request-origin"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    },
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    }
+                  ],
+                  "has": {
+                    "matches": "request-origin"
+                  }
+                }
+              ]
+            },
+            "credentialed-unguarded": {
+              "all": [
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "program",
+                    "has": {
+                      "stopBy": "end",
+                      "kind": "string",
+                      "regex": "(?i)^[\"']access-control-allow-credentials[\"']$"
+                    }
+                  }
+                },
+                {
+                  "not": {
+                    "inside": {
+                      "stopBy": {
+                        "any": [
+                          {
+                            "kind": "function_declaration"
+                          },
+                          {
+                            "kind": "function_expression"
+                          },
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "method_definition"
+                          }
+                        ]
+                      },
+                      "any": [
+                        {
+                          "kind": "function_declaration"
+                        },
+                        {
+                          "kind": "function_expression"
+                        },
+                        {
+                          "kind": "arrow_function"
+                        },
+                        {
+                          "kind": "method_definition"
+                        }
+                      ],
+                      "has": {
+                        "stopBy": "end",
+                        "any": [
+                          {
+                            "kind": "if_statement"
+                          },
+                          {
+                            "kind": "ternary_expression"
+                          }
+                        ],
+                        "has": {
+                          "field": "condition",
+                          "regex": "(?i)origin",
+                          "not": {
+                            "regex": "^\\(?\\s*(?:!?\\s*[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?|typeof\\s+[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?\\s*[!=]==?\\s*[\"'`]\\w+[\"'`]|[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?\\s*[!=]==?\\s*(?:undefined|null|\"\"|''|``)|(?:undefined|null|\"\"|''|``)\\s*[!=]==?\\s*[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?)(?:\\s*&&\\s*(?:!?\\s*[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?|typeof\\s+[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?\\s*[!=]==?\\s*[\"'`]\\w+[\"'`]|[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?\\s*[!=]==?\\s*(?:undefined|null|\"\"|''|``)|(?:undefined|null|\"\"|''|``)\\s*[!=]==?\\s*[\\w$.?\\[\\]\"'`]+(?:\\(\\s*[\"'`]\\w+[\"'`]\\s*\\))?))*\\s*\\)?$"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} allows credentials for whatever origin sent the request. Reflect the Origin only after an exact allowlist match."
+  }
+}

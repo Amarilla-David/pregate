@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/tests/no-branch-in-test",
+  "version": "1.0.0",
+  "area": "tests",
+  "cardinality": "singleton",
+  "dimension": "tests.branching-in-case",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "test-body-branch",
+          "rule": {
+            "any": [
+              { "kind": "if_statement" },
+              { "kind": "switch_statement" },
+              { "kind": "ternary_expression" }
+            ],
+            "inside": {
+              "stopBy": "end",
+              "kind": "call_expression",
+              "has": { "field": "function", "regex": "^(it|test)$" }
+            }
+          },
+          "files": ["**/*.test.ts", "**/*.spec.ts", "**/*.test.tsx", "**/*.spec.tsx", "**/__tests__/**"]
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} branches inside a test case. Prefer explicit cases for each behavior; review intentional property-based branches." }
+}

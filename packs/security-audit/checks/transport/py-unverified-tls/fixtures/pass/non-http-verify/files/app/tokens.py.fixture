@@ -1,0 +1,3 @@
+def load(token, schema):
+    claims = decode_claims(token, verify=False)
+    return schema.validate(claims, verify=False)

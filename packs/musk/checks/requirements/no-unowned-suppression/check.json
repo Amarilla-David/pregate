@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "musk/requirements/no-unowned-suppression",
+  "version": "1.0.0",
+  "area": "requirements",
+  "cardinality": "singleton",
+  "dimension": "requirements.suppression",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unowned-suppression",
+          "rule": {
+            "kind": "comment",
+            "regex": "@ts-(ignore|nocheck|expect-error)|eslint-disable",
+            "not": {
+              "regex": "(@ts-(ignore|nocheck|expect-error)\\s*[:(]\\s*[a-zA-Z0-9._-]+|eslint-disable.*--\\s*[a-zA-Z0-9._-]+)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} suppresses compiler or linter checks without a named owner. Step 1 (Musk): make requirements less dumb by attributing every suppression to a person, not an anonymous bypass."
+  }
+}

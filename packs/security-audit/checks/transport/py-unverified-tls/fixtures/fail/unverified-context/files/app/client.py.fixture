@@ -1,0 +1,10 @@
+import ssl
+import urllib.request
+
+
+def fetch(url):
+    ctx = ssl._create_unverified_context()
+    return urllib.request.urlopen(url, context=ctx)
+
+
+ssl._create_default_https_context = ssl._create_unverified_context

@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/tests/no-weak-matcher",
+  "version": "1.0.0",
+  "area": "tests",
+  "cardinality": "singleton",
+  "dimension": "tests.weak-matcher",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "weak-matcher",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "\\.(toBeDefined|toBeTruthy|toBeFalsy|toBeUndefined|toHaveBeenCalled|toHaveBeenCalledTimes)$"
+            }
+          },
+          "files": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            "**/*.test.tsx",
+            "**/*.spec.tsx",
+            "**/__tests__/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} asserts presence, truthiness, or that a call happened. Assert the value the caller observes."
+  }
+}

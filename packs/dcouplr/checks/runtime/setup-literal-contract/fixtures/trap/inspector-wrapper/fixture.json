@@ -1,0 +1,24 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/setup.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "inspector-contract",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "Transparent wrappers retain invalid inspector options."
+  }
+}

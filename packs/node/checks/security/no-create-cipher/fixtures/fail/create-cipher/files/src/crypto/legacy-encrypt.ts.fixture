@@ -1,0 +1,6 @@
+import crypto from "node:crypto";
+
+export function encrypt(password: string, text: string): string {
+  const cipher = crypto.createCipher("aes-256-cbc", password);
+  return cipher.update(text, "utf8", "hex") + cipher.final("hex");
+}

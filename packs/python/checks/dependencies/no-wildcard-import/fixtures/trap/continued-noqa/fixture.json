@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "continued-noqa",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A line continuation and a linter suppression comment do not name the imported identifiers."
+  }
+}

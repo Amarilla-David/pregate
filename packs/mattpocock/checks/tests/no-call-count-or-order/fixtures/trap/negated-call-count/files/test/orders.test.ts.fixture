@@ -1,0 +1,1 @@
+expect(pricing.calculate).not.toHaveBeenCalledTimes(2);

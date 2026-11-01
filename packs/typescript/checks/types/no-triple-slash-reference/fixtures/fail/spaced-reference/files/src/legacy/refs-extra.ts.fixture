@@ -1,0 +1,4 @@
+///   <reference path="./other" />
+export function show(n: number): string {
+  return String(n);
+}

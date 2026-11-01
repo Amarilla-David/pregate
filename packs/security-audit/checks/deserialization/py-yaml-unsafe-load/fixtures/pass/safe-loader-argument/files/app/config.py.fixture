@@ -1,0 +1,8 @@
+import yaml
+
+
+def read(text):
+    a = yaml.load(text, Loader=yaml.SafeLoader)
+    b = yaml.load(text, yaml.CSafeLoader)
+    c = yaml.load_all(text, Loader=IncludeLoader)
+    return a, b, c

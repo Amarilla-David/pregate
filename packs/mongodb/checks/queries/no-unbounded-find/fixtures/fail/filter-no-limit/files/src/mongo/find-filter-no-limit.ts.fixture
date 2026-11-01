@@ -1,0 +1,4 @@
+import type { Col } from "./db";
+export async function active(col: Col): Promise<void> {
+  await col.find({ status: "active" }).toArray();
+}

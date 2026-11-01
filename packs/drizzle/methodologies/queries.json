@@ -1,0 +1,153 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "drizzle/queries",
+  "version": "1.3.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DRIZ-RAW-001",
+      "check": "drizzle/queries/no-sql-concat",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, querying with raw SQL",
+        "locator": "sql`` template parameters and sql.raw",
+        "paraphrase": "Build raw fragments with the sql`` template so values travel as parameters. sql.raw splices text straight into the statement, and string concatenation through execute does the same."
+      },
+      "why": "A value concatenated into SQL is syntax to the database. A quote in the value ends the literal and starts a new command.",
+      "fixHint": "Use the query builder, or sql`... ${value} ...` so the value travels as a parameter. Reserve sql.raw for constant fragments, never for input.",
+      "avoid": "sql.raw with a constant string still fires; once text is raw the engine cannot tell a constant from input. Sanitizing before sql.raw also fires: the check is the raw call, not the cleaner.",
+      "examples": {
+        "pass": "pass/select-builder",
+        "fail": "fail/execute-concat"
+      }
+    },
+    {
+      "id": "DRIZ-SQL-001",
+      "check": "drizzle/queries/no-template-injection",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, select with filters",
+        "locator": "where() with the eq, and, and or helpers",
+        "paraphrase": "Filter with the builder helpers: where(eq(table.col, value)) and its and/or combinations. A raw string passed to where bypasses the helpers and reaches SQL as written."
+      },
+      "why": "A string argument to where is spliced into the statement. A template literal with ${} looks parameterized but is still a raw string in this position.",
+      "fixHint": "Replace the string with eq/and/or over columns, or pass a parameterized sql`` fragment.",
+      "avoid": "A where whose first argument is a helper passes even when a later argument is a string literal, as in eq(name, \"x\"). Only a leading string or template is the raw-string shape this rule sees.",
+      "examples": {
+        "pass": "pass/eq-where",
+        "fail": "fail/where-string"
+      }
+    },
+    {
+      "id": "DRIZ-LIMIT-001",
+      "check": "drizzle/queries/no-unbounded-select",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, select with pagination",
+        "locator": "db.select().from().limit(); sqlite-core query-builder and prepared-query get() contract",
+        "paraphrase": "Use a result bound on selected read paths. A limit bounds returned rows; SQLite get returns one row or no row. An offset alone does not bound the result."
+      },
+      "why": "On selected bounded-read paths, a select/from result can grow with the table. A limit or terminal SQLite get() bounds returned rows. A predicate covering a declared primary/unique key also bounds rows when every inArray input has a proved finite budget and joins preserve that bound. These result bounds do not prove database execution cost or index quality.",
+      "fixHint": "For pagination, add .limit(n) with a validated page size. Keep valid unique-key queries: declare the actual constraint in the imported Drizzle schema. Bound inArray input with a fixed list, literal slice(0, n), or a preceding rejecting length guard. Unknown flows need scoped project evidence rather than unnecessary pagination.",
+      "avoid": "The checker follows literal select().from() receiver chains and admits limit() or terminal get() on that same chain. It resolves static local imports/reexports and TypeScript aliases, recognizes imported Drizzle table/helper bindings, and checks declared column/composite primary keys and unconditional unique indexes/constraints. It excludes partial/functional indexes, self-column equality, unknown predicates and amplifying joins; a proved many-to-one left/inner join preserves a bound. Input guards must dominate the query in the same function with no intervening calls or writes. Names such as id/slug, arbitrary lists, split queries, aggregate SQL, schema wrappers and unseen database migrations do not prove a bound. Apply this optional result policy only to reviewed bounded-read paths.",
+      "examples": {
+        "pass": "pass/limited-assign",
+        "fail": "fail/unbounded-statement"
+      }
+    },
+    {
+      "id": "DRIZ-REL-001",
+      "check": "drizzle/queries/no-n-plus-one-loop",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, relational queries",
+        "locator": "db.query with the with option, and joins",
+        "paraphrase": "Load related rows with one relational query using with, or with a join, instead of awaiting a query per parent inside a loop."
+      },
+      "why": "A query per iteration turns one round trip into N. Latency multiplies by the list length and the pool drains under load.",
+      "fixHint": "Replace the loop with db.query.parents.findMany({ with: { children: true } }) or a single join, then group in memory.",
+      "avoid": "The rule sees an awaited db call inside for, for-in/of, or while. A loop that only builds the query without awaiting it is a different shape this rule does not see.",
+      "examples": {
+        "pass": "pass/relational-with",
+        "fail": "fail/await-in-for-of"
+      }
+    },
+    {
+      "id": "DRIZ-MIG-001",
+      "check": "drizzle/queries/no-db-execute-ddl",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle Kit documentation, migrations",
+        "locator": "drizzle-kit generate and the migrator",
+        "paraphrase": "Change the schema through generated migrations, not through DDL executed at runtime. CREATE, DROP, ALTER, and TRUNCATE inside execute bypass review, ordering, and rollback."
+      },
+      "why": "Runtime DDL changes the schema outside the migration history. Two deploys disagree about the tables, and there is no down path.",
+      "fixHint": "Move the statement into a drizzle-kit migration and run it through the migrator.",
+      "avoid": "The keyword match is case-insensitive and reads string and template arguments; SELECT, INSERT, UPDATE, and DELETE pass. DDL hidden behind a variable instead of a literal is a hole this rule does not see.",
+      "examples": {
+        "pass": "pass/select-one",
+        "fail": "fail/drop-table"
+      }
+    },
+    {
+      "id": "DRIZ-TX-001",
+      "check": "drizzle/queries/no-outer-db-in-transaction",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Drizzle ORM documentation, transactions",
+        "locator": "db.transaction(async (tx) => ...) with queries on tx, nested tx.transaction savepoints; https://orm.drizzle.team/docs/transactions",
+        "paraphrase": "Run every statement of a transaction through the tx passed to the callback, including relational queries and nested savepoints. The outer db is not part of the transaction."
+      },
+      "why": "A query on the outer db inside the callback runs on another connection. It commits on its own and survives tx.rollback(), and with a small pool it can wait on the connection the transaction holds.",
+      "fixHint": "Replace db with tx inside the callback, or pass tx to the helper that runs the query. Move work that must survive a rollback after the transaction.",
+      "avoid": "The rule reports select, insert, update, delete, execute, run, all, get, values, $count and query.<table>.findMany/findFirst on the outer receiver. A callback parameter that shadows the receiver, as in async (db) =>, passes. Queries inside a helper called from the callback are not seen.",
+      "examples": {
+        "pass": "pass/tx-queries",
+        "fail": "fail/outer-insert"
+      }
+    },
+    {
+      "id": "DRIZ-DELETE-001",
+      "check": "drizzle/queries/no-unbounded-delete",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, SQL Delete (orm.drizzle.team)",
+        "locator": "https://orm.drizzle.team/docs/delete",
+        "paraphrase": "db.delete(table) without a .where(...) clause emits an unfiltered DELETE FROM table statement that removes every row."
+      },
+      "why": "Forgetting .where(eq(...)) on db.delete(table) or tx.delete(table) silently truncates the entire table in production.",
+      "fixHint": "Chain .where(eq(table.id, id)) onto db.delete(table) before awaiting or returning the query.",
+      "avoid": "Matches db.delete(...) and tx.delete(...) calls that are not wrapped in a .where(...) call within the same expression.",
+      "examples": {
+        "pass": "pass/delete-with-where",
+        "fail": "fail/bare-db-delete"
+      }
+    },
+    {
+      "id": "DRIZ-UPDATE-001",
+      "check": "drizzle/queries/no-unbounded-update",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Drizzle ORM documentation, SQL Update (orm.drizzle.team)",
+        "locator": "https://orm.drizzle.team/docs/update",
+        "paraphrase": "db.update(table).set(values) without a .where(...) clause emits an unfiltered UPDATE statement across every row in the table."
+      },
+      "why": "Omitting .where(...) on db.update(table).set(...) overwrites columns across the entire table instead of the target record.",
+      "fixHint": "Chain .where(eq(table.id, id)) onto db.update(table).set(values).",
+      "avoid": "Matches db.update(...).set(...) and tx.update(...).set(...) chains that do not chain .where(...) in the same statement.",
+      "examples": {
+        "pass": "pass/update-with-where",
+        "fail": "fail/update-without-where"
+      }
+    }
+  ]
+}

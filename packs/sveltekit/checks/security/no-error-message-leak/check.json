@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/security/no-error-message-leak",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.error-message-leak",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "error-message-leak",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^error$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "\\.message\\b"
+                }
+              }
+            ]
+          },
+          "files": [
+            "**/+page.server.ts",
+            "**/+layout.server.ts",
+            "**/+server.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} forwards an internal message to the client via error(). Log the original server-side and throw a static message instead."
+  }
+}

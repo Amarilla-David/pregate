@@ -1,0 +1,22 @@
+type Status = "open" | "paid" | "shipped";
+
+export class Order {
+  private status: Status = "open";
+  private note = "";
+
+  constructor(readonly id: string) {}
+
+  setStatus(status: Status): void {
+    this.status = status;
+  }
+
+  withNote(note: string): Order {
+    this.note = note;
+    return this;
+  }
+
+  pay(): void {
+    if (this.status !== "open") throw new Error("Only open orders can be paid");
+    this.status = "paid";
+  }
+}

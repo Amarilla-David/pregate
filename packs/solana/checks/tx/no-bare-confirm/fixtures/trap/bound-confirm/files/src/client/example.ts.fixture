@@ -1,0 +1,2 @@
+const verify = connection.confirmTransaction.bind(connection);
+await verify(sig, "confirmed");

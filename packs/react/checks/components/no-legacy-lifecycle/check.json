@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react/components/no-legacy-lifecycle",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "react.legacy-lifecycle",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "legacy-lifecycle",
+          "rule": {
+            "kind": "method_definition",
+            "has": {
+              "field": "name",
+              "regex": "^(componentWillMount|componentWillReceiveProps|componentWillUpdate|UNSAFE_componentWillMount|UNSAFE_componentWillReceiveProps|UNSAFE_componentWillUpdate)$"
+            },
+            "inside": {
+              "kind": "class_body"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} defines a removed legacy React lifecycle method. Migrate to componentDidMount, componentDidUpdate, getDerivedStateFromProps, or function hooks."
+  }
+}

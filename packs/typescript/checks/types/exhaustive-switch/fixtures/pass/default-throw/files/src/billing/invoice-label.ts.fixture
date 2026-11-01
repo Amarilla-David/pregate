@@ -1,0 +1,11 @@
+
+export function label(status: "open" | "paid"): string {
+  switch (status) {
+    case "open":
+      return "Open";
+    case "paid":
+      return "Paid";
+    default:
+      throw new Error(status);
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "typescript/framework-entries",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [
+    {
+      "with": "typescript/named-exports",
+      "dimension": "modules.default-export",
+      "suggest": {
+        "use": "TS-DEFAULT-001"
+      },
+      "why": "Next.js, Remix, and similar routers require a default export on page and layout modules. Resolving modules.default-export to TS-ENTRY-001 turns the named-export ban off for every file. Keep both methodologies and override typescript/TS-DEFAULT-001 with an exclude for pages/** and app/**/page and layout files, so the ban still applies everywhere else and TS-ENTRY-001 still requires a default export on those entries."
+    }
+  ],
+  "invariants": [
+    {
+      "id": "TS-ENTRY-001",
+      "check": "typescript/exports/require-default-export",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js App Router and Pages Router",
+        "locator": "page and layout modules",
+        "paraphrase": "A page or layout module is loaded through its default export. The file is the route."
+      },
+      "why": "Next.js and similar file routers call the default export of a page or layout. A named export alone is not the entry.",
+      "fixHint": "Default-export the page or layout component. typescript/named-exports excludes these globs by default and keeps the named-export ban for the rest of the program.",
+      "avoid": "A comment that looks like export default does not create one. export { Page as default } does. Assigning exports.default is not this syntax.",
+      "examples": {
+        "pass": "pass/default-page",
+        "fail": "fail/named-page"
+      }
+    }
+  ]
+}

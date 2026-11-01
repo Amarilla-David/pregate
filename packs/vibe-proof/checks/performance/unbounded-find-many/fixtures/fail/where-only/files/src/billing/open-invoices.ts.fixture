@@ -1,0 +1,6 @@
+
+export async function list(db: Db): Promise<unknown> {
+  return db.invoice.findMany({ where: { status: "open" } });
+}
+
+interface Db { invoice: { findMany(q: unknown): Promise<unknown> } }

@@ -1,0 +1,7 @@
+exports.createInvoice = (input, kernel) => {
+  if (!input || !Object.hasOwn(input, 'amount') || !Number.isSafeInteger(input.amount) || input.amount <= 0 || input.amount > 1000000)
+    throw new Error('Invalid invoice amount');
+  const billing = kernel.dependencies.resolve('BILLING');
+  const amount = input.amount;
+  return Object.freeze({ amount, charge: () => billing.charge(amount) });
+};

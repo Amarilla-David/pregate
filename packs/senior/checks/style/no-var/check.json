@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/style/no-var",
+  "version": "1.0.0",
+  "area": "style",
+  "cardinality": "singleton",
+  "dimension": "style.var",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "var-decl",
+          "rule": {
+            "kind": "variable_declaration"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses var. Use const or let."
+  }
+}

@@ -1,0 +1,7 @@
+import os
+
+
+def run(name):
+    # A built string is SA-PY-SHELL-001's form and is not repeated here.
+    os.system(f"echo {name}")
+    os.system("echo " + name)

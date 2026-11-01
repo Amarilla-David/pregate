@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/guards/no-canactivate-interface",
+  "version": "1.0.0",
+  "area": "guards",
+  "cardinality": "singleton",
+  "dimension": "angular.canactivate-interface",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "canactivate-interface",
+          "rule": {
+            "any": [
+              {
+                "regex": "^CanActivate$"
+              },
+              {
+                "regex": "^CanActivateChild$"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a legacy CanActivate interface. Use a functional CanActivateFn guard instead."
+  }
+}

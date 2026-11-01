@@ -1,0 +1,4 @@
+const o = {};
+Object.setPrototypeOf(o, null);
+
+export const store = o;

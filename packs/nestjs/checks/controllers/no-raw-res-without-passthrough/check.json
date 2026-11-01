@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nestjs/controllers/no-raw-res-without-passthrough",
+  "version": "1.0.0",
+  "area": "controllers",
+  "cardinality": "singleton",
+  "dimension": "nestjs.res-passthrough",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "raw-res-without-passthrough",
+          "rule": {
+            "kind": "decorator",
+            "inside": {
+              "any": [
+                {
+                  "kind": "required_parameter"
+                },
+                {
+                  "kind": "optional_parameter"
+                }
+              ]
+            },
+            "has": {
+              "kind": "call_expression",
+              "all": [
+                {
+                  "has": {
+                    "field": "function",
+                    "kind": "identifier",
+                    "regex": "^(Res|Response)$"
+                  }
+                },
+                {
+                  "not": {
+                    "has": {
+                      "field": "arguments",
+                      "has": {
+                        "kind": "object",
+                        "has": {
+                          "kind": "pair",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "key",
+                                "regex": "^['\"]?passthrough['\"]?$"
+                              }
+                            },
+                            {
+                              "has": {
+                                "field": "value",
+                                "kind": "true"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} injects the platform response without { passthrough: true }, disabling Nest interceptors, @HttpCode, and standard serialization."
+  }
+}

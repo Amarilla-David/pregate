@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "solana/kit/no-legacy-anchor-import",
+  "version": "1.1.0",
+  "area": "kit",
+  "cardinality": "singleton",
+  "dimension": "solana.kit-anchor-import",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "legacy-anchor-import",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "@(coral-xyz|project-serum)/anchor",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "^require$"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports @coral-xyz/anchor or @project-serum/anchor. Anchor 1.x clients live in @anchor-lang/core; pin one Anchor line per repo."
+  }
+}

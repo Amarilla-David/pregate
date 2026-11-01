@@ -1,0 +1,2 @@
+// @ts-expect-error intentional test of invalid type argument
+const n: number = "not a number";

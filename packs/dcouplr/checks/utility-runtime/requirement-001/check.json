@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/utility-runtime/requirement-001",
+  "version": "1.0.0",
+  "area": "utility-runtime",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.utility-runtime.r001",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DCP-UTILITY-RUNTIME-001"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DCP-UTILITY-RUNTIME-001 requires current passing project utility-runtime verification: {symbol}."
+  }
+}

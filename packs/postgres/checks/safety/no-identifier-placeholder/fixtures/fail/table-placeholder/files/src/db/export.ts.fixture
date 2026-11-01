@@ -1,0 +1,6 @@
+import { pool } from "./pool";
+
+export async function exportTable(table: string, since: Date) {
+  const res = await pool.query("SELECT * FROM $1 WHERE created_at > $2", [table, since]);
+  return res.rows;
+}

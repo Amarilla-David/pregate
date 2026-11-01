@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function announce(payload: string): Promise<void> {
+  await redis.publish(`updates`, payload);
+}

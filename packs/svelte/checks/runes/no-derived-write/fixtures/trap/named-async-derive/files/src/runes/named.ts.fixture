@@ -1,0 +1,9 @@
+declare function fetchJson(url: string): Promise<string>;
+
+const data = $derived(async function load() {
+  return fetchJson("/api/data");
+});
+
+export function text(): string {
+  return "data";
+}

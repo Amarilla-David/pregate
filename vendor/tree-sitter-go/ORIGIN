@@ -1,0 +1,9 @@
+package: tree-sitter-go@0.25.0
+url: https://registry.npmjs.org/tree-sitter-go/-/tree-sitter-go-0.25.0.tgz
+tarball-sha256: f7265544d6b297797dc3675c02b76fb182c177ce29fda10ac1f36e9ab33fd90e
+source: https://github.com/tree-sitter/tree-sitter-go/tree/v0.25.0
+license: MIT
+modified: no; LICENSE and published WASM copied byte for byte.
+files:
+2e0110e07abef7c2548b26ec9d6969775617ca539a0dc8dbeeb14d6452c711d1  LICENSE
+9504573f352b20be7f2f1911754d710622aedc15afff16d5ed8fb5645681aee7  tree-sitter-go.wasm

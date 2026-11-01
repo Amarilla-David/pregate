@@ -1,0 +1,35 @@
+{
+  "id": "python/errors/no-bare-except",
+  "version": "1.0.0",
+  "area": "errors",
+  "cardinality": "singleton",
+  "dimension": "python.errors.bare-except",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "bare",
+          "rule": {
+            "kind": "except_clause",
+            "regex": "^except\\s*:"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: A bare except also catches process-control exceptions."
+  }
+}

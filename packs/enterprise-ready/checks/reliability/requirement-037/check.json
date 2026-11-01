@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/reliability/requirement-037",
+  "version": "1.0.0",
+  "area": "reliability",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r037",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-037"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-037 requires current passing project verification: {symbol}."
+  }
+}

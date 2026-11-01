@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/storage/no-public-bucket-upload",
+  "version": "1.0.0",
+  "area": "storage",
+  "cardinality": "singleton",
+  "dimension": "supabase.public-bucket-upload",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "public-upload",
+          "rule": {
+            "kind": "expression_statement",
+            "all": [
+              {
+                "regex": "\\.upload\\s*\\("
+              },
+              {
+                "regex": "\\.from\\s*\\(\\s*[\"'`]public[\"'`]"
+              }
+            ]
+          }
+        },
+        {
+          "id": "assigned-public-upload",
+          "rule": {
+            "kind": "variable_declarator",
+            "all": [
+              {
+                "regex": "\\.upload\\s*\\("
+              },
+              {
+                "regex": "\\.from\\s*\\(\\s*[\"'`]public[\"'`]"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uploads into the bucket literally named public. Upload into a private bucket and serve through signed URLs or download rules."
+  }
+}

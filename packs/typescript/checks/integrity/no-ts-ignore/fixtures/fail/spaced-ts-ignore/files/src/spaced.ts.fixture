@@ -1,0 +1,2 @@
+//    @ts-ignore: suppressing error
+const x: number = "hello";

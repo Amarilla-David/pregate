@@ -1,0 +1,34 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/clean-code"
+    ],
+    "overrides": {
+      "CC-FN-002": {
+        "params": {
+          "max": "four",
+          "maxx": 4
+        }
+      }
+    }
+  },
+  "errors": [
+    "example/CC-FN-002: params/max: must be of type integer",
+    "example/CC-FN-002: params/maxx: is not allowed"
+  ]
+}

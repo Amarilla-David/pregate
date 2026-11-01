@@ -1,0 +1,1 @@
+kernel.dependencies.resolve('I_QUEUE', { segmentCapacity: 1, maxSegments: 2, persistence: { aotMs: 10, maxPendingOps: 2 } });

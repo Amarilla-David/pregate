@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function readInfo(): Promise<string> {
+  return redis.info();
+}

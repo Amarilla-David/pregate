@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/server/no-forced-dev-mode",
+  "version": "1.0.0",
+  "area": "server",
+  "cardinality": "singleton",
+  "dimension": "trpc.forced-dev-mode",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "forced-dev-mode",
+          "rule": {
+            "kind": "pair",
+            "regex": "^[\"']?isDev[\"']?\\s*:\\s*true$",
+            "inside": {
+              "stopBy": "end",
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "kind": "member_expression",
+                "regex": "^initTRPC\\b[\\s\\S]*\\.\\s*create$"
+              }
+            }
+          },
+          "ignores": [
+            "**/*.spec.ts",
+            "**/*.test.ts",
+            "**/test/**",
+            "**/__tests__/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} forces tRPC development mode, so error responses carry stack traces in production too. Remove isDev and keep the NODE_ENV default."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "extensions": ["", "py", "pyi", "go", "rs", "java", "kt", "kts", "groovy", "scala", "clj", "cljs", "rb", "php", "cs", "swift", "ex", "exs", "erl", "dart", "lua", "pl", "r", "c", "h", "cc", "cpp", "hpp", "sql", "sh", "bash", "zsh", "fish", "ps1", "vue", "svelte", "astro"] },
+  "context": {
+    "layers": { "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" } },
+    "scope": { "include": ["src/**"], "exclude": ["src/generated/**"] }
+  },
+  "target": "tools/report.py",
+  "before": null,
+  "expect": { "verdict": "pass" }
+}

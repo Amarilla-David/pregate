@@ -1,0 +1,2 @@
+const {limit: Infinity} = options;
+startDcouplrInspector(app, {maxEvents: Infinity});

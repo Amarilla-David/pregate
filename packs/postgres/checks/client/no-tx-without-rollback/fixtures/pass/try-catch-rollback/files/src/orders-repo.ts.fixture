@@ -1,0 +1,13 @@
+interface Client { query(sql: string, params?: unknown[]): Promise<unknown>; release(): void; }
+export async function transferFunds(client: Client, amount: number): Promise<void> {
+  try {
+    await client.query("BEGIN");
+    await client.query("UPDATE accounts SET balance = balance - $1", [amount]);
+    await client.query("COMMIT");
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+}

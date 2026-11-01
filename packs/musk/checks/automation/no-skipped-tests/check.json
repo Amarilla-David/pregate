@@ -1,0 +1,153 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "musk/automation/no-skipped-tests",
+  "version": "1.0.1",
+  "area": "automation",
+  "cardinality": "singleton",
+  "dimension": "automation.skipped-tests",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "skipped-tests",
+          "utils": {
+            "runtime-ref": {
+              "any": [
+                { "kind": "identifier" },
+                { "kind": "member_expression" },
+                { "kind": "call_expression" },
+                { "kind": "await_expression" }
+              ]
+            },
+            "cond-wrapper": {
+              "any": [
+                { "kind": "parenthesized_expression" },
+                { "kind": "as_expression" },
+                { "kind": "satisfies_expression" },
+                { "kind": "non_null_expression" },
+                { "kind": "unary_expression", "has": { "field": "operator", "regex": "^!$" } }
+              ]
+            },
+            "truthy-value": {
+              "any": [
+                { "kind": "string" },
+                { "kind": "template_string" },
+                { "kind": "true" },
+                { "kind": "arrow_function" },
+                { "kind": "function_expression" },
+                { "kind": "generator_function" },
+                { "kind": "class" },
+                { "kind": "object" },
+                { "kind": "array" },
+                { "kind": "new_expression" },
+                { "kind": "sequence_expression" },
+                { "kind": "spread_element" },
+                { "kind": "identifier", "regex": "^globalThis$" }
+              ]
+            },
+            "always-truthy": {
+              "any": [
+                { "matches": "truthy-value" },
+                {
+                  "matches": "cond-wrapper",
+                  "has": {
+                    "stopBy": { "not": { "matches": "cond-wrapper" } },
+                    "matches": "truthy-value"
+                  }
+                }
+              ]
+            },
+            "runtime-skip": {
+              "all": [
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "any": [
+                      { "kind": "arrow_function" },
+                      { "kind": "function_expression" },
+                      { "kind": "function_declaration" },
+                      { "kind": "method_definition" }
+                    ]
+                  }
+                },
+                {
+                  "has": {
+                    "field": "arguments",
+                    "all": [
+                      {
+                        "has": {
+                          "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                          "not": { "matches": "always-truthy" },
+                          "any": [
+                            { "matches": "runtime-ref" },
+                            { "has": { "stopBy": "end", "matches": "runtime-ref" } }
+                          ]
+                        }
+                      },
+                      {
+                        "has": {
+                          "nthChild": { "position": 2, "ofRule": { "not": { "kind": "comment" } } },
+                          "any": [
+                            { "kind": "string" },
+                            { "kind": "template_string" }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "has": {
+                            "nthChild": { "position": 3, "ofRule": { "not": { "kind": "comment" } } }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^(test|it|describe)\\.(skip|only)$|^(fit|fdescribe|xit|xtest)$"
+            },
+            "not": {
+              "all": [
+                {
+                  "has": {
+                    "field": "function",
+                    "regex": "^test\\.skip$"
+                  }
+                },
+                {
+                  "matches": "runtime-skip"
+                }
+              ]
+            }
+          },
+          "x-note": "The one call left out is the Playwright runtime skip test.skip(condition, reason) made inside a function (a test body, hook or describe callback): the condition is evaluated at run time and skips only that test, or that group when the call sits in a describe callback (accepted: a conditional group skip still runs whenever the condition is false). The condition must reach a runtime value (an identifier, member access, call or await somewhere inside it) and must not be always true by its syntax: after unwrapping parentheses, as, satisfies, non-null and ! it is not a string, template, true, function, arrow, generator, class, object, array, new expression, sequence, spread or globalThis. And the reason must be a string or template; no third argument. So test.skip(), test.skip(true, r), test.skip(1, r), test.skip(!0, r), test.skip(title, fn), a top-level test.skip(cond, r), it.skip(...) (Mocha's it.skip(title, x) really skips) and every .only stay reported. Known gaps: an always-true condition that still names a value (test.skip(true || x, r), test.skip(Boolean(1), r), const S = true; test.skip(S, r)) and Mocha's TDD UI test.skip(titleVar, 'str'), which reads as the Playwright form.",
+          "files": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            "**/*.test.tsx",
+            "**/*.spec.tsx",
+            "**/__tests__/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} disables or skips automated tests. Step 5 (Musk): automate verification and do not bypass automated test suites."
+  }
+}

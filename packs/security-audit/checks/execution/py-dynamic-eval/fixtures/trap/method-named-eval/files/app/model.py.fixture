@@ -1,0 +1,4 @@
+def run(model, cursor, sql):
+    model.eval()
+    cursor.exec(sql)
+    return eval(compile(sql, "<q>", "eval"))

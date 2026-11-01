@@ -1,0 +1,1 @@
+setupDcouplr({ charEncoding: 1, charEncoding: 'UTF-8', mode: 'invalid', mode: 'test' });

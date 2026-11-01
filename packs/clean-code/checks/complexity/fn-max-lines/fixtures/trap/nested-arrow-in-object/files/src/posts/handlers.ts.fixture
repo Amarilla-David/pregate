@@ -1,0 +1,26 @@
+type Draft = { title: string; body: string; tags: string[] };
+
+export const handlers = {
+  create: (draft: Draft) => {
+    const errors: string[] = [];
+    const title = draft.title.trim();
+    if (title.length === 0) {
+      errors.push("title is required");
+    }
+    if (title.length > 120) {
+      errors.push("title is too long");
+    }
+    const body = draft.body.trim();
+    if (body.length === 0) {
+      errors.push("body is required");
+    }
+    const tags = draft.tags.map((tag) => tag.toLowerCase());
+    if (tags.length > 5) {
+      errors.push("at most five tags");
+    }
+    if (new Set(tags).size !== tags.length) {
+      errors.push("tags repeat");
+    }
+    return errors.length === 0 ? { ok: true, title, body, tags } : { ok: false, errors };
+  },
+};

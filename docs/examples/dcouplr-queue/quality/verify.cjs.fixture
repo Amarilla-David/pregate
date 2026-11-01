@@ -1,0 +1,26 @@
+const assert = require('node:assert/strict');
+const { accept } = require('../src/accept.cjs');
+
+async function verifyAdmission() {
+  let release, settled = false, received;
+  const delayed = new Promise(resolve => { release = resolve; });
+  const item = { id: 'one' };
+  const pending = accept({ enqueue(value) { received = value; return delayed; } }, item)
+    .then(value => { settled = true; return value; });
+  await Promise.resolve();
+  await Promise.resolve();
+  const beforeRelease = settled;
+  release(true);
+  assert.deepEqual(await pending, { accepted: true, item });
+  assert.equal(beforeRelease, false, 'The producer reported acceptance before admission completed');
+  assert.equal(received, item);
+}
+
+async function main() {
+  await verifyAdmission();
+  await assert.rejects(() => accept({ enqueue: async () => false }, 'one'), /Queue did not admit work/);
+  const failure = new Error('storage failed');
+  await assert.rejects(() => accept({ enqueue: () => Promise.reject(failure) }, 'one'), error => error === failure);
+}
+
+main().catch(error => { console.error(error.message); process.exitCode = 1; });

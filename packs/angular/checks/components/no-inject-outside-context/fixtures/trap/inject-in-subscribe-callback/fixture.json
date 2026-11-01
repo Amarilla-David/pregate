@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/order/order.component.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 12
+      }
+    ]
+  },
+  "trap": {
+    "family": "inject-in-hook-callback",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The class field above uses inject() correctly, but the call inside the subscribe callback runs later from ngOnInit, outside any injection context, and throws NG0203."
+  }
+}

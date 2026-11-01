@@ -1,0 +1,6 @@
+
+export function street(order: Order): string | undefined {
+  return order?.customer?.address?.city;
+}
+
+interface Order { customer?: { address?: { city?: string } } }

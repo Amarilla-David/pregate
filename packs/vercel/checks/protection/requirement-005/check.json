@@ -1,0 +1,27 @@
+{
+  "id": "vercel/protection/requirement-005",
+  "version": "1.0.0",
+  "area": "protection",
+  "cardinality": "singleton",
+  "dimension": "vercel.r005",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "VERCEL-005"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "VERCEL-005 requires current passing project verification: {symbol}."
+  }
+}

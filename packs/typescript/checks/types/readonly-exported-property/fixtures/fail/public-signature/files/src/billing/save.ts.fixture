@@ -1,0 +1,5 @@
+export function save(
+  value: { total: number }
+): { count: number } {
+  return { count: value.total };
+}

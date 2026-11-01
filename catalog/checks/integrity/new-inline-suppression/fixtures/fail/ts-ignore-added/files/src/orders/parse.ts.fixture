@@ -1,0 +1,4 @@
+export function parseQuantity(text: string): number {
+  // @ts-ignore the caller sometimes passes a number
+  return Number.parseInt(text.trim(), 10);
+}

@@ -1,0 +1,6 @@
+import { createHash } from "node:crypto";
+import type { Document } from "./document";
+
+export function fingerprint(doc: Document): string {
+  return createHash("sha256").update(doc.title).update(doc.body).digest("hex");
+}

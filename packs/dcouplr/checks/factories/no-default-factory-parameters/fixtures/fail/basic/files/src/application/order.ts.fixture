@@ -1,0 +1,1 @@
+admission.addFactoryMethod((inputDto = {}, dKernel) => dKernel.dependencies.resolve('STORE'));

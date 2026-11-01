@@ -1,0 +1,7 @@
+pub fn client(insecure: bool) -> reqwest::Client {
+    reqwest::Client::builder()
+        .danger_accept_invalid_certs(false)
+        .danger_accept_invalid_hostnames(insecure)
+        .build()
+        .unwrap()
+}

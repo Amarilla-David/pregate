@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "target": "src/application/order.ts",
+  "before": null,
+  "params": {
+    "packages": [
+      "dcouplr/dist",
+      "dcouplr/src"
+    ]
+  },
+  "expect": {
+    "verdict": "pass"
+  }
+}

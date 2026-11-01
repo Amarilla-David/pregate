@@ -1,0 +1,5 @@
+import type { NextFunction } from "express";
+
+export function skip(next: NextFunction): void {
+  next("route");
+}

@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth/session.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 6
+      }
+    ]
+  },
+  "trap": {
+    "family": "nearest-function",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "Only the nearest function's name counts: a jitter helper inside a token module passes, a callback inside a token declarator fails."
+  }
+}

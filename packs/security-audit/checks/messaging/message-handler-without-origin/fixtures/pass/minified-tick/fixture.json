@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/next-tick.js",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

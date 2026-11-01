@@ -1,0 +1,10 @@
+import type { OrderLine } from "./order-line";
+
+export class Order {
+  private constructor(readonly lines: readonly OrderLine[]) {}
+
+  static create(lines: OrderLine[]): Order {
+    if (lines.length === 0) throw new Error("An order needs at least one line");
+    return new Order(lines);
+  }
+}

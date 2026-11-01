@@ -1,0 +1,7 @@
+import { createEventDispatcher } from "svelte";
+
+const dispatch = createEventDispatcher<{ save: string }>();
+
+export function commit(): void {
+  dispatch("save", "draft");
+}

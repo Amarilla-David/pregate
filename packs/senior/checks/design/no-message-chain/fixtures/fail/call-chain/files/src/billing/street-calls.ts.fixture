@@ -1,0 +1,8 @@
+
+export function street(order: Order): string {
+  return order.getCustomer().getAddress().city;
+}
+
+interface Order {
+  getCustomer(): { getAddress(): { city: string } };
+}

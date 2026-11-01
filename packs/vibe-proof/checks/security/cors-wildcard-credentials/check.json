@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/security/cors-wildcard-credentials",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "security.cors-credentials",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "cors-star",
+          "rule": {
+            "kind": "object",
+            "all": [
+              {
+                "has": {
+                  "stopBy": "end",
+                  "kind": "pair",
+                  "regex": "origin\\s*:\\s*[\"']\\*[\"']"
+                }
+              },
+              {
+                "has": {
+                  "stopBy": "end",
+                  "kind": "pair",
+                  "regex": "credentials\\s*:\\s*true\\b"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} allows every origin and credentials together."
+  }
+}

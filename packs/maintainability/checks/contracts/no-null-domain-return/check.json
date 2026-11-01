@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/contracts/no-null-domain-return",
+  "version": "1.0.0",
+  "area": "contracts",
+  "cardinality": "singleton",
+  "dimension": "maintainability.null-domain-return",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "direct-domain-null-result",
+          "rule": {
+            "any": [
+              { "kind": "return_statement", "regex": "^return\\s+\\(?\\s*null\\s*\\)?\\s*;?$" },
+              { "kind": "arrow_function", "regex": "=>\\s*\\(?\\s*null\\s*\\)?$" }
+            ]
+          },
+          "files": ["src/domain/**/*", "**/domain/**/*"]
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} returns null directly from a domain module. Model absence explicitly in this boundary's result type." }
+}

@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth/options.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "spelling",
+    "note": "A quoted property name and an upper-case NONE are the same option to the verifier.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

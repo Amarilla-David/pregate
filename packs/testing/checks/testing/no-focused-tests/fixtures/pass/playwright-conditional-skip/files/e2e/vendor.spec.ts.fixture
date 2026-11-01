@@ -1,0 +1,16 @@
+import { test, expect } from "@playwright/test";
+
+test.describe("vendor", () => {
+  test.skip(process.env.STIL_URL === undefined, "needs STIL_URL");
+
+  test.beforeEach(async ({ page }) => {
+    test.skip(!(await page.getByRole("switch").isVisible()), "vendor toggle is hidden");
+  });
+
+  test("vendor detail", async ({ page, browserName }) => {
+    test.skip(browserName === "webkit", `no ${browserName} support`);
+    const toggle = page.getByRole("switch");
+    test.skip(!(await toggle.isVisible()), "vendor is not held on STIL right now.");
+    await expect(toggle).toBeVisible();
+  });
+});

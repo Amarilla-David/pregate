@@ -1,0 +1,23 @@
+const assert = require('node:assert/strict');
+const { shutdown } = require('../src/shutdown.cjs');
+
+async function verifyCompletion() {
+  let release, settled = false;
+  const delayed = new Promise(resolve => { release = resolve; });
+  const pending = shutdown({ flush: () => delayed }).then(result => { settled = true; return result; });
+  await Promise.resolve();
+  await Promise.resolve();
+  const beforeRelease = settled;
+  release();
+  assert.deepEqual(await pending, { closed: true });
+  assert.equal(beforeRelease, false, 'Shutdown completed before the logger flush');
+}
+
+async function main() {
+  await verifyCompletion();
+  const failure = new Error('sink failed');
+  await assert.rejects(() => shutdown({ flush: () => Promise.reject(failure) }), error => error === failure);
+  assert.deepEqual(await shutdown({}), { closed: true });
+}
+
+main().catch(error => { console.error(error.message); process.exitCode = 1; });

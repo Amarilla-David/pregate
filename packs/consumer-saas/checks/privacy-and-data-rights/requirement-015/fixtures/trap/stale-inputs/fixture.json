@@ -1,0 +1,43 @@
+{
+  "language": "typescript",
+  "params": {
+    "verifier": "CONSUMER-015"
+  },
+  "context": {
+    "fitness": {
+      "contractHash": "reviewed-contract-v1",
+      "inputHash": "current-code-tree",
+      "command": [
+        "fixture-verifier"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "contractHash": "reviewed-contract-v1",
+        "inputHash": "old-code-tree",
+        "verifier": "CONSUMER-015",
+        "command": [
+          "fixture-verifier"
+        ],
+        "exitCode": 0,
+        "completed": true,
+        "recordedAt": "2026-10-05T00:00:00Z"
+      }
+    }
+  },
+  "target": ".pregate/preset.json",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "stale-fitness-evidence",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "A prior passing assertion must not admit changed product inputs."
+  }
+}

@@ -1,0 +1,1 @@
+{"language": "typescript","params": {},"target": "src/parse/loose.ts","before": null,"expect": {"verdict": "fail","violations": [{"line": 2}]},"$schema": "../../../../../../../schema/fixture.v1.json"}

@@ -1,0 +1,11 @@
+package tools
+
+import (
+	"context"
+	"os/exec"
+)
+
+func Grep(ctx context.Context, pattern string) ([]byte, error) {
+	cmd := exec.CommandContext(ctx, "/bin/bash", "-c", "grep -r "+pattern+" .")
+	return cmd.Output()
+}

@@ -1,0 +1,4 @@
+export async function load({ fetch }: { fetch: (url: string) => Promise<{ json: () => Promise<unknown> }> }) {
+  const res = await fetch("/api/user");
+  return { user: await res.json() };
+}

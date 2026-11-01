@@ -1,0 +1,12 @@
+import { initTRPC } from "@trpc/server";
+import type { Context } from "./context";
+
+const flags = { isDev: true, verbose: false };
+
+const t = initTRPC.context<Context>().create({
+  isDev: process.env.NODE_ENV !== "production",
+});
+
+export const router = t.router;
+export const publicProcedure = t.procedure;
+export const devFlags = flags;

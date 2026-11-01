@@ -1,0 +1,11 @@
+# trpc backlog
+
+Judgment, or checks the syntax tree cannot decide without types, flow, or version knowledge.
+
+- **Procedure authorization strength.** Whether a `protectedProcedure` actually checks the right role needs the user model. The pack flags writes on `publicProcedure` (TRPC-PROC-001), not a guard that checks the wrong claim.
+- **Input schema strength.** Whether a zod schema is strict (`.strict()`, no coercion, bounded strings) needs schema semantics. The pack flags a missing `.input` (TRPC-INPUT-001), not a loose one.
+- **Dataloader N+1 inside resolvers.** Whether a resolver fans out per-row queries needs data flow across awaits. A loop shape alone is not proof of N+1.
+- **Caller versus fetch boundary.** Whether server code should use a direct caller or HTTP fetch depends on deployment topology (same process or not), which the tree cannot see. Building a caller inside another procedure's resolver is wrong in every topology, so TRPC-SELFCALL-001 reports it.
+- **wsLink versus httpBatchLink choice.** Whether subscriptions need a websocket link or polling suffices depends on latency needs and infra. The pack flags an unbounded batch link (TRPC-BATCH-001) and a streamless subscription (TRPC-CALLER-001), not the transport decision.
+- **Computed error code variables (`TRPC-CODE-001` limit).** `TRPC-CODE-001` checks literal strings, templates, and numbers passed to `new TRPCError({ code })`. Dynamic error codes computed in a helper function are not evaluated.
+- **Wrapped middleware next helpers (`TRPC-RET-NEXT-001` limit).** `TRPC-RET-NEXT-001` flags bare `next()` / `next({ ctx })` (empty or first-argument object) and `await next()` statements directly inside single-parameter `.middleware()` and `.use()` callbacks (`stopBy: { kind: "@fn" }`, excluding multi-parameter Express `(req, res, next)` handlers). Forwarding `next` into an external helper without returning that helper's result requires call-graph inspection.

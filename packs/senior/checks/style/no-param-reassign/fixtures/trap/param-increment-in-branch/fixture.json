@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/retry.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "optional-param-update-expression",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Incrementing an optional parameter with ++ inside a conditional branch still mutates the parameter binding."
+  }
+}

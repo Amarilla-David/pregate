@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/auth.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "quoted-cookie-option-key",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Quoting the 'httpOnly' option key in res.cookie still disables the HttpOnly flag on the Set-Cookie header."
+  }
+}

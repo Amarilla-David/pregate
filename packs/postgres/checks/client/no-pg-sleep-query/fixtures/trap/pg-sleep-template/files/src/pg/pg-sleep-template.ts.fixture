@@ -1,0 +1,6 @@
+
+import { Pool } from "pg";
+
+export async function nap(pool: Pool, s: number): Promise<unknown> {
+  return pool.query(`SELECT pg_sleep(${s})`);
+}

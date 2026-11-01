@@ -1,0 +1,6 @@
+function* check() { yield true; }
+stage.addValidationPolicy(check);
+const verify = function* () {};
+stage.addVerificationPolicy(verify);
+async function* validate() { yield true; }
+stage.addValidationPolicy(validate);

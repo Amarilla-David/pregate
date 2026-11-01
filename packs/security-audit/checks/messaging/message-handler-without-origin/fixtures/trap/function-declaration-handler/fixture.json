@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/bridge.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 6
+      }
+    ]
+  },
+  "trap": {
+    "family": "named-handler",
+    "origin": "corpus",
+    "discovered": "2026-10-25",
+    "note": "A handler declared in the same file is resolved; only an imported or delegated one is left unchecked."
+  }
+}

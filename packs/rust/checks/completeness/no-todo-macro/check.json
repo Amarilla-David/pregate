@@ -1,0 +1,39 @@
+{
+  "id": "rust/completeness/no-todo-macro",
+  "version": "1.0.0",
+  "area": "completeness",
+  "cardinality": "singleton",
+  "dimension": "rust.completeness.todo",
+  "minSeverity": null,
+  "languages": [
+    "rust"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "rust": [
+        {
+          "id": "todo",
+          "rule": {
+            "kind": "macro_invocation",
+            "has": {
+              "field": "macro",
+              "regex": "^(::\\s*)?((std|core)\\s*::\\s*)?todo$"
+            }
+          },
+          "x-note": "todo! states that the code is unfinished. unimplemented! states that it is deliberately not provided and stays allowed."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: todo! marks unfinished code that panics when it runs."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/auth.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 9
+      }
+    ]
+  },
+  "trap": {
+    "family": "system-random",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "random.SystemRandom draws from the OS CSPRNG, so only module-level random functions are findings."
+  }
+}

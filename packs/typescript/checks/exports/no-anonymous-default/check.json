@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/exports/no-anonymous-default",
+  "version": "1.0.0",
+  "area": "exports",
+  "cardinality": "singleton",
+  "dimension": "typescript.anonymous-default",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "anonymous-default",
+          "rule": {
+            "kind": "export_statement",
+            "has": {
+              "stopBy": "neighbor",
+              "any": [
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} default-exports an anonymous function. Name the function so stack traces and refresh name it."
+  }
+}

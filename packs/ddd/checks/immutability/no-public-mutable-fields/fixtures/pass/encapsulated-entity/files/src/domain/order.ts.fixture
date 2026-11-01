@@ -1,0 +1,33 @@
+type OrderStatus = "draft" | "placed" | "cancelled";
+
+export interface OrderSnapshot {
+  id: string;
+  status: OrderStatus;
+}
+
+export class Order {
+  static readonly maxLines = 50;
+  static nextReference = 1;
+  readonly id: string;
+  private status: OrderStatus = "draft";
+  protected placedAt: string | null = null;
+  #lines: string[] = [];
+
+  constructor(id: string) {
+    this.id = id;
+  }
+
+  get currentStatus(): OrderStatus {
+    return this.status;
+  }
+
+  place(on: string): void {
+    if (this.#lines.length === 0) throw new Error("An empty order cannot be placed");
+    this.status = "placed";
+    this.placedAt = on;
+  }
+
+  snapshot(): OrderSnapshot {
+    return { id: this.id, status: this.status };
+  }
+}

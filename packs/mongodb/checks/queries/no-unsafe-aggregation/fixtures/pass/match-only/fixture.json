@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mongo/agg-match.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

@@ -1,0 +1,16 @@
+import { pool } from "./pool";
+
+export async function transfer(from: number, to: number, amount: number) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query("UPDATE accounts SET balance = balance - $1 WHERE id = $2", [amount, from]);
+    await client.query("UPDATE accounts SET balance = balance + $1 WHERE id = $2", [amount, to]);
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}

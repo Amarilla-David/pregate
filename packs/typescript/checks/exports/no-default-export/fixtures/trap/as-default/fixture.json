@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/as-default.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "specifier-default",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "export { Page as default } is a default export written without the default keyword."
+  }
+}

@@ -1,0 +1,4 @@
+declare const t: { middleware(fn: (opts: { ctx: Record<string, unknown>; next: (o?: unknown) => Promise<unknown> }) => Promise<void>): unknown };
+export const broken = t.middleware(async ({ ctx, next }) => {
+  await next({ ctx });
+});

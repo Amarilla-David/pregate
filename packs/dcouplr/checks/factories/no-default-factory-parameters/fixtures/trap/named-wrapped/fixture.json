@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/register.ts",
+  "before": null,
+  "params": {},
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "named-factory-ownership",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "A same-scope immutable creator must retain its factory policies; direct invocation must not receive a component-root exception."
+  }
+}

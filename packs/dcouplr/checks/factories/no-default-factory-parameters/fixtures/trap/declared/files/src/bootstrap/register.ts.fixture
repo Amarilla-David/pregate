@@ -1,0 +1,1 @@
+function creator(input = {}, kernel) { return input; } stage.addFactoryMethod(creator);

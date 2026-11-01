@@ -1,0 +1,3 @@
+const session = $state({ user: "ada" });
+
+$inspect("session", session);

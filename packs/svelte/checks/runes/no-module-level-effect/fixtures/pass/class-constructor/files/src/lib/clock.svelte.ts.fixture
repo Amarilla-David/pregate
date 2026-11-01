@@ -1,0 +1,10 @@
+export class Clock {
+  now = $state(new Date());
+
+  constructor(intervalMs: number) {
+    $effect(() => {
+      const id = setInterval(() => (this.now = new Date()), intervalMs);
+      return () => clearInterval(id);
+    });
+  }
+}

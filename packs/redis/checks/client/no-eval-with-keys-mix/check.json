@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "redis/client/no-eval-with-keys-mix",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "redis.script-over-eval",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "direct-eval",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.eval\\s*\\("
+          }
+        },
+        {
+          "id": "interpolated-eval",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.eval\\s*\\([^)]*\\$\\{"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sends an inline Lua script with eval. Load it once and call evalsha, or use defineCommand."
+  }
+}

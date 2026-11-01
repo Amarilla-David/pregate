@@ -1,0 +1,13 @@
+export function flush(queue, log) {
+  try {
+    queue.drain();
+  } finally {
+    queue.onIdle(() => {
+      return log("idle");
+    });
+    queue.onError(function (error) {
+      return log(error.message);
+    });
+  }
+  return queue.size;
+}

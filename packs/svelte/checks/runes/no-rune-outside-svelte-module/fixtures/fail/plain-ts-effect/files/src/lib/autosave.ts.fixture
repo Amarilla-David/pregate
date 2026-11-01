@@ -1,0 +1,5 @@
+export function autosave(read: () => string, key: string): void {
+  $effect.pre(() => {
+    localStorage.setItem(key, read());
+  });
+}

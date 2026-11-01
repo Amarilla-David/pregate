@@ -1,0 +1,6 @@
+"use server";
+declare const supabase: { auth: { getSession(): Promise<{ data: { session: unknown } }> } };
+export async function deleteAccount(): Promise<unknown> {
+  const { data } = await supabase.auth.getSession();
+  return data.session;
+}

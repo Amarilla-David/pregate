@@ -1,0 +1,259 @@
+[
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x3.ts",
+  "hook_behaviour": "exit 2, stderr only, stdout empty",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "Hook blocked with message: STDERR-X3 only stderr\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "Hook blocked with message: STDERR-X3 only stderr\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x1.ts",
+  "hook_behaviour": "exit 2, stdout plain text",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "REASON-X1 plain stdout with exit 2\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "REASON-X1 plain stdout with exit 2\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x2.ts",
+  "hook_behaviour": "exit 0, JSON deny with user_message + agent_message",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "USER-X2 shown to human\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "USER-X2 shown to human\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x4.ts",
+  "hook_behaviour": "exit 1 (crash), failClosed false",
+  "result": {
+   "success": {
+    "path": "/home/user/project/x4.ts",
+    "linesAdded": 1,
+    "linesRemoved": 0,
+    "diffString": "--- /dev/null\n+++ b//home/user/project/x4.ts\n@@ -1,0 +1 @@\n+export const v = 1;",
+    "afterFullFileContent": "export const v = 1;\n",
+    "message": "Wrote contents to /home/user/project/x4.ts"
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x6.ts",
+  "hook_behaviour": "exit 0, JSON deny, long agent_message + short user_message",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "USER-X6\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "USER-X6\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x7.ts",
+  "hook_behaviour": "exit 2 with JSON deny on stdout",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "{\"permission\":\"deny\",\"agent_message\":\"AGENT-X7\",\"user_message\":\"USER-X7\"}\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "{\"permission\":\"deny\",\"agent_message\":\"AGENT-X7\",\"user_message\":\"USER-X7\"}\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x8.ts",
+  "hook_behaviour": "exit 0, Claude Code hookSpecificOutput deny",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "CLAUDE-X8 reason\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "CLAUDE-X8 reason\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x9.ts",
+  "hook_behaviour": "exit 0, stdout not JSON",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "Hook \"sh /home/user/hooks/gate.sh A\" returned invalid JSON. The command was blocked for safety.\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "Hook \"sh /home/user/hooks/gate.sh A\" returned invalid JSON. The command was blocked for safety.\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/y4.ts",
+  "hook_behaviour": "exit 1, failClosed true",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "Tool blocked because this hook is configured to fail closed (block when it fails). Hook \"sh /home/user/hooks/gate.sh B\" failed with exit code 1: crash-y4\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "Tool blocked because this hook is configured to fail closed (block when it fails). Hook \"sh /home/user/hooks/gate.sh B\" failed with exit code 1: crash-y4\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/y6.ts",
+  "hook_behaviour": "exit 0, empty stdout, failClosed true",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "Tool blocked because this hook is configured to fail closed (block when it fails). Hook \"sh /home/user/hooks/gate.sh B\" returned no output.\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "Tool blocked because this hook is configured to fail closed (block when it fails). Hook \"sh /home/user/hooks/gate.sh B\" returned no output.\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/x5.ts",
+  "hook_behaviour": "sleep 8 s > timeout 3 s, failClosed false",
+  "result": {
+   "success": {
+    "path": "/home/user/project/x5.ts",
+    "linesAdded": 1,
+    "linesRemoved": 0,
+    "diffString": "--- /dev/null\n+++ b//home/user/project/x5.ts\n@@ -1,0 +1 @@\n+export const v = 1;",
+    "afterFullFileContent": "export const v = 1;\n",
+    "message": "Wrote contents to /home/user/project/x5.ts"
+   }
+  }
+ },
+ {
+  "run": "run3",
+  "tool": "editToolCall",
+  "target": "/home/user/project/y5.ts",
+  "hook_behaviour": "sleep 8 s > timeout 3 s, failClosed true",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "Tool blocked because this hook is configured to fail closed (block when it fails). Hook \"sh /home/user/hooks/gate.sh B\" execution failed: Hook script timed out after 3000ms\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "Tool blocked because this hook is configured to fail closed (block when it fails). Hook \"sh /home/user/hooks/gate.sh B\" execution failed: Hook script timed out after 3000ms\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run4",
+  "tool": "editToolCall",
+  "target": "/home/user/project/w1.ts",
+  "hook_behaviour": "exit 0, JSON deny with agent_message only",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "Write blocked by preToolUse hook\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "Write blocked by preToolUse hook\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run4",
+  "tool": "editToolCall",
+  "target": "/home/user/project/w2.ts",
+  "hook_behaviour": "exit 0, JSON deny, ~12 KB user_message",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "USER-W2-START u0000 u0001 u0002 u0003 u0004 u0005 u0006 u0007 u0008 u0009 u0010 u0011 u0012 u0013 u0014 u0015 u0016 u001 \u2026[12086 chars total, untruncated in the original]\u2026 u1992 u1993 u1994 u1995 u1996 u1997 u1998 u1999 USER-W2-END\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "USER-W2-START u0000 u0001 u0002 u0003 u0004 u0005 u0006 u0007 u0008 u0009 u0010 u0011 u0012 u0013 u0014 u0015 u0016 u001 \u2026[12086 chars total, untruncated in the original]\u2026 u1992 u1993 u1994 u1995 u1996 u1997 u1998 u1999 USER-W2-END\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run4",
+  "tool": "deleteToolCall",
+  "target": "/home/user/project/c.txt",
+  "hook_behaviour": "Delete: exit 0, JSON deny user_message",
+  "result": {
+   "rejected": {
+    "path": "",
+    "reason": "USER-DEL delete denied\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run4",
+  "tool": "editToolCall",
+  "target": "/home/user/project/b.ts",
+  "hook_behaviour": "exit 0, JSON deny on edit of existing file",
+  "result": {
+   "error": {
+    "path": "",
+    "error": "USER-BTS edit of existing file denied\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "modelVisibleError": "USER-BTS edit of existing file denied\n\nAgent note: Do not suggest workarounds to the blocked tool."
+   }
+  }
+ },
+ {
+  "run": "run4",
+  "tool": "shellToolCall",
+  "target": "echo BLOCKME1 > s1.txt",
+  "hook_behaviour": "Shell: preToolUse JSON deny",
+  "result": {
+   "rejected": {
+    "command": "echo BLOCKME1 > s1.txt",
+    "workingDirectory": "/home/user/project",
+    "reason": "USER-SH1 shell denied in preToolUse\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "isReadonly": false
+   }
+  }
+ },
+ {
+  "run": "run4",
+  "tool": "shellToolCall",
+  "target": "echo BLOCKME2 > s2.txt",
+  "hook_behaviour": "Shell: beforeShellExecution JSON deny",
+  "result": {
+   "rejected": {
+    "command": "echo BLOCKME2 > s2.txt",
+    "workingDirectory": "/home/user/project",
+    "reason": "Command execution was blocked by a hook: USER-SH2 denied in beforeShellExecution\n\nTo view or modify configured hooks, go to Cursor Settings > Hooks.\n\nAgent note: Do not suggest workarounds to the blocked tool.",
+    "isReadonly": false
+   }
+  }
+ },
+ {
+  "run": "run4",
+  "tool": "editToolCall",
+  "target": "/home/user/project/z1.ts",
+  "hook_behaviour": "no timeout key, hook sleeps 75 s, failClosed false",
+  "result": {
+   "success": {
+    "path": "/home/user/project/z1.ts",
+    "linesAdded": 1,
+    "linesRemoved": 0,
+    "diffString": "--- /dev/null\n+++ b//home/user/project/z1.ts\n@@ -1,0 +1 @@\n+export const v = 1;",
+    "afterFullFileContent": "export const v = 1;\n",
+    "message": "Wrote contents to /home/user/project/z1.ts"
+   }
+  }
+ }
+]

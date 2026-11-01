@@ -1,0 +1,5 @@
+import { useState } from "#app";
+const count = useState();
+export function useCount(): unknown {
+  return count;
+}

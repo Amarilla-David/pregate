@@ -1,0 +1,4 @@
+declare const tokens: { deleteMany(filter: { revoked: boolean }): Promise<unknown> };
+export async function purgeRevoked(): Promise<void> {
+  await tokens.deleteMany({ revoked: true });
+}

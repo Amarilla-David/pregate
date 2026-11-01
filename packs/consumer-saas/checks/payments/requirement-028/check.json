@@ -1,0 +1,27 @@
+{
+  "id": "consumer-saas/payments/requirement-028",
+  "version": "1.0.0",
+  "area": "payments",
+  "cardinality": "singleton",
+  "dimension": "consumer-saas.r028",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CONSUMER-028"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CONSUMER-028 requires current passing project verification: {symbol}."
+  }
+}

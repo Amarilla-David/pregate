@@ -1,0 +1,24 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/policy.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "named-policy-reference",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "A local policy reference must retain completion/result constraints across transparent wrappers and hoisted exports."
+  }
+}

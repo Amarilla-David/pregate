@@ -1,0 +1,13 @@
+export class FormState {
+  private values = new Map<string, string>();
+
+  set(field: string, value: string): void {
+    this.values.set(field, value);
+  }
+
+  setTouched(touched: boolean): void {
+    this.touched = touched;
+  }
+
+  touched = false;
+}

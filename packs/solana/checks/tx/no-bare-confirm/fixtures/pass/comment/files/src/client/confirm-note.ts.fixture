@@ -1,0 +1,2 @@
+// TODO: confirmTransaction(sig) needs a blockhash
+await connection.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight });

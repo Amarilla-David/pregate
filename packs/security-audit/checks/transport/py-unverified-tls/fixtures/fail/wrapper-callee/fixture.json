@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/modules/lookup.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      },
+      {
+        "line": 8
+      }
+    ]
+  }
+}

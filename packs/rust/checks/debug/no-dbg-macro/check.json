@@ -1,0 +1,91 @@
+{
+  "id": "rust/debug/no-dbg-macro",
+  "version": "1.0.0",
+  "area": "debug",
+  "cardinality": "singleton",
+  "dimension": "rust.debug.dbg",
+  "minSeverity": null,
+  "languages": [
+    "rust"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "rust": [
+        {
+          "id": "dbg",
+          "utils": {
+            "attributes": {
+              "not": {
+                "any": [
+                  {
+                    "kind": "attribute_item"
+                  },
+                  {
+                    "kind": "line_comment"
+                  },
+                  {
+                    "kind": "block_comment"
+                  }
+                ]
+              }
+            },
+            "test-code": {
+              "any": [
+                {
+                  "kind": "mod_item",
+                  "follows": {
+                    "stopBy": {
+                      "matches": "attributes"
+                    },
+                    "kind": "attribute_item",
+                    "regex": "^#\\s*\\[\\s*cfg\\s*\\(\\s*test\\s*\\)\\s*\\]$"
+                  }
+                },
+                {
+                  "kind": "function_item",
+                  "follows": {
+                    "stopBy": {
+                      "matches": "attributes"
+                    },
+                    "kind": "attribute_item",
+                    "regex": "^#\\s*\\[[A-Za-z_:\\s]*\\btest\\b"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "macro_invocation",
+            "has": {
+              "field": "macro",
+              "regex": "^(::\\s*)?(std\\s*::\\s*)?dbg$"
+            },
+            "not": {
+              "inside": {
+                "stopBy": "end",
+                "matches": "test-code"
+              }
+            }
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/benches/**",
+            "**/examples/**"
+          ],
+          "x-note": "dbg! or std::dbg! outside a #[cfg(test)] module, a #[test]-style function (including #[tokio::test]) and the tests/, benches/ and examples/ directories. A dbg! nested inside another macro's token tree is not parsed."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: dbg! is a temporary debugging aid left in non-test code."
+  }
+}

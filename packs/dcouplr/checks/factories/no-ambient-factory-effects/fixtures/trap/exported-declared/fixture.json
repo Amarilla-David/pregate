@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/register.ts",
+  "before": null,
+  "params": { "allow": [] },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "declared-factory-ownership",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "Same-scope declared or exported creators retain policies; ambiguous bindings do not establish callable ownership."
+  }
+}

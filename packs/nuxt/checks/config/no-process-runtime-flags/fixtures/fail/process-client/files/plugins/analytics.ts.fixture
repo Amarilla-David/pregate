@@ -1,0 +1,7 @@
+declare function startAnalytics(id: string): void;
+
+export default defineNuxtPlugin(() => {
+  if (process.client) {
+    startAnalytics("site-1");
+  }
+});

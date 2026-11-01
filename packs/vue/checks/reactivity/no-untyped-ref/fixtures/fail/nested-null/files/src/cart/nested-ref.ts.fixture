@@ -1,0 +1,6 @@
+import { ref } from "vue";
+
+export function useSelection() {
+  const selectedId = ref(null);
+  return { selectedId };
+}

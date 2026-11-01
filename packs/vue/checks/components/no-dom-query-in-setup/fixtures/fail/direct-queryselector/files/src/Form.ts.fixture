@@ -1,0 +1,3 @@
+export function findSubmitButton() {
+  return document.querySelector(".submit-btn");
+}

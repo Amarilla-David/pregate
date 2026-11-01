@@ -1,0 +1,2 @@
+import { useRouter as useNavigation } from 'next/navigation'; const base = "/search?q=";
+export function go(q: string) { const router = useNavigation(); router.push(base + q); }

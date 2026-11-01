@@ -1,0 +1,1 @@
+{"$schema":"../../../../../../../schema/fixture.v1.json","language":"typescript","params":{},"target":"src/field.tsx","before":null,"expect":{"verdict":"fail","violations":[{"line":2}]},"trap":{"family":"single-quoted-ref","origin":"forge","discovered":"2026-10-03","note":"Single quotes inside an expression container are still a string literal ref, not an object ref."}}

@@ -1,0 +1,10 @@
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { verify } from "./password";
+
+export const { handlers, auth } = NextAuth({
+  session: { strategy: "database" },
+  providers: [
+    Credentials({ authorize: (credentials) => verify(credentials) }),
+  ],
+});

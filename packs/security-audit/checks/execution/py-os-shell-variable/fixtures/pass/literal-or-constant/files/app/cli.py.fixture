@@ -1,0 +1,7 @@
+import os
+
+CLEAR = "clear"
+
+os.system("clear")
+os.system(CLEAR)
+os.popen("uname -a").read()

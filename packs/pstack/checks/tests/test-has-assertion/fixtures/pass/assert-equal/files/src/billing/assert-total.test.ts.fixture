@@ -1,0 +1,6 @@
+
+test("posts the invoice total", () => {
+  assert.equal(total, 1200);
+});
+
+const total = 1200;

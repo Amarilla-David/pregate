@@ -1,0 +1,32 @@
+{
+  "language": "typescript",
+  "params": {
+    "verifier": "CORE-INV-057"
+  },
+  "context": {
+    "fitness": {
+      "contractHash": "reviewed-contract-v2",
+      "inputHash": "current-code-tree",
+      "command": [
+        "fixture-verifier"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "contractHash": "reviewed-contract-v2",
+        "inputHash": "current-code-tree",
+        "verifier": "CORE-INV-057",
+        "command": [
+          "fixture-verifier"
+        ],
+        "exitCode": 0,
+        "completed": true,
+        "recordedAt": "2026-10-04T00:00:00Z"
+      }
+    }
+  },
+  "target": ".pregate/preset.json",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

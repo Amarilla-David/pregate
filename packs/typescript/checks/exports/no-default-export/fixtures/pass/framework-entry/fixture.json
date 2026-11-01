@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {
+    "exclude": [
+      "**/pages/**",
+      "**/app/**/page.ts",
+      "**/app/**/page.tsx",
+      "**/app/**/layout.ts",
+      "**/app/**/layout.tsx"
+    ]
+  },
+  "target": "src/app/orders/page.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "consumer-saas/account/requirement-003",
+  "version": "1.0.0",
+  "area": "account",
+  "cardinality": "singleton",
+  "dimension": "consumer-saas.r003",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CONSUMER-003"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CONSUMER-003 requires current passing project verification: {symbol}."
+  }
+}

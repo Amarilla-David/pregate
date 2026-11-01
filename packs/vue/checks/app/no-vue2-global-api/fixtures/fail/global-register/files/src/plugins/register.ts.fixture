@@ -1,0 +1,7 @@
+import Vue from "vue";
+import Router from "vue-router";
+import CartBadge from "../cart/CartBadge.vue";
+
+Vue.use(Router);
+Vue.component("CartBadge", CartBadge);
+Vue.config.productionTip = false;

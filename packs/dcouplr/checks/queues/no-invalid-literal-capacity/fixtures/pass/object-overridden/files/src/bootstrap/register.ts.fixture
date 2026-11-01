@@ -1,0 +1,1 @@
+kernel.dependencies.resolve('I_QUEUE', { persistence: { aotMs: -1 }, persistence: { aotMs: 10 } });

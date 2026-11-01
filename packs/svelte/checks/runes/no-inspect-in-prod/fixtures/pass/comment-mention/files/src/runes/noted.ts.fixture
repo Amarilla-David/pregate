@@ -1,0 +1,6 @@
+// While developing, $inspect(count) shows live values; remove before commit.
+const count = $state(0);
+
+export function value(): number {
+  return count;
+}

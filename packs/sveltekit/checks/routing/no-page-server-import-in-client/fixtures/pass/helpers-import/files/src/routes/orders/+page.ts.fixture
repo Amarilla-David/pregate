@@ -1,0 +1,5 @@
+import { formatPrice } from "./helpers";
+
+export async function load({ params }) {
+	return { total: formatPrice(params.total) };
+}

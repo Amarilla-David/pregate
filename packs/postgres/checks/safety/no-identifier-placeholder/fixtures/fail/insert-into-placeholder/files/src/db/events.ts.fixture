@@ -1,0 +1,5 @@
+import { pool } from "./pool";
+
+export async function record(stream: string, payload: unknown) {
+  await pool.query({ text: "insert into $1 (payload) values ($2)", values: [stream, payload] });
+}

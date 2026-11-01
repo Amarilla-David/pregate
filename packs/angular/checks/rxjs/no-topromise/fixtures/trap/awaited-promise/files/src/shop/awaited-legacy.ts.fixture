@@ -1,0 +1,5 @@
+import { orders$ } from "./orders";
+export async function loadOrders(): Promise<unknown> {
+  const orders = await orders$.toPromise();
+  return orders;
+}

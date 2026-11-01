@@ -1,0 +1,98 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "redis/pubsub/no-commands-on-subscriber",
+  "version": "1.0.0",
+  "area": "pubsub",
+  "cardinality": "singleton",
+  "dimension": "redis.subscriber-connection",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "commands-on-subscriber",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "pattern": "$CLIENT"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(subscribe|psubscribe|pSubscribe|ssubscribe|sSubscribe)$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "program",
+                  "regex": "(\\bfrom\\s*|\\brequire\\s*\\(\\s*|\\bimport\\s*\\(\\s*)[\"'](ioredis|redis|@redis/client)[\"']"
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "program",
+                    "regex": "\\bRESP\\s*:\\s*3\\b|\\bcreateCluster\\s*\\(|\\bcreateSentinel\\s*\\(|\\bCluster\\b"
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "program",
+                  "has": {
+                    "stopBy": "end",
+                    "kind": "call_expression",
+                    "has": {
+                      "field": "function",
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "object",
+                            "pattern": "$CLIENT"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "(?i)^(get|set|setex|setnx|getdel|getex|del|unlink|exists|expire|pexpire|ttl|incr|incrby|decr|decrby|mget|mset|hget|hset|hmset|hgetall|hdel|hincrby|lpush|rpush|lpop|rpop|lrange|llen|sadd|srem|smembers|sismember|zadd|zrem|zrange|zscore|xadd|xread|publish|spublish|multi|eval|evalsha)$"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} subscribes on a client that also runs regular commands. A subscribed connection only accepts subscription commands; subscribe on a dedicated connection from client.duplicate() or a second client."
+  }
+}

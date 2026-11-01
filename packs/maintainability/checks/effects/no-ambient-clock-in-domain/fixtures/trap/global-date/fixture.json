@@ -1,0 +1,1 @@
+{"language":"typescript","params":{},"target":"src/domain/order.ts","before":null,"expect":{"verdict":"fail","violations":[{"line":1}]},"trap":{"family":"global-date","origin":"forge","discovered":"2026-10-03","note":"Qualifying the global Date constructor does not make the clock an explicit dependency."}}

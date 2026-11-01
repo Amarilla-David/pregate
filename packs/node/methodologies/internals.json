@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "node/internals",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "NODE-BIND-001",
+      "check": "node/modules/no-process-binding",
+      "defaults": {},
+      "severity": "deny",
+      "source": { "work": "Node.js documentation, deprecated APIs", "locator": "process.binding()", "paraphrase": "process.binding is an undocumented internal entry point; application modules should use supported public APIs." },
+      "why": "Internal bindings can change between Node releases without the compatibility guarantees of public modules.",
+      "fixHint": "Import the documented Node module that exposes the needed capability.",
+      "avoid": "Bracket access to binding is the same internal call.",
+      "examples": { "pass": "pass/node-fs-import", "fail": "fail/direct-binding" }
+    },
+    {
+      "id": "NODE-UNCAUGHT-001",
+      "check": "node/process/no-uncaught-exception-empty",
+      "defaults": {},
+      "severity": "deny",
+      "source": { "work": "Node.js documentation, process events", "locator": "uncaughtException", "paraphrase": "An uncaughtException listener must perform emergency handling; an empty callback suppresses the default failure path." },
+      "why": "An empty listener keeps a process alive in an undefined state after an uncaught exception.",
+      "fixHint": "Report the failure and terminate cleanly, or omit the listener and let the runtime exit.",
+      "avoid": "Changing quote style or using an empty function callback does not handle the error.",
+      "examples": { "pass": "pass/log-error", "fail": "fail/empty-arrow" }
+    },
+    {
+      "id": "NODE-TLS-001",
+      "check": "node/security/no-tls-reject-unauthorized-false",
+      "defaults": {},
+      "severity": "deny",
+      "source": { "work": "Node.js documentation, TLS", "locator": "tls.connect options: rejectUnauthorized", "paraphrase": "TLS clients verify peer certificates by default; setting rejectUnauthorized to false explicitly disables verification." },
+      "why": "Without certificate verification an active intermediary can impersonate the server.",
+      "fixHint": "Leave verification enabled and configure a trusted CA when necessary.",
+      "avoid": "Other TLS options do not restore certificate verification.",
+      "examples": { "pass": "pass/verify-default", "fail": "fail/tls-connect" }
+    },
+    {
+      "id": "NODE-SHELL-001",
+      "check": "node/security/no-shell-true",
+      "defaults": {},
+      "severity": "deny",
+      "source": { "work": "Node.js documentation, child_process", "locator": "spawn and execFile shell option", "paraphrase": "Enabling shell routes command and arguments through a shell instead of executing the program directly." },
+      "why": "The extra shell interpreter can treat data as commands when arguments are assembled from input.",
+      "fixHint": "Invoke the program directly with an argument array.",
+      "avoid": "Specifying a working directory does not make shell execution safe.",
+      "examples": { "pass": "pass/array-args", "fail": "fail/spawn-shell" }
+    },
+    {
+      "id": "NODE-COMPILE-001",
+      "check": "node/modules/no-module-compile",
+      "defaults": {},
+      "severity": "deny",
+      "source": { "work": "Node.js documentation, Modules", "locator": "module._compile and require.extensions", "paraphrase": "Underscored module loader hooks and require.extensions are internal or deprecated extension mechanisms." },
+      "why": "Loader internals have unstable contracts and execute source outside the normal import path.",
+      "fixHint": "Use import or a supported loader integration instead.",
+      "avoid": "Using Module._compile or assigning require.extensions is still a loader modification.",
+      "examples": { "pass": "pass/dynamic-import", "fail": "fail/module-compile" }
+    }
+  ]
+}

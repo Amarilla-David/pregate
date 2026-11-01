@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/writes/no-empty-where-delete",
+  "version": "1.0.0",
+  "area": "writes",
+  "cardinality": "singleton",
+  "dimension": "prisma.empty-where-mutation",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "empty-where-bulk-mutation",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^(deleteMany|updateMany)$"
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "kind": "object",
+                    "has": {
+                      "kind": "pair",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "key",
+                            "regex": "^['\"]?where['\"]?$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "value",
+                            "kind": "object",
+                            "regex": "^\\{\\s*\\}$"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes an empty where: {} filter to deleteMany or updateMany, affecting every row in the table. Provide an explicit non-empty predicate."
+  }
+}

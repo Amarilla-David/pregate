@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/runes/env.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "member-dollar",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A member call on a $UPPER object is the same hallucinated shape. No rune lives behind a qualified $Name either."
+  }
+}

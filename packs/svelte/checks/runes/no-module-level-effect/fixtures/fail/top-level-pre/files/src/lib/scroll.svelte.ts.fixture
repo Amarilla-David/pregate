@@ -1,0 +1,5 @@
+export const scroll = $state({ y: 0 });
+
+$effect.pre(() => {
+  document.documentElement.style.setProperty("--scroll", `${scroll.y}px`);
+});

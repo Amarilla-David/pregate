@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/Invite.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "create-user",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Creating users is still the admin API even when the intent is an invite. The call bypasses RLS exactly like deleteUser."
+  }
+}

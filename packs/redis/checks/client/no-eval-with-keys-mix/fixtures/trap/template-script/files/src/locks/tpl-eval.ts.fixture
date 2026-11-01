@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function runScript(script: string): Promise<unknown> {
+  return redis.eval(`return ${script}`, 0);
+}

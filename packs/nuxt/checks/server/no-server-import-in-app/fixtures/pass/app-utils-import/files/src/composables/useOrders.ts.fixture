@@ -1,0 +1,4 @@
+import { formatOrder } from "~/utils/format";
+export function useFormatted(id: string): string {
+  return formatOrder(id);
+}

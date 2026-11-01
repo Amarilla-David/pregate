@@ -1,0 +1,9 @@
+import { pool } from "./pool";
+
+export async function stats(at: string, code: string, ids: number[]) {
+  const res = await pool.query(
+    "SELECT EXTRACT(EPOCH FROM $1::timestamptz) AS epoch, substring($2 FROM 3) AS suffix, trim(BOTH ' ' FROM $2) AS clean, n FROM unnest($3::int[]) AS n",
+    [at, code, ids],
+  );
+  return res.rows;
+}

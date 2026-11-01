@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/schema/relations-empty.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-one-config",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "An empty config object carries no fields or references. The relation still points nowhere."
+  }
+}

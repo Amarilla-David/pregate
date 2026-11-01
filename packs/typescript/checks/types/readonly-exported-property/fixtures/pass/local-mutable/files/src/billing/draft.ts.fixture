@@ -1,0 +1,8 @@
+
+interface Draft {
+  total: number;
+}
+
+export function seal(draft: Draft): string {
+  return String(draft.total);
+}

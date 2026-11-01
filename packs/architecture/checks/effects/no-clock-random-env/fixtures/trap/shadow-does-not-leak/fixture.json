@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["@layers:core"], "allow": [] },
+  "context": {
+    "layers": {
+      "core": { "paths": ["src/core/**"], "mayImport": [], "kind": "core" },
+      "shell": { "paths": ["src/shell/**"], "mayImport": ["core"], "kind": "adapter" }
+    }
+  },
+  "target": "src/core/uptime.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 3 }, { "line": 10 }, { "line": 14 }, { "line": 18 }, { "line": 21 }, { "line": 30 }, { "line": 32 }, { "line": 36 }, { "line": 39 }, { "line": 40 }] },
+  "trap": {
+    "family": "shadowing",
+    "origin": "corpus",
+    "discovered": "2026-10-02",
+    "note": "Once local names stop counting, the global comes back beside them: a parameter shadows only its own function, a destructuring default reads the global, a declare, a type-only import, a parameter of a function type, a namespace of types or a const enum binds nothing at runtime, a for-of without a declaration assigns the global, an alias carries the global and globalThis.window is the global object again."
+  }
+}

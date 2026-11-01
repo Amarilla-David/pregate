@@ -1,0 +1,4 @@
+declare const publicProcedure: { use(fn: (opts: { next: (o?: unknown) => Promise<unknown> }) => void): unknown };
+export const loggedProcedure = publicProcedure.use((opts) => {
+  opts.next();
+});

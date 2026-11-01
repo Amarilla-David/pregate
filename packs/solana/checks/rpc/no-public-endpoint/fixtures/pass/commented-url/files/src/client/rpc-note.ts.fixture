@@ -1,0 +1,2 @@
+// backup: https://api.devnet.solana.com
+export const RPC_URL = process.env.RPC_URL as string;

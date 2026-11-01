@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "sveltekit/data",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SK-ENV-001",
+      "check": "sveltekit/data/no-private-env-in-load",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "$env modules",
+        "paraphrase": "The $env/static/private and $env/dynamic/private modules are server-only. A universal load file that imports them leaks secrets into the client bundle."
+      },
+      "why": "Universal load code ships to the browser, and its imports ship with it, so a private-env import publishes the secret it was meant to protect.",
+      "fixHint": "Read private env in +page.server.ts or +layout.server.ts and return only the derived public data.",
+      "avoid": "A lazy import() of the private module still bundles it. Reading through $env/dynamic/private instead of static is the same leak.",
+      "examples": {
+        "pass": "pass/public-env",
+        "fail": "fail/static-private"
+      }
+    },
+    {
+      "id": "SK-FETCH-001",
+      "check": "sveltekit/data/no-load-fetch-absolute",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "Load fetch",
+        "paraphrase": "Load receives a fetch that talks to the app itself. An absolute http(s) URL pins one origin, so same-app data uses a relative path."
+      },
+      "why": "A hardcoded origin breaks previews, branches and region failover: the deployment serving the page is not the origin in the string.",
+      "fixHint": "Fetch a relative path such as /api/orders so the request stays on the serving origin.",
+      "avoid": "Building the absolute URL in a template string still hardcodes the origin. Interpolating params into the path does not fix the host.",
+      "examples": {
+        "pass": "pass/relative-fetch",
+        "fail": "fail/absolute-fetch"
+      }
+    },
+    {
+      "id": "SK-SECRET-001",
+      "check": "sveltekit/security/no-secret-in-load-return",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "Load data serialization",
+        "paraphrase": "Whatever a load function returns is serialized and sent to the client. Tokens and secrets must stay server-side and never appear in the returned object."
+      },
+      "why": "Load data crosses the server-client boundary by design, so a secret-shaped field in the return value is published to every visitor.",
+      "fixHint": "Use the secret server-side (sessions, API calls) and return only the derived public result such as the user profile.",
+      "avoid": "Nesting the token one level down still serializes it. Renaming the field hides the leak from review, not from the client.",
+      "examples": {
+        "pass": "pass/return-user",
+        "fail": "fail/return-token"
+      }
+    },
+    {
+      "id": "SK-ERROR-001",
+      "relations": [
+        {
+          "with": "typescript/TS-THROW-001",
+          "kind": "contradicts",
+          "why": "SK-ERROR-001 tells load functions to throw error(500, ...) with a static message, and TS-THROW-001 denies that throw inside the exported load.",
+          "settle": "On SvelteKit 2 call error(...) without the throw keyword: it throws itself and no throw statement remains. On SvelteKit 1, exclude the **/+page.server.ts, **/+layout.server.ts and **/+server.ts route files from TS-THROW-001."
+        }
+      ],
+      "check": "sveltekit/security/no-error-message-leak",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "Errors: expected vs unexpected",
+        "paraphrase": "error() renders its message to the client. Passing err.message forwards internal detail, so unexpected failures get a static message while the original is logged."
+      },
+      "why": "Raw error messages carry paths, query fragments and driver detail that help an attacker map the backend.",
+      "fixHint": "Log the original error server-side and throw error(500, ...) with a static message the user can act on.",
+      "avoid": "Concatenating err.message onto a static prefix still sends it. Interpolating it into a template still sends it.",
+      "examples": {
+        "pass": "pass/static-message",
+        "fail": "fail/err-message"
+      }
+    }
+  ]
+}

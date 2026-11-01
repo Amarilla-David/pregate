@@ -1,0 +1,5 @@
+import type { Db, ObjectId } from "mongodb";
+
+export async function rename(db: Db, id: ObjectId, name: string) {
+  await db.collection("users").updateOne({ _id: id }, { name, updatedAt: new Date() });
+}

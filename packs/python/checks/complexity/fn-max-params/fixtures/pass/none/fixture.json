@@ -1,0 +1,11 @@
+{
+  "language": "python",
+  "params": {
+    "max": 4
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

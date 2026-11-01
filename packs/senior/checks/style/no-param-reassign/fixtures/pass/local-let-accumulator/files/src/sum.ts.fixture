@@ -1,0 +1,9 @@
+export function sumPositive(values: readonly number[]): number {
+  let total = 0;
+  for (const v of values) {
+    if (v > 0) {
+      total += v;
+    }
+  }
+  return total;
+}

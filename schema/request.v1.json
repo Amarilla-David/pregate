@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "why": { "type": "string" },
+    "patch": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "op": { "enum": ["add", "replace", "test"] },
+              "path": { "type": "string", "pattern": "^(/([^/~]|~[01])*)*$" },
+              "value": {}
+            },
+            "required": ["op", "path", "value"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": { "const": "remove" },
+              "path": { "type": "string", "pattern": "^(/([^/~]|~[01])*)*$" }
+            },
+            "required": ["op", "path"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "required": ["why", "patch"],
+  "additionalProperties": false
+}

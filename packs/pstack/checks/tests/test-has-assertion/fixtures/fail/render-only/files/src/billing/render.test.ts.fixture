@@ -1,0 +1,9 @@
+
+it("renders the invoice", () => {
+  render(invoice);
+});
+
+const invoice = { id: "inv_1" };
+function render(value: { id: string }): string {
+  return value.id;
+}

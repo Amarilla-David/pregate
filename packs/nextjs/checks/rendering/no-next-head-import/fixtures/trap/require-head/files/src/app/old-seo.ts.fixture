@@ -1,0 +1,2 @@
+const Head = require("next/head");
+export const title = "Old";

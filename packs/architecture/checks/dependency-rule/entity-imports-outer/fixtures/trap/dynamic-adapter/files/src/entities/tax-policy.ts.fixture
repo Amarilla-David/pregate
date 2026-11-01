@@ -1,0 +1,4 @@
+
+export async function rate(): Promise<unknown> {
+  return import("../adapters/tax-service");
+}

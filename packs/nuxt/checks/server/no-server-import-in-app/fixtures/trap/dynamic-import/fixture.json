@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/composables/useLazyOrders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "dynamic-import",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "import() still bundles the server module into the client chunk. The lazy call is not a boundary; only a server route or shared util is."
+  }
+}

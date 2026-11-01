@@ -1,0 +1,4 @@
+declare function createProgramAddressSync(seeds: Uint8Array[], programId: unknown): unknown;
+export function rawPda(seeds: Uint8Array[], programId: unknown): unknown {
+  return createProgramAddressSync(seeds, programId);
+}

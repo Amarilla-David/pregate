@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {
+    "packages": [
+      "zod",
+      "valibot",
+      "ajv",
+      "superstruct",
+      "yup",
+      "io-ts"
+    ],
+    "paths": [
+      "**/domain/**",
+      "**/core/**",
+      "**/entities/**"
+    ]
+  },
+  "target": "src/domain/order.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  }
+}

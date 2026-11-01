@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/security/no-secret-in-load-return",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.secret-in-load-return",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "secret-in-return",
+          "rule": {
+            "kind": "return_statement",
+            "regex": "\\b(SECRET|PRIVATE_KEY|SERVICE_ROLE|TOKEN|PASSWORD|secret|token|password)\\b"
+          },
+          "files": [
+            "**/+page.ts",
+            "**/+page.server.ts",
+            "**/+layout.ts",
+            "**/+layout.server.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} returns a secret-shaped value from load. Load data is serialized to the client; keep tokens and secrets server-side."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "block-return-true",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A block body ending in return true is the same unconditional yes as the arrow form."
+  }
+}

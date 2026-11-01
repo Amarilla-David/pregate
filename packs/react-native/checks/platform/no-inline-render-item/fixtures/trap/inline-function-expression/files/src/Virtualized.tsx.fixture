@@ -1,0 +1,4 @@
+import { VirtualizedList, Text } from "react-native";
+export function Virtualized({ data }: { data: { id: string }[] }) {
+  return <VirtualizedList data={data} renderItem={function ({ item }) { return <Text>{item.id}</Text>; }} />;
+}

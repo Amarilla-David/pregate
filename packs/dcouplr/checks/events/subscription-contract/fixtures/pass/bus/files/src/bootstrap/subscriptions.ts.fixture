@@ -1,0 +1,1 @@
+kernel.eventBus.subscribe('ORDER', listener);

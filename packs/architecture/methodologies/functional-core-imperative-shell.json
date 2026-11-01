@@ -1,0 +1,148 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/functional-core-imperative-shell",
+  "version": "1.1.1",
+  "status": "preview",
+  "conflicts": [
+    {
+      "with": "architecture/clean-architecture",
+      "dimension": "deps.layers",
+      "suggest": {
+        "use": "architecture/CA-DEP-001"
+      },
+      "why": "Both select architecture/dependencies/layer-direction: CA-DEP-001 checks every layer and FCIS-DEP-001 only the core layer. Resolving deps.layers to CA-DEP-001 keeps the wider check, which still covers the core."
+    }
+  ],
+  "invariants": [
+    {
+      "id": "FCIS-DEP-001",
+      "relations": [
+        {
+          "with": "architecture/CA-DEP-001",
+          "kind": "duplicates",
+          "why": "Both select architecture/dependencies/layer-direction: CA-DEP-001 checks every layer and FCIS-DEP-001 only the core layer, so the core check is contained in the wider one.",
+          "settle": "Resolve deps.layers to architecture/CA-DEP-001; the core-layer check stays covered."
+        },
+        {
+          "with": "dcouplr/DCP-EDGE-001",
+          "kind": "duplicates",
+          "why": "Both check imports from core-layer files against the preset layers, so one forbidden edge is reported twice.",
+          "settle": "Keep one of them: both run the same layer-edge evaluation on the core layer."
+        }
+      ],
+      "check": "architecture/dependencies/layer-direction",
+      "defaults": { "paths": ["@layers:core"] },
+      "severity": "deny",
+      "source": {
+        "work": "Boundaries (G. Bernhardt, conference talk, 2012)",
+        "locator": "the functional core and imperative shell section",
+        "paraphrase": "The shell calls the core. The core must not depend on the shell that performs external effects."
+      },
+      "why": "A local shell import can hide external effects even when the core imports no I/O package directly.",
+      "fixHint": "Pass the required values or a narrow collaborator from the shell. Declare any stable data or port layer explicitly in the preset's layer map.",
+      "avoid": "Type-only imports, path aliases and local re-export chains retain the dependency. Unresolved dependencies cannot prove a permitted edge. This graph check does not prove that every implementation is pure or determine module ownership.",
+      "examples": { "pass": "pass/functional-core-inward", "fail": "fail/functional-core-shell" }
+    },
+    {
+      "id": "FCIS-IO-001",
+      "relations": [
+        {
+          "with": "architecture/CA-DEP-002",
+          "kind": "duplicates",
+          "why": "Both deny pg, mysql2, mongodb and @prisma/client in the core layer, so one import of those packages is reported twice.",
+          "settle": "Keep both when each list is wanted; to report once, drop the shared packages from one alias with a packages override."
+        }
+      ],
+      "check": "architecture/dependencies/banned-imports",
+      "defaults": {
+        "paths": [
+          "@layers:core"
+        ],
+        "packages": [
+          "fs",
+          "child_process",
+          "net",
+          "http",
+          "https",
+          "http2",
+          "dgram",
+          "dns",
+          "tls",
+          "cluster",
+          "worker_threads",
+          "readline",
+          "os",
+          "process",
+          "perf_hooks",
+          "timers",
+          "vm",
+          "bun",
+          "bun:sqlite",
+          "bun:ffi",
+          "undici",
+          "node-fetch",
+          "axios",
+          "ws",
+          "pg",
+          "mysql2",
+          "mongodb",
+          "redis",
+          "ioredis",
+          "@prisma/client",
+          "pino",
+          "winston"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Boundaries (G. Bernhardt, conference talk, 2012)",
+        "locator": "the functional core and imperative shell section",
+        "paraphrase": "Keep decisions in a core of pure functions over plain values, and push every interaction with the outside world, such as files, network and processes, out to a thin shell."
+      },
+      "why": "A core that performs I/O cannot be tested with plain values and hides its effects from its callers.",
+      "fixHint": "Let the shell do the I/O and pass the resulting values into core functions; the core returns values that describe what the shell must do.",
+      "avoid": "Importing the same module with a node: prefix, through a subpath such as fs/promises, as a type-only import or through a local re-export.",
+      "examples": {
+        "pass": "pass/core-hashes-without-effects",
+        "fail": "fail/fs-and-https-in-core"
+      }
+    },
+    {
+      "id": "FCIS-IO-002",
+      "relations": [
+        {
+          "with": "maintainability/MAINT-CLOCK-001",
+          "kind": "duplicates",
+          "why": "Both report Date.now() and new Date() in domain files of the core layer, so one clock read is reported twice.",
+          "settle": "FCIS-IO-002 also covers randomness and the environment; turn MAINT-CLOCK-001 off when the core layer is the domain."
+        },
+        {
+          "with": "architecture/ARCH-EFF-002",
+          "kind": "duplicates",
+          "why": "Both flag crypto randomness and performance.now() when domain, entity, or use-case folders belong to the core layer.",
+          "settle": "Keep one active or turn architecture/ARCH-EFF-002 off when FCIS-IO-002 covers the core layer."
+        }
+      ],
+      "check": "architecture/effects/no-clock-random-env",
+      "defaults": {
+        "paths": [
+          "@layers:core"
+        ],
+        "allow": []
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Grokking Simplicity (E. Normand, 2021)",
+        "locator": "ch. 3, Distinguishing actions, calculations, and data",
+        "paraphrase": "Calculations turn equal inputs into equal outputs every time; code whose result depends on the moment it runs or on how many times it runs, like reading the clock or a random number, is an action."
+      },
+      "why": "Reading the clock, randomness, the environment or the network makes the core nondeterministic, so its results cannot be reproduced in a test.",
+      "fixHint": "Read the time, random values and configuration in the shell and pass them to the core as parameters.",
+      "avoid": "Aliasing or destructuring the global, bracket access, going through globalThis, constructing a Date without arguments, or switching to Temporal, node:crypto, Bun, Deno, import.meta.env or the global fetch.",
+      "examples": {
+        "pass": "pass/time-as-input",
+        "fail": "fail/date-now"
+      }
+    }
+  ]
+}

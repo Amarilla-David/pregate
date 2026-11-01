@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/repository/returns-raw-row",
+  "version": "1.0.0",
+  "area": "repository",
+  "cardinality": "singleton",
+  "dimension": "repository.raw-row",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "raw-row",
+          "rule": {
+            "kind": "return_statement",
+            "regex": "return\\s+(row|record|raw)\\s*(;|as\\b)|return\\s+\\{\\s*\\.\\.\\.(row|record|raw)\\b"
+          },
+          "files": [
+            "**/repositories/**",
+            "**/*repository.ts",
+            "**/*-repository.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} returns the raw row from a repository. Map it to the domain type before returning."
+  }
+}

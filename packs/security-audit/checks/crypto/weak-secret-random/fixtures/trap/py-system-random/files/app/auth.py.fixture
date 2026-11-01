@@ -1,0 +1,10 @@
+import random
+
+rng = random.SystemRandom()
+
+
+def new_token():
+    a = rng.choice("abc")
+    b = random.SystemRandom().randint(0, 9)
+    c = random.randint(0, 9)
+    return a, b, c

@@ -1,0 +1,6 @@
+import type { FrameworkAgreement } from "../../entities/framework-agreement";
+import { renewAgreement } from "../../use-cases/framework-agreements/renew";
+
+export function presentAgreement(agreement: FrameworkAgreement): { title: string; renewable: boolean } {
+  return { title: agreement.title, renewable: renewAgreement.length > 0 };
+}

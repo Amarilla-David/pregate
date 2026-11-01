@@ -1,0 +1,16 @@
+import { useForm } from "react-hook-form";
+
+export function Signup(props: { name: string; token: string; kind: string; value: string; on: boolean }) {
+  const { register } = useForm();
+  return (
+    <form>
+      <input defaultValue={props.name} name="name" />
+      <input type="hidden" name="token" value={props.token} />
+      <input type="submit" value="Save" />
+      <button type="submit" value="draft">Save draft</button>
+      <input type={props.kind} value={props.value} />
+      <input {...register("email")} value={props.value} />
+      <input type="checkbox" defaultChecked={props.on} />
+    </form>
+  );
+}

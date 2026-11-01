@@ -1,0 +1,10 @@
+from subprocess import call
+from subprocess import Popen as execute
+
+
+def notify(cmd, env):
+    return call(cmd, env=env, shell=True)
+
+
+def start(self):
+    self.proc = execute(self.cli_cmd, shell=True)

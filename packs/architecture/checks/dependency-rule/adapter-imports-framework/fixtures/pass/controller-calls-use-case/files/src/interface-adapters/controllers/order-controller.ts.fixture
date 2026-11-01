@@ -1,0 +1,8 @@
+import { placeOrder } from "../../use-cases/place-order";
+import type { Order } from "../../entities/order";
+import { toOrderView } from "../presenters/order-presenter";
+
+export function handlePlaceOrder(body: { lines: { amount: number }[] }): { id: string } {
+  const order: Order = placeOrder(body.lines);
+  return toOrderView(order);
+}

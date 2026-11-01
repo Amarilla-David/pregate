@@ -1,0 +1,7 @@
+export function logState(active: boolean): void {
+  if (active) {
+    console.log("active");
+  } else {
+    console.log("inactive");
+  }
+}

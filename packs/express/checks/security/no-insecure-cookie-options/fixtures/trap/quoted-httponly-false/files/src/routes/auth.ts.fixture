@@ -1,0 +1,4 @@
+interface Res { cookie(name: string, val: string, opts?: Record<string, unknown>): void; }
+export function attachSession(res: Res, raw: string): void {
+  res.cookie("session", raw, { "httpOnly": false });
+}

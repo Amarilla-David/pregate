@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/queries/no-db-execute-ddl",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "drizzle.execute-ddl",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "execute-ddl",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\.execute$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "(?i)\\b(CREATE|DROP|ALTER|TRUNCATE)\\b"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} executes DDL at runtime. Change the schema through a drizzle-kit migration instead."
+  }
+}

@@ -1,0 +1,30 @@
+// Parses "key=value;key=value" settings strings.
+
+export function parseSettings(raw: string): Map<string, string> {
+  // Empty input means no settings at all.
+  const settings = new Map<string, string>();
+  if (raw.trim() === "") {
+    return settings;
+  }
+
+  // Entries are separated by semicolons; blank entries are ignored.
+  for (const entry of raw.split(";")) {
+    const trimmed = entry.trim();
+    if (trimmed === "") {
+      continue;
+    }
+
+    /*
+     * A key without "=" is a flag: its value is "true".
+     */
+    const at = trimmed.indexOf("=");
+    if (at < 0) {
+      settings.set(trimmed, "true");
+      continue;
+    }
+
+    // Later entries win over earlier ones.
+    settings.set(trimmed.slice(0, at).trim(), trimmed.slice(at + 1).trim());
+  }
+  return settings;
+}

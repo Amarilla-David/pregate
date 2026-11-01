@@ -1,0 +1,6 @@
+export function parseName(value: unknown): string {
+  if (typeof value === "strnig") {
+    return String(value).trim();
+  }
+  return "";
+}

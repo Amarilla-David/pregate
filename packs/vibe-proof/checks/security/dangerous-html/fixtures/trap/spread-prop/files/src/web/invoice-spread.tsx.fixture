@@ -1,0 +1,5 @@
+
+const dangerouslySetInnerHTML = { __html: "<b>invoice</b>" };
+export function InvoiceHtml() {
+  return <div {...{ dangerouslySetInnerHTML }} />;
+}

@@ -1,0 +1,4 @@
+export async function loadPlugin(modulePath: string): Promise<unknown> {
+  const plugin = await import(modulePath);
+  return plugin.default;
+}

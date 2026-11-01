@@ -1,0 +1,1 @@
+kernel.dependencies.resolve('I_QUEUE', { queueId: 'orders', segmentCapacity: 1, maxSegments: 1, persistence: { __proto__: persistenceConfig } });

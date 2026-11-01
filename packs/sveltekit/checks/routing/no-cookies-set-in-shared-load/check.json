@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/routing/no-cookies-set-in-shared-load",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.cookies-shared-load",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "cookies-shared-load",
+          "files": [
+            "**/+page.ts",
+            "**/+layout.ts",
+            "**/+page.js",
+            "**/+layout.js"
+          ],
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "(^|\\.)cookies\\.(set|delete)$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} mutates cookies inside a universal load file (+page.ts or +layout.ts). Move cookie mutations to +page.server.ts, +layout.server.ts, or +server.ts."
+  }
+}

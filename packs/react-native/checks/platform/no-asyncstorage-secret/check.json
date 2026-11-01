@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/platform/no-asyncstorage-secret",
+  "version": "1.0.0",
+  "area": "platform",
+  "cardinality": "singleton",
+  "dimension": "react-native.no-asyncstorage-secret",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "asyncstorage-secret",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "AsyncStorage\\.(setItem|multiSet)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "(?i)secret|token|password|private_key|privatekey|refresh|credential"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} writes secret-shaped data to AsyncStorage. AsyncStorage is unencrypted: keep tokens in the keychain or secure store."
+  }
+}

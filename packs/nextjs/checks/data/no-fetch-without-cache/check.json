@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-fetch-without-cache",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-fetch-without-cache",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "fetch-cache",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^fetch$"
+            },
+            "not": {
+              "has": {
+                "field": "arguments",
+                "regex": "\\b(cache|revalidate|next)\\b"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} fetches without a cache policy. Pass cache or next.revalidate in the options."
+  }
+}

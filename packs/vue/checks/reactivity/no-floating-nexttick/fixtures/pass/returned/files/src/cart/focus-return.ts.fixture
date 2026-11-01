@@ -1,0 +1,5 @@
+import { nextTick } from "vue";
+
+export function scheduleFocus(): Promise<void> {
+  return nextTick();
+}

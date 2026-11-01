@@ -1,0 +1,1 @@
+export function quote(...values: [number, number, number, number, number]) { return values[0]; }

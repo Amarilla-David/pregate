@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/io/comment-decoy.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-decoy",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Mentioning the factory in a comment does not replace the legacy constructor call."
+  }
+}

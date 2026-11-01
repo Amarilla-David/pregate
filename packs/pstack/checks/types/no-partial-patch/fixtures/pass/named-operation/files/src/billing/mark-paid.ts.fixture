@@ -1,0 +1,6 @@
+
+export function markPaid(order: Order, paidAt: string): Order {
+  return { ...order, status: "paid", paidAt };
+}
+
+interface Order { id: string; status: string; paidAt?: string }

@@ -1,0 +1,6 @@
+import { User } from "../domain/user";
+import { slugify } from "../shared/slugify";
+
+export function registerUser(name: string): User {
+  return new User(slugify(name), name);
+}

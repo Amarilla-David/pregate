@@ -1,0 +1,4 @@
+
+export async function load(url: string, signal: AbortSignal): Promise<Response> {
+  return fetch(url, { signal });
+}

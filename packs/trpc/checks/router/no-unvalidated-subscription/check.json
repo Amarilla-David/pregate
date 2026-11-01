@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/router/no-unvalidated-subscription",
+  "version": "1.0.0",
+  "area": "router",
+  "cardinality": "singleton",
+  "dimension": "trpc.subscription-shape",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "subscription-without-stream",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "^publicProcedure[\\s\\S]*\\.subscription\\s*\\(",
+            "not": {
+              "regex": "(yield|observable\\s*(<[^>]*>)?\\s*\\()"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} declares a subscription with no observable or generator. Back the subscription with observable() or an async generator so callers get a stream they can iterate and unsubscribe from."
+  }
+}

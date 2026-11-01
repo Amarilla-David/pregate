@@ -1,0 +1,7 @@
+import { createHmac } from "node:crypto";
+
+export function verify(body: string, header: string, key: string): boolean {
+  const expectedSignature = createHmac("sha256", key).update(body).digest("hex");
+  if (header !== expectedSignature) return false;
+  return createHmac("sha256", key).update(body).digest("hex") === header;
+}

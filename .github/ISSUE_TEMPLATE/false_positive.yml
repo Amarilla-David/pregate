@@ -1,0 +1,43 @@
+name: False Positive / Rule Dispute
+description: Report an inaccurate rule violation or parser false positive
+title: "[false-positive]: "
+labels: ["false-positive"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Tip**: You can generate a privacy-safe, self-contained report directly from the CLI with `pregate issue draft --last --note "why this should pass"`.
+  - type: input
+    id: rule
+    attributes:
+      label: Check or Rule ID
+      description: For example `architecture/CA-DEP-001` or `clean-code/CC-ER-002`
+      placeholder: "architecture/CA-DEP-001"
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Source Language
+      options:
+        - TypeScript / JavaScript (.ts, .tsx, .js, .jsx)
+        - Vue / Svelte (.vue, .svelte)
+        - Python (.py)
+        - Go (.go)
+        - Rust (.rs)
+    validations:
+      required: true
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Minimal Code Reproduction
+      description: Provide a minimal code snippet and the `.pregate/preset.json` configuration that triggered the violation.
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Why is this a false positive?
+      description: Explain why the check should permit this construct.
+    validations:
+      required: true

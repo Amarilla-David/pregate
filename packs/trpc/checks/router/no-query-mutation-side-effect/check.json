@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/router/no-query-mutation-side-effect",
+  "version": "1.0.0",
+  "area": "router",
+  "cardinality": "singleton",
+  "dimension": "trpc.query-side-effect",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "write-inside-query",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "^publicProcedure[\\s\\S]*\\.query\\s*\\([\\s\\S]*?\\.(create|update|delete|insert|upsert|save)\\s*\\("
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} writes inside a .query resolver. Queries must be read-only; move the write into a .mutation."
+  }
+}

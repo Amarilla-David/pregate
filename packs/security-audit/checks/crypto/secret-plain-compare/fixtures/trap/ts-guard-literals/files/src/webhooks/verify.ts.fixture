@@ -1,0 +1,5 @@
+export function check(signature: string | undefined, digest: string, secret?: string) {
+  if (signature === undefined || signature == null || signature === "") return false;
+  if (digest !== "sha256" || secret === ``) return false;
+  return signature.length === 64 && signature === secret;
+}

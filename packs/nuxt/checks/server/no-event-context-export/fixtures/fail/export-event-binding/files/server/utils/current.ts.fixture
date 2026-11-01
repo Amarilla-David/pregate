@@ -1,0 +1,4 @@
+export const event = null;
+export function version(): string {
+  return "v1";
+}

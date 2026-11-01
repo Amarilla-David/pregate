@@ -1,0 +1,9 @@
+import { useEffect, useState } from "react";
+export function Feed() {
+  const [items, setItems] = useState<string[]>([]);
+  useEffect((async () => {
+    const res = await fetch("/api/feed");
+    setItems(await res.json());
+  })(), []);
+  return <ul>{items}</ul>;
+}

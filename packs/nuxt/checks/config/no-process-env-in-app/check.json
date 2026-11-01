@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/config/no-process-env-in-app",
+  "version": "1.0.0",
+  "area": "config",
+  "cardinality": "singleton",
+  "dimension": "nuxt.no-process-env-in-app",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "process-env",
+          "rule": {
+            "kind": "member_expression",
+            "regex": "^process\\.env\\b"
+          },
+          "files": [
+            "pages/**",
+            "components/**",
+            "composables/**",
+            "app/**",
+            "src/pages/**",
+            "src/components/**",
+            "src/composables/**",
+            "src/app/**"
+          ],
+          "ignores": [
+            "**/server/**",
+            "server/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reads process.env in app code. Read config with useRuntimeConfig so public values ship to the client safely."
+  }
+}

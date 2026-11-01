@@ -1,0 +1,5 @@
+import { users$ } from "./users";
+import { show } from "./screen";
+export function loadUsers(): void {
+  users$.subscribe(show);
+}

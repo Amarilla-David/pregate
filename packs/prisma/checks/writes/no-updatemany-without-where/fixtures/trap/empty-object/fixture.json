@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shop/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-object-update",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "An empty argument object carries no filter either. Missing where is the violation, not just missing data."
+  }
+}

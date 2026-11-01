@@ -1,0 +1,6 @@
+
+export type InvoiceStatus = "open" | "paid" | "void";
+
+export function isOpen(status: InvoiceStatus): boolean {
+  return status === "open";
+}

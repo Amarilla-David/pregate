@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mod/dynamic-bare.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "dynamic-import",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A dynamic import of a bare builtin still needs the prefix. Laziness does not change the specifier."
+  }
+}

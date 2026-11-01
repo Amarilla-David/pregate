@@ -1,0 +1,4 @@
+import { ValidationPipe } from "@nestjs/common";
+export function loosePipe(): ValidationPipe {
+  return new ValidationPipe({ forbidUnknownValues: false });
+}

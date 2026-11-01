@@ -1,0 +1,15 @@
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
+
+const shortLinks = {
+  redirect: (url: string) => url,
+};
+
+export const { handlers, auth } = NextAuth({
+  providers: [Google],
+  callbacks: {
+    redirect: ({ baseUrl }) => baseUrl,
+  },
+});
+
+export { shortLinks };

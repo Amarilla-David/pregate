@@ -1,0 +1,8 @@
+import { ship, type Order } from "./ship";
+
+export async function shipAll(orders: readonly Order[]): Promise<void> {
+  await Promise.all(orders.map(async (order) => ship(order)));
+  for (const order of orders) {
+    await ship(order);
+  }
+}

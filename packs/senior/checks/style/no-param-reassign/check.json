@@ -1,0 +1,112 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/style/no-param-reassign",
+  "version": "1.0.0",
+  "area": "style",
+  "cardinality": "singleton",
+  "dimension": "senior.no-param-reassign",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "param-reassign",
+          "rule": {
+            "any": [
+              {
+                "kind": "assignment_expression",
+                "has": {
+                  "field": "left",
+                  "kind": "identifier",
+                  "pattern": "$PARAM"
+                }
+              },
+              {
+                "kind": "augmented_assignment_expression",
+                "has": {
+                  "field": "left",
+                  "kind": "identifier",
+                  "pattern": "$PARAM"
+                }
+              },
+              {
+                "kind": "update_expression",
+                "has": {
+                  "field": "argument",
+                  "kind": "identifier",
+                  "pattern": "$PARAM"
+                }
+              }
+            ],
+            "inside": {
+              "stopBy": {
+                "kind": "@fn"
+              },
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "function_declaration"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "method_definition"
+                    }
+                  ],
+                  "has": {
+                    "field": "parameters",
+                    "kind": "formal_parameters",
+                    "has": {
+                      "any": [
+                        {
+                          "kind": "required_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "kind": "identifier",
+                            "pattern": "$PARAM"
+                          }
+                        },
+                        {
+                          "kind": "optional_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "kind": "identifier",
+                            "pattern": "$PARAM"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "arrow_function",
+                  "has": {
+                    "field": "parameter",
+                    "kind": "identifier",
+                    "pattern": "$PARAM"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reassigns a function parameter. Bind a new local `const` or `let` instead of mutating parameter bindings."
+  }
+}

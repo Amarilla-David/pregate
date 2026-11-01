@@ -1,0 +1,30 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/clean-code"
+    ],
+    "resolve": {
+      "fn.size": {
+        "use": "example/clean-code"
+      }
+    }
+  },
+  "errors": [
+    "resolve.fn.size: no active invariant has this dimension"
+  ]
+}

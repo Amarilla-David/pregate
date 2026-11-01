@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "upstreamVersion": "0.1.3-beta",
+  "requirements": [
+    {
+      "id": "DCP-QUEUE-RUNTIME-001",
+      "statement": "A queue producer must await admission and handle a false result with a named reject, retry or backpressure policy. Memory capacity and pending-persistence capacity must have explicit budgets.",
+      "when": "The application submits work through IQueue or a compatible configured queue.",
+      "verify": "Hold an admission promise and assert that the actual producer does not report acceptance early. Fill memory and pending-persistence budgets separately and assert the false-result policy. Include missing-await and ignored-false failing controls.",
+      "apiReferences": [{ "type": "IQueue", "members": ["enqueue", "size", "isEmpty"] }, { "type": "IDQueueConfig", "members": ["segmentCapacity", "maxSegments"] }, { "type": "IQueuePersistenceConfig", "members": ["maxPendingOps"] }],
+      "source": "dist/index.mjs:2911-2959,3118-3122; dist/index.d.mts:39-63",
+      "canaries": ["queue admission returns false at capacity and permits admission after removal", "queue pending persistence can reject with spare memory capacity"]
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-002",
+      "statement": "A durability requirement must verify the queue's actual repository and persistence mode. Setting enabled to true or registering a system persistence singleton must not be treated as proof of persistence.",
+      "when": "A queue must survive process loss or satisfy a stored-work contract. Deliberately volatile queues are valid when their loss policy is explicit.",
+      "verify": "Observe actual writes and recovery through the configured queue and repository. For the pinned default queue, pass the resolved singleton repository explicitly: its fallback uses a transient has lookup that does not see the registered singleton. Verify a direct repository's precedence and include an enabled-but-unpersisted failing control.",
+      "apiReferences": [{ "type": "IDQueueConfig", "members": ["repository", "persistence"] }, { "type": "IQueuePersistenceConfig", "members": ["enabled", "mode"] }, { "type": "ISystemDependencyFactories", "members": ["IQueuePersistence"] }, { "type": "IDependenciesGate", "members": ["has", "hasSingleton", "resolveSingleton"] }],
+      "source": "dist/index.mjs:811-827,842-844,2927-2936,3563-3575; dist/index.d.mts:447-453",
+      "canaries": ["enabled queue persistence without a repository silently loses durability", "configured singleton queue persistence is not selected by the default transient has lookup", "explicitly resolved singleton repository provides actual queue persistence", "queue direct repository overrides the system persistence adapter"]
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-003",
+      "statement": "A leading-persistence queue caller must await the actual append or delete outcome and handle failure before it reports the corresponding admission or removal. A rejected operation must not be treated as a completed durable effect.",
+      "when": "The queue uses leading persistence or an adapter promises equivalent stored-before-return behavior.",
+      "verify": "Hold actual repository append and delete promises; assert memory and caller state before and after completion. Reject each operation and assert retained work, later operation progress and the named retry or rejection policy. Verify storage idempotency separately when retries can repeat effects.",
+      "apiReferences": [{ "type": "IQueue", "members": ["enqueue", "dequeue", "peek"] }, { "type": "IQueuePersistence", "members": ["append", "delete"] }],
+      "source": "dist/index.mjs:2947-2986,3092-3106,3129-3133; dist/index.d.mts:55-63,107-113",
+      "canaries": ["leading queue admission waits for append before exposing memory", "leading append failure preserves memory and later operations still run", "leading queue removal waits for delete and retains its pending head", "leading delete failure preserves the item for an explicit retry"]
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-004",
+      "statement": "A lagging-persistence queue must have an owned loss window, background lifetime and failure policy. Successful enqueue must not be reported as durable completion. A background storage failure must be observed and acted on.",
+      "when": "The queue uses lagging persistence. A caller can select leading persistence when its contract needs stored-before-return behavior.",
+      "verify": "Exercise real scheduled batches, coalesced appends and inclusive deletions. Hold and reject the storage operation and verify the application's recovery, retry and shutdown policy. The pinned timer can emit an unhandled rejection after enqueue succeeds; do not assume caller catch handles it. Include early-durability and lost-background-failure controls.",
+      "apiReferences": [{ "type": "IQueuePersistenceConfig", "members": ["mode", "aotMs", "maxPendingOps"] }, { "type": "IQueuePersistence", "members": ["appendBatch", "deleteUpTo"] }, { "type": "IQueue", "members": ["enqueue", "dequeue"] }],
+      "source": "dist/index.mjs:3108-3127,3134-3184; dist/index.d.mts:39-45,107-114",
+      "canaries": ["lagging admission completes before its scheduled persistence", "lagging enqueue then dequeue coalesces away an unpersisted append", "lagging recovery removal batches append before inclusive deletion", "lagging persistence failure escapes the timer as an unhandled rejection"]
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-005",
+      "statement": "A queue flush must be an explicit discard decision. It must not stand in for a persistence commit, a storage deletion or completed shutdown. A discard owner must first stop or settle concurrent writers that could refill the queue.",
+      "when": "The application calls IQueue.flush or clears work during shutdown, cancellation or recovery.",
+      "verify": "Assert memory, pending timer and storage effects separately. Hold a leading enqueue across flush and verify the application's writer barrier. Use an actual owned storage removal or drain contract when deletion or durability is required. Include a flush-as-commit and pending-writer failing control.",
+      "apiReferences": [{ "type": "IQueue", "members": ["flush", "enqueue"] }, { "type": "IQueuePersistence", "members": ["remove"] }],
+      "source": "dist/index.mjs:3003-3020,3203-3225; dist/index.d.mts:55-63,107-114",
+      "canaries": ["queue flush drops unpersisted lagging work instead of committing it", "queue flush does not remove a persisted leading entry", "queue flush can be followed by an already pending leading admission"]
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-006",
+      "statement": "A recovery owner must verify claim ownership and snapshot validity before it admits recovered work. The repository must provide valid bounded entries with unique ordered sequences. A failed or partial recovery must not be treated as a healthy queue.",
+      "when": "The application uses IQueue.recover or a storage adapter returns IQueueRecoveryClaim snapshots.",
+      "verify": "Validate acquired, snapshot shape, capacity, item values and finite valid unique sequence order at the adapter boundary. Exercise denied, missing, rejected, oversized and malformed claims. The pinned runtime trusts item order and duplicate sequences, ignores snapshot.size, and can retain partial memory or disable later persistence after malformed input. Reject unsafe recovery before business processing.",
+      "apiReferences": [{ "type": "IQueue", "members": ["recover"] }, { "type": "IQueuePersistence", "members": ["claimRecovery"] }, { "type": "IQueueRecoveryClaim", "members": ["acquired", "snapshot"] }, { "type": "QueueSnapshot", "members": ["size", "items"] }],
+      "source": "dist/index.mjs:3022-3052,3065-3075; dist/index.d.mts:91-109",
+      "canaries": ["recovery with a denied claim preserves current memory", "recovery without a snapshot preserves current memory", "recovery claim failure rejects without clearing current memory", "acquired recovery replaces memory and advances the highest entry sequence", "oversized recovery rejects after loading a capacity-sized prefix", "recovery trusts duplicate sequence values and incoming item order", "recovery preserves unsorted incoming sequence order", "malformed recovery can leave subsequent leading admission unpersisted"]
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-007",
+      "statement": "Each durable queue identity must have an explicit storage scope and writer-conflict rule. Independent queue instances must not be assumed to share sequence allocation or enforce exclusive ownership.",
+      "when": "More than one instance, process, organization or restart can use the same durable queue identity.",
+      "verify": "Verify stable queue IDs, organization partitioning and actual claim or atomic storage conflict handling. The pinned code trims IDs but hashes their original case; two instances of the same ID can append sequence zero without automatic writer admission. Include duplicate-writer, wrong-scope and restart controls. A normalized storage key is not authorization.",
+      "apiReferences": [{ "type": "IDQueueConfig", "members": ["queueId"] }, { "type": "IQueuePersistence", "members": ["claimRecovery", "append", "delete", "appendBatch", "deleteUpTo"] }],
+      "source": "dist/index.mjs:2922-2924,3059-3075; dist/index.d.mts:99-114,447-453",
+      "canaries": ["queue storage codes trim identity but distinguish case with a hash", "separate queue instances share storage identity without automatic writer ownership"]
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-008",
+      "statement": "A custom queue must satisfy its declared contract and every operation its consumers use. Read views must not be treated as consumption, a concurrent snapshot or a deep copy of item data.",
+      "when": "The product replaces IQueue or uses size, isEmpty, peek, stream, flush or returned values in its decisions.",
+      "verify": "Check actual return types, promises, metadata, mutation ownership and the consumer's required operations. The pinned callable-member admission permits missing size and flush and a nonboolean nonpromise enqueue result. Verify nonconsuming peek/stream and shared item references; add an incomplete-adapter and mutated-item control.",
+      "apiReferences": [{ "type": "IQueue" }, { "type": "ISystemDependencyFactories", "members": ["IQueue"] }],
+      "source": "dist/index.mjs:2983-3002,3439-3450; dist/index.d.mts:55-63,185-186",
+      "canaries": ["queue read views do not consume entries and share item references", "custom queue callable admission does not verify public size flush or result contracts"]
+    }
+  ]
+}

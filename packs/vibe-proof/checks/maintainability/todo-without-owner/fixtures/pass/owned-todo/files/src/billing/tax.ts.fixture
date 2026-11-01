@@ -1,0 +1,5 @@
+
+export function tax(total: number): number {
+  // TODO(ada): round half-up once finance confirms the currency
+  return total;
+}

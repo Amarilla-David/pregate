@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+redis.on("error", (err) => {
+  console.error("redis failed", err);
+});

@@ -1,0 +1,4 @@
+export function ratio(part, whole) {
+  const value = part / whole;
+  return value != NaN ? value : 0;
+}

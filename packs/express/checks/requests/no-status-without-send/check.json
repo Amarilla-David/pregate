@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-status-without-send",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.status-without-send",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "status-alone",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "res\\.status\\s*\\(",
+            "not": {
+              "regex": "\\.(send|json|end|redirect|download)\\s*\\("
+            }
+          }
+        },
+        {
+          "id": "statuscode-assign",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "res\\.statusCode\\s*="
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sets a status without sending a response. Chain .send, .json, or .end so the request does not hang."
+  }
+}

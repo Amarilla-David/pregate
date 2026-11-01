@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/pubsub-close.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "subscriber-abrupt-disconnect",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Calling subscriber.disconnect() drops pending UNSUBSCRIBE frames instead of draining cleanly with quit()."
+  }
+}

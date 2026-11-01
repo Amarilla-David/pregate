@@ -1,0 +1,163 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "clean-code/errors/no-empty-catch",
+  "version": "1.0.0",
+  "area": "errors",
+  "cardinality": "singleton",
+  "dimension": "errors.swallowing",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "swallowed-error",
+          "utils": {
+            "logger-ref": {
+              "kind": "member_expression",
+              "any": [
+                {
+                  "has": {
+                    "field": "property",
+                    "regex": "^(log|warn|error|info|debug|trace)$"
+                  }
+                },
+                {
+                  "has": {
+                    "field": "object",
+                    "kind": "identifier",
+                    "regex": "^console$"
+                  }
+                }
+              ]
+            },
+            "log-call": {
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "matches": "logger-ref"
+              }
+            },
+            "discard": {
+              "kind": "unary_expression",
+              "regex": "^void\\b"
+            },
+            "ignorable-block": {
+              "kind": "statement_block",
+              "not": {
+                "has": {
+                  "not": {
+                    "any": [
+                      {
+                        "regex": "^[{}]$"
+                      },
+                      {
+                        "kind": "comment"
+                      },
+                      {
+                        "kind": "empty_statement"
+                      },
+                      {
+                        "kind": "statement_block",
+                        "matches": "ignorable-block"
+                      },
+                      {
+                        "kind": "expression_statement",
+                        "has": {
+                          "any": [
+                            {
+                              "matches": "log-call"
+                            },
+                            {
+                              "matches": "discard"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "catch-argument": {
+              "inside": {
+                "kind": "arguments",
+                "inside": {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "member_expression",
+                    "has": {
+                      "field": "property",
+                      "regex": "^catch$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "catch_clause",
+                "has": {
+                  "field": "body",
+                  "matches": "ignorable-block"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "kind": "arrow_function"
+                  },
+                  {
+                    "kind": "function_expression"
+                  }
+                ],
+                "matches": "catch-argument",
+                "has": {
+                  "field": "body",
+                  "any": [
+                    {
+                      "matches": "ignorable-block"
+                    },
+                    {
+                      "matches": "log-call"
+                    },
+                    {
+                      "matches": "discard"
+                    },
+                    {
+                      "kind": "undefined"
+                    }
+                  ]
+                }
+              },
+              {
+                "all": [
+                  {
+                    "matches": "logger-ref"
+                  },
+                  {
+                    "matches": "catch-argument"
+                  }
+                ]
+              }
+            ]
+          },
+          "x-note": "A handler that only logs, discards with void, holds comments or nested empty blocks, or returns undefined swallows the error; .catch(console.error) is the point-free form of the same thing. Returning null stays allowed: it is a declared fallback value."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} swallows an error: its handler is empty, only logs or discards it."
+  }
+}

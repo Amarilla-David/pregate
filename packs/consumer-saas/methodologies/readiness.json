@@ -1,0 +1,789 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "consumer-saas/readiness",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "CONSUMER-001",
+      "check": "consumer-saas/account/requirement-001",
+      "defaults": {
+        "verifier": "CONSUMER-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 1",
+        "paraphrase": "A person can create an account without a sales call."
+      },
+      "why": "A person can create an account without a sales call.",
+      "fixHint": "Bind CONSUMER-001 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-001; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-002",
+      "check": "consumer-saas/account/requirement-002",
+      "defaults": {
+        "verifier": "CONSUMER-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 2",
+        "paraphrase": "The product supports sign-in with an email address and a password."
+      },
+      "why": "The product supports sign-in with an email address and a password.",
+      "fixHint": "Bind CONSUMER-002 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-002; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-003",
+      "check": "consumer-saas/account/requirement-003",
+      "defaults": {
+        "verifier": "CONSUMER-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 3",
+        "paraphrase": "The product supports password reset by email."
+      },
+      "why": "The product supports password reset by email.",
+      "fixHint": "Bind CONSUMER-003 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-003; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-004",
+      "check": "consumer-saas/account/requirement-004",
+      "defaults": {
+        "verifier": "CONSUMER-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 4",
+        "paraphrase": "The product verifies the email address before it grants full access."
+      },
+      "why": "The product verifies the email address before it grants full access.",
+      "fixHint": "Bind CONSUMER-004 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-004; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-005",
+      "check": "consumer-saas/account/requirement-005",
+      "defaults": {
+        "verifier": "CONSUMER-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 5",
+        "paraphrase": "The product supports social sign-in when it offers that option."
+      },
+      "why": "The product supports social sign-in when it offers that option.",
+      "fixHint": "Bind CONSUMER-005 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-005; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-006",
+      "check": "consumer-saas/account/requirement-006",
+      "defaults": {
+        "verifier": "CONSUMER-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 6",
+        "paraphrase": "The product lets the user review and end active sessions."
+      },
+      "why": "The product lets the user review and end active sessions.",
+      "fixHint": "Bind CONSUMER-006 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-006; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-007",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-007",
+      "defaults": {
+        "verifier": "CONSUMER-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 7",
+        "paraphrase": "The product shows a privacy policy before or at account creation."
+      },
+      "why": "The product shows a privacy policy before or at account creation.",
+      "fixHint": "Bind CONSUMER-007 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-007; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-008",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-008",
+      "defaults": {
+        "verifier": "CONSUMER-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 8",
+        "paraphrase": "The privacy policy matches the data that the product collects."
+      },
+      "why": "The privacy policy matches the data that the product collects.",
+      "fixHint": "Bind CONSUMER-008 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-008; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-009",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-009",
+      "defaults": {
+        "verifier": "CONSUMER-009"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 9",
+        "paraphrase": "The product collects only the personal data that the service needs."
+      },
+      "why": "The product collects only the personal data that the service needs.",
+      "fixHint": "Bind CONSUMER-009 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-009; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-010",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-010",
+      "defaults": {
+        "verifier": "CONSUMER-010"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 10",
+        "paraphrase": "The product states each category of personal data and the reason for collection."
+      },
+      "why": "The product states each category of personal data and the reason for collection.",
+      "fixHint": "Bind CONSUMER-010 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-010; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-011",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-011",
+      "defaults": {
+        "verifier": "CONSUMER-011"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 11",
+        "paraphrase": "The product records consent before optional processing, such as marketing email."
+      },
+      "why": "The product records consent before optional processing, such as marketing email.",
+      "fixHint": "Bind CONSUMER-011 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-011; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-012",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-012",
+      "defaults": {
+        "verifier": "CONSUMER-012"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 12",
+        "paraphrase": "The product lets the user withdraw consent."
+      },
+      "why": "The product lets the user withdraw consent.",
+      "fixHint": "Bind CONSUMER-012 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-012; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-013",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-013",
+      "defaults": {
+        "verifier": "CONSUMER-013"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 13",
+        "paraphrase": "The product lets the user export personal data in a machine-readable format."
+      },
+      "why": "The product lets the user export personal data in a machine-readable format.",
+      "fixHint": "Bind CONSUMER-013 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-013; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-014",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-014",
+      "defaults": {
+        "verifier": "CONSUMER-014"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 14",
+        "paraphrase": "The product lets the user delete the account and the personal data."
+      },
+      "why": "The product lets the user delete the account and the personal data.",
+      "fixHint": "Bind CONSUMER-014 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-014; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-015",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-015",
+      "defaults": {
+        "verifier": "CONSUMER-015"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 15",
+        "paraphrase": "The product completes a deletion request within the time that the law requires."
+      },
+      "why": "The product completes a deletion request within the time that the law requires.",
+      "fixHint": "Bind CONSUMER-015 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-015; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-016",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-016",
+      "defaults": {
+        "verifier": "CONSUMER-016"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 16",
+        "paraphrase": "The product keeps billing records only for the period that tax law requires."
+      },
+      "why": "The product keeps billing records only for the period that tax law requires.",
+      "fixHint": "Bind CONSUMER-016 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-016; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-017",
+      "check": "consumer-saas/privacy-and-data-rights/requirement-017",
+      "defaults": {
+        "verifier": "CONSUMER-017"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 17",
+        "paraphrase": "The product lists the processors that receive personal data."
+      },
+      "why": "The product lists the processors that receive personal data.",
+      "fixHint": "Bind CONSUMER-017 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-017; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-018",
+      "check": "consumer-saas/security/requirement-018",
+      "defaults": {
+        "verifier": "CONSUMER-018"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 18",
+        "paraphrase": "The product encrypts data in transit with TLS 1.2 or a later version."
+      },
+      "why": "The product encrypts data in transit with TLS 1.2 or a later version.",
+      "fixHint": "Bind CONSUMER-018 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-018; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-019",
+      "check": "consumer-saas/security/requirement-019",
+      "defaults": {
+        "verifier": "CONSUMER-019"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 19",
+        "paraphrase": "The product encrypts personal data at rest."
+      },
+      "why": "The product encrypts personal data at rest.",
+      "fixHint": "Bind CONSUMER-019 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-019; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-020",
+      "check": "consumer-saas/security/requirement-020",
+      "defaults": {
+        "verifier": "CONSUMER-020"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 20",
+        "paraphrase": "The product stores passwords only as a salted hash."
+      },
+      "why": "The product stores passwords only as a salted hash.",
+      "fixHint": "Bind CONSUMER-020 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-020; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-021",
+      "check": "consumer-saas/security/requirement-021",
+      "defaults": {
+        "verifier": "CONSUMER-021"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 21",
+        "paraphrase": "The product does not store a full payment-card number on its own servers."
+      },
+      "why": "The product does not store a full payment-card number on its own servers.",
+      "fixHint": "Bind CONSUMER-021 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-021; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-022",
+      "check": "consumer-saas/security/requirement-022",
+      "defaults": {
+        "verifier": "CONSUMER-022"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 22",
+        "paraphrase": "One user cannot read or change the private content of another user."
+      },
+      "why": "One user cannot read or change the private content of another user.",
+      "fixHint": "Bind CONSUMER-022 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-022; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-023",
+      "check": "consumer-saas/security/requirement-023",
+      "defaults": {
+        "verifier": "CONSUMER-023"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 23",
+        "paraphrase": "The product limits the rate of sign-up, sign-in, and password-reset requests."
+      },
+      "why": "The product limits the rate of sign-up, sign-in, and password-reset requests.",
+      "fixHint": "Bind CONSUMER-023 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-023; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-024",
+      "check": "consumer-saas/security/requirement-024",
+      "defaults": {
+        "verifier": "CONSUMER-024"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 24",
+        "paraphrase": "The product tells the user about a breach that affects their data when the law requires notice."
+      },
+      "why": "The product tells the user about a breach that affects their data when the law requires notice.",
+      "fixHint": "Bind CONSUMER-024 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-024; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-025",
+      "check": "consumer-saas/payments/requirement-025",
+      "defaults": {
+        "verifier": "CONSUMER-025"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 25",
+        "paraphrase": "The product shows the price, the billing period, and the renewal rule before the user pays."
+      },
+      "why": "The product shows the price, the billing period, and the renewal rule before the user pays.",
+      "fixHint": "Bind CONSUMER-025 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-025; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-026",
+      "check": "consumer-saas/payments/requirement-026",
+      "defaults": {
+        "verifier": "CONSUMER-026"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 26",
+        "paraphrase": "The product lets the user cancel a paid plan from the account settings."
+      },
+      "why": "The product lets the user cancel a paid plan from the account settings.",
+      "fixHint": "Bind CONSUMER-026 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-026; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-027",
+      "check": "consumer-saas/payments/requirement-027",
+      "defaults": {
+        "verifier": "CONSUMER-027"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 27",
+        "paraphrase": "The product sends a receipt for each charge."
+      },
+      "why": "The product sends a receipt for each charge.",
+      "fixHint": "Bind CONSUMER-027 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-027; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-028",
+      "check": "consumer-saas/payments/requirement-028",
+      "defaults": {
+        "verifier": "CONSUMER-028"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 28",
+        "paraphrase": "The product does not continue a charge after a valid cancellation takes effect."
+      },
+      "why": "The product does not continue a charge after a valid cancellation takes effect.",
+      "fixHint": "Bind CONSUMER-028 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-028; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-029",
+      "check": "consumer-saas/reliability-and-support/requirement-029",
+      "defaults": {
+        "verifier": "CONSUMER-029"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 29",
+        "paraphrase": "The product defines an availability target."
+      },
+      "why": "The product defines an availability target.",
+      "fixHint": "Bind CONSUMER-029 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-029; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-030",
+      "check": "consumer-saas/reliability-and-support/requirement-030",
+      "defaults": {
+        "verifier": "CONSUMER-030"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 30",
+        "paraphrase": "The product shows service status to users."
+      },
+      "why": "The product shows service status to users.",
+      "fixHint": "Bind CONSUMER-030 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-030; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-031",
+      "check": "consumer-saas/reliability-and-support/requirement-031",
+      "defaults": {
+        "verifier": "CONSUMER-031"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 31",
+        "paraphrase": "The product keeps the user's content available while the account is active."
+      },
+      "why": "The product keeps the user's content available while the account is active.",
+      "fixHint": "Bind CONSUMER-031 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-031; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-032",
+      "check": "consumer-saas/reliability-and-support/requirement-032",
+      "defaults": {
+        "verifier": "CONSUMER-032"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 32",
+        "paraphrase": "The product provides a way for the user to contact support."
+      },
+      "why": "The product provides a way for the user to contact support.",
+      "fixHint": "Bind CONSUMER-032 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-032; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-033",
+      "check": "consumer-saas/reliability-and-support/requirement-033",
+      "defaults": {
+        "verifier": "CONSUMER-033"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 33",
+        "paraphrase": "The product has a written procedure for backup and restore."
+      },
+      "why": "The product has a written procedure for backup and restore.",
+      "fixHint": "Bind CONSUMER-033 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-033; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-034",
+      "check": "consumer-saas/legal-and-product-rules/requirement-034",
+      "defaults": {
+        "verifier": "CONSUMER-034"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 34",
+        "paraphrase": "The product shows terms of service."
+      },
+      "why": "The product shows terms of service.",
+      "fixHint": "Bind CONSUMER-034 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-034; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-035",
+      "check": "consumer-saas/legal-and-product-rules/requirement-035",
+      "defaults": {
+        "verifier": "CONSUMER-035"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 35",
+        "paraphrase": "The product can suspend an account that breaks the terms."
+      },
+      "why": "The product can suspend an account that breaks the terms.",
+      "fixHint": "Bind CONSUMER-035 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-035; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-036",
+      "check": "consumer-saas/legal-and-product-rules/requirement-036",
+      "defaults": {
+        "verifier": "CONSUMER-036"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 36",
+        "paraphrase": "The product provides a way to report abuse."
+      },
+      "why": "The product provides a way to report abuse.",
+      "fixHint": "Bind CONSUMER-036 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-036; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-037",
+      "check": "consumer-saas/legal-and-product-rules/requirement-037",
+      "defaults": {
+        "verifier": "CONSUMER-037"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 37",
+        "paraphrase": "The product blocks access by a child when the law requires an age limit."
+      },
+      "why": "The product blocks access by a child when the law requires an age limit.",
+      "fixHint": "Bind CONSUMER-037 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-037; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-038",
+      "check": "consumer-saas/legal-and-product-rules/requirement-038",
+      "defaults": {
+        "verifier": "CONSUMER-038"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 38",
+        "paraphrase": "The product supports the languages and regions that it claims to serve."
+      },
+      "why": "The product supports the languages and regions that it claims to serve.",
+      "fixHint": "Bind CONSUMER-038 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-038; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "CONSUMER-039",
+      "check": "consumer-saas/legal-and-product-rules/requirement-039",
+      "defaults": {
+        "verifier": "CONSUMER-039"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/consumer-saas-pack.md, rule 39",
+        "paraphrase": "Primary user flows meet the accessibility level that the product claims."
+      },
+      "why": "Primary user flows meet the accessibility level that the product claims.",
+      "fixHint": "Bind CONSUMER-039 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run CONSUMER-039; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

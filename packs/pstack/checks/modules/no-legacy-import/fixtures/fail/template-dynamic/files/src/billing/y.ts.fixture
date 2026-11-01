@@ -1,0 +1,3 @@
+export async function l() {
+  return import(`./pay.legacy`);
+}

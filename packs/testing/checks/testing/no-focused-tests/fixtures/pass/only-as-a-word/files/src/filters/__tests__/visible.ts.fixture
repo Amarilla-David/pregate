@@ -1,0 +1,10 @@
+import { expect, it } from "bun:test";
+import { visible } from "../visible";
+
+const only = { tag: "featured" };
+const items = [{ tag: "featured" }, { tag: "draft" }];
+
+it("keeps only the requested tag", () => {
+  expect(visible(items, only.tag).length).toBe(1);
+  expect(items.slice(1).filter((item) => item.tag !== "skip")).toHaveLength(1);
+});

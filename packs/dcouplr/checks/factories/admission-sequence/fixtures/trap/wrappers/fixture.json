@@ -1,0 +1,36 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/sequence.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 2
+      },
+      {
+        "line": 3
+      },
+      {
+        "line": 4
+      },
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "dcouplr-admission-sequence",
+    "origin": "forge",
+    "discovered": "2026-10-04",
+    "note": "Literal members and transparent wrappers must retain the same stage contract."
+  }
+}

@@ -1,0 +1,5 @@
+import type { Order } from "../domain/order";
+
+export interface OrderStore {
+  save(order: Order): Promise<void>;
+}

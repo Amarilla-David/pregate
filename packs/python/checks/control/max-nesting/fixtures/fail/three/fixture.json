@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "params": {
+    "max": 2
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4,
+        "measured": 3
+      }
+    ]
+  }
+}

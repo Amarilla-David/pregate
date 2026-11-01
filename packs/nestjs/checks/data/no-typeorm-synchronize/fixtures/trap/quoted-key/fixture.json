@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/orders/orders-db.module.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 9
+      }
+    ]
+  },
+  "trap": {
+    "family": "key-spelling",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A quoted key and a line break before .forRoot are the same option on the same module call."
+  }
+}

@@ -1,0 +1,20 @@
+const assert = require('node:assert/strict');
+const { createInvoice } = require('../src/create-invoice.cjs');
+
+let resolutions = 0, charged;
+const kernel = { dependencies: { resolve(id) {
+  resolutions++;
+  assert.equal(id, 'BILLING');
+  return { charge: amount => { charged = amount; return 'accepted'; } };
+} } };
+for (const input of [undefined, {}, { amount: 0 }, { amount: -1 }, { amount: 1.5 },
+  { amount: '10' }, { amount: Infinity }, { amount: 1000001 }, Object.create({ amount: 10 })])
+  assert.throws(() => createInvoice(input, kernel), /Invalid invoice amount/);
+assert.equal(resolutions, 0, 'Invalid input reached dependency resolution');
+const input = { amount: 10 }, invoice = createInvoice(input, kernel);
+input.amount = 500;
+assert.equal(invoice.amount, 10);
+assert.equal(invoice.charge(), 'accepted');
+assert.equal(charged, 10, 'A caller mutation changed the admitted invoice');
+assert.equal(resolutions, 1);
+assert.equal(Object.isFrozen(invoice), true);

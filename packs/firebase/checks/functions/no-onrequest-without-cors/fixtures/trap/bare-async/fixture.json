@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/api/async-api.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "bare-async",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "An async handler still answers without CORS headers. Async controls ordering, not the cross-origin contract."
+  }
+}

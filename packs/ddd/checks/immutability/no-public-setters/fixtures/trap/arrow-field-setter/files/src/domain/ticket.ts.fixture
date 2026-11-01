@@ -1,0 +1,11 @@
+export class Ticket {
+  private assignee: string | null = null;
+
+  constructor(readonly id: string) {}
+
+  assign = (assignee: string): void => {
+    this.assignee = assignee;
+  };
+
+  reassign = (assignee: string) => (this.assignee = assignee);
+}

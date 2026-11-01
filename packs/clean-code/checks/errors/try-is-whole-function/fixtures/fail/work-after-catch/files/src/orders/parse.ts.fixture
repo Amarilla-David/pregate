@@ -1,0 +1,11 @@
+import { normalize, type Order } from "./order";
+
+export function parse(raw: string): Order | null {
+  let order: Order;
+  try {
+    order = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  return normalize(order);
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/server/no-absolute-url-in-app-fetch",
+  "version": "1.0.0",
+  "area": "server",
+  "cardinality": "singleton",
+  "dimension": "nuxt.no-absolute-url-in-app-fetch",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "absolute-url-fetch",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^(fetch|useFetch|useAsyncData|\\$fetch)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "https?://"
+                }
+              }
+            ]
+          },
+          "files": [
+            "pages/**",
+            "components/**",
+            "composables/**",
+            "app/**",
+            "src/pages/**",
+            "src/components/**",
+            "src/composables/**",
+            "src/app/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} fetches an absolute URL from app code. Use a relative path so the request goes through the Nitro proxy."
+  }
+}

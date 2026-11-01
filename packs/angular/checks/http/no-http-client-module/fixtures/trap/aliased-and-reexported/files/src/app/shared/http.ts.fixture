@@ -1,0 +1,8 @@
+import {
+  HttpClientModule as LegacyHttp,
+  HttpClientXsrfModule,
+} from "@angular/common/http";
+
+export const SHARED_HTTP_IMPORTS = [LegacyHttp, HttpClientXsrfModule.withOptions({ cookieName: "XSRF-TOKEN" })];
+
+export { HttpClientJsonpModule } from "@angular/common/http";

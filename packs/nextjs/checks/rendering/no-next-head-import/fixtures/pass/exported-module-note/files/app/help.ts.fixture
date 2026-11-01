@@ -1,0 +1,1 @@
+export function note() { return "next/head"; }

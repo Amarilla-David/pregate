@@ -1,0 +1,7 @@
+export function evaluate(expression: string): number {
+  return eval(expression);
+}
+
+export function compile(body: string): (x: number) => number {
+  return new Function("x", body) as (x: number) => number;
+}

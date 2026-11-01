@@ -1,0 +1,4 @@
+/* eslint-disable -- elon.musk: legacy import migration in progress */
+export const x = 1;
+// @ts-ignore: elon
+export const y = 2;

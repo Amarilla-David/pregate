@@ -1,0 +1,10 @@
+const Clock = Date;
+const { now } = Date;
+
+export function stamp(label: string): string {
+  return `${label}@${Date["now"]()}`;
+}
+
+export function stampWith(label: string): string {
+  return `${label}@${now.call(Clock)}`;
+}

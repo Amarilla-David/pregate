@@ -1,0 +1,5 @@
+export function Host({ session }: { session: string }) {
+  const load = (event: { currentTarget: HTMLIFrameElement }) =>
+    event.currentTarget.contentWindow?.postMessage({ session }, '*');
+  return <iframe src="https://widget.example.com" onLoad={load} />;
+}

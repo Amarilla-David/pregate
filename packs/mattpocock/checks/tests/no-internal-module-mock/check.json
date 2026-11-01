@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mattpocock/tests/no-internal-module-mock",
+  "version": "1.0.0",
+  "area": "tests",
+  "cardinality": "singleton",
+  "dimension": "tests.internal-module-mock",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "relative-module-mock",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "kind": "member_expression",
+              "any": [
+                {
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^(vi|jest)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(mock|doMock|unstable_mockModule)$"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^mock$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^module$"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "all": [
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "kind": "string",
+                    "regex": "^['\"]\\.{1,2}/"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} mocks a relative module. Prefer the real module and a substituted system-boundary adapter."
+  }
+}

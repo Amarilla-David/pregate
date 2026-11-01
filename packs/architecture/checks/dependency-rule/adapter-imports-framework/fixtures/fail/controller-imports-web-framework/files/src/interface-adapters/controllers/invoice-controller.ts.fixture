@@ -1,0 +1,6 @@
+import { app } from "../../frameworks/web/express-app";
+import { issueInvoice } from "../../use-cases/issue-invoice";
+
+export function registerInvoiceRoutes(): void {
+  app.post("/invoices", (body: { id: string }) => issueInvoice(body.id));
+}

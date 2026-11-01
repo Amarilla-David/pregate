@@ -1,0 +1,4 @@
+
+export function isOpen(status: string): boolean {
+  return status === "open";
+}

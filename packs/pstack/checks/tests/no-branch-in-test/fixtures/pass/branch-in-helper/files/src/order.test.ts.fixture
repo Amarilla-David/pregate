@@ -1,0 +1,2 @@
+function price(vip: boolean) { if (vip) return 10; return 20; }
+test("vip", () => { expect(price(true)).toBe(10); });

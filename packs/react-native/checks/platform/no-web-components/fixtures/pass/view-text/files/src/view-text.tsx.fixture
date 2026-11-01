@@ -1,0 +1,5 @@
+import { View, Text } from "react-native";
+
+export function Screen(): unknown {
+  return <View><Text>hi</Text></View>;
+}

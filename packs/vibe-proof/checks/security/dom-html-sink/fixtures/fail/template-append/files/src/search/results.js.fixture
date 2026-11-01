@@ -1,0 +1,8 @@
+export function renderResults(list, query, results) {
+  const heading = document.getElementById("results-heading");
+  heading.innerHTML = `Results for <em>${query}</em>`;
+  for (const result of results) {
+    list.innerHTML += `<li><a href="${result.url}">${result.title}</a></li>`;
+    list.insertAdjacentHTML("afterend", `<p>${results.length} found</p>`);
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "javascript/safety/no-unsafe-negation",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "safety.unsafe-negation",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unsafe-negation",
+          "rule": {
+            "kind": "binary_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "operator",
+                  "regex": "^(in|instanceof)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "left",
+                  "kind": "unary_expression",
+                  "has": {
+                    "field": "operator",
+                    "regex": "^!$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses unexpected negation on left side of in/instanceof operator. Use !(key in obj) or !(obj instanceof Cls)."
+  }
+}

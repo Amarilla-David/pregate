@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/block-total.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "block-scoped-module-let",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A bare block is not a function. The let is still module state that every reader of the file has to track."
+  }
+}

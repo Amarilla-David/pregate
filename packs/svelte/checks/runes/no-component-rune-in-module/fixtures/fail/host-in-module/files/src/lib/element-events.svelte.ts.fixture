@@ -1,0 +1,3 @@
+export function dispatchChange(detail: string): void {
+  $host().dispatchEvent(new CustomEvent("change", { detail }));
+}

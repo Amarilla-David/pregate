@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/fake-allow.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "string-marker",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "The marker has to be a comment on the previous statement. A string with the same words is not a justification."
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/data/no-bare-fetch-in-app",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nuxt.no-bare-fetch-in-app",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-fetch",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "(^|\\.)fetch$"
+            }
+          },
+          "files": [
+            "pages/**",
+            "components/**",
+            "composables/**",
+            "app/**",
+            "src/pages/**",
+            "src/components/**",
+            "src/composables/**",
+            "src/app/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls fetch directly in app code. Use useFetch or useAsyncData so the request dedupes across SSR and client."
+  }
+}

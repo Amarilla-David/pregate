@@ -1,0 +1,10 @@
+import type { App } from "vue";
+
+declare const http: { get(url: string): Promise<unknown> };
+
+export const httpPlugin = {
+  install(app: App) {
+    app.config.globalProperties.$http = http;
+    app.provide("http", http);
+  },
+};

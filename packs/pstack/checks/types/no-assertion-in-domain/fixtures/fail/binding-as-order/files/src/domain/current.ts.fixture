@@ -1,0 +1,5 @@
+
+export const current = raw as Order;
+
+interface Order { id: string; total: number }
+declare const raw: { id: string; total: number };

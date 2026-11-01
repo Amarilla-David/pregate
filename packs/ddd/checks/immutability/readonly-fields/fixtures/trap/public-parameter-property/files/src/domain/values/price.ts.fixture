@@ -1,0 +1,7 @@
+export class Price {
+  constructor(readonly cents: number, public currency: string) {}
+
+  format(): string {
+    return `${(this.cents / 100).toFixed(2)} ${this.currency}`;
+  }
+}

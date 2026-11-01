@@ -1,0 +1,81 @@
+name: "Pregate"
+description: "Pre-execution and CI architectural & invariant gate for AI coding agents and repositories"
+author: "Pedro Knigge"
+branding:
+  icon: "shield"
+  color: "green"
+
+inputs:
+  version:
+    description: "Pregate release version (e.g. 0.0.1)"
+    required: false
+    default: "0.0.1"
+  mode:
+    description: "Command mode: check | ratchet | audit"
+    required: false
+    default: "check"
+  base:
+    description: "Git base ref or SHA when mode is ratchet"
+    required: false
+    default: ""
+  args:
+    description: "Additional arguments passed to pregate (e.g. --all)"
+    required: false
+    default: "--all"
+  sarif:
+    description: "Optional path to write SARIF 2.1.0 report for GitHub Code Scanning"
+    required: false
+    default: ""
+  sarif-file:
+    description: "Alias for sarif: optional path to write SARIF 2.1.0 report"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Pregate
+      shell: bash
+      env:
+        PREGATE_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        os=$(uname -s)
+        arch=$(uname -m)
+        case "$os-$arch" in
+          Darwin-arm64) target="darwin-arm64" ;;
+          Darwin-x86_64) target="darwin-x64" ;;
+          Linux-x86_64) target="linux-x64" ;;
+          Linux-aarch64|Linux-arm64) target="linux-arm64" ;;
+          *) echo "Unsupported runner $os-$arch" >&2; exit 1 ;;
+        esac
+        dir=$(mktemp -d)
+        curl -fsSL "https://github.com/pedroknigge/pregate/releases/download/v${PREGATE_VERSION}/pregate-${PREGATE_VERSION}-${target}.tar.gz" -o "$dir/pregate.tar.gz"
+        tar -xzf "$dir/pregate.tar.gz" -C "$dir"
+        mkdir -p "$HOME/.local/bin"
+        install -m 0755 "$dir/pregate" "$HOME/.local/bin/pregate"
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+    - name: Run Pregate Gate
+      shell: bash
+      env:
+        PREGATE_MODE: ${{ inputs.mode }}
+        PREGATE_BASE: ${{ inputs.base }}
+        PREGATE_ARGS: ${{ inputs.args }}
+        PREGATE_SARIF: ${{ inputs.sarif || inputs.sarif-file }}
+      run: |
+        set -euo pipefail
+        if [ -n "$PREGATE_SARIF" ]; then
+          if [ "$PREGATE_MODE" = "audit" ]; then
+            pregate audit $PREGATE_ARGS --sarif > "$PREGATE_SARIF"
+          elif [ "$PREGATE_MODE" = "ratchet" ] && [ -n "$PREGATE_BASE" ]; then
+            pregate check --ratchet --base "$PREGATE_BASE" --format sarif > "$PREGATE_SARIF"
+          else
+            pregate check $PREGATE_ARGS --format sarif > "$PREGATE_SARIF"
+          fi
+        else
+          if [ "$PREGATE_MODE" = "ratchet" ] && [ -n "$PREGATE_BASE" ]; then
+            pregate check --ratchet --base "$PREGATE_BASE"
+          else
+            pregate "$PREGATE_MODE" $PREGATE_ARGS
+          fi
+        fi

@@ -1,0 +1,1 @@
+stage.addFactoryMethod((((input, kernel, required) => required) as Creator));

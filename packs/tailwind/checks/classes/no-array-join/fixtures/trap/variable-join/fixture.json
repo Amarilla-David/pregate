@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/tw/join-variable.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "variable-array",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Joining a variable array hides every fragment from the scanner; the receiver is .join regardless of whether the array is inline or a parameter."
+  }
+}

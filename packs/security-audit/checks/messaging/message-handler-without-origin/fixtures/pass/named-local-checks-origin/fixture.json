@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/services/restore-session.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

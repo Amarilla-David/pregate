@@ -1,0 +1,3 @@
+def load(target, namespace):
+    module, name = target.split(":", 1)
+    return eval("%s.%s" % (module, name), namespace)

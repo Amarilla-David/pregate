@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/errors/no-throw-in-export",
+  "version": "1.0.0",
+  "area": "errors",
+  "cardinality": "singleton",
+  "dimension": "errors.exported-throw",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "export-throw",
+          "rule": {
+            "kind": "throw_statement",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "method_definition"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ],
+              "inside": {
+                "stopBy": "end",
+                "kind": "export_statement"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} throws from an exported function. Return a result the caller can branch on."
+  }
+}

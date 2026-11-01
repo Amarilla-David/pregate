@@ -1,0 +1,3 @@
+import { readFileSync } from "node:fs";
+
+export const testData: string = readFileSync("fixture.txt", "utf-8");

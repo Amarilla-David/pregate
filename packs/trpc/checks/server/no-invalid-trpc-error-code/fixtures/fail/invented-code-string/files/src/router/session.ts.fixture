@@ -1,0 +1,4 @@
+declare class TRPCError extends Error { constructor(opts: { code: string; message?: string }); }
+export function denySession(): never {
+  throw new TRPCError({ code: "UNAUTHENTICATED", message: "Sign in first" });
+}

@@ -1,0 +1,9 @@
+export default defineNuxtRouteMiddleware((to) => {
+  const user = useState<{ role: string } | null>("user", () => null);
+  if (!user.value) {
+    return navigateTo("/login");
+  }
+  if (to.path.startsWith("/admin") && user.value.role !== "admin") {
+    return abortNavigation("Insufficient permissions.");
+  }
+});

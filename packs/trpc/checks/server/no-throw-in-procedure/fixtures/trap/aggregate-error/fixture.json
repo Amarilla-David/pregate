@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/router/admin.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "aggregate-error",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "AggregateError is still an untyped throw. Clients cannot match it to a tRPC code, so it fails like a plain Error."
+  }
+}

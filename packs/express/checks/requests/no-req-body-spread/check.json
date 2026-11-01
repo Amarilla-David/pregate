@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-req-body-spread",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.body-spread",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "spread-req-body",
+          "rule": {
+            "kind": "object",
+            "regex": "\\.\\.\\.req\\.body"
+          }
+        },
+        {
+          "id": "assign-req-body",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "Object\\.assign\\s*\\([^)]*req\\.body"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} copies the whole request body into an object. Pick the named fields the handler needs instead."
+  }
+}

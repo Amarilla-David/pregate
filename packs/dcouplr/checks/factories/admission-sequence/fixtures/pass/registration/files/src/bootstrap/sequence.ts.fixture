@@ -1,0 +1,1 @@
+builder.declareIntent('ORDER').addMandatoryInputFields({}).addValidationPolicy().addVerificationPolicy().addFactoryMethod(() => ({})).register().raisesEvents([]).withExtendedInfo({ label: 'Order' }).reactsTo([]);

@@ -1,0 +1,12 @@
+{
+  "language": "typescript",
+  "params": {
+    "max": 3,
+    "exempt": []
+  },
+  "target": "src/billing/total.ts",
+  "before": "before/",
+  "expect": {
+    "verdict": "pass"
+  }
+}

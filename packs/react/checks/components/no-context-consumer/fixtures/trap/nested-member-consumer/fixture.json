@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/Nested.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-namespace-consumer",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Accessing Consumer through a nested namespace object is still the legacy Context.Consumer render-prop component."
+  }
+}

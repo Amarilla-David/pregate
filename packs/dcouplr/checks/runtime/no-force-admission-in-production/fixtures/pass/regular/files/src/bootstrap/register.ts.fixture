@@ -1,0 +1,1 @@
+stage.register(); stage.registerSingleton({ id: 'order' });

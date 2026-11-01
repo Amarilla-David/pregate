@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/security/no-insecure-cookie-options",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "express.cookie-options",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "insecure-cookie-options",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^(res|response)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^cookie$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "kind": "object",
+                    "has": {
+                      "kind": "pair",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "key",
+                            "regex": "^['\"]?(httpOnly|secure)['\"]?$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "value",
+                            "kind": "false"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sets httpOnly: false or secure: false on a response cookie. Keep session and auth cookies httpOnly and secure."
+  }
+}

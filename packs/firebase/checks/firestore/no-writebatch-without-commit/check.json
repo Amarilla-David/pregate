@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/firestore/no-writebatch-without-commit",
+  "version": "1.0.0",
+  "area": "firestore",
+  "cardinality": "singleton",
+  "dimension": "firebase.firestore.writebatch-commit",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-batch",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "writeBatch\\s*\\(",
+            "not": {
+              "regex": "\\.commit\\s*\\("
+            }
+          }
+        },
+        {
+          "id": "assigned-batch",
+          "rule": {
+            "kind": "lexical_declaration",
+            "regex": "writeBatch\\s*\\(",
+            "not": {
+              "regex": "\\.commit\\s*\\("
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds a writeBatch with no commit in the same statement. Queued writes never run; chain commit onto the batch statement."
+  }
+}

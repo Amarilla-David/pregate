@@ -1,0 +1,13 @@
+import type Redis from "ioredis";
+
+export class PresenceService {
+  constructor(private readonly redis: Redis) {}
+
+  async start() {
+    await this.redis.subscribe("presence:changed");
+  }
+
+  async lastSeen(userId: string) {
+    return this.redis.get(`presence:${userId}`);
+  }
+}

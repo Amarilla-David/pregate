@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mattpocock/types/no-enum",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "mattpocock.no-enum",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-enum-declaration",
+          "rule": {
+            "kind": "enum_declaration",
+            "not": {
+              "inside": {
+                "kind": "ambient_declaration"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} declares a TypeScript enum. Prefer a union of literal types or an `as const` object so values remain transparent and erasable."
+  }
+}

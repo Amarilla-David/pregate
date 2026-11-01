@@ -1,0 +1,1 @@
+{"language":"typescript","params":{},"target":"src/a.ts","before":null,"expect":{"verdict":"fail","violations":[{"line":1}]},"trap":{"family":"other-options","origin":"forge","discovered":"2026-10-03","note":"Other process options do not remove the shell-injection surface when shell remains true."}}

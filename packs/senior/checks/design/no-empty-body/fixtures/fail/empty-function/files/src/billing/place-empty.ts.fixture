@@ -1,0 +1,4 @@
+
+export function place(order: Order): void {}
+
+interface Order { id: string }

@@ -1,0 +1,2 @@
+
+export const cors = { origin: "*", credentials: true };

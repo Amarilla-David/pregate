@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["@layers"] },
+  "context": {
+    "layers": {
+      "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" },
+      "infra": { "paths": ["src/infra/**"], "mayImport": ["domain"], "kind": "adapter" }
+    }
+  },
+  "target": "src/domain/tax-catalog-door.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 5 }, { "line": 6 }, { "line": 7 }, { "line": 8 }, { "line": 9 }, { "line": 14 }, { "line": 18 }] },
+  "trap": {
+    "family": "dynamic-import",
+    "origin": "real",
+    "discovered": "2026-10-02",
+    "note": "O35 lets a method named require (the pilot's taxCatalogMigration.require()) and an object key eval: through. The loader itself still counts on module and on the global object, cast, chained, by bracket or destructured, right beside the allowed lookalike."
+  }
+}

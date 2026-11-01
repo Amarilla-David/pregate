@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "app/chart/chart.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "lookalike-directive",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A backtick string in the first position reads like the directive but is a template literal, so the module stays a Server Component."
+  }
+}

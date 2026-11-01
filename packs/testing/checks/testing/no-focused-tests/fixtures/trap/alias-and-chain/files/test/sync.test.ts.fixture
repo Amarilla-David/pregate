@@ -1,0 +1,12 @@
+import { expect, it } from "bun:test";
+import { sync } from "../src/sync";
+
+const focus = it.only;
+
+focus("syncs one record", async () => {
+  expect(await sync(["a"])).toBe(1);
+});
+
+it.concurrent.only("syncs many records", async () => {
+  expect(await sync(["a", "b"])).toBe(2);
+});

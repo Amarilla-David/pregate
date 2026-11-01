@@ -1,0 +1,46 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "local",
+        "kind": "path",
+        "path": ".pregate/rules"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "local/team"
+    ],
+    "layers": {
+      "domain": {
+        "paths": [
+          "src/domain/**"
+        ],
+        "mayImport": [],
+        "kind": "core"
+      }
+    },
+    "coexist": {
+      "arkgate": {
+        "ownedByArkgate": [
+          "TEAM-CAST-001"
+        ]
+      }
+    }
+  },
+  "errors": [
+    "coexist.arkgate.ownedByArkgate: core/EVA-CAST-001 is an integrity invariant; PREGATE always enforces it"
+  ]
+}

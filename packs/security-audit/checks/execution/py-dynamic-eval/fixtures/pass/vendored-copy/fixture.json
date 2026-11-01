@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "lib/thirdparty/bottle/bottle.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

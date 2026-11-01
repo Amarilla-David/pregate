@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-req-files-without-filter",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.multer-limits",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "multer-without-limits",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\bmulter\\s*\\(",
+            "not": {
+              "regex": "\\b(limits|fileFilter)\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} accepts uploads with no limits or file filter. Set limits and a fileFilter so callers cannot fill the disk with anything."
+  }
+}

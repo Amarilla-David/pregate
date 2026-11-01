@@ -1,0 +1,17 @@
+import type { Accounts } from "./accounts";
+
+export class CloseAccount {
+  constructor(private readonly accounts: Accounts) {}
+
+  async execute(accountId: string): Promise<void> {
+    await this.accounts.close(accountId);
+  }
+}
+
+export class ReopenAccount {
+  constructor(private readonly accounts: Accounts) {}
+
+  async execute(accountId: string): Promise<void> {
+    await this.accounts.reopen(accountId);
+  }
+}

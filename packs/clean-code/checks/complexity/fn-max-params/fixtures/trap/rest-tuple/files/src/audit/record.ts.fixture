@@ -1,0 +1,4 @@
+export function record(...entry: [actor: string, action: string, target: string, at: number]): string {
+  const [actor, action, target, at] = entry;
+  return `${at} ${actor} ${action} ${target}`;
+}

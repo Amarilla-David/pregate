@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/orders/+page.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "dynamic-import",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A lazy import() of a .server module still pulls server-only code into the universal load. Keep the secret behind a server load and return only public data."
+  }
+}

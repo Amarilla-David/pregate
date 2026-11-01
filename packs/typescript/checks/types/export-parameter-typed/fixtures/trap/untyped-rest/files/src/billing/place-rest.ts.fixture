@@ -1,0 +1,4 @@
+
+export function place(...orders) {
+  return orders.length;
+}

@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function wipe(query: string) {
+  await prisma.$executeRawUnsafe(query);
+}

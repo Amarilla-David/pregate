@@ -1,0 +1,6 @@
+import type { Col } from "./db";
+export async function list(col: Col, req: Req): Promise<void> {
+  await col.find({ $expr: { $eq: ["$role", req.body.role] } });
+}
+
+interface Req { body: { role: string } }

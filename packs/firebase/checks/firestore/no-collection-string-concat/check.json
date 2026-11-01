@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/firestore/no-collection-string-concat",
+  "version": "1.0.0",
+  "area": "firestore",
+  "cardinality": "singleton",
+  "dimension": "firebase.firestore.collection-concat",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "path-plus-concat",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\+",
+            "has": {
+              "field": "function",
+              "regex": "\\b(collection|doc)$"
+            }
+          }
+        },
+        {
+          "id": "path-template",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\$\\{",
+            "has": {
+              "field": "function",
+              "regex": "\\b(collection|doc)$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds a Firestore path by concatenation. Pass each segment as its own argument so Security Rules path matching stays exact."
+  }
+}

@@ -1,0 +1,5 @@
+export const BANNER = "DO NOT EDIT: produced by the nightly report job";
+
+export function withBanner(body: string): string {
+  return `${BANNER}\n${body}`;
+}

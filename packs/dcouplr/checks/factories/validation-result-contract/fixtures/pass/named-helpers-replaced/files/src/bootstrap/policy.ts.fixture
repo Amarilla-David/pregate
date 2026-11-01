@@ -1,0 +1,5 @@
+function check() { function helper() { return 1; } return true; }
+stage.addValidationPolicy(check);
+function replaced() { return 1; }
+replaced = () => true;
+stage.addValidationPolicy(replaced);

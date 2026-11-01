@@ -1,0 +1,6 @@
+import subprocess
+
+
+def archive(name):
+    subprocess.run(["tar", "czf", f"{name}.tgz", "build"], check=True)
+    subprocess.run("make all", shell=True)

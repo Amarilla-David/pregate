@@ -1,0 +1,12 @@
+declare function Controller(prefix?: string): ClassDecorator;
+declare function Post(path?: string): MethodDecorator;
+declare function Res(opts?: { passthrough?: boolean }): ParameterDecorator;
+interface CookieRes { cookie(k: string, v: string): void; }
+@Controller("auth")
+export class AuthController {
+  @Post("login")
+  login(@Res({ passthrough: true }) res: CookieRes): { ok: boolean } {
+    res.cookie("sid", "token");
+    return { ok: true };
+  }
+}

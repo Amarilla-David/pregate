@@ -1,0 +1,17 @@
+import { Module } from "@nestjs/common";
+import { SequelizeModule } from "@nestjs/sequelize";
+import { TypeOrmModule } from "@nestjs/typeorm";
+
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: "postgres",
+      url: process.env.DATABASE_URL,
+      autoLoadEntities: true,
+      synchronize: false,
+      migrationsRun: true,
+    }),
+    SequelizeModule.forRoot({ dialect: "postgres", synchronize: true }),
+  ],
+})
+export class AppModule {}

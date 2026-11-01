@@ -1,0 +1,7 @@
+import express from "express";
+
+export const app = express();
+
+app.del("/orders/:id", (_req, res) => {
+  res.sendStatus(204);
+});

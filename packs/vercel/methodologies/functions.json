@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vercel/functions",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VERCEL-010",
+      "check": "vercel/functions/requirement-010",
+      "defaults": {
+        "verifier": "VERCEL-010"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/functions; checked 2026-10-05; docs/features/vercel-pack.md, rule 10",
+        "paraphrase": "Each function must use a runtime and configuration supported by its selected Vercel execution model."
+      },
+      "why": "Each function must use a runtime and configuration supported by its selected Vercel execution model.",
+      "fixHint": "Bind VERCEL-010 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-010; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-011",
+      "check": "vercel/functions/requirement-011",
+      "defaults": {
+        "verifier": "VERCEL-011"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/functions; checked 2026-10-05; docs/features/vercel-pack.md, rule 11",
+        "paraphrase": "Each function must keep execution duration and resource use inside the current limits and the project's reviewed budget for that plan and compute mode."
+      },
+      "why": "Each function must keep execution duration and resource use inside the current limits and the project's reviewed budget for that plan and compute mode.",
+      "fixHint": "Bind VERCEL-011 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-011; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-012",
+      "check": "vercel/functions/requirement-012",
+      "defaults": {
+        "verifier": "VERCEL-012"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/functions; checked 2026-10-05; docs/features/vercel-pack.md, rule 12",
+        "paraphrase": "Required work after a response must use a supported lifecycle mechanism or durable service; a detached promise must not be assumed to complete."
+      },
+      "why": "Required work after a response must use a supported lifecycle mechanism or durable service; a detached promise must not be assumed to complete.",
+      "fixHint": "Bind VERCEL-012 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-012; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

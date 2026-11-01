@@ -1,0 +1,6 @@
+// Corpus look-alike (nextTick shims): only this window can post a message whose source is this window.
+const queue = [];
+window.addEventListener("message", function (event) {
+  const source = event.source;
+  if ((source === window || source === null) && event.data === "tick") queue.shift()?.();
+}, true);

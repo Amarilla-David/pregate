@@ -1,0 +1,6 @@
+
+namespace Orders {
+  export namespace Status {
+    export const open = "open";
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "middleware/admin.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "unreturned-abort",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "abortNavigation reads like a command that stops the route, but middleware only cancels a navigation when the helper's result is returned."
+  }
+}

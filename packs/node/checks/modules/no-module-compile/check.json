@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/modules/no-module-compile",
+  "version": "1.0.0",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "node.no-module-compile",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "module-loader-internals",
+          "rule": {
+            "any": [
+              { "kind": "member_expression", "regex": "^(module|Module)\\._compile$" },
+              { "kind": "member_expression", "regex": "^require\\.extensions$" }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} touches the module loader internals. Load code with a static import or a dynamic import instead." }
+}

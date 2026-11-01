@@ -1,0 +1,11 @@
+export function issueInvoice(id: string): string {
+  return id;
+}
+
+/** @deprecated Use issueInvoice; removed once the v1 API is retired. */
+export function createInvoice(id: string): string {
+  return issueInvoice(id);
+}
+
+/** @deprecated {@link issueInvoice} replaces this after the 2027 billing migration. */
+export const makeInvoice = createInvoice;

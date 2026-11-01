@@ -1,0 +1,20 @@
+{
+  "language": "rust",
+  "params": {},
+  "target": "src/core_stub.rs",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "core-qualified-unimplemented",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "A fully qualified core::unimplemented! macro invocation panics identically to bare unimplemented!."
+  }
+}

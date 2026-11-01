@@ -1,0 +1,4 @@
+const check = () => true;
+stage.addValidationPolicy(check);
+function verify() { return 1; }
+stage.addVerificationPolicy(verify);

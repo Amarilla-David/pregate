@@ -1,0 +1,4 @@
+export async function load({ fetch, params }) {
+	const res = await fetch(`https://api.example.com/orders/${params.id}`);
+	return { order: await res.json() };
+}

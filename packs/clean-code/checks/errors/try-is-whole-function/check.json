@@ -1,0 +1,104 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "clean-code/errors/try-is-whole-function",
+  "version": "1.0.0",
+  "area": "errors",
+  "cardinality": "singleton",
+  "dimension": "errors.try-placement",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "try-beside-other-work",
+          "utils": {
+            "function-like": {
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "generator_function_declaration"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "method_definition"
+                }
+              ]
+            },
+            "function-body": {
+              "kind": "statement_block",
+              "inside": {
+                "field": "body",
+                "matches": "function-like"
+              }
+            },
+            "statement": {
+              "not": {
+                "any": [
+                  {
+                    "kind": "comment"
+                  },
+                  {
+                    "kind": "empty_statement"
+                  },
+                  {
+                    "regex": "^[{}]$"
+                  }
+                ]
+              }
+            }
+          },
+          "rule": {
+            "kind": "try_statement",
+            "inside": {
+              "stopBy": "end",
+              "matches": "function-like"
+            },
+            "any": [
+              {
+                "not": {
+                  "inside": {
+                    "matches": "function-body"
+                  }
+                }
+              },
+              {
+                "follows": {
+                  "stopBy": "end",
+                  "matches": "statement"
+                }
+              },
+              {
+                "precedes": {
+                  "stopBy": "end",
+                  "matches": "statement"
+                }
+              }
+            ]
+          },
+          "x-note": "A try inside a function must be the function body's only statement: a statement before it, a statement after its catch/finally, or a try nested in an if, loop, catch or other block is reported. Comments do not count. A try outside every function, such as a module-level script entry, is not checked."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} handles an error and also does other work. Move the try/catch into a function of its own."
+  }
+}

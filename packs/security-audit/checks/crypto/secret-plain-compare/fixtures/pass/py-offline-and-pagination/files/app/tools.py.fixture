@@ -1,0 +1,22 @@
+import hmac
+import os
+
+
+def crack_hmac(secrets, message, target, fn):
+    for secret in secrets:
+        if hmac.new(secret, message, fn).digest() == target:
+            return secret
+
+
+def _livetest():
+    SECRET = "fixture-value"
+
+    def check(got):
+        return got == SECRET
+    return check
+
+
+def page(response, last):
+    api_key = os.environ["API_KEY"]
+    headers = {"x-api-key": api_key}
+    return response.next_token != last.next_token, headers

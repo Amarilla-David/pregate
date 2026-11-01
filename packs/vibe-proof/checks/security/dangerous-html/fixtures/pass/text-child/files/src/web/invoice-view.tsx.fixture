@@ -1,0 +1,4 @@
+
+export function InvoiceView(props: { title: string }) {
+  return <p>{props.title}</p>;
+}

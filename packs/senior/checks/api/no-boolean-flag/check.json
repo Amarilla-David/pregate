@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/api/no-boolean-flag",
+  "version": "1.0.0",
+  "area": "api",
+  "cardinality": "singleton",
+  "dimension": "api.boolean-flag",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "boolean-param",
+          "rule": {
+            "any": [
+              {
+                "kind": "required_parameter"
+              },
+              {
+                "kind": "optional_parameter"
+              }
+            ],
+            "has": {
+              "field": "type",
+              "has": {
+                "stopBy": "neighbor",
+                "kind": "predefined_type",
+                "regex": "^boolean$"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} takes a boolean parameter. Split the operation or name the mode."
+  }
+}

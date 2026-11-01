@@ -1,0 +1,7 @@
+import { computed, signal } from "@angular/core";
+const total = signal(0);
+const items = signal(0);
+export const summary = computed(() => {
+  total.set(items());
+  return total();
+});

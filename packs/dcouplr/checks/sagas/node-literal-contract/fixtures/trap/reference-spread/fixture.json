@@ -1,0 +1,24 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/sagas.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "duplicate-saga-reference",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "An explicit repeated literal remains invalid beside a spread or transparent wrapper."
+  }
+}

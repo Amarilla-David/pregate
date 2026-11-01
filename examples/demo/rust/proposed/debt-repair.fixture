@@ -1,0 +1,3 @@
+pub fn legacy() -> i32 {
+    10
+}

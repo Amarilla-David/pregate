@@ -1,0 +1,34 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/tdd"
+    ],
+    "overrides": {
+      "TDD-FOCUS-001": {
+        "params": {
+          "paths": [
+            "src/**"
+          ]
+        }
+      }
+    }
+  },
+  "errors": [
+    "example/TDD-FOCUS-001: params.paths: example/testing/no-focused-tests already restricts paths through its patterns' files"
+  ]
+}

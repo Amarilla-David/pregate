@@ -1,0 +1,2 @@
+function other(Infinity: number) { return Infinity; }
+startDcouplrInspector(app, {maxEvents: Infinity});

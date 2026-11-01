@@ -1,0 +1,2 @@
+const controller = new AbortController();
+export async function search(q: string) { return fetch(q, { signal: controller.signal }); }

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "go",
+  "params": { "paths": ["**/test_*.py", "**/*_test.py", "**/*_test.go"] },
+  "target": "parse/parse_test.go",
+  "before": null,
+  "expect": { "verdict": "pass" }
+}

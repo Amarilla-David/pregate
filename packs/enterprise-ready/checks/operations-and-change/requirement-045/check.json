@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/operations-and-change/requirement-045",
+  "version": "1.0.0",
+  "area": "operations-and-change",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r045",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-045"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-045 requires current passing project verification: {symbol}."
+  }
+}

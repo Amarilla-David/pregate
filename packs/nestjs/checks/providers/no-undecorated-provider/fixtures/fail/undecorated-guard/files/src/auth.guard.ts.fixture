@@ -1,0 +1,6 @@
+export interface CanActivate { canActivate(ctx: unknown): boolean; }
+export class AuthGuard implements CanActivate {
+  canActivate(_ctx: unknown): boolean {
+    return false;
+  }
+}

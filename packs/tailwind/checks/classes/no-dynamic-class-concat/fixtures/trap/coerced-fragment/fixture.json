@@ -1,0 +1,1 @@
+{"language":"typescript","params":{},"target":"src/tw/coerced.tsx","before":null,"expect":{"verdict":"fail","violations":[{"line":2}]},"trap":{"family":"coerced-fragment","origin":"forge","discovered":"2026-10-03","note":"Wrapping a dynamic fragment in String still prevents the scanner from seeing the generated utility."}}

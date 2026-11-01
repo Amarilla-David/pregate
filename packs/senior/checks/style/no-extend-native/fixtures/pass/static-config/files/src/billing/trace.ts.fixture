@@ -1,0 +1,6 @@
+
+Error.stackTraceLimit = 50;
+
+export function capture(): string {
+  return new Error("probe").stack ?? "";
+}

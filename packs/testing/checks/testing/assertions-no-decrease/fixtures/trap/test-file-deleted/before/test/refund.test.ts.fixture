@@ -1,0 +1,7 @@
+import { expect, it } from "bun:test";
+import { refund } from "../src/refund";
+
+it("refunds the full amount", () => {
+  expect(refund(1_000, 0)).toBe(1_000);
+  expect(refund(1_000, 250)).toBe(750);
+});

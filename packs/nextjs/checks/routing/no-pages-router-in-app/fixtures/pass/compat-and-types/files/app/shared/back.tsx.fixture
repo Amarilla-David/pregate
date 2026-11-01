@@ -1,0 +1,9 @@
+"use client";
+import { useRouter } from "next/compat/router";
+import type { NextRouter } from "next/router";
+import { type SingletonRouter } from "next/router";
+
+export function Back(props: { fallback?: NextRouter; singleton?: SingletonRouter }) {
+  const router = useRouter();
+  return <button onClick={() => router?.back()}>Back</button>;
+}

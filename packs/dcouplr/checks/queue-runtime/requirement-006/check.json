@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/queue-runtime/requirement-006",
+  "version": "1.0.0",
+  "area": "queue-runtime",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.queue-runtime.r006",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DCP-QUEUE-RUNTIME-006"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DCP-QUEUE-RUNTIME-006 requires current passing project queue-runtime verification: {symbol}."
+  }
+}

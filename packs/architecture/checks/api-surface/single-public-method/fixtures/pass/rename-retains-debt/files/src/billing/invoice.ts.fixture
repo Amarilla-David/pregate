@@ -1,0 +1,4 @@
+export class Receipt {
+  subtotal(): number { return 100; }
+  tax(): number { return 20; }
+}

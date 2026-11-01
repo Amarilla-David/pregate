@@ -1,0 +1,4 @@
+function Rows({ ids }) {
+  const [selected] = useState(0);
+  return ids.map(id => id === selected);
+}

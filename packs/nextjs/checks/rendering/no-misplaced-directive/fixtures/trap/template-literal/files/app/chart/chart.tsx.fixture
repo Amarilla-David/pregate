@@ -1,0 +1,8 @@
+`use client`;
+import { useEffect, useRef } from "react";
+
+export function Chart() {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => ref.current?.getContext("2d")?.fillRect(0, 0, 10, 10), []);
+  return <canvas ref={ref} />;
+}

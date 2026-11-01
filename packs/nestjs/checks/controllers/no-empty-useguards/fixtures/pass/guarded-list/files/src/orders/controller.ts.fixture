@@ -1,0 +1,10 @@
+import { Controller, Get, UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "./jwt-auth.guard";
+@Controller("orders")
+export class OrdersController {
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  list() {
+    return [];
+  }
+}

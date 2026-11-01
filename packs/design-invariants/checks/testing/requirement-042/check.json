@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/testing/requirement-042",
+  "version": "1.0.0",
+  "area": "testing",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r042",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-042"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-042 requires current passing project verification: {symbol}."
+  }
+}

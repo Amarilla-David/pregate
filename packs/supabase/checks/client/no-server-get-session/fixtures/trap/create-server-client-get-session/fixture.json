@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/server-auth.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "server-client-helper-get-session",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Calling client.auth.getSession() on a createServerClient instance skips server-side JWT revalidation just like in a route handler."
+  }
+}

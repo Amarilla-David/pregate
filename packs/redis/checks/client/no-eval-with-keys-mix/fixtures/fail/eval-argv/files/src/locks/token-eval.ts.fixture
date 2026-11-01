@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function echoToken(token: string): Promise<unknown> {
+  return redis.eval("return ARGV[1]", 0, token);
+}

@@ -1,0 +1,7 @@
+
+export async function loadUser(n: number, client: Client): Promise<unknown> {
+  return client.query({ query: GET_USER, variables: { id: `u-${n}` } });
+}
+
+declare const GET_USER: unknown;
+interface Client { query(options: { query: unknown; variables: object }): Promise<unknown> }

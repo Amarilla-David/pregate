@@ -1,0 +1,134 @@
+{
+  "$schema": "../../schema/methodology.v1.json",
+  "id": "core/pregate-integrity",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "EVA-GEN-001",
+      "check": "core/integrity/new-generated-marker",
+      "defaults": {
+        "markers": [
+          "@generatedMarkers"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE anti-evasion policy",
+        "locator": "SPEC §10.1 (self-exemption) and DD-21",
+        "paraphrase": "Marking hand-written code as generated exempts it from review and from later edits; only a generator may introduce the marker."
+      },
+      "why": "A generated marker makes reviewers and tools skip the file and freezes it against later edits.",
+      "fixHint": "Remove the marker; if the file really comes from a generator, run the generator and ask the user to commit its output.",
+      "avoid": "Actual line or block comments carry generated markers in supported source. Strings, templates, regular expressions, JSX text and JSON data do not. Markdown counts genuine HTML comments outside fenced, indented and matched backtick code; prose and examples do not exempt a file. Unsupported executable source retains conservative substring matching. Invalid parsed source cannot hide a marker through syntax recovery.",
+      "examples": {
+        "pass": "pass/no-marker",
+        "fail": "fail/new-file-with-marker"
+      }
+    },
+    {
+      "id": "EVA-GEN-002",
+      "check": "core/integrity/edit-generated-or-excluded",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE anti-evasion policy",
+        "locator": "SPEC §8.5.10 and DD-21",
+        "paraphrase": "Files that were generated or excluded before the session are regenerated or changed by people, never edited by the agent, because no rule evaluates them."
+      },
+      "why": "Edits to generated or excluded files skip every rule and are lost or overwritten at the next regeneration.",
+      "fixHint": "Change the source the file is generated from, or ask the user to bring the file into scope in the preset.",
+      "avoid": "Deleting a genuine comment marker in the same edit, or moving code to an excluded path, does not bypass placement. Generated-marker detection uses the same comment and documentation semantics as EVA-GEN-001. Unsupported executable source retains conservative substring matching; unsupported language coverage remains incomplete.",
+      "examples": {
+        "pass": "pass/edit-regular-file",
+        "fail": "fail/edit-generated-file"
+      }
+    },
+    {
+      "id": "EVA-SUP-001",
+      "check": "core/integrity/new-inline-suppression",
+      "defaults": {
+        "markers": [
+          "pregate-disable",
+          "eslint-disable",
+          "@ts-ignore",
+          "@ts-nocheck",
+          "@ts-expect-error",
+          "biome-ignore",
+          "oxlint-disable",
+          "deno-lint-ignore"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE anti-evasion policy",
+        "locator": "SPEC §10.1 (inline suppression)",
+        "paraphrase": "An inline suppression turns a check off at the exact spot where it found a problem; suppressions are a human decision, so the agent does not add new ones."
+      },
+      "why": "Each new suppression silences a check exactly where it found a problem.",
+      "fixHint": "Fix the reported problem; if the rule is wrong here, write a request under .pregate/requests/ proposing an override and tell the user.",
+      "avoid": "File-wide block comments and swapping one suppression for another tool's syntax remain checked. Supported source counts comment tokens, not strings, JSX text, templates, regular expressions or documentation examples. This counts marker occurrences in comments; it does not implement each linter's directive grammar. Unsupported executable source and invalid recovered trees retain conservative substring matching.",
+      "examples": {
+        "pass": "pass/no-suppression",
+        "fail": "fail/ts-ignore-added"
+      }
+    },
+    {
+      "id": "EVA-SCOPE-001",
+      "check": "core/integrity/out-of-scope-file",
+      "defaults": {
+        "extensions": [
+          "",
+          "py",
+          "pyi",
+          "go",
+          "rs",
+          "java",
+          "kt",
+          "kts",
+          "groovy",
+          "scala",
+          "clj",
+          "cljs",
+          "rb",
+          "php",
+          "cs",
+          "swift",
+          "ex",
+          "exs",
+          "erl",
+          "dart",
+          "lua",
+          "pl",
+          "r",
+          "c",
+          "h",
+          "cc",
+          "cpp",
+          "hpp",
+          "sql",
+          "sh",
+          "bash",
+          "zsh",
+          "fish",
+          "ps1",
+          "astro"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE anti-evasion policy",
+        "locator": "SPEC §8.5.10-11",
+        "paraphrase": "New code goes where the rules apply; a new file in an excluded path, or a file in a language without analysis inside a layer, escapes every check."
+      },
+      "why": "Code outside the evaluated scope is code no invariant protects.",
+      "fixHint": "Write the code in an in-scope file of a supported language; if that path or language is required, ask the user to change the preset.",
+      "avoid": "Other excluded folders, other programming languages (also with the extension in capitals), or files without an extension inside a layer.",
+      "examples": {
+        "pass": "pass/new-file-in-scope",
+        "fail": "fail/new-file-in-exclude"
+      }
+    }
+  ]
+}

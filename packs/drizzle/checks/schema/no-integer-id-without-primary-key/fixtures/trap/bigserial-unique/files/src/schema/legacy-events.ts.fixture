@@ -1,0 +1,4 @@
+export const events = pgTable("events", {
+  id: bigserial("id", { mode: "number" }).unique(),
+  kind: text("kind").notNull(),
+});

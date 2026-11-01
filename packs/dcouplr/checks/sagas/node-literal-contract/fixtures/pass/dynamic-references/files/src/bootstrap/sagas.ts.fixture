@@ -1,0 +1,1 @@
+saga.registerNode({kind: 'join', stepId: 'join', mode: 'any', expectedStepIds: [nextId(), nextId()]});

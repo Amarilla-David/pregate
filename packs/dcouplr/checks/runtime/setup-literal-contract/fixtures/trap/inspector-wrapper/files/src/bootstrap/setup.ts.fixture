@@ -1,0 +1,1 @@
+lib['startDcouplrInspector']?.(app, ({debugConsole: {path: 1}} as Options));

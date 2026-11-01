@@ -1,0 +1,11 @@
+import random
+
+
+def make_boundary():
+    nonce = "%016x" % random.getrandbits(64)
+    return "----form-" + nonce
+
+
+def list_page(client):
+    next_token = random.choice(client.cursors)
+    return client.get(next_token=next_token)

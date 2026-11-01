@@ -1,0 +1,28 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "mixed",
+        "kind": "path",
+        "path": ".pregate/mixed"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": []
+  },
+  "errors": [
+    "sources: mixed (.pregate/mixed): checks/money/no-hand-rounding/check.json: its patterns declare different files or ignores; split them into separate checks"
+  ]
+}

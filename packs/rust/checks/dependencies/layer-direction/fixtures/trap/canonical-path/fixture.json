@@ -1,0 +1,62 @@
+{
+  "language": "rust",
+  "params": {
+    "paths": [
+      "@layers:core"
+    ]
+  },
+  "target": "src/domain/a.rs",
+  "before": null,
+  "context": {
+    "layers": {
+      "core": {
+        "paths": [
+          "src/domain/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "core"
+      },
+      "ports": {
+        "paths": [
+          "src/ports.rs"
+        ],
+        "mayImport": [],
+        "kind": "port"
+      },
+      "infra": {
+        "paths": [
+          "src/infra.rs"
+        ],
+        "mayImport": [
+          "*"
+        ],
+        "kind": "adapter"
+      },
+      "main": {
+        "paths": [
+          "src/lib.rs"
+        ],
+        "mayImport": [
+          "*"
+        ],
+"kind": "main"
+      }
+    }
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "canonical-path",
+    "origin": "forge",
+    "discovered": "2026-10-07",
+    "note": "A canonical path reaches the same forbidden adapter without a use declaration."
+  }
+}

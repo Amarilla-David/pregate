@@ -1,0 +1,5 @@
+declare const redis: { mget(...keys: string[]): Promise<(string | null)[]> };
+export async function loadProfiles(ids: string[]): Promise<(string | null)[]> {
+  const keys = ids.map((id) => `profile:${id}`);
+  return await redis.mget(...keys);
+}

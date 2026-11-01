@@ -1,0 +1,5 @@
+import { useRef } from "react";
+export function Box() {
+  const boxRef = useRef<HTMLElement>(null);
+  return <section ref={boxRef}>box</section>;
+}

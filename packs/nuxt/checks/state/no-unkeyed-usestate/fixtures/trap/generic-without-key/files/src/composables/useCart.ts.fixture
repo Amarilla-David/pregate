@@ -1,0 +1,5 @@
+import { useState } from "#app";
+export function useCart(): Array<string> {
+  const items = useState<Array<string>>();
+  return items.value;
+}

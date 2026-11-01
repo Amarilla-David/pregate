@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "redis/keys/no-flush-in-app",
+  "version": "1.0.0",
+  "area": "keys",
+  "cardinality": "singleton",
+  "dimension": "redis.app-danger-commands",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "danger-command",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.(flush[Aa]ll|flush[Dd]b|config|debug)\\s*\\("
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} runs a server-danger command from app code. Keep flush/config/debug in ops tooling."
+  }
+}

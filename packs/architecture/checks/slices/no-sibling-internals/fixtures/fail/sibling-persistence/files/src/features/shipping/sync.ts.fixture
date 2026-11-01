@@ -1,0 +1,6 @@
+
+import { rows } from "../billing/persistence/invoices";
+
+export function sync(): string {
+  return rows.name;
+}

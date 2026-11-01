@@ -1,0 +1,4 @@
+
+export function notify(userId: string, mode: "email" | "none"): string {
+  return userId + mode;
+}

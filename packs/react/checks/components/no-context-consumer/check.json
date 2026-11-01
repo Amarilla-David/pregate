@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react/components/no-context-consumer",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "react.context-consumer",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "context-consumer",
+          "rule": {
+            "regex": "^<[^/]",
+            "has": {
+              "field": "name",
+              "kind": "member_expression",
+              "regex": "\\.Consumer$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} renders a legacy <Context.Consumer>. Read context with useContext(Context) or use(Context) instead."
+  }
+}

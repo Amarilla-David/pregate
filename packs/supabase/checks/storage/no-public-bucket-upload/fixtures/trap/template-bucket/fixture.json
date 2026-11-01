@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/brand.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-bucket",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Backticks do not change the bucket. A template literal naming public is still a write to the public bucket."
+  }
+}

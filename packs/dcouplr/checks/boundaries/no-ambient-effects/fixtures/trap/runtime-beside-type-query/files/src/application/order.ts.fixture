@@ -1,0 +1,5 @@
+admission.addFactoryMethod(() => {
+  type Fetch = typeof fetch;
+  const capture = fetch as typeof fetch;
+  return { kind: () => typeof fetch };
+});

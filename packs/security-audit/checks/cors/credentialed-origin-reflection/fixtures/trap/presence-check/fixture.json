@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/server/middleware.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "partial-check",
+    "note": "Testing that an Origin header is present is not an allowlist; the reflected value is still any origin.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

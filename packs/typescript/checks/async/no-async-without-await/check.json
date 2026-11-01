@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/async/no-async-without-await",
+  "version": "1.0.0",
+  "area": "async",
+  "cardinality": "singleton",
+  "dimension": "typescript.async-await-presence",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "async-without-await",
+          "rule": {
+            "any": [
+              {
+                "kind": "function_declaration",
+                "regex": "^async\\b",
+                "not": {
+                  "has": {
+                    "stopBy": "end",
+                    "kind": "await_expression"
+                  }
+                }
+              },
+              {
+                "kind": "arrow_function",
+                "regex": "^async\\b",
+                "not": {
+                  "has": {
+                    "stopBy": "end",
+                    "kind": "await_expression"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is async but never awaits. Remove async, or await the work it does."
+  }
+}

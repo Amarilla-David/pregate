@@ -1,0 +1,2 @@
+const { confirmTransaction: verify } = connection;
+await verify(sig);

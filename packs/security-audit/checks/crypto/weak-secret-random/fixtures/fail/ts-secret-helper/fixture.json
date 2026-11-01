@@ -1,0 +1,17 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/people/password.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 9
+      },
+      {
+        "line": 12
+      }
+    ]
+  }
+}

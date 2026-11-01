@@ -1,0 +1,6 @@
+export class CheckoutController {
+  async checkout(dbClient: any) {
+    const tx = await dbClient.beginTransaction();
+    return tx;
+  }
+}

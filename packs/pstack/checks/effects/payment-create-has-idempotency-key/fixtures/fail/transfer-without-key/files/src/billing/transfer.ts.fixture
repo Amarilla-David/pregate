@@ -1,0 +1,8 @@
+
+export async function transfer(stripe: Stripe): Promise<void> {
+  await stripe.transfers.create({ amount: 500, currency: "usd", destination: "acct_1" });
+}
+
+interface Stripe {
+  transfers: { create(body: object): Promise<void> };
+}

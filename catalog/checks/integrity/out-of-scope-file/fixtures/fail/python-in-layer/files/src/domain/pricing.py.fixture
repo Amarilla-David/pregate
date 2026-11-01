@@ -1,0 +1,4 @@
+import requests
+
+def price(sku):
+    return requests.get(f"https://prices.example.test/{sku}").json()["cents"]

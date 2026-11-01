@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "markers": ["pregate-disable", "eslint-disable", "@ts-ignore", "@ts-nocheck", "@ts-expect-error", "biome-ignore", "oxlint-disable", "deno-lint-ignore"] },
+  "target": "src/orders/parse.ts",
+  "before": "before/",
+  "expect": { "verdict": "fail", "violations": [{ "line": 2, "measured": 1 }] }
+}

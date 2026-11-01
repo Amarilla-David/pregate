@@ -1,0 +1,209 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/delivery",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-DELIVERY-001",
+      "check": "dcouplr/delivery/requirement-001",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IEventRaiser and IMessageGate; dist/index.mjs DBaseBus.emitBlocking/emitToAllBlocking, EventGate.raiseLocalBlocking, MessageGate.sendLocalBlocking",
+        "paraphrase": "A path that requires completed local delivery must wait for the blocking event or message operation before it reports completion. It must handle the actual aggregate failure, including nested causes for a broadcast."
+      },
+      "why": "A path that requires completed local delivery must wait for the blocking event or message operation before it reports completion. It must handle the actual aggregate failure, including nested causes for a broadcast. Apply when a caller's success depends on local listeners or handlers finishing. A deliberate background path can use a different reviewed lifetime policy.",
+      "fixHint": "Hold a real listener or handler on a deferred promise. Assert the application response remains pending until release. Make two listeners fail and verify the response/error policy preserves both causes, including the broadcast's nested errors. Bind DCP-DELIVERY-001 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-001.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-002",
+      "check": "dcouplr/delivery/requirement-002",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IEventRaiser.raiseLocal and IMessageGate.sendLocal; dist/index.mjs EventGate.raiseLocal, MessageGate.sendLocal, DBaseBus.emit",
+        "paraphrase": "A fire-and-forget path must own the listener lifetime and its failure policy. It must not treat awaiting a void local call or a synchronous try/catch as proof that delivery completed or that listener errors were handled."
+      },
+      "why": "A fire-and-forget path must own the listener lifetime and its failure policy. It must not treat awaiting a void local call or a synchronous try/catch as proof that delivery completed or that listener errors were handled. Apply to raise/raiseLocal and send/sendLocal paths. Preserve intentionally nonblocking long-lived work when its lifetime and error policy are explicit.",
+      "fixHint": "Hold the listener while the application path returns and inspect its lifecycle policy. Inject a listener error and verify the onError/observability path records or handles it. A negative control that merely awaits the void call must fail the application's completion assertion. Bind DCP-DELIVERY-002 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-002.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-003",
+      "check": "dcouplr/delivery/requirement-003",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts broker method comments; dist/index.mjs EventGate.raiseBroker and MessageGate.sendBroker",
+        "paraphrase": "A broker path must preserve the adapter handoff for the caller's lifetime and must handle adapter failures through the configured error policy. A resolved broker promise must not be presented as proof of remote processing."
+      },
+      "why": "A broker path must preserve the adapter handoff for the caller's lifetime and must handle adapter failures through the configured error policy. A resolved broker promise must not be presented as proof of remote processing. Apply to raiseBroker and sendBroker. When remote completion is a requirement, use a separate acknowledgment or product contract rather than infer it from handoff.",
+      "fixHint": "Delay the actual configured adapter's handoff and assert a short-lived entry point remains pending. Reject handoff and verify its error callback/policy. Assert no success claim of remote processing is made before the separate acknowledgment. Bind DCP-DELIVERY-003 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-003.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-004",
+      "check": "dcouplr/delivery/requirement-004",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs EventGate and MessageGate constructors: getSetting('ephemeral') ?? true and fallback emitBlocking versus emit; kernel/settings setup spread",
+        "paraphrase": "A path that permits broker fallback must verify the actual fallback against its lifetime and completion requirements. It must not assume that broker methods always wait for local listeners. The pinned fallback waits when ephemeral is omitted, undefined or true, and does not wait when ephemeral is false."
+      },
+      "why": "A path that permits broker fallback must verify the actual fallback against its lifetime and completion requirements. It must not assume that broker methods always wait for local listeners. The pinned fallback waits when ephemeral is omitted, undefined or true, and does not wait when ephemeral is false. Apply when no custom broker adapter is configured. A custom adapter has its own reviewed handoff contract. An explicitly nonblocking persistent-process policy remains valid.",
+      "fixHint": "Exercise the deployed setup options without a broker adapter and hold a real fallback listener. Assert the required response/lifetime behavior for every supported environment. Check effective behavior rather than the stored setting alone. Bind DCP-DELIVERY-004 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-004.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-005",
+      "check": "dcouplr/delivery/requirement-005",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IEventSubscriber; dist/index.mjs EventGate listener/subscription maps and teardown",
+        "paraphrase": "Each event subscription must have an owned listener reference or returned subscription ID for teardown. A function reference must not be subscribed twice through the gate. A display label must not be used as the subscription ID."
+      },
+      "why": "Each event subscription must have an owned listener reference or returned subscription ID for teardown. A function reference must not be subscribed twice through the gate. A display label must not be used as the subscription ID. Apply to event-gate subscriptions and their lifecycle. Distinct closures may share a display label. The explicit nonempty-channel policy remains a separate syntax rule for the built-in bus.",
+      "fixHint": "Create and remove actual subscriptions through the owning application component. Assert delivery stops after disposal and repeated disposal is safe. Exercise duplicate references and display-label/subscription-ID confusion as negative controls. Bind DCP-DELIVERY-005 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-005.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-006",
+      "check": "dcouplr/delivery/requirement-006",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IMessageGate; dist/index.mjs MessageGate registration, peer normalization and teardown",
+        "paraphrase": "Each message handler must own its effective peer and returned subscription ID. Two active handlers must not claim the same trimmed peer. Teardown must use that peer or the returned subscription ID, not the handler display label."
+      },
+      "why": "Each message handler must own its effective peer and returned subscription ID. Two active handlers must not claim the same trimmed peer. Teardown must use that peer or the returned subscription ID, not the handler display label. Apply to message-gate registration and disposal. Omitted or blank peers may generate distinct anonymous addresses; a product need not invent an address when no external caller needs one.",
+      "fixHint": "Exercise application registration, resolution of anonymous peers and disposal. Assert only the intended handler owns a trimmed address and no delivery occurs after disposal. Include duplicate-peer and wrong-ID controls. Bind DCP-DELIVERY-006 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-006.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-007",
+      "check": "dcouplr/delivery/requirement-007",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IMessageGate routing comments; dist/index.mjs MessageGate.#prepareForDelivery and DMessageBus.emit/emitBlocking",
+        "paraphrase": "A direct-message path must pass the intended destination as to. A path that omits or blanks to must permit broadcast explicitly. It must not use sourceType as the destination or an authorization decision."
+      },
+      "why": "A direct-message path must pass the intended destination as to. A path that omits or blanks to must permit broadcast explicitly. It must not use sourceType as the destination or an authorization decision. Apply when business behavior distinguishes directed messages from broadcast. Broadcast is valid when the product contract calls for it.",
+      "fixHint": "Register two actual peers and exercise the product sender. Assert directed traffic reaches only the intended peer and broadcast reaches the permitted set. Include omitted-destination and sourceType-as-routing negative controls. Bind DCP-DELIVERY-007 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-007.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-008",
+      "check": "dcouplr/delivery/requirement-008",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs EventGate.#withRuntimeTimestamp and MessageGate.#withRuntimeTimestamp/#withRuntimeMessageScope",
+        "paraphrase": "A path that reads event or message context must distinguish caller correlation/source data from runtime timestamp, instanceId and delivery scope. Caller-supplied context must not be trusted as authentication or as an unchanged runtime identity."
+      },
+      "why": "A path that reads event or message context must distinguish caller correlation/source data from runtime timestamp, instanceId and delivery scope. Caller-supplied context must not be trusted as authentication or as an unchanged runtime identity. Apply to tracing, attribution, authorization and tests that depend on delivered context. The gate rewrites timestamp, instanceId and scope; it preserves other submitted context fields through a shallow copy.",
+      "fixHint": "Submit known correlation/source values and conflicting valid runtime-context values through actual application paths. Assert which values survive and which the configured gate replaces. Test authorization independently of sourceType or correlation metadata. Bind DCP-DELIVERY-008 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-008.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-009",
+      "check": "dcouplr/delivery/requirement-009",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-009"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IExceptionGate explicit report/never qualification; dist/index.mjs DExceptionGate.throw/report",
+        "paraphrase": "A failure path that must stop execution must use an actual throwing or explicit rejection/return path. It must not rely on exception.report or legacy quiet throw to stop execution or return a business value."
+      },
+      "why": "A failure path that must stop execution must use an actual throwing or explicit rejection/return path. It must not rely on exception.report or legacy quiet throw to stop execution or return a business value. Apply when subsequent work would be invalid after the failure. Nonfatal reporting is valid when execution is intended to continue. The report method's never type is not a runtime guarantee.",
+      "fixHint": "Exercise the product's actual failure branches. Assert forbidden effects and success responses do not occur after a fatal failure. Preserve deliberate reporting branches and test that report returns undefined and continues in the pinned runtime. Bind DCP-DELIVERY-009 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-009.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-DELIVERY-010",
+      "check": "dcouplr/delivery/requirement-010",
+      "defaults": {
+        "verifier": "DCP-DELIVERY-010"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.d.mts IEventBrokerAdapter/IMessageBrokerAdapter; dist/index.mjs verifyEventBrokerAdapterFactoryOutput/verifyMessageBrokerAdapterFactoryOutput and broker gate calls",
+        "paraphrase": "A custom event or message broker adapter must return the declared promise from raise or send and preserve its handoff/error behavior. The existence of a function member is not evidence that the adapter meets that contract."
+      },
+      "why": "A custom event or message broker adapter must return the declared promise from raise or send and preserve its handoff/error behavior. The existence of a function member is not evidence that the adapter meets that contract. Apply to configured broker replacements and wrappers. Upstream output verification checks callable members; consumers must verify return and behavioral contracts too.",
+      "fixHint": "Run the actual configured adapter with delayed handoff and rejection controls. Assert a promise is returned and the gate's error policy sees failures. Include an adapter whose member returns undefined; callable shape alone must not pass the product assertion. Bind DCP-DELIVERY-010 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-DELIVERY-010.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

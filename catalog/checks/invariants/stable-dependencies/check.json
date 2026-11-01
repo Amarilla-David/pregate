@@ -1,0 +1,27 @@
+{
+  "id": "core/invariants/stable-dependencies",
+  "version": "1.0.0",
+  "area": "invariants",
+  "cardinality": "singleton",
+  "dimension": "invariant.r005",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CORE-INV-005"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CORE-INV-005 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shop/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "unsafe-variable-arg",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Passing a bare variable with no concatenation is still unparameterized. Awaiting the call does not sanitize it."
+  }
+}

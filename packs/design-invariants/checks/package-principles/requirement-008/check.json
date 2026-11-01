@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/package-principles/requirement-008",
+  "version": "1.0.0",
+  "area": "package-principles",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r008",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-008"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-008 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,5 @@
+def validate(x: int) -> None:
+    assert (
+        x > 0,
+        "x must be positive"
+    )

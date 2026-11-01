@@ -1,0 +1,5 @@
+import fs from "node:fs";
+
+export async function load(p: string): Promise<string> {
+  return fs.promises.readFile(p, "utf8");
+}

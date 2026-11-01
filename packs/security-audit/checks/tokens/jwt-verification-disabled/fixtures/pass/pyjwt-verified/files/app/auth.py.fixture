@@ -1,0 +1,7 @@
+import jwt
+
+
+def claims(token: str, key: str) -> dict:
+    return jwt.decode(
+        token, key, algorithms=["RS256"], audience="api", options={"verify_signature": True, "require": ["exp"]}
+    )

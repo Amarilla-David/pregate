@@ -1,0 +1,98 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "ddd/ddd-tactical",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DDD-VO-001",
+      "check": "ddd/immutability/readonly-fields",
+      "defaults": {
+        "paths": [
+          "**/domain/**/values/**",
+          "**/domain/**/value-objects/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Domain-Driven Design (E. Evans, 2003); Implementing Domain-Driven Design (V. Vernon, 2013)",
+        "locator": "Evans ch. 5, Value Objects; Vernon ch. 6, Value Objects",
+        "paraphrase": "A value object is defined only by its attributes and treated as immutable: to change a value, replace it with a new one instead of altering it in place."
+      },
+      "why": "A shared value that changes in place changes every holder at once, breaking equality by value and the rules checked at construction.",
+      "fixHint": "Make every field readonly and return a new instance from each operation that would change the value.",
+      "avoid": "Private mutable fields behind getters, public constructor parameter properties, and writes through Object.assign or casts.",
+      "examples": {
+        "pass": "pass/readonly-value-object",
+        "fail": "fail/mutable-field"
+      },
+      "relations": [
+        {
+          "with": "ddd/DDD-ENT-002",
+          "kind": "duplicates",
+          "why": "Under value-object paths DDD-ENT-002 also reports a public mutable field, which DDD-VO-001 already reports as a field that is not readonly.",
+          "settle": "Keep both: the repair (a readonly or private field) satisfies each. To report it once, add the value-object globs to exclude on DDD-ENT-002."
+        }
+      ]
+    },
+    {
+      "id": "DDD-ENT-001",
+      "check": "ddd/immutability/no-public-setters",
+      "defaults": {
+        "paths": [
+          "**/domain/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Domain-Driven Design (E. Evans, 2003); Implementing Domain-Driven Design (V. Vernon, 2013)",
+        "locator": "Evans ch. 5, Entities; Vernon ch. 5, Entities",
+        "paraphrase": "An entity keeps its identity and guards its own consistency: its state changes through operations that express domain intent, not through raw writes to its properties."
+      },
+      "why": "A public setter lets any caller put the entity into a state its own rules never allowed.",
+      "fixHint": "Replace the setter with a method named after the domain operation, which checks the entity's rules before changing state; take the name from the glossary or the domain.",
+      "avoid": "Renaming the setter, computing its name, returning this from it, or exposing it as an arrow-function property.",
+      "examples": {
+        "pass": "pass/intention-revealing-methods",
+        "fail": "fail/setter-methods"
+      }
+    },
+    {
+      "id": "DDD-ENT-002",
+      "check": "ddd/immutability/no-public-mutable-fields",
+      "defaults": {
+        "paths": [
+          "**/domain/**"
+        ]
+      },
+      "severity": "warn",
+      "source": {
+        "work": "Domain-Driven Design (E. Evans, 2003); Implementing Domain-Driven Design (V. Vernon, 2013)",
+        "locator": "Evans ch. 5, Entities; Vernon ch. 5, Entities",
+        "paraphrase": "An entity keeps its identity and guards its own consistency: its state changes through operations that express domain intent, not through raw writes to its properties."
+      },
+      "why": "A public field that is not readonly is a setter with no body: any caller can write order.status = \"paid\" and skip every rule the entity checks.",
+      "fixHint": "Make the field private (or readonly if it never changes), expose a getter if callers need to read it, and change it only inside a method named after the domain operation.",
+      "avoid": "Static fields, function-valued fields and fields outside the configured paths are not checked. Persistence-mapped classes kept under domain/ are reported too; map them to the domain type in the adapter instead of loosening the entity.",
+      "examples": {
+        "pass": "pass/encapsulated-entity",
+        "fail": "fail/public-state-fields"
+      },
+      "relations": [
+        {
+          "with": "ddd/DDD-VO-001",
+          "kind": "duplicates",
+          "why": "Under value-object paths DDD-VO-001 already reports every field that is not readonly, so a public mutable field there is reported by both rules.",
+          "settle": "Keep both: the repair (a readonly or private field) satisfies each. To report it once, add the value-object globs to exclude on DDD-ENT-002."
+        },
+        {
+          "with": "typescript/TS-LEGACY-005",
+          "kind": "duplicates",
+          "why": "A public constructor parameter property is reported by DDD-ENT-002 as mutable state and by TS-LEGACY-005 as a parameter property.",
+          "settle": "Declare a private field and assign it in the constructor body; that satisfies both rules."
+        }
+      ]
+    }
+  ]
+}

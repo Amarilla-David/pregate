@@ -1,0 +1,6 @@
+const { getSession } = require("next-auth/react");
+
+export async function GET() {
+  const session = await getSession();
+  return Response.json({ ok: session !== null });
+}

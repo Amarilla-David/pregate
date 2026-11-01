@@ -1,0 +1,18 @@
+import type { Users } from "../ports/users";
+
+export class RegisterUser {
+  constructor(private readonly users: Users) {}
+
+  async execute(email: string): Promise<string> {
+    this.assertValid(email);
+    return this.users.add(email.toLowerCase());
+  }
+
+  private assertValid(email: string): void {
+    if (!email.includes("@")) throw new Error("Not an email address");
+  }
+
+  #audit(email: string): string {
+    return `registered ${email}`;
+  }
+}

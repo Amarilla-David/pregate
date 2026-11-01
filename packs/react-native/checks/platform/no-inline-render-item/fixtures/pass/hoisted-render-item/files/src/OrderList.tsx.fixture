@@ -1,0 +1,5 @@
+import { FlatList, Text } from "react-native";
+const renderOrder = ({ item }: { item: { id: string } }) => <Text>{item.id}</Text>;
+export function OrderList({ orders }: { orders: { id: string }[] }) {
+  return <FlatList data={orders} keyExtractor={(i) => i.id} renderItem={renderOrder} />;
+}

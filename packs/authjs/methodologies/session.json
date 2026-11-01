@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "authjs/session",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "AUTH-CALLBACK-001",
+      "check": "authjs/session/no-authorized-returns-true",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, middleware and the authorized callback",
+        "locator": "authorized callback return value",
+        "paraphrase": "Middleware protects a route only when the authorized callback returns a decision based on the request. Returning true always admits every request."
+      },
+      "why": "An authorized callback that always returns true keeps the middleware file while protecting nothing behind it.",
+      "fixHint": "Decide on the session: return !!auth?.user, or check a role on the request path that needs it.",
+      "avoid": "A block body ending in return true is the same unconditional yes as the arrow form.",
+      "examples": {
+        "pass": "pass/guarded-arrow",
+        "fail": "fail/arrow-true"
+      }
+    },
+    {
+      "id": "AUTH-SERVER-001",
+      "check": "authjs/session/no-client-getsession",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, server-side session access",
+        "locator": "auth() versus next-auth/react in server code",
+        "paraphrase": "Server code reads the session with auth(). The next-auth/react helpers are client bindings; importing them into routes and server components pulls the wrong layer."
+      },
+      "why": "In the selected server-owned paths, session access must use the project's server auth API. A valid leading use client directive exempts a client module; importing client components for rendering is a separate project boundary decision.",
+      "fixHint": "Import { auth } from the server auth module and call await auth() in routes and server components.",
+      "avoid": "This is an optional module-boundary policy, not proof that every next-auth/react import is invalid. Only literal import/export sources and first literal require/import arguments are checked. Client directives must be in the top-level directive prologue; nested strings and late directives do not exempt the module. Cross-file client subtrees and symbol usage require project evidence.",
+      "examples": {
+        "pass": "pass/server-auth",
+        "fail": "fail/getsession-import"
+      }
+    },
+    {
+      "id": "AUTH-JWT-001",
+      "check": "authjs/session/no-jwt-without-token-guard",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, jwt callback",
+        "locator": "token and user/account trigger parameters",
+        "paraphrase": "The jwt callback runs on every request, but user and account arrive only on sign-in. A callback that spreads them unconditionally reads fields that are absent on later calls."
+      },
+      "why": "Spreading sign-in-only fields without a guard crashes or mints malformed tokens on every subsequent request.",
+      "fixHint": "Guard the callback: handle !token first, or apply user and account fields only inside if (user).",
+      "avoid": "Passing the token through untouched is still unguarded when later code assumes the sign-in fields exist.",
+      "examples": {
+        "pass": "pass/user-guard",
+        "fail": "fail/spread-user"
+      }
+    },
+    {
+      "id": "AUTH-TOKEN-001",
+      "check": "authjs/session/no-session-exposes-refresh-token",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, session callback",
+        "locator": "what the session callback returns to the client",
+        "paraphrase": "The session callback shapes the object the client receives. Long-lived refresh credentials must stay server-side; only short-lived access data goes out."
+      },
+      "why": "A refresh token sent to the client lets anyone holding it mint fresh sessions until it is revoked.",
+      "fixHint": "Keep refresh credentials in the JWT or the database. Return only the access data the UI needs.",
+      "avoid": "Aliasing the refresh value under another key still sends it to the client.",
+      "examples": {
+        "pass": "pass/access-token-only",
+        "fail": "fail/refresh-key"
+      }
+    },
+    {
+      "id": "AUTH-REDIRECT-001",
+      "check": "authjs/session/no-open-redirect-callback",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Auth.js reference, callbacks.redirect, https://authjs.dev/reference/nextjs#redirect",
+        "locator": "callbacks.redirect",
+        "paraphrase": "The redirect callback runs whenever the user is sent to a callback URL. By default only URLs on the same host as the origin are allowed; the documented example allows relative paths and same-origin URLs and otherwise returns baseUrl."
+      },
+      "why": "Returning url unchanged removes the same-host check, so a crafted callbackUrl sends users from your login page to any site.",
+      "fixHint": "Return url only when it starts with / or its origin equals baseUrl; otherwise return baseUrl.",
+      "avoid": "Flags a redirect callback inside callbacks whose whole body is url or x.url (concise arrow, or a block with that single return; comments are ignored). Any extra statement, such as an origin check, passes. Warn only: the matcher cannot see an allowlist enforced elsewhere.",
+      "examples": {
+        "pass": "pass/documented-guard",
+        "fail": "fail/arrow-url"
+      }
+    },
+    {
+      "id": "AUTH-JWT-SECRET-001",
+      "check": "authjs/session/no-sensitive-in-jwt",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js documentation, Callbacks (authjs.dev)",
+        "locator": "https://authjs.dev/guides/basics/callbacks#jwt-callback",
+        "paraphrase": "The jwt callback controls what is encoded into the session token stored in the client cookie; only minimal identity claims needed for authorization should be added."
+      },
+      "why": "Copying password hashes, private keys, or secrets onto token bloat cookie size and expose credentials if the token secret leaks or is decoded.",
+      "fixHint": "Assign only safe identifiers such as token.sub = user.id or token.role = user.role inside the jwt callback.",
+      "avoid": "Only direct assignments to token.<sensitiveField> or returned object keys inside a jwt callback are matched.",
+      "examples": {
+        "pass": "pass/role-and-id-only",
+        "fail": "fail/token-password-hash"
+      }
+    }
+  ]
+}

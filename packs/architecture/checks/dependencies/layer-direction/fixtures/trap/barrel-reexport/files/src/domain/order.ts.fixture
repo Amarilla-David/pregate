@@ -1,0 +1,6 @@
+import { newId, systemClock } from "./kernel";
+
+export class Order {
+  readonly id: string = newId();
+  readonly placedAt: number = systemClock.now();
+}

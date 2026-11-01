@@ -1,0 +1,10 @@
+const { random } = Math;
+
+export function createdAt(): number {
+  return globalThis.Date.now();
+}
+
+export function newId(prefix: string): string {
+  const salt = new Date().getMilliseconds() + random();
+  return `${prefix}-${crypto.randomUUID()}-${salt}`;
+}

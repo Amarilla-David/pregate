@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/storage/no-unbounded-listall",
+  "version": "1.0.0",
+  "area": "storage",
+  "cardinality": "singleton",
+  "dimension": "firebase.storage.listall-bound",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unbounded-listall",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "\\blistAll$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls listAll, which pages through everything under the ref. Use list() with maxResults and page tokens instead."
+  }
+}

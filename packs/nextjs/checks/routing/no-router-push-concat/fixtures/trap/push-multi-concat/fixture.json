@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/multi.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "multi-concat",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Chained plus operators still build the href by concatenation. The rule reads every plus in the arguments, not just the first join."
+  }
+}

@@ -1,0 +1,7 @@
+package tools
+
+import "os/exec"
+
+func Archive(name string) error {
+	return exec.Command("tar", "czf", name+".tgz", "build").Run()
+}

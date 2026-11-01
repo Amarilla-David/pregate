@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "musk/simplification/no-else-after-return",
+  "version": "1.0.0",
+  "area": "simplification",
+  "cardinality": "singleton",
+  "dimension": "simplification.guard-clause",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "else-after-return",
+          "rule": {
+            "any": [
+              {
+                "pattern": "if ($A) { $$$B; return $C; } else { $$$D }"
+              },
+              {
+                "pattern": "if ($A) { return $C; } else { $$$D }"
+              },
+              {
+                "pattern": "if ($A) { $$$B; return; } else { $$$D }"
+              },
+              {
+                "pattern": "if ($A) { return; } else { $$$D }"
+              },
+              {
+                "pattern": "if ($A) { $$$B; throw $C; } else { $$$D }"
+              },
+              {
+                "pattern": "if ($A) { throw $C; } else { $$$D }"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} contains an unnecessary else block after return/throw. Step 3 (Musk): simplify control flow using guard clauses and early exits."
+  }
+}

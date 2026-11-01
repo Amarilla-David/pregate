@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/naming/no-impl-suffix",
+  "version": "1.0.0",
+  "area": "naming",
+  "cardinality": "singleton",
+  "dimension": "naming.impl-suffix",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "impl-suffix",
+          "rule": {
+            "any": [
+              {
+                "any": [
+                  {
+                    "kind": "class_declaration"
+                  },
+                  {
+                    "kind": "abstract_class_declaration"
+                  },
+                  {
+                    "kind": "class"
+                  }
+                ],
+                "has": {
+                  "field": "name",
+                  "regex": "(Impl|Implementation)$"
+                }
+              },
+              {
+                "kind": "variable_declarator",
+                "all": [
+                  {
+                    "has": {
+                      "field": "name",
+                      "regex": "(Impl|Implementation)$"
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "value",
+                      "kind": "class"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} names a class after the fact that it implements something. Name what it does or what it is built on."
+  }
+}

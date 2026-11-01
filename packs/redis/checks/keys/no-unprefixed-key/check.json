@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "redis/keys/no-unprefixed-key",
+  "version": "1.0.0",
+  "area": "keys",
+  "cardinality": "singleton",
+  "dimension": "redis.key-namespace",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-key",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.(set|get|del|expire|exists)\\s*\\(\\s*[\"'][^\"':]+[\"']"
+          }
+        },
+        {
+          "id": "bare-template-key",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.(set|get|del|expire|exists)\\s*\\(\\s*`[^`$:]+`"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a key with no namespace prefix. Name keys as <domain>:<id>."
+  }
+}

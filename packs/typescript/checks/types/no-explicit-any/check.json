@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/no-explicit-any",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.explicit-any",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "explicit-any",
+          "rule": {
+            "kind": "predefined_type",
+            "regex": "^any$",
+            "not": {
+              "inside": {
+                "stopBy": "end",
+                "follows": {
+                  "stopBy": "neighbor",
+                  "kind": "comment",
+                  "regex": "pregate-allow-any:"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses any. Name the type, or use unknown and narrow it. A pregate-allow-any comment exempts only the next statement."
+  }
+}

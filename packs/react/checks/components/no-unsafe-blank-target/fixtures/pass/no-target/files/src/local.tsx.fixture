@@ -1,0 +1,3 @@
+export function Local(props: { url: string }) {
+  return <a href={props.url}>open</a>;
+}

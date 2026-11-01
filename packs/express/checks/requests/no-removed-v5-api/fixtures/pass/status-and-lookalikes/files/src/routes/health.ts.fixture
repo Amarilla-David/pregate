@@ -1,0 +1,22 @@
+import express from "express";
+import { cache } from "../cache";
+
+export const app = express();
+
+app.param("id", (req, _res, next, id) => {
+  req.headers["x-id"] = String(id);
+  next();
+});
+
+app.get("/health", (req, res) => {
+  cache.del("health");
+  if (req.acceptsLanguages("en")) {
+    res.send("200");
+    return;
+  }
+  res.sendStatus(404);
+});
+
+app.get("/old", (_req, res) => {
+  res.redirect(301, "/new");
+});

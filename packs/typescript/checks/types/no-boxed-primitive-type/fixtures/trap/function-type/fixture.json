@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/func.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "function-wrapper-type",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "The global Function type accepts any callable without checking parameter or return types; use a specific signature such as () => void."
+  }
+}

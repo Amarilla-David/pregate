@@ -1,0 +1,5 @@
+
+export function refund(total: number): number {
+  // FIXME(billing-team): credit notes are not issued yet
+  return total;
+}

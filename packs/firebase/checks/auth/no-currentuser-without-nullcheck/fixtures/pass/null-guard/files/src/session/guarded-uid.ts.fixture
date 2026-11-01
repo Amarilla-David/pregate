@@ -1,0 +1,5 @@
+export function uidOf(auth: Auth): string | null {
+  const u = auth.currentUser;
+  if (!u) return null;
+  return u.uid;
+}

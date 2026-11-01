@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "observe-only",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "path",
+      "path": "packs/typescript"
+    }
+  ],
+  "methodologies": [
+    "core/pregate-integrity",
+    "typescript/strict-types",
+    "typescript/async-results",
+    "typescript/named-exports",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "shadow",
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

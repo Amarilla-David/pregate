@@ -1,0 +1,34 @@
+{
+  "id": "rust/dependencies/no-wildcard-use",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "singleton",
+  "dimension": "rust.deps.wildcard",
+  "minSeverity": null,
+  "languages": [
+    "rust"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "rust": [
+        {
+          "id": "source",
+          "rule": {
+            "kind": "use_wildcard"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: A wildcard use obscures the owner of an identifier."
+  }
+}

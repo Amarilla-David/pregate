@@ -1,0 +1,4 @@
+declare const tx: { auditLog: { deleteMany(args: { where: Record<string, never> }): Promise<unknown> } };
+export async function purgeLogs(): Promise<void> {
+  await tx.auditLog.deleteMany({ where: {   } });
+}

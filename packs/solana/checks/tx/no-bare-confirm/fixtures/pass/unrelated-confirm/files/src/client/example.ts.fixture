@@ -1,0 +1,2 @@
+const { confirm: verify } = dialog;
+await verify(sig);

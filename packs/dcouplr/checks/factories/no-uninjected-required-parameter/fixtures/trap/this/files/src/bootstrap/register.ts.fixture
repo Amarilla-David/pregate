@@ -1,0 +1,1 @@
+admission.addFactoryMethod(function (this: void, input: object, kernel: unknown, required: string) { return { required }; });

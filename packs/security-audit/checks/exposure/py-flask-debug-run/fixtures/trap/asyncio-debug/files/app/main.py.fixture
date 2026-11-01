@@ -1,0 +1,7 @@
+import asyncio
+
+
+class Server:
+    def start(self):
+        asyncio.run(self.serve(), debug=True)
+        self.flask_app.run(debug=True)

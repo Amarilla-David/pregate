@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/router/no-unprotected-procedure",
+  "version": "1.0.0",
+  "area": "router",
+  "cardinality": "singleton",
+  "dimension": "trpc.protected-procedure",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "public-mutation",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "^publicProcedure[\\s\\S]*\\.mutation\\s*\\("
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} exposes a mutation on publicProcedure. Mutations change state; build them on an authed procedure so anonymous callers cannot write."
+  }
+}

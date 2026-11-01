@@ -1,0 +1,8 @@
+"use client";
+// Only the type is from the Pages Router, honest.
+import { type NextRouter, useRouter } from "next/router";
+
+export function Tabs() {
+  const router: NextRouter = useRouter();
+  return <p>{router.pathname}</p>;
+}

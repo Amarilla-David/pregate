@@ -1,0 +1,95 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "pstack/boundaries",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PS-ZOD-001",
+      "check": "pstack/boundary/no-validator-in-domain",
+      "defaults": {
+        "packages": [
+          "zod",
+          "valibot",
+          "ajv",
+          "superstruct",
+          "yup",
+          "io-ts"
+        ],
+        "paths": [
+          "**/domain/**",
+          "**/core/**",
+          "**/entities/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "boundary discipline",
+        "paraphrase": "Guards sit at the system boundary. Inside that boundary the code trusts its types and keeps the business rules free of framework adapters."
+      },
+      "why": "A validator in the domain makes the model depend on a parsing library and invites business rules to re-parse data they should already trust.",
+      "fixHint": "Parse the request in the adapter, then call the domain with the type the parser returned.",
+      "avoid": "A subpath such as zod/v4 is the same package. A relative barrel that re-exports the validator is a hole: the domain import no longer names the package.",
+      "examples": {
+        "pass": "pass/domain-type",
+        "fail": "fail/zod-in-domain"
+      }
+    },
+    {
+      "id": "PS-AS-001",
+      "check": "pstack/types/no-assertion-in-domain",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "type system discipline",
+        "paraphrase": "Refuse to lie to the checker. External data is parsed at the boundary so the domain never asserts a type it did not construct."
+      },
+      "why": "An assertion tells the checker to trust the author. In the domain that lie becomes a business rule that was never parsed.",
+      "fixHint": "Parse untrusted input in the adapter. Inside the domain, narrow with a guard that returns the domain type.",
+      "avoid": "`as const` is a value narrowing, not a lie about a foreign row. A double assertion is still an assertion. Core already rejects the double-assertion form on its own; this rule rejects each `as` in the domain.",
+      "examples": {
+        "pass": "pass/as-const",
+        "fail": "fail/row-as-order"
+      }
+    },
+    {
+      "id": "PS-PARTIAL-001",
+      "check": "pstack/types/no-partial-patch",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "model the domain",
+        "paraphrase": "Stateful changes belong to named operations. A bag of optional fields repeats a shape assumption instead of encoding the change the domain allows."
+      },
+      "why": "A Partial patch hides which fields the operation is allowed to change. Callers invent combinations the domain never named.",
+      "fixHint": "Replace the patch with a named operation whose parameters are the fields it actually changes.",
+      "avoid": "A type alias `type Patch = Partial<Order>` is not a parameter, so this rule does not see it. Intersecting Partial with `{ id: string }` does not name the operation.",
+      "examples": {
+        "pass": "pass/named-operation",
+        "fail": "fail/partial-param"
+      }
+    },
+    {
+      "id": "PS-LEGACY-001",
+      "check": "pstack/modules/no-legacy-import",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "migrate callers then delete legacy APIs",
+        "paraphrase": "When a new internal API replaces an old one, move the callers and delete the old API in the same wave instead of leaving a compatibility layer behind."
+      },
+      "why": "A compatibility path keeps two APIs alive. Callers of the old one never move, so the deletion the change was for does not happen.",
+      "fixHint": "Point the caller at the new module and delete the legacy file in the same change.",
+      "avoid": "Only module specifiers count (import/export sources, TS `import x = require()`, and the first argument of `import()` and `require()`), and only project-internal ones starting with `./`, `../`, `@/`, `~/` or `#`. A template literal counts when its text starts with one of those prefixes, even if a `${…}` comes before the legacy segment. Plain strings such as i18n namespaces (`estimateTemplates.legacy`) and bare package subpaths such as `pdfjs-dist/legacy/...` are not this rule. A name like legacy-adapter has no `.legacy` suffix and no `/legacy` segment, so it is not this rule either. Known holes: a specifier ending in `.legacy.ts` (the suffix is `.ts`, not end-of-string); custom tsconfig path aliases such as `@app/legacy/x`; bare specifiers resolved through `baseUrl` such as `src/legacy/x`; template literals that start with `${…}`; and resolver or mock calls that are not plain `require()`/`import()`, such as `require.resolve()`, `module.require()`, `(require)()`, `import.meta.resolve()`, `jest.mock()` and `vi.mock()`.",
+      "examples": {
+        "pass": "pass/legacy-named-file",
+        "fail": "fail/dot-legacy"
+      }
+    }
+  ]
+}

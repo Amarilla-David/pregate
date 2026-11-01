@@ -1,0 +1,2 @@
+const version = Number("1");
+await rpc.getTransaction(sig, { maxSupportedTransactionVersion: version });

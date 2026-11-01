@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mongo/find-sort-no-limit.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "sort-without-limit",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Sorting narrows the order, not the size. A .sort() with no .limit() still streams the whole collection."
+  }
+}

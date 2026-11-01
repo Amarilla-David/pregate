@@ -1,0 +1,9 @@
+package client
+
+import "crypto/tls"
+
+func Config() *tls.Config {
+	cfg := &tls.Config{}
+	cfg.InsecureSkipVerify = true
+	return cfg
+}

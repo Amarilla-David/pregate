@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "supabase/storage",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SB-STORAGE-001",
+      "check": "supabase/storage/no-public-bucket-upload",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, storage buckets and access control",
+        "locator": "public versus private bucket pages",
+        "paraphrase": "Uploads belong in private buckets served through signed URLs or download policies. A bucket literally named public serves whatever lands in it."
+      },
+      "why": "Writing user uploads into a public bucket publishes them to anyone with the URL, including files the user thought were private.",
+      "fixHint": "Upload into a named private bucket such as avatars, then serve reads through signed URLs or storage policies.",
+      "avoid": "Quoting the name with backticks is still the public bucket. Reading from public with download is fine; writing is the flagged shape.",
+      "examples": {
+        "pass": "pass/avatars-upload",
+        "fail": "fail/public-upload"
+      }
+    },
+    {
+      "id": "SB-RPC-001",
+      "check": "supabase/rpc/no-untyped-rpc",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, calling Postgres functions",
+        "locator": "rpc params pages",
+        "paraphrase": "An rpc call names the function and passes its arguments object. A bare name carries no inputs and no types."
+      },
+      "why": "A params-less rpc either calls the wrong overload or hides its inputs from review, and generated types cannot check a call that passes nothing.",
+      "fixHint": "Pass the params object as the second argument, matching the generated function signature.",
+      "avoid": "A template-literal function name with no params is still untyped. Quoting style does not change the call shape.",
+      "examples": {
+        "pass": "pass/with-params",
+        "fail": "fail/bare-rpc"
+      }
+    },
+    {
+      "id": "SB-REALTIME-001",
+      "check": "supabase/realtime/no-unfiltered-subscription",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, realtime postgres_changes",
+        "locator": "channel filter and subscribe pages",
+        "paraphrase": "Subscriptions scope events with an .on() handler naming event, schema, and table. A bare channel streams everything it can see."
+      },
+      "why": "An unfiltered subscription pushes every change the key can read to the browser, multiplying realtime traffic and leaking rows the UI never shows.",
+      "fixHint": "Add .on() with the event, schema, and table before .subscribe(), or use presence/broadcast with their own handlers.",
+      "avoid": "Interpolating an id into the channel name is not a filter. Presence .on() handlers count as filters and are not flagged.",
+      "examples": {
+        "pass": "pass/filtered-channel",
+        "fail": "fail/bare-channel"
+      }
+    },
+    {
+      "id": "SB-EDGE-001",
+      "check": "supabase/edge/no-direct-fetch-to-functions",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Supabase documentation, invoking edge functions",
+        "locator": "functions.invoke client pages",
+        "paraphrase": "Clients invoke edge functions through supabase.functions.invoke, which attaches auth headers. A raw fetch to functions/v1 skips that handling."
+      },
+      "why": "A hand-rolled fetch must rebuild auth header forwarding, so tokens drift, refresh, and leak through manual plumbing instead of the client's handling.",
+      "fixHint": "Call supabase.functions.invoke(name, { body }) and let the client attach the session.",
+      "avoid": "A hand-set Authorization header is still manual plumbing. Plain fetch to the app's own routes is unaffected and is not flagged.",
+      "examples": {
+        "pass": "pass/invoke",
+        "fail": "fail/raw-functions-fetch"
+      }
+    }
+  ]
+}

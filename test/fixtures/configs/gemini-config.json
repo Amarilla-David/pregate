@@ -1,0 +1,22 @@
+{
+  "plugins": {
+    "android-cli-plugin": {
+      "enabled": true
+    },
+    "chrome-devtools-plugin": {
+      "enabled": true
+    },
+    "firebase": {
+      "enabled": true
+    },
+    "google-antigravity-sdk": {
+      "enabled": true
+    },
+    "modern-web-guidance-plugin": {
+      "enabled": true
+    },
+    "ponytail": {
+      "enabled": true
+    }
+  }
+}

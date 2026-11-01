@@ -1,0 +1,5 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript", "params": {}, "target": "src/loader.tsx", "before": null,
+  "expect": { "verdict": "pass" }
+}

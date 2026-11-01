@@ -1,0 +1,6 @@
+import { reactive } from "vue";
+
+declare function loadDefaults(): { count: number };
+const { count } = reactive(loadDefaults());
+
+export { count };

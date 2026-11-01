@@ -1,0 +1,6 @@
+
+it("has a total", () => {
+  expect(invoice.total).toBeTruthy();
+});
+
+const invoice = { total: 1200 };

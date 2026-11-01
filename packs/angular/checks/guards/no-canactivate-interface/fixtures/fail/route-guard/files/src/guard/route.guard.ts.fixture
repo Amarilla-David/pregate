@@ -1,0 +1,8 @@
+import { Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from "@angular/router";
+@Injectable({ providedIn: "root" })
+export class RouteGuard implements CanActivate {
+  canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): boolean {
+    return _state.url.length > 0;
+  }
+}

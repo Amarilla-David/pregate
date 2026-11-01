@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/client.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      },
+      {
+        "line": 10
+      }
+    ]
+  }
+}

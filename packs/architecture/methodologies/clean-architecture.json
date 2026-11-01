@@ -1,0 +1,136 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/clean-architecture",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [
+    {
+      "with": "architecture/functional-core-imperative-shell",
+      "dimension": "deps.layers",
+      "suggest": {
+        "use": "architecture/CA-DEP-001"
+      },
+      "why": "Both select architecture/dependencies/layer-direction: CA-DEP-001 checks every layer and FCIS-DEP-001 only the core layer. Resolving deps.layers to CA-DEP-001 keeps the wider check, which still covers the core."
+    }
+  ],
+  "invariants": [
+    {
+      "id": "CA-DEP-001",
+      "relations": [
+        {
+          "with": "architecture/FCIS-DEP-001",
+          "kind": "duplicates",
+          "why": "Both select architecture/dependencies/layer-direction: CA-DEP-001 checks every layer and FCIS-DEP-001 only the core layer, so the core check is contained in the wider one.",
+          "settle": "Resolve deps.layers to architecture/CA-DEP-001; the core-layer check stays covered."
+        },
+        {
+          "with": "dcouplr/DCP-EDGE-001",
+          "kind": "duplicates",
+          "why": "Both check imports against the preset layers; DCP-EDGE-001 covers the core layer, which CA-DEP-001 already checks, so one forbidden core edge is reported twice.",
+          "settle": "Turn DCP-EDGE-001 off while CA-DEP-001 is active, unless its managed-component wording is wanted."
+        }
+      ],
+      "check": "architecture/dependencies/layer-direction",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Clean Architecture (R. C. Martin, 2017)",
+        "locator": "ch. 22, The Clean Architecture (The Dependency Rule)",
+        "paraphrase": "Compile-time dependencies run from the outer rings toward the inner ones; inner code never mentions what is declared further out, so policy does not depend on detail."
+      },
+      "why": "An inner layer that imports an outer one cannot be tested, reused or kept stable without dragging the details along.",
+      "fixHint": "Declare what the inner layer needs as a port in a layer it may import, implement it in the outer layer, and wire both in the composition root the preset declares.",
+      "avoid": "Barrels and re-exports that tunnel the same edge, type-only imports, require calls and path aliases that point at the same outer module.",
+      "examples": {
+        "pass": "pass/inward-imports",
+        "fail": "fail/domain-imports-infra"
+      }
+    },
+    {
+      "id": "CA-DEP-002",
+      "relations": [
+        {
+          "with": "architecture/FCIS-IO-001",
+          "kind": "duplicates",
+          "why": "Both deny pg, mysql2, mongodb and @prisma/client in the core layer, so one import of those packages is reported twice.",
+          "settle": "Keep both when each list is wanted; to report once, drop the shared packages from one alias with a packages override."
+        }
+      ],
+      "check": "architecture/dependencies/banned-imports",
+      "defaults": {
+        "paths": [
+          "@layers:core"
+        ],
+        "packages": [
+          "@prisma/client",
+          "prisma",
+          "typeorm",
+          "sequelize",
+          "mongoose",
+          "drizzle-orm",
+          "knex",
+          "kysely",
+          "@mikro-orm/core",
+          "pg",
+          "mysql2",
+          "mongodb",
+          "express",
+          "fastify",
+          "koa",
+          "hono",
+          "@nestjs/common",
+          "@nestjs/core",
+          "next",
+          "react",
+          "vue",
+          "@angular/core"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Clean Architecture (R. C. Martin, 2017)",
+        "locator": "ch. 30-32 (The Database Is a Detail; The Web Is a Detail; Frameworks Are Details)",
+        "paraphrase": "Databases, the web and frameworks are details; the business rules do not know them, and the code keeps them at arm's length behind boundaries it owns."
+      },
+      "why": "A framework or ORM type in the core ties business rules to a vendor's lifecycle and to infrastructure every test must then start.",
+      "fixHint": "Move the framework or ORM call into an adapter outside the core layers and give the core a port that speaks in domain types.",
+      "avoid": "Reaching the same package through require, a literal dynamic import, a subpath or a local barrel.",
+      "examples": {
+        "pass": "pass/domain-without-frameworks",
+        "fail": "fail/orm-in-domain"
+      }
+    },
+    {
+      "id": "CA-UC-001",
+      "relations": [
+        {
+          "with": "senior/SR-WIDE-001",
+          "kind": "duplicates",
+          "why": "Both count public methods: in use-case files CA-UC-001 allows 1 and SR-WIDE-001 allows 8, so a wide use case is reported by both.",
+          "settle": "Usually keep both, since CA-UC-001 is the narrower use-case rule; to report once, exclude the use-case globs from SR-WIDE-001."
+        }
+      ],
+      "check": "architecture/api-surface/single-public-method",
+      "defaults": {
+        "paths": [
+          "**/use-cases/**",
+          "**/*.use-case.ts"
+        ],
+        "max": 1
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Clean Architecture (R. C. Martin, 2017)",
+        "locator": "ch. 20, Business Rules (Use Cases)",
+        "paraphrase": "A use case describes one application-specific rule: the input it accepts, the steps it runs and the output it returns, behind a single entry point."
+      },
+      "why": "Several entry points in one use case mix scenarios that change for different reasons.",
+      "fixHint": "Give each scenario its own use case class with one public entry method; shared steps go to private methods or to the domain model.",
+      "avoid": "Second entry points written as public arrow-function properties or static methods.",
+      "examples": {
+        "pass": "pass/single-execute",
+        "fail": "fail/two-public-methods"
+      }
+    }
+  ]
+}

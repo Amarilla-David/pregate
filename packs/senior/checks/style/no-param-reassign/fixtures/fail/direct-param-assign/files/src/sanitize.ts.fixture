@@ -1,0 +1,4 @@
+export function sanitizeName(name: string): string {
+  name = name.trim();
+  return name.toLowerCase();
+}

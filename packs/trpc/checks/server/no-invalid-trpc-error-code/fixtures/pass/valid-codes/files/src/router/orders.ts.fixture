@@ -1,0 +1,6 @@
+declare class TRPCError extends Error { constructor(opts: { code: string; message?: string }); }
+export function assertFound(order: unknown): void {
+  if (!order) {
+    throw new TRPCError({ code: "NOT_FOUND", message: "Order missing" });
+  }
+}

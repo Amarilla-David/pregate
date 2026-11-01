@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "javascript/safety/no-self-compare",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "safety.self-compare",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "self-compare",
+          "rule": {
+            "kind": "binary_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "left",
+                  "pattern": "$A"
+                }
+              },
+              {
+                "has": {
+                  "field": "right",
+                  "pattern": "$A"
+                }
+              },
+              {
+                "has": {
+                  "field": "operator",
+                  "regex": "^([!=]==?|[<>]=?)$"
+                }
+              }
+            ],
+            "not": {
+              "has": {
+                "field": "left",
+                "regex": "^(Number\\.)?NaN$"
+              }
+            }
+          },
+          "constraints": {
+            "A": {
+              "any": [
+                {
+                  "kind": "identifier"
+                },
+                {
+                  "kind": "member_expression"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} compares {A} to itself. This comparison is redundant or a mistaken NaN check; use Number.isNaN() instead."
+  }
+}

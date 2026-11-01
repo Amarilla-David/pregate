@@ -1,0 +1,6 @@
+
+export async function dropDraft(id: string, db: Db): Promise<void> {
+  await db["delete"]("invoices", id);
+}
+
+interface Db { delete(table: string, id: string): Promise<void> }

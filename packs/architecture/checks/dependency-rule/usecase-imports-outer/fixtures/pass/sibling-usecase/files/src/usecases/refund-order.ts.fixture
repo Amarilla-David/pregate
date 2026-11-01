@@ -1,0 +1,6 @@
+
+import { place } from "../use-cases/place-order";
+
+export function refund(lines: { amount: number }[]): number {
+  return place(lines);
+}

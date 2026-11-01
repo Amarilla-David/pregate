@@ -1,0 +1,1 @@
+{"language": "typescript","params": {},"target": "src/exports/merged.ts","before": null,"expect": {"verdict": "fail","violations": [{"line": 1}]},"trap": {"family": "cjs-alias","origin": "forge","discovered": "2026-10-03","note": "Assigning into module.exports through a helper still publishes a CommonJS export."},"$schema": "../../../../../../../schema/fixture.v1.json"}

@@ -1,0 +1,442 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/routing/no-router-push-concat",
+  "version": "1.0.1",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-router-push-concat",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "hook-router-push-concat",
+          "constraints": {
+            "PATH": {
+              "kind": "binary_expression",
+              "regex": "\\+"
+            }
+          },
+          "rule": {
+            "all": [
+              {
+                "pattern": "$ROUTER.push($PATH)"
+              },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "source",
+                          "regex": "^[\"']next/(navigation|router)[\"']$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "kind": "import_specifier",
+                          "stopBy": "end",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "name",
+                                "regex": "^useRouter$"
+                              }
+                            },
+                            {
+                              "any": [
+                                {
+                                  "has": {
+                                    "field": "alias",
+                                    "pattern": "$HOOK"
+                                  }
+                                },
+                                {
+                                  "not": {
+                                    "has": {
+                                      "field": "alias",
+                                      "kind": "identifier"
+                                    }
+                                  },
+                                  "has": {
+                                    "field": "name",
+                                    "pattern": "$HOOK"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "stopBy": "end"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "kind": "program",
+                    "stopBy": "end",
+                    "has": {
+                      "any": [
+                        {
+                          "kind": "required_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "pattern": "$HOOK"
+                          }
+                        },
+                        {
+                          "kind": "optional_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "pattern": "$HOOK"
+                          }
+                        },
+                        {
+                          "kind": "identifier",
+                          "pattern": "$HOOK",
+                          "inside": {
+                            "kind": "formal_parameters"
+                          }
+                        },
+                        {
+                          "kind": "identifier",
+                          "pattern": "$HOOK",
+                          "inside": {
+                            "kind": "arrow_function",
+                            "field": "parameter"
+                          }
+                        },
+                        {
+                          "kind": "function_declaration",
+                          "has": {
+                            "field": "name",
+                            "pattern": "$HOOK"
+                          }
+                        },
+                        {
+                          "kind": "variable_declarator",
+                          "has": {
+                            "field": "name",
+                            "pattern": "$HOOK"
+                          }
+                        }
+                      ],
+                      "stopBy": "end"
+                    }
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "any": [
+                    {
+                      "kind": "statement_block"
+                    },
+                    {
+                      "kind": "program"
+                    }
+                  ],
+                  "stopBy": {
+                    "any": [
+                      {
+                        "kind": "arrow_function"
+                      },
+                      {
+                        "kind": "function_expression"
+                      },
+                      {
+                        "kind": "function_declaration"
+                      },
+                      {
+                        "kind": "generator_function"
+                      },
+                      {
+                        "kind": "generator_function_declaration"
+                      },
+                      {
+                        "kind": "method_definition"
+                      },
+                      {
+                        "kind": "statement_block"
+                      }
+                    ]
+                  },
+                  "has": {
+                    "pattern": "const $ROUTER = $HOOK()",
+                    "stopBy": {
+                      "any": [
+                        {
+                          "kind": "arrow_function"
+                        },
+                        {
+                          "kind": "function_expression"
+                        },
+                        {
+                          "kind": "function_declaration"
+                        },
+                        {
+                          "kind": "generator_function"
+                        },
+                        {
+                          "kind": "generator_function_declaration"
+                        },
+                        {
+                          "kind": "method_definition"
+                        },
+                        {
+                          "kind": "statement_block"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "direct-hook-push-concat",
+          "constraints": {
+            "PATH": {
+              "kind": "binary_expression",
+              "regex": "\\+"
+            }
+          },
+          "rule": {
+            "all": [
+              {
+                "pattern": "$HOOK().push($PATH)"
+              },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "source",
+                          "regex": "^[\"']next/(navigation|router)[\"']$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "kind": "import_specifier",
+                          "stopBy": "end",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "name",
+                                "regex": "^useRouter$"
+                              }
+                            },
+                            {
+                              "any": [
+                                {
+                                  "has": {
+                                    "field": "alias",
+                                    "pattern": "$HOOK"
+                                  }
+                                },
+                                {
+                                  "not": {
+                                    "has": {
+                                      "field": "alias",
+                                      "kind": "identifier"
+                                    }
+                                  },
+                                  "has": {
+                                    "field": "name",
+                                    "pattern": "$HOOK"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "stopBy": "end"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "kind": "program",
+                    "stopBy": "end",
+                    "has": {
+                      "any": [
+                        {
+                          "kind": "required_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "pattern": "$HOOK"
+                          }
+                        },
+                        {
+                          "kind": "optional_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "pattern": "$HOOK"
+                          }
+                        },
+                        {
+                          "kind": "identifier",
+                          "pattern": "$HOOK",
+                          "inside": {
+                            "kind": "formal_parameters"
+                          }
+                        },
+                        {
+                          "kind": "identifier",
+                          "pattern": "$HOOK",
+                          "inside": {
+                            "kind": "arrow_function",
+                            "field": "parameter"
+                          }
+                        },
+                        {
+                          "kind": "function_declaration",
+                          "has": {
+                            "field": "name",
+                            "pattern": "$HOOK"
+                          }
+                        },
+                        {
+                          "kind": "variable_declarator",
+                          "has": {
+                            "field": "name",
+                            "pattern": "$HOOK"
+                          }
+                        }
+                      ],
+                      "stopBy": "end"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "imported-router-push-concat",
+          "constraints": {
+            "PATH": {
+              "kind": "binary_expression",
+              "regex": "\\+"
+            }
+          },
+          "rule": {
+            "all": [
+              {
+                "pattern": "$ROUTER.push($PATH)"
+              },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "source",
+                          "regex": "^[\"']next/router[\"']$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "kind": "import_clause",
+                          "has": {
+                            "kind": "identifier",
+                            "pattern": "$ROUTER"
+                          }
+                        }
+                      }
+                    ],
+                    "stopBy": "end"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "kind": "program",
+                    "stopBy": "end",
+                    "has": {
+                      "any": [
+                        {
+                          "kind": "required_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "pattern": "$ROUTER"
+                          }
+                        },
+                        {
+                          "kind": "optional_parameter",
+                          "has": {
+                            "field": "pattern",
+                            "pattern": "$ROUTER"
+                          }
+                        },
+                        {
+                          "kind": "identifier",
+                          "pattern": "$ROUTER",
+                          "inside": {
+                            "kind": "formal_parameters"
+                          }
+                        },
+                        {
+                          "kind": "identifier",
+                          "pattern": "$ROUTER",
+                          "inside": {
+                            "kind": "arrow_function",
+                            "field": "parameter"
+                          }
+                        },
+                        {
+                          "kind": "function_declaration",
+                          "has": {
+                            "field": "name",
+                            "pattern": "$ROUTER"
+                          }
+                        },
+                        {
+                          "kind": "variable_declarator",
+                          "has": {
+                            "field": "name",
+                            "pattern": "$ROUTER"
+                          }
+                        }
+                      ],
+                      "stopBy": "end"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} concatenates a href on a recognized Next router. This is a readability observation; validate untrusted destinations independently."
+  }
+}

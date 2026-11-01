@@ -1,0 +1,8 @@
+
+import type { Request } from "../frameworks/web";
+
+export function path(request: Request): string {
+  return request.url;
+}
+
+interface Request { url: string }

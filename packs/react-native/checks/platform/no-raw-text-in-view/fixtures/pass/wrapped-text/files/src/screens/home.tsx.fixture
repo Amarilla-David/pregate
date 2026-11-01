@@ -1,0 +1,17 @@
+import { Pressable, ScrollView, Text, View } from "react-native";
+
+export function Home({ count, onMore }: { count: number; onMore: () => void }) {
+  return (
+    <ScrollView>
+      {/* Header */}
+      <View style={{ padding: 16 }}>
+        <Text>Welcome back</Text>
+        <Text>{`You have ${count} new messages`}</Text>
+        {count > 0 ? <Text>{count}</Text> : null}
+      </View>
+      <Pressable onPress={onMore}>
+        <Text>See more</Text>
+      </Pressable>
+    </ScrollView>
+  );
+}

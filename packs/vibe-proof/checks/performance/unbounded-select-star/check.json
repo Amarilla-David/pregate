@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/performance/unbounded-select-star",
+  "version": "1.0.0",
+  "area": "performance",
+  "cardinality": "singleton",
+  "dimension": "performance.select-star",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "select-star",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "string",
+                  "regex": "(?i)select\\s+\\*"
+                },
+                {
+                  "kind": "template_string",
+                  "regex": "(?i)select\\s+\\*"
+                }
+              ]
+            },
+            "not": {
+              "regex": "(?i)\\blimit\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} selects every column and sets no limit."
+  }
+}

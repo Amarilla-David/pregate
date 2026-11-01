@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/trailing_comma.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "trailing-comma-tuple-assert",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "A trailing comma inside parentheses constructs a 1-element tuple, which is always truthy even when its element is False."
+  }
+}

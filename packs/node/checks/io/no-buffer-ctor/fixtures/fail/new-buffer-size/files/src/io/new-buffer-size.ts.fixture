@@ -1,0 +1,3 @@
+export function make(n: number): Buffer {
+  return new Buffer(n);
+}

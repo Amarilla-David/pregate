@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/types/no-partial-patch",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "domain.patch-bag",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "partial-param",
+          "rule": {
+            "kind": "type_annotation",
+            "regex": "Partial\\s*<",
+            "inside": {
+              "stopBy": "end",
+              "kind": "formal_parameters",
+              "inside": {
+                "stopBy": "end",
+                "kind": "export_statement"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} takes a Partial patch. Name the operation and the fields it changes."
+  }
+}

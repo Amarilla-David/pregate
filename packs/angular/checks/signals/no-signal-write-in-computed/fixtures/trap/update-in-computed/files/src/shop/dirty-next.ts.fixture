@@ -1,0 +1,6 @@
+import { computed, signal } from "@angular/core";
+const count = signal(0);
+export const next = computed(() => {
+  count.update((c) => c + 1);
+  return count();
+});

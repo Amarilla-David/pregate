@@ -1,0 +1,1 @@
+function choose(endpoint) { if (endpoint === "/orders") return orders; return customers; }

@@ -1,0 +1,5 @@
+import fs from "node:fs";
+
+export function saveData(path: string, content: string): void {
+  fs.writeFileSync(path, content, "utf-8");
+}

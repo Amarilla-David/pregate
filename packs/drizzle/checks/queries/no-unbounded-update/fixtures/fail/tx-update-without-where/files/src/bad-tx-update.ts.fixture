@@ -1,0 +1,5 @@
+declare const tx: { update(t: unknown): { set(v: Record<string, unknown>): Promise<unknown> } };
+declare const invoices: unknown;
+export async function archiveInvoices(): Promise<void> {
+  await tx.update(invoices).set({ archived: true });
+}

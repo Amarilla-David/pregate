@@ -1,0 +1,2 @@
+import { useRouter } from 'next/navigation';
+function go(id: string) { const router = useRouter(); { const router: string[] = []; router.push('next' + id); } }

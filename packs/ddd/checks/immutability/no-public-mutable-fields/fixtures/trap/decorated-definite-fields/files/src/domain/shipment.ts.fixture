@@ -1,0 +1,17 @@
+declare function Column(): PropertyDecorator;
+
+export class Shipment {
+  @Column()
+  private readonly id!: string;
+
+  @Column()
+  status!: "packed" | "shipped";
+
+  @Column()
+  deliveredAt?: string;
+
+  ship(): void {
+    if (this.status === "shipped") return;
+    this.status = "shipped";
+  }
+}

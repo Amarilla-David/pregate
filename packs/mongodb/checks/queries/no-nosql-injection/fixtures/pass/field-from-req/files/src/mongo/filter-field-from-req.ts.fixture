@@ -1,0 +1,6 @@
+import type { Col } from "./db";
+export async function get(col: Col, req: Req): Promise<void> {
+  await col.find({ name: req.name });
+}
+
+interface Req { name: string }

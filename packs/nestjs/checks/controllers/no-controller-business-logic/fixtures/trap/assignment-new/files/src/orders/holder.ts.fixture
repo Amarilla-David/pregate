@@ -1,0 +1,11 @@
+import { Controller, Get } from "@nestjs/common";
+import { OrdersRepository } from "./orders.repository";
+@Controller("orders")
+export class OrdersHolder {
+  private repo!: OrdersRepository;
+  @Get()
+  setup() {
+    this.repo = new OrdersRepository();
+    return this.repo.findAll();
+  }
+}

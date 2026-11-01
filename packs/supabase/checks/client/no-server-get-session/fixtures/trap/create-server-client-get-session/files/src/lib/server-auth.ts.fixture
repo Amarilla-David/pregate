@@ -1,0 +1,5 @@
+declare function createServerClient(url: string, key: string): { auth: { getSession(): Promise<unknown> } };
+export async function currentSession(url: string, key: string): Promise<unknown> {
+  const client = createServerClient(url, key);
+  return await client.auth.getSession();
+}

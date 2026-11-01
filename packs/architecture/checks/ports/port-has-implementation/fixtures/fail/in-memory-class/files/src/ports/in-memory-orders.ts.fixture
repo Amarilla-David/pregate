@@ -1,0 +1,8 @@
+
+export class InMemoryOrders {
+  async save(order: Order): Promise<void> {
+    await Promise.resolve(order);
+  }
+}
+
+interface Order { id: string }

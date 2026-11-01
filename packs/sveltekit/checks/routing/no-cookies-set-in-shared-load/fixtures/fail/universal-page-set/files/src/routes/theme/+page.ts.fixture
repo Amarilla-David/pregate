@@ -1,0 +1,4 @@
+export function load({ cookies }: { cookies: { set: (k: string, v: string, o: { path: string }) => void } }) {
+  cookies.set("theme", "dark", { path: "/" });
+  return {};
+}

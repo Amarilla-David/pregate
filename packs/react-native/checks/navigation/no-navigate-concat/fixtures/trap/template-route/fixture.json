@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/template-route.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-route",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A template literal builds the route name with no plus sign. The deep-link type still cannot see the value."
+  }
+}

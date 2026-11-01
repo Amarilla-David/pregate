@@ -1,0 +1,1232 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/factories/admission-sequence",
+  "version": "1.0.0",
+  "area": "factories",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.factory-admission-sequence",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "direct-stage-transitions",
+          "utils": {
+            "source-member-0": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent)[\\\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-member-0"
+                  }
+                }
+              ]
+            },
+            "source-call-0": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "source-member-0"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-call-0"
+                  }
+                }
+              ]
+            },
+            "invalid-next-0": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent|addValidationPolicy|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-0"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent|addValidationPolicy|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)[\\\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-0"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-next-0"
+                  }
+                }
+              ]
+            },
+            "source-member-1": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(addMandatoryInputFields)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](addMandatoryInputFields)[\\\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-member-1"
+                  }
+                }
+              ]
+            },
+            "source-call-1": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "source-member-1"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-call-1"
+                  }
+                }
+              ]
+            },
+            "invalid-next-1": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent|addMandatoryInputFields|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-1"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent|addMandatoryInputFields|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)[\\\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-1"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-next-1"
+                  }
+                }
+              ]
+            },
+            "source-member-2": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(addValidationPolicy)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](addValidationPolicy)[\\\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-member-2"
+                  }
+                }
+              ]
+            },
+            "source-call-2": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "source-member-2"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-call-2"
+                  }
+                }
+              ]
+            },
+            "invalid-next-2": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent|addMandatoryInputFields|addValidationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-2"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent|addMandatoryInputFields|addValidationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)[\\\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-2"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-next-2"
+                  }
+                }
+              ]
+            },
+            "source-member-3": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(addVerificationPolicy)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](addVerificationPolicy)[\\\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-member-3"
+                  }
+                }
+              ]
+            },
+            "source-call-3": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "source-member-3"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-call-3"
+                  }
+                }
+              ]
+            },
+            "invalid-next-3": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-3"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)[\\\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-3"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-next-3"
+                  }
+                }
+              ]
+            },
+            "source-member-4": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(addFactoryMethod)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](addFactoryMethod)[\\\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-member-4"
+                  }
+                }
+              ]
+            },
+            "source-call-4": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "source-member-4"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-call-4"
+                  }
+                }
+              ]
+            },
+            "invalid-next-4": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|addFactoryMethod|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-4"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|addFactoryMethod|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)[\\\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-4"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-next-4"
+                  }
+                }
+              ]
+            },
+            "source-member-5": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(createOnly)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](createOnly)[\\\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-member-5"
+                  }
+                }
+              ]
+            },
+            "source-call-5": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "source-member-5"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-call-5"
+                  }
+                }
+              ]
+            },
+            "invalid-next-5": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-5"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)[\\\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-5"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-next-5"
+                  }
+                }
+              ]
+            },
+            "source-member-6": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](register|registerSingleton|registerForce|registerSingletonForce|raisesEvents|sendsMessages|usesDependencies|reactsTo|withExtendedInfo)[\\\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-member-6"
+                  }
+                }
+              ]
+            },
+            "source-call-6": {
+              "any": [
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "matches": "source-member-6"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "source-call-6"
+                  }
+                }
+              ]
+            },
+            "invalid-next-6": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^(declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce)$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-6"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\\\"'`](declareIntent|addMandatoryInputFields|addValidationPolicy|addVerificationPolicy|addFactoryMethod|createOnly|register|registerSingleton|registerForce|registerSingletonForce)[\\\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "source-call-6"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-next-6"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "invalid-next-0"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "invalid-next-1"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "invalid-next-2"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "invalid-next-3"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "invalid-next-4"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "invalid-next-5"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "invalid-next-6"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Follow the admission stages in order; complete factory creation before registration and use interaction metadata only after registration."
+  }
+}

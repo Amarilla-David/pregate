@@ -1,0 +1,3 @@
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
+export const label = "reports/legacy/archive";
+export { pdfjs };

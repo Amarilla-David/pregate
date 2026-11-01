@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/client/no-unreleased-pool-client",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "postgres.client-release",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unreleased-pool-client",
+          "rule": {
+            "kind": "variable_declarator",
+            "all": [
+              {
+                "has": {
+                  "field": "name",
+                  "kind": "identifier",
+                  "pattern": "$CLIENT"
+                }
+              },
+              {
+                "has": {
+                  "field": "value",
+                  "kind": "await_expression",
+                  "has": {
+                    "kind": "call_expression",
+                    "pattern": "$POOL.connect()"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "program",
+                    "has": {
+                      "stopBy": "end",
+                      "any": [
+                        {
+                          "kind": "member_expression",
+                          "pattern": "$CLIENT.release"
+                        },
+                        {
+                          "kind": "return_statement",
+                          "has": {
+                            "pattern": "$CLIENT"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} checks a client out with pool.connect() and never calls release on it. Release it in a finally block, or use pool.query for a single statement."
+  }
+}

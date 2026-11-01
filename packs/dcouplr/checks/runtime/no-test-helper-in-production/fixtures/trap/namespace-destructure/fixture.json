@@ -1,0 +1,31 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/main.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ],
+    "exclude": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "**/test/**",
+      "**/tests/**",
+      "**/__tests__/**"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "architectural-bypass",
+    "origin": "forge",
+    "discovered": "2026-10-04",
+    "note": "Changing the import shape must not expose a forbidden runtime locator or test helper."
+  }
+}

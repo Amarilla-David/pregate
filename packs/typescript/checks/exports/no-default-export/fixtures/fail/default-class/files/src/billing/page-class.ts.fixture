@@ -1,0 +1,4 @@
+
+export default class InvoicePage {
+  show(): string { return "invoice"; }
+}

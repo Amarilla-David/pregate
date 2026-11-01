@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/comments/no-narration",
+  "version": "1.0.0",
+  "area": "comments",
+  "cardinality": "singleton",
+  "dimension": "comments.narration",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "narration",
+          "rule": {
+            "kind": "comment",
+            "not": {
+              "regex": "(?i)(\\b(TODO|FIXME|HACK|XXX)\\([A-Za-z0-9][A-Za-z0-9._-]{1,})|@ts-expect-error|eslint-|biome-ignore|pregate-|istanbul|\\bc8\\b|SPDX-License-Identifier|Copyright|@license|///\\s*<reference"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} has a comment that restates the code. Delete it, or keep a marker the tools already understand."
+  }
+}

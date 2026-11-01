@@ -1,0 +1,2 @@
+import * as d from 'dcouplr';
+d.setupDcouplr({ charEncoding: 'UTF-8' });

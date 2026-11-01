@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/optional-street.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "optional-chain",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "?. does not remove a hop. The caller still walks the inner structure."
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "go/effects",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "GO-IO-001",
+      "check": "go/dependencies/no-core-io-imports",
+      "defaults": {
+        "paths": [
+          "@layers:core"
+        ],
+        "packages": [
+          "os",
+          "net",
+          "database/sql"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "go deps.packages, revision 1",
+        "paraphrase": "The core imports a selected I/O package."
+      },
+      "why": "The core imports a selected I/O package.",
+      "fixHint": "Move this effect behind an injected port and implement the operation in an adapter.",
+      "avoid": "This checks literal imports, not all runtime effects; do not rename the package or obscure the loading call.",
+      "examples": {
+        "pass": "pass/pure-package",
+        "fail": "fail/database-or-os"
+      }
+    }
+  ]
+}

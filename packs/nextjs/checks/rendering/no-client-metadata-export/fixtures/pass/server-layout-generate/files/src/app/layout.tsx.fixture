@@ -1,0 +1,12 @@
+import type { Metadata } from "next";
+import { getSite } from "@/lib/site";
+
+// Do not add "use client" here: metadata must stay on the server.
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSite();
+  return { title: site.name };
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <html lang="en"><body>{children}</body></html>;
+}

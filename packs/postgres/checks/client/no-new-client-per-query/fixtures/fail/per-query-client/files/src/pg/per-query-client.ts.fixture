@@ -1,0 +1,8 @@
+
+import { Client } from "pg";
+
+export async function getUser(id: string): Promise<unknown> {
+  const c = new Client({ connectionString: process.env.DATABASE_URL });
+  await c.connect();
+  return c.query("SELECT * FROM users WHERE id = $1", [id]);
+}

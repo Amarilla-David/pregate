@@ -1,0 +1,23 @@
+{
+  "language": "rust",
+  "params": {
+    "max": 3
+  },
+  "target": "src/a.rs",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1,
+        "measured": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "compact-statements",
+    "origin": "forge",
+    "discovered": "2026-10-07",
+    "note": "Alternate source syntax retains the selected observable condition."
+  }
+}

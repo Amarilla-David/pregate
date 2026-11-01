@@ -1,0 +1,110 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "authjs/session/no-sensitive-in-jwt",
+  "version": "1.0.0",
+  "area": "session",
+  "cardinality": "singleton",
+  "dimension": "authjs.jwt-sensitive-field",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sensitive-field-in-jwt",
+          "rule": {
+            "any": [
+              {
+                "kind": "assignment_expression",
+                "has": {
+                  "field": "left",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^token$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(password|passwordHash|hash|secret|secretKey|privateKey|clientSecret|refreshToken)$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "pair",
+                "inside": {
+                  "stopBy": {
+                    "kind": "@fn"
+                  },
+                  "kind": "return_statement",
+                  "inside": {
+                    "stopBy": {
+                      "kind": "@fn"
+                    },
+                    "any": [
+                      {
+                        "kind": "method_definition",
+                        "has": {
+                          "field": "name",
+                          "regex": "^jwt$"
+                        }
+                      },
+                      {
+                        "kind": "@fn",
+                        "inside": {
+                          "kind": "pair",
+                          "has": {
+                            "field": "key",
+                            "regex": "^['\"]?jwt['\"]?$"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "has": {
+                  "field": "key",
+                  "regex": "^['\"]?(password|passwordHash|hash|secret|secretKey|privateKey|clientSecret|refreshToken)['\"]?$"
+                }
+              }
+            ],
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "method_definition",
+                  "has": {
+                    "field": "name",
+                    "regex": "^jwt$"
+                  }
+                },
+                {
+                  "kind": "pair",
+                  "has": {
+                    "field": "key",
+                    "regex": "^['\"]?jwt['\"]?$"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} persists a sensitive credential field (password, hash, secret, privateKey, refreshToken) into the Auth.js JWT token. Store only minimal non-secret claims."
+  }
+}

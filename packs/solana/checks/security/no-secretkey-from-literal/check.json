@@ -1,0 +1,109 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "solana/security/no-secretkey-from-literal",
+  "version": "1.0.1",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "solana.custody-secretkey-source",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "secretkey-literal",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "function",
+                      "regex": "fromSecretKey$"
+                    }
+                  },
+                  {
+                    "all": [
+                      {
+                        "pattern": "$RESTORE($$$ARGS)"
+                      },
+                      {
+                        "inside": {
+                          "any": [
+                            {
+                              "kind": "program"
+                            },
+                            {
+                              "kind": "statement_block"
+                            }
+                          ],
+                          "stopBy": {
+                            "any": [
+                              {
+                                "kind": "program"
+                              },
+                              {
+                                "kind": "statement_block"
+                              }
+                            ]
+                          },
+                          "has": {
+                            "kind": "lexical_declaration",
+                            "regex": "^const\\b",
+                            "has": {
+                              "any": [
+                                {
+                                  "kind": "variable_declarator",
+                                  "all": [
+                                    {
+                                      "has": {
+                                        "field": "name",
+                                        "pattern": "$RESTORE"
+                                      }
+                                    },
+                                    {
+                                      "has": {
+                                        "field": "value",
+                                        "pattern": "$KEYPAIR.fromSecretKey"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "not": {
+                  "has": {
+                    "field": "arguments",
+                    "has": {
+                      "stopBy": "end",
+                      "pattern": "process.env.$KEY"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} restores key material without a visible environment source. Review its provenance; syntax cannot prove custody."
+  }
+}

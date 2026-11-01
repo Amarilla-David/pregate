@@ -1,0 +1,103 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/routing/no-export-in-client-component",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "nextjs.server-exports-in-client",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "export-in-client",
+          "files": [
+            "app/**/page.*",
+            "app/**/layout.*",
+            "app/**/route.*",
+            "src/app/**/page.*",
+            "src/app/**/layout.*",
+            "src/app/**/route.*"
+          ],
+          "rule": {
+            "kind": "identifier",
+            "regex": "^(dynamic|revalidate|runtime|preferredRegion|maxDuration|generateStaticParams)$",
+            "all": [
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "export_statement",
+                    "regex": "^export\\s+type\\b"
+                  }
+                }
+              },
+              {
+                "any": [
+                  {
+                    "inside": {
+                      "field": "name",
+                      "kind": "variable_declarator",
+                      "inside": {
+                        "any": [
+                          {
+                            "kind": "lexical_declaration"
+                          },
+                          {
+                            "kind": "variable_declaration"
+                          }
+                        ],
+                        "inside": {
+                          "kind": "export_statement"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "inside": {
+                      "field": "name",
+                      "kind": "function_declaration",
+                      "inside": {
+                        "kind": "export_statement"
+                      }
+                    }
+                  },
+                  {
+                    "nthChild": {
+                      "position": 1,
+                      "reverse": true
+                    },
+                    "inside": {
+                      "kind": "export_specifier"
+                    }
+                  }
+                ]
+              },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "expression_statement",
+                    "regex": "^[\"']use client[\"'];?$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is exported from a 'use client' module. Route segment options and generateStaticParams only take effect in Server Components."
+  }
+}

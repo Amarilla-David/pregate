@@ -1,0 +1,17 @@
+import { expect, test } from "vitest";
+import { flushSync } from "svelte";
+import { createCounter } from "./counter.svelte";
+
+test("doubles the count", () => {
+  const cleanup = $effect.root(() => {
+    const counter = createCounter(1);
+    let seen = $state(0);
+    $effect(() => {
+      seen = counter.doubled;
+    });
+    counter.increment();
+    flushSync();
+    expect(seen).toBe(4);
+  });
+  cleanup();
+});

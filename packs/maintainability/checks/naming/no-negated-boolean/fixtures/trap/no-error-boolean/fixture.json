@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth/form-result.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "no-error-boolean",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A boolean named noError expresses a negative condition and leads to double-negative checks."
+  }
+}

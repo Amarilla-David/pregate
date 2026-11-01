@@ -1,0 +1,5 @@
+
+// TODO(ada): invoice totals stay in cents until the ledger posts
+export function total(cents: number): number {
+  return cents;
+}

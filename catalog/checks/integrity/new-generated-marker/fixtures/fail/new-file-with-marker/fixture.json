@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "markers": ["@generatedMarkers"] },
+  "context": { "generatedMarkers": ["@generated", "DO NOT EDIT"] },
+  "target": "src/billing/rates.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1, "measured": 1 }] }
+}

@@ -1,0 +1,6 @@
+
+import { total } from "./order";
+
+export function due(lines: { amount: number }[]): number {
+  return total.length + lines.length;
+}

@@ -1,0 +1,8 @@
+
+interface Res { rows: Array<{ email: string }> }
+
+export function emailOf(res: Res): string {
+  const row = res.rows[0];
+  if (!row) throw new Error("missing user");
+  return row.email;
+}

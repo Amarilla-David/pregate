@@ -1,0 +1,12 @@
+export class Customer {
+  constructor(readonly id: string, private mail: string) {}
+
+  get email(): string {
+    return this.mail;
+  }
+
+  set email(value: string) {
+    if (!value.includes("@")) throw new Error("Not an email address");
+    this.mail = value;
+  }
+}

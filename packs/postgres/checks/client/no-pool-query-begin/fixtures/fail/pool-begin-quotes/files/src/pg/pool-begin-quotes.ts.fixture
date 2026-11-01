@@ -1,0 +1,7 @@
+
+import { Pool } from "pg";
+
+export async function move(pool: Pool): Promise<void> {
+  await pool.query('BEGIN');
+  await pool.query('COMMIT');
+}

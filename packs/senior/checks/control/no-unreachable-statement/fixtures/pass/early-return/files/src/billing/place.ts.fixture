@@ -1,0 +1,7 @@
+
+export function place(order: Order): string {
+  if (order.closed) return "closed";
+  return order.id;
+}
+
+interface Order { id: string; closed: boolean }

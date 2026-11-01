@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-credentials",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "An empty options object is still a Credentials provider with no verification behind the form."
+  }
+}

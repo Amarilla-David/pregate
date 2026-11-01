@@ -1,0 +1,165 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "solana/tx/no-tx-version-string",
+  "version": "1.0.1",
+  "area": "tx",
+  "cardinality": "singleton",
+  "dimension": "solana.tx-version-type",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "tx-version-string",
+          "rule": {
+            "kind": "pair",
+            "all": [
+              {
+                "has": {
+                  "field": "key",
+                  "regex": "^maxSupportedTransactionVersion$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "value",
+                      "any": [
+                        {
+                          "kind": "string"
+                        },
+                        {
+                          "kind": "template_string"
+                        },
+                        {
+                          "kind": "call_expression",
+                          "has": {
+                            "field": "function",
+                            "regex": "^String$"
+                          }
+                        },
+                        {
+                          "kind": "binary_expression",
+                          "has": {
+                            "stopBy": "end",
+                            "any": [
+                              {
+                                "kind": "string"
+                              },
+                              {
+                                "kind": "template_string"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "all": [
+                      {
+                        "has": {
+                          "field": "value",
+                          "kind": "identifier",
+                          "pattern": "$VERSION"
+                        }
+                      },
+                      {
+                        "inside": {
+                          "any": [
+                            {
+                              "kind": "program"
+                            },
+                            {
+                              "kind": "statement_block"
+                            }
+                          ],
+                          "stopBy": {
+                            "any": [
+                              {
+                                "kind": "program"
+                              },
+                              {
+                                "kind": "statement_block"
+                              }
+                            ]
+                          },
+                          "has": {
+                            "kind": "lexical_declaration",
+                            "regex": "^const\\b",
+                            "has": {
+                              "kind": "variable_declarator",
+                              "all": [
+                                {
+                                  "has": {
+                                    "field": "name",
+                                    "pattern": "$VERSION"
+                                  }
+                                },
+                                {
+                                  "has": {
+                                    "field": "value",
+                                    "pattern": "$TEXT"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "constraints": {
+            "TEXT": {
+              "any": [
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "^String$"
+                  }
+                },
+                {
+                  "kind": "binary_expression",
+                  "has": {
+                    "stopBy": "end",
+                    "any": [
+                      {
+                        "kind": "string"
+                      },
+                      {
+                        "kind": "template_string"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes a visible string expression as maxSupportedTransactionVersion. Supply a number; review values returned by helpers."
+  }
+}

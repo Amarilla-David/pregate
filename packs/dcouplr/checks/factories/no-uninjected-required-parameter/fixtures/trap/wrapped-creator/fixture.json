@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/register.ts",
+  "before": null,
+  "params": {},
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "factory-callback-ownership",
+    "origin": "forge",
+    "discovered": "2026-10-05",
+    "note": "Literal syntax and transparent wrappers must preserve first-argument factory ownership; an extra callback is not a component root."
+  }
+}

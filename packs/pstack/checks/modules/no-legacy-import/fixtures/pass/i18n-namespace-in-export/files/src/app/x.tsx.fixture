@@ -1,0 +1,4 @@
+export default function A() {
+  const t = useTranslations("estimateTemplates.legacy");
+  return t("x");
+}

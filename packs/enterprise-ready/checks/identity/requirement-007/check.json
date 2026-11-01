@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/identity/requirement-007",
+  "version": "1.0.0",
+  "area": "identity",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r007",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-007"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-007 requires current passing project verification: {symbol}."
+  }
+}

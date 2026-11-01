@@ -1,0 +1,22 @@
+import { fit } from "@jest/globals";
+import { describe, expect, it } from "bun:test";
+import { render } from "../src/plan";
+
+describe("interactive plan", () => {
+  it("finds the Fit button", () => {
+    const fit = render().find("Fit");
+    expect(fit.label).toBe("Fit");
+  });
+
+  fit("zooms the plan to the page", () => {
+    expect(render().zoom).toBe(1);
+  });
+});
+
+const width = (xit: string): number => xit.length;
+
+xit("keeps the zoom", () => {
+  expect(width("page")).toBe(4);
+});
+
+export const focused = { fit };

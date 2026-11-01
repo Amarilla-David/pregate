@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/truthy.test.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "truthy-value",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "toBeTruthy passes for any non-zero total. The test never checks that the total is 1200."
+  }
+}

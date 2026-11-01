@@ -1,0 +1,15 @@
+
+export function Money(this: { cents: number }, cents: number) {
+  this.cents = cents;
+}
+
+Money.prototype.format = function () {
+  return `${this.cents / 100}`;
+};
+
+export function toArray(args: ArrayLike<unknown>): unknown[] {
+  return Array.prototype.slice.call(args);
+}
+
+export const listLike = Object.create(Array.prototype);
+Object.assign(listLike, Array.prototype);

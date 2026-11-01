@@ -1,0 +1,5 @@
+import type { Config } from "./types";
+
+export function label(cfg: Config): string {
+  return cfg.name;
+}

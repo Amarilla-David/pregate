@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "solana-hackathon",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "solana",
+      "kind": "path",
+      "path": "packs/solana"
+    },
+    {
+      "ns": "typescript",
+      "kind": "library",
+      "version": "1.2.0"
+    }
+  ],
+  "methodologies": [
+    "core/pregate-integrity",
+    "solana/kit-client",
+    "solana/rpc-env",
+    "solana/tx-safety",
+    "solana/key-custody",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "enforce",
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

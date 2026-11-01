@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/server/routes/status.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "string-arg-create-error",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Returning createError('message') with a string shorthand in src/server/** still returns the error instance instead of throwing it."
+  }
+}

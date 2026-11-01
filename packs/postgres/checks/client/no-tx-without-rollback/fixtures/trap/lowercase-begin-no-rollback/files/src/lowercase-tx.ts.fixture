@@ -1,0 +1,10 @@
+interface Client { query(sql: string): Promise<unknown>; release(): void; }
+export async function batchInsert(client: Client): Promise<void> {
+  try {
+    await client.query("begin transaction");
+    await client.query("COMMIT");
+  } catch (err) {
+    client.release();
+    throw err;
+  }
+}

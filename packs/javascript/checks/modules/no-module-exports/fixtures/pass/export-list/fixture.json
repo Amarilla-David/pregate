@@ -1,0 +1,1 @@
+{"language": "typescript","params": {},"target": "src/exports/bundle.ts","before": null,"expect": {"verdict": "pass"},"$schema": "../../../../../../../schema/fixture.v1.json"}

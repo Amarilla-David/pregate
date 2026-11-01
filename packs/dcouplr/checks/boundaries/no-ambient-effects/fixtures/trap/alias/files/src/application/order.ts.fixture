@@ -1,0 +1,2 @@
+const request = globalThis.fetch;
+request('/orders');

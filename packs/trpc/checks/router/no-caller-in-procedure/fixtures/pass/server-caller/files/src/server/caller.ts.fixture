@@ -1,0 +1,15 @@
+import { createContext } from "./context";
+import { appRouter } from "./routers/_app";
+import { createCallerFactory } from "./trpc";
+
+const createCaller = createCallerFactory(appRouter);
+
+export async function loadHomePosts() {
+  const caller = createCaller(await createContext());
+  return caller.post.list();
+}
+
+export const loadHomeQuery = async () => {
+  const posts = await createCaller(await createContext()).post.list();
+  return posts.filter((post) => post.published);
+};

@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "react/hooks",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "REACT-HOOK-001",
+      "check": "react/hooks/no-conditional-hook",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, Rules of Hooks",
+        "locator": "Only call Hooks at the top level",
+        "paraphrase": "Call Hooks unconditionally at the top level of a component or custom Hook so every render runs them in the same order."
+      },
+      "why": "A Hook inside a branch runs on some renders and not others, so every Hook after it reads the wrong slot.",
+      "fixHint": "Move the Hook call above the branch and put only its result inside the condition.",
+      "avoid": "A custom Hook is still a plain function: the rule only fires inside a branch or loop, so a helper without JSX is not flagged.",
+      "examples": {
+        "pass": "pass/top-level",
+        "fail": "fail/in-if"
+      }
+    },
+    {
+      "id": "REACT-EFFECT-001",
+      "check": "react/hooks/no-async-effect",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, useEffect",
+        "locator": "Effect callbacks are synchronous",
+        "paraphrase": "An effect callback returns either nothing or a cleanup function. An async callback returns a promise, so the cleanup protocol cannot run."
+      },
+      "why": "React treats the returned promise as a cleanup function that never runs, and rejections escape the effect.",
+      "fixHint": "Define an async function inside the effect and void it, or move the work into an event handler.",
+      "avoid": "An async helper declared inside a synchronous effect callback is fine; only the callback itself must stay synchronous.",
+      "examples": {
+        "pass": "pass/sync-callback",
+        "fail": "fail/direct-async"
+      }
+    },
+    {
+      "id": "REACT-RENDER-001",
+      "check": "react/hooks/no-setstate-in-render",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "React documentation, keeping components pure",
+        "locator": "Do not update state during render",
+        "paraphrase": "React permits guarded updates of the current component during render to track previous renders. Unconditional updates can loop."
+      },
+      "why": "The matcher cannot resolve setter bindings or prove a guarded update converges. A setX name alone does not establish a defect.",
+      "fixHint": "Review whether this is a React setter and whether a guarded update converges before changing it.",
+      "avoid": "Guarded previous-render updates are documented as valid. Ordinary functions named setX are also matched; keep this heuristic off until bindings and control flow are resolved.",
+      "examples": {
+        "pass": "pass/handler-arrow",
+        "fail": "fail/guarded-set"
+      }
+    },
+    {
+      "id": "REACT-CALLBACK-001",
+      "check": "react/hooks/no-hook-in-callback",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, Rules of Hooks",
+        "locator": "Only call Hooks at the top level",
+        "paraphrase": "Hooks cannot be called inside callbacks passed to iterators, effects, timers, or promise handlers."
+      },
+      "why": "A callback can run outside render or a different number of times, so React cannot preserve the Hook call order.",
+      "fixHint": "Move the Hook to the top level of the component or custom Hook and pass its result into the callback.",
+      "avoid": "Renaming the callback does not turn it into a component. Components passed to memo remain valid and are not matched.",
+      "examples": {
+        "pass": "pass/top-level-component",
+        "fail": "fail/array-map"
+      }
+    }
+  ]
+}

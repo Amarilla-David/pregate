@@ -1,0 +1,5 @@
+import { untrack } from "svelte";
+
+export function read<T>(fn: () => T): T {
+  return untrack(fn);
+}

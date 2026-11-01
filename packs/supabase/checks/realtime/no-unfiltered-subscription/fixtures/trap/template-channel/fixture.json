@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/live-order.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-channel",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Interpolating an id into the channel name is not a filter. The subscription still has no .on() handler scoping the events."
+  }
+}

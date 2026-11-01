@@ -1,0 +1,4 @@
+import { Schema } from "mongoose";
+export function build(): void {
+  const s = new Schema({ name: String }, { strict: "throw" });
+}

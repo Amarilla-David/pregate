@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "prisma/writes",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PRISMA-DELETE-001",
+      "check": "prisma/writes/no-deletemany-without-where",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, deleteMany",
+        "locator": "section on the filter argument",
+        "paraphrase": "deleteMany with an empty filter deletes every row in the table. A where clause must name exactly the rows to remove."
+      },
+      "why": "A missing filter turns a scoped cleanup into a table wipe, and the call succeeds quietly with a count.",
+      "fixHint": "Add a where filter that names the rows to remove. For a real truncate, isolate it in a migration or seed script, not app code.",
+      "avoid": "An empty object argument is an empty filter. Awaiting the call sequences the wipe but does not scope it.",
+      "examples": {
+        "pass": "pass/with-where",
+        "fail": "fail/bare-call"
+      },
+      "relations": [
+        {
+          "with": "mongodb/MONGO-DELETEMANY-001",
+          "kind": "duplicates",
+          "why": "A bare .deleteMany() or .deleteMany({}) call has no where property and an empty filter, so both rules report it when both packs are active.",
+          "settle": "Keep both. Passing a non-empty where filter satisfies both; disable the pack for the database you do not use in that module."
+        }
+      ]
+    },
+    {
+      "id": "PRISMA-UPSERT-001",
+      "check": "prisma/writes/no-updatemany-without-where",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, updateMany",
+        "locator": "section on the filter argument",
+        "paraphrase": "updateMany applies data to every row its filter matches. With no where clause the filter matches the whole table."
+      },
+      "why": "A data-only call rewrites the column on every row, and the damage looks like normal application writes.",
+      "fixHint": "Pass where alongside data so only the intended rows change.",
+      "avoid": "data alone is not a scope. An empty object argument carries no filter either.",
+      "examples": {
+        "pass": "pass/with-where",
+        "fail": "fail/data-without-where"
+      }
+    },
+    {
+      "id": "PRISMA-TXCLIENT-001",
+      "check": "prisma/writes/no-outer-client-in-transaction",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Prisma docs, Transactions and batch queries",
+        "locator": "Interactive transactions; https://www.prisma.io/docs/v6/orm/prisma-client/queries/transactions#interactive-transactions",
+        "paraphrase": "The async function passed to $transaction receives a Prisma Client instance, tx. Only calls made on that tx instance are encapsulated in the transaction."
+      },
+      "why": "A model or raw query on the outer client inside the callback runs on its own connection. It commits immediately and does not roll back when the transaction fails.",
+      "fixHint": "Call the query on the callback's tx parameter, or pass tx to the helper that runs it. Move work that must survive a rollback after the transaction instead.",
+      "avoid": "The rule only reports a callback whose parameter has a different name from the client; async (prisma) => shadows the client and passes. The array form $transaction([prisma.a.create(), ...]) is correct and passes. Queries inside a helper called from the callback are not seen.",
+      "examples": {
+        "pass": "pass/tx-client",
+        "fail": "fail/outer-model-call"
+      }
+    },
+    {
+      "id": "PRISMA-EMPTY-WHERE-001",
+      "check": "prisma/writes/no-empty-where-delete",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma documentation, Prisma Client API reference (prisma.io)",
+        "locator": "https://www.prisma.io/docs/orm/reference/prisma-client-reference#deletemany",
+        "paraphrase": "Passing an empty object where: {} to deleteMany or updateMany matches all records in the table, identical to omitting where entirely."
+      },
+      "why": "Developers often write where: {} to satisfy a required key or lint check, not realizing Prisma treats an empty filter as an unconditional full-table delete or update.",
+      "fixHint": "Specify at least one concrete column condition inside where (for example where: { tenantId, expiredAt: { lt: now } }).",
+      "avoid": "Complements PRISMA-DELETE-001 and PRISMA-UPSERT-001, which catch calls that omit the where key altogether. Dynamic filter variables are not evaluated.",
+      "examples": {
+        "pass": "pass/filtered-deletemany",
+        "fail": "fail/empty-where-deletemany"
+      }
+    }
+  ]
+}

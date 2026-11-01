@@ -1,0 +1,5 @@
+const allowed = new Set(["https://app.example.com"]);
+window.onmessage = ({ origin, data }: MessageEvent) => {
+  if (allowed.has(origin)) render(data);
+};
+declare function render(value: unknown): void;

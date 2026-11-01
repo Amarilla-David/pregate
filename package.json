@@ -1,0 +1,52 @@
+{
+  "name": "pregate",
+  "version": "0.0.1",
+  "description": "Deterministic pre-tool gate, architectural boundary verifier, and static analyzer for AI coding agents (Claude Code, Codex, Cursor, Grok, Antigravity) and CI.",
+  "license": "MIT",
+  "author": "Pedro Knigge",
+  "homepage": "https://github.com/pedroknigge/pregate",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedroknigge/pregate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pedroknigge/pregate/issues"
+  },
+  "keywords": [
+    "ai-agents",
+    "claude-code",
+    "codex",
+    "cursor",
+    "static-analysis",
+    "architecture",
+    "tree-sitter",
+    "sarif",
+    "guardrails",
+    "pregate"
+  ],
+  "type": "module",
+  "bin": {
+    "pregate": "bin/pregate.mjs"
+  },
+  "files": [
+    "bin/",
+    "install.sh",
+    "install.ps1",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "bun run scripts/build.ts",
+    "manifests": "bun run scripts/release-manifests.ts",
+    "test": "bun test",
+    "typecheck": "tsc",
+    "bench": "bun run scripts/bench.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@ast-grep/napi": "0.45.3",
+    "@types/bun": "1.3.14",
+    "typescript": "7.0.2"
+  }
+}

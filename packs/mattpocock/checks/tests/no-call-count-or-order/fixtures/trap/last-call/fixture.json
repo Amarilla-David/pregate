@@ -1,0 +1,28 @@
+{
+  "language": "typescript",
+  "params": {
+    "paths": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "**/__tests__/**",
+      "test/**",
+      "tests/**"
+    ]
+  },
+  "target": "test/orders.test.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "last-call",
+    "origin": "forge",
+    "discovered": "2026-10-06",
+    "note": "Last-call assertions are ordering assertions even without an explicit numeric index."
+  }
+}

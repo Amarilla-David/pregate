@@ -1,0 +1,12 @@
+import unittest
+
+
+class CacheTest(unittest.TestCase):
+    @unittest.skipUnless(HAS_REDIS, "needs redis")
+    def test_remote(self):
+        self.assertTrue(remote_ok())
+
+    def test_local(self):
+        if not local_ok():
+            self.skipTest("no local cache")
+        self.assertEqual(get("a"), 1)

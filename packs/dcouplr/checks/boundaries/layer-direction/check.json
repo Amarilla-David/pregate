@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/boundaries/layer-direction",
+  "version": "1.0.0",
+  "area": "boundaries",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.layer-direction",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "primitive",
+    "primitive": "layer-edge"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Managed components must depend on declared ports, not concrete adapters or undeclared implementation modules."
+  }
+}

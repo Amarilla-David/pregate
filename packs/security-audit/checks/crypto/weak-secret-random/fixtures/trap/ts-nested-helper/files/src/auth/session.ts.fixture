@@ -1,0 +1,8 @@
+export function refreshToken(retry: () => void) {
+  function backoff() {
+    return Math.random() * 1000;
+  }
+  setTimeout(retry, backoff());
+  const session = { secret: Math.random().toString(36) };
+  return session;
+}

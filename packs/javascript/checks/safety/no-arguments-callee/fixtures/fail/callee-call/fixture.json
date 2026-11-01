@@ -1,0 +1,1 @@
+{"language": "typescript","params": {},"target": "src/fn/count.ts","before": null,"expect": {"verdict": "fail","violations": [{"line": 2}]},"$schema": "../../../../../../../schema/fixture.v1.json"}

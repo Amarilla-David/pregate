@@ -1,0 +1,11 @@
+import random
+import secrets
+
+
+def make_password(n=16):
+    return secrets.token_urlsafe(n)
+
+
+def shuffle_deck(cards):
+    random.shuffle(cards)
+    return cards

@@ -1,0 +1,6 @@
+import { computed, signal } from "@angular/core";
+const count = signal(0);
+export const double = computed(() => {
+  count.set(0);
+  return count() * 2;
+});

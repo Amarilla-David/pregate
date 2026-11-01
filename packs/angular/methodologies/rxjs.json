@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "angular/rxjs",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "ANG-SUB-001",
+      "check": "angular/rxjs/no-nested-subscribe",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "RxJS documentation",
+        "locator": "higher-order mapping operators",
+        "paraphrase": "Flatten dependent streams with switchMap or mergeMap instead of subscribing inside a subscribe callback."
+      },
+      "why": "A nested subscribe hides the inner subscription: it is never piped, never cancelled with the outer one, and leaks on every emission.",
+      "fixHint": "Pipe the outer stream: users$.pipe(switchMap((u) => ordersFor(u))).subscribe(show).",
+      "avoid": "Extracting the inner subscribe into a helper called from the callback is still a subscribe inside a subscribe.",
+      "examples": {
+        "pass": "pass/piped-switchmap",
+        "fail": "fail/nested-orders"
+      }
+    },
+    {
+      "id": "ANG-PROMISE-001",
+      "check": "angular/rxjs/no-topromise",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "RxJS v7 deprecation guide",
+        "locator": "toPromise removal",
+        "paraphrase": "toPromise is deprecated and removed. Convert a finite stream with firstValueFrom or lastValueFrom."
+      },
+      "why": "toPromise no longer exists on current RxJS. Code that calls it fails against the installed version.",
+      "fixHint": "Return firstValueFrom(orders$) for one emission, or lastValueFrom(orders$) for completion.",
+      "avoid": "Awaiting the call does not modernize it. await obs.toPromise() is still the deprecated conversion.",
+      "examples": {
+        "pass": "pass/first-value",
+        "fail": "fail/direct-promise"
+      }
+    },
+    {
+      "id": "ANG-SIGNAL-001",
+      "check": "angular/signals/no-signal-write-in-computed",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Angular signals guide",
+        "locator": "computed purity",
+        "paraphrase": "A computed derives its value from the signals it reads. It never writes a signal with set or update."
+      },
+      "why": "Writing inside computed creates a feedback loop: the write invalidates the computation that just ran, and the graph can cycle.",
+      "fixHint": "Return the derived value only. Use linkedSignal(() => ...) for writable state derived from signals, or move the write into an event handler or the code that owns the source signal.",
+      "avoid": "update is a write like set. Rewriting the same value through update is still a write inside computed.",
+      "examples": {
+        "pass": "pass/pure-computed",
+        "fail": "fail/set-in-computed"
+      }
+    },
+    {
+      "id": "ANG-HTTP-001",
+      "check": "angular/http/no-untyped-http-call",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Angular HttpClient guide",
+        "locator": "typed responses",
+        "paraphrase": "Every HttpClient call names its response type, so the untyped reference never flows into components as any."
+      },
+      "why": "An untyped get returns any. Every field access on the response compiles, and a renamed backend field surfaces at runtime.",
+      "fixHint": "Add the type argument: this.http.get<User[]>(url). Name the domain type next to the service that fetches it.",
+      "avoid": "Typing only the get while leaving post, put, patch, or delete bare keeps an untyped reference on the same service.",
+      "examples": {
+        "pass": "pass/typed-get",
+        "fail": "fail/bare-get"
+      }
+    }
+  ]
+}

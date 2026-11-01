@@ -1,0 +1,2 @@
+def load(name, ns):
+    exec(f"import {name}", ns)

@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "tools/update.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

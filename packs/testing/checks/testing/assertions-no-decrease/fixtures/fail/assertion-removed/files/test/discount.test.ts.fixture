@@ -1,0 +1,7 @@
+import { expect, it } from "bun:test";
+import { discountFor } from "../src/discount";
+
+it("applies tiers", () => {
+  expect(discountFor(4_999)).toBe(0);
+  expect(discountFor(10_000)).toBe(1_000);
+});

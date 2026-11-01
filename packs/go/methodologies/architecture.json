@@ -1,0 +1,30 @@
+{
+  "id": "go/architecture",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "GO-LAYER-001",
+      "check": "go/dependencies/layer-direction",
+      "defaults": {
+        "paths": [
+          "@layers:core"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "go deps.layers, revision 1",
+        "paraphrase": "The import reaches a layer this core is not allowed to depend on."
+      },
+      "why": "The import reaches a layer this core is not allowed to depend on.",
+      "fixHint": "Depend on a declared port and wire the adapter at the application boundary.",
+      "avoid": "Do not hide an adapter behind a package initializer, alias or local module replacement.",
+      "examples": {
+        "pass": "pass/port",
+        "fail": "fail/adapter"
+      }
+    }
+  ]
+}

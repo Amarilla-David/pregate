@@ -1,0 +1,7 @@
+
+it("pays", () => {
+  const expect = invoice.total;
+  return expect;
+});
+
+const invoice = { total: 1200 };

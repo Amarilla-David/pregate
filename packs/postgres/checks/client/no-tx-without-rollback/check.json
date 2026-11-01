@@ -1,0 +1,91 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/client/no-tx-without-rollback",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "postgres.tx-rollback",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "tx-begin-without-rollback",
+          "rule": {
+            "kind": "try_statement",
+            "all": [
+              {
+                "has": {
+                  "field": "body",
+                  "has": {
+                    "stopBy": "end",
+                    "kind": "call_expression",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "function",
+                          "kind": "member_expression",
+                          "has": {
+                            "field": "property",
+                            "regex": "^query$"
+                          }
+                        }
+                      },
+                      {
+                        "has": {
+                          "field": "arguments",
+                          "regex": "(?i)^\\(\\s*['\"`]BEGIN\\b"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "not": {
+                  "has": {
+                    "field": "handler",
+                    "kind": "catch_clause",
+                    "has": {
+                      "stopBy": "end",
+                      "kind": "call_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "function",
+                            "kind": "member_expression",
+                            "has": {
+                              "field": "property",
+                              "regex": "^query$"
+                            }
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "arguments",
+                            "regex": "(?i)^\\(\\s*['\"`]ROLLBACK\\b"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} starts a transaction with client.query('BEGIN') inside a try block whose catch handler never runs client.query('ROLLBACK'). Roll back on error before releasing the client."
+  }
+}

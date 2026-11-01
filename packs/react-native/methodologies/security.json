@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "react-native/security",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "RN-SECRET-001",
+      "check": "react-native/security/no-expo-public-secret-name",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Expo docs, Environment variables",
+        "locator": "EXPO_PUBLIC_ prefix is client-visible",
+        "paraphrase": "Every EXPO_PUBLIC_ variable is inlined into the client bundle. A secret-shaped name with that prefix is a published secret."
+      },
+      "why": "The bundle ships to every install, so a public token or service key in it is readable by anyone who downloads the app.",
+      "fixHint": "Keep secrets server-side and expose only an endpoint. Keep EXPO_PUBLIC_ names to URLs, ids, and feature flags.",
+      "avoid": "Renaming the binding on destructure does not rename the variable. The EXPO_PUBLIC_ name still ships.",
+      "examples": {
+        "pass": "pass/public-url",
+        "fail": "fail/public-token"
+      }
+    },
+    {
+      "id": "RN-LOG-001",
+      "check": "react-native/security/no-exp-dev-url",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Expo docs, Linking and Expo Go",
+        "locator": "exp:// development URLs",
+        "paraphrase": "exp:// URLs point at the Expo Go development channel. Shipped code links through the registered app scheme."
+      },
+      "why": "A leftover dev URL opens Expo Go or a dead tunnel on a user device instead of the screen the link promised.",
+      "fixHint": "Open myapp:// routes through the registered scheme, and resolve the host from config rather than a dev tunnel.",
+      "avoid": "Building the exp:// URL from a template hides the scheme from a literal search but opens the same dev channel.",
+      "examples": {
+        "pass": "pass/app-scheme",
+        "fail": "fail/exp-link"
+      }
+    },
+    {
+      "id": "RN-NAV-001",
+      "check": "react-native/navigation/no-navigate-concat",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React Navigation docs, type-safe routes",
+        "locator": "static route names and params",
+        "paraphrase": "Route names are a static set the navigator types check. Concatenating them builds names no type and no deep link can verify."
+      },
+      "why": "A computed route name bypasses the typed route map, so a rename compiles and then navigates nowhere at runtime.",
+      "fixHint": "Navigate with a literal route name and pass the varying value as a param object.",
+      "avoid": "A template literal with no plus sign is still concatenation. The type checker still cannot see the final name.",
+      "examples": {
+        "pass": "pass/params-object",
+        "fail": "fail/plus-suffix"
+      }
+    },
+    {
+      "id": "RN-OTA-001",
+      "check": "react-native/security/no-sensitive-in-navigation-params",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React Navigation docs, params and state persistence",
+        "locator": "params persist in navigation state",
+        "paraphrase": "Navigation params persist in navigation state and deep-link URLs. Secret-shaped values travel as ids loaded server-side instead."
+      },
+      "why": "Params survive in state dumps, logs, and shared links, so a token param leaks the session wherever the state goes.",
+      "fixHint": "Pass an order or session id and load the secret value from the server on the destination screen.",
+      "avoid": "Bundling the secret as credentials or a session object does not change what the param carries.",
+      "examples": {
+        "pass": "pass/order-id",
+        "fail": "fail/token-param"
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+export function authorize(request: Request): boolean {
+  const expected = process.env.CRON_SECRET;
+  if (!expected) return false;
+  const auth = request.headers.get("authorization") ?? "";
+  const expectedHeader = `Bearer ${expected}`;
+  return auth === expectedHeader;
+}

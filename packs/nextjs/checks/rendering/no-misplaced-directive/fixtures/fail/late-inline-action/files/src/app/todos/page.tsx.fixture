@@ -1,0 +1,10 @@
+import { db } from "@/lib/db";
+
+export default function Todos() {
+  async function add(formData: FormData) {
+    const title = String(formData.get("title"));
+    "use server";
+    await db.todo.create({ data: { title } });
+  }
+  return <form action={add} />;
+}

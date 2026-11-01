@@ -1,0 +1,8 @@
+export function createForm() {
+  const { initial } = $props<{ initial: string }>();
+  let value = $state(initial);
+  return {
+    get value() { return value; },
+    set value(next: string) { value = next; },
+  };
+}

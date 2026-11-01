@@ -1,0 +1,14 @@
+import sys
+
+import pytest
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="uses fork")
+def test_fork_worker():
+    assert run_worker() == "ok"
+
+
+def test_needs_database(db_url):
+    if db_url is None:
+        pytest.skip("no database configured")
+    assert connect(db_url)

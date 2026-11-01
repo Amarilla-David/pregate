@@ -1,0 +1,4 @@
+def submit(form, token):
+    form.validate(verify=False)
+    form.verify = False
+    return decode_draft(token, verify=False)

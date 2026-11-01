@@ -1,0 +1,14 @@
+import { db } from "@/lib/db";
+
+export default function Notes() {
+  async function create(formData: FormData) {
+    // Runs on the server.
+    "use server";
+    await db.note.create({ data: { text: String(formData.get("text")) } });
+  }
+  const save = async () => {
+    'use server';
+    await db.note.deleteMany();
+  };
+  return <form action={create}><button formAction={save}>Clear</button></form>;
+}

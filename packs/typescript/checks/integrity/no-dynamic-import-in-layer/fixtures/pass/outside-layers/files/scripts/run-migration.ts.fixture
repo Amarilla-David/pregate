@@ -1,0 +1,4 @@
+export async function runMigration(name: string): Promise<void> {
+  const migration = await import(`../migrations/${name}`);
+  await migration.up();
+}

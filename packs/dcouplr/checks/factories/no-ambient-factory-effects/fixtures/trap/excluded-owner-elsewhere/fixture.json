@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "target": "src/application/order.ts",
+  "before": null,
+  "params": {
+    "allow": [],
+    "exclude": [
+      "src/infra/http/fetcher.ts",
+      "test/kernel/forbidden-fetch.test.ts"
+    ]
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  }
+}

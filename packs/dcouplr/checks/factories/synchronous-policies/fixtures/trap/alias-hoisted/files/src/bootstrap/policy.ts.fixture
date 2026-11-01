@@ -1,0 +1,3 @@
+const alias = check;
+stage.addVerificationPolicy(alias);
+export async function check() { return true; }

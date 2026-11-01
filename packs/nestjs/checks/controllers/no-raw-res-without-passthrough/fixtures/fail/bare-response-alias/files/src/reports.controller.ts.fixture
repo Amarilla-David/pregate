@@ -1,0 +1,11 @@
+declare function Controller(prefix?: string): ClassDecorator;
+declare function Get(path?: string): MethodDecorator;
+declare function Response(opts?: { passthrough?: boolean }): ParameterDecorator;
+interface RawRes { send(v: string): void; }
+@Controller("reports")
+export class ReportsController {
+  @Get()
+  exportCsv(@Response() res: RawRes): void {
+    res.send("id,name");
+  }
+}

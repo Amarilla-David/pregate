@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "app/settings/tabs.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "type-import-cover",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "An inline type specifier does not make the import type-only: useRouter in the same braces still loads the Pages Router hook."
+  }
+}

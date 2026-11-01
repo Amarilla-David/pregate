@@ -1,0 +1,7 @@
+
+export async function byId(id: string, client: Client): Promise<unknown> {
+  return client.query(sql`SELECT * FROM users WHERE id = ${id}`);
+}
+
+declare function sql(parts: TemplateStringsArray, ...values: unknown[]): unknown;
+interface Client { query(statement: unknown): Promise<unknown> }

@@ -1,0 +1,1947 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/runtime/setup-literal-contract",
+  "version": "1.3.0",
+  "area": "runtime",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.bootstrap-configuration",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "setup-literal-contract",
+          "rule": {
+            "kind": "call_expression",
+            "any": [{ "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "matches": "setup-function"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "any": [
+                    {
+                      "not": {
+                        "has": {
+                          "nthChild": {
+                            "position": 1,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "has": {
+                        "nthChild": {
+                          "position": 1,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "matches": "invalid-config"
+                      }
+                    }
+                  ]
+                }
+              }
+            ] }, {
+              "all": [
+                { "has": { "field": "function", "matches": "inspector-function" } },
+                { "has": { "field": "arguments", "has": {
+                  "nthChild": { "position": 2, "ofRule": { "not": { "kind": "comment" } } },
+                  "matches": "invalid-direct-inspector"
+                } } },
+                { "not": { "has": { "field": "arguments", "has": {
+                  "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                  "kind": "spread_element"
+                } } } }
+              ]
+            }]
+          },
+          "utils": {
+            "inspector-function": {
+              "any": [
+                { "kind": "identifier", "regex": "^startDcouplrInspector$" },
+                { "kind": "member_expression", "has": { "field": "property", "regex": "^startDcouplrInspector$" } },
+                { "kind": "subscript_expression", "has": { "field": "index", "regex": "^[\"'`]startDcouplrInspector[\"'`]$" } },
+                {
+                  "any": [{ "kind": "parenthesized_expression" }, { "kind": "as_expression" }, { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }],
+                  "has": { "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } }, "matches": "inspector-function" }
+                }
+              ]
+            },
+            "invalid-direct-inspector": {
+              "any": [
+                { "matches": "invalid-object", "not": { "any": [{ "matches": "optional-undefined" }, { "matches": "class-value" }] } },
+                { "matches": "invalid-inspector-options" }
+              ]
+            },
+            "setup-function": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "regex": "^setupDcouplr$"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "has": {
+                        "field": "property",
+                        "regex": "^setupDcouplr$"
+                      }
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "has": {
+                        "field": "index",
+                        "regex": "^[\"'`]setupDcouplr[\"'`]$"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "setup-function"
+                  }
+                }
+              ]
+            },
+            "plain-object": {
+              "kind": "object",
+              "not": {
+                "has": {
+                  "any": [
+                    {
+                      "any": [
+                        {
+                          "kind": "spread_element"
+                        },
+                        {
+                          "kind": "method_definition"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "kind": "computed_property_name"
+                      }
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "kind": "string",
+                        "regex": "\\\\"
+                      }
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?__proto__[\"']?$"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "invalid-string": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "number"
+                    },
+                    {
+                      "kind": "true"
+                    },
+                    {
+                      "kind": "false"
+                    },
+                    {
+                      "kind": "null"
+                    },
+                    {
+                      "kind": "object"
+                    },
+                    {
+                      "kind": "array"
+                    },
+                    {
+                      "kind": "regex"
+                    },
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "generator_function"
+                    },
+                    {
+                      "kind": "class"
+                    }
+                  ]
+                },
+                {
+                  "kind": "unary_expression",
+                  "regex": "^(?:void\\b|[+~!\\-]|delete\\b)"
+                },
+                {
+                  "kind": "update_expression"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-string"
+                  }
+                },
+                {
+                  "any": [{ "kind": "identifier" }, { "kind": "undefined" }],
+                  "regex": "^undefined$"
+                }
+              ]
+            },
+            "invalid-boolean": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "number"
+                    },
+                    {
+                      "kind": "string"
+                    },
+                    {
+                      "kind": "template_string"
+                    },
+                    {
+                      "kind": "null"
+                    },
+                    {
+                      "kind": "object"
+                    },
+                    {
+                      "kind": "array"
+                    },
+                    {
+                      "kind": "regex"
+                    },
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "generator_function"
+                    },
+                    {
+                      "kind": "class"
+                    }
+                  ]
+                },
+                {
+                  "kind": "unary_expression",
+                  "regex": "^(?:typeof\\b|[+~\\-])"
+                },
+                {
+                  "kind": "update_expression"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-boolean"
+                  }
+                }
+              ]
+            },
+            "invalid-array": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "number"
+                    },
+                    {
+                      "kind": "string"
+                    },
+                    {
+                      "kind": "template_string"
+                    },
+                    {
+                      "kind": "true"
+                    },
+                    {
+                      "kind": "false"
+                    },
+                    {
+                      "kind": "null"
+                    },
+                    {
+                      "kind": "object"
+                    },
+                    {
+                      "kind": "regex"
+                    },
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "generator_function"
+                    },
+                    {
+                      "kind": "class"
+                    }
+                  ]
+                },
+                {
+                  "kind": "unary_expression",
+                  "regex": "^(?:typeof\\b|[+~!\\-]|delete\\b)"
+                },
+                {
+                  "kind": "update_expression"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-array"
+                  }
+                }
+              ]
+            },
+            "invalid-object": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "number"
+                    },
+                    {
+                      "kind": "string"
+                    },
+                    {
+                      "kind": "template_string"
+                    },
+                    {
+                      "kind": "true"
+                    },
+                    {
+                      "kind": "false"
+                    },
+                    {
+                      "kind": "null"
+                    },
+                    {
+                      "kind": "array"
+                    },
+                    {
+                      "kind": "regex"
+                    },
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "generator_function"
+                    },
+                    {
+                      "kind": "class"
+                    }
+                  ]
+                },
+                {
+                  "kind": "unary_expression",
+                  "regex": "^(?:typeof\\b|[+~!\\-]|delete\\b)"
+                },
+                {
+                  "kind": "update_expression"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-object"
+                  }
+                }
+              ]
+            },
+            "class-value": {
+              "any": [
+                { "kind": "class" },
+                {
+                  "any": [{ "kind": "parenthesized_expression" }, { "kind": "as_expression" }, { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }],
+                  "has": { "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } }, "matches": "class-value" }
+                }
+              ]
+            },
+            "invalid-create": {
+              "any": [
+                { "any": [{ "kind": "number" }, { "kind": "string" }, { "kind": "template_string" }, { "kind": "true" }, { "kind": "false" }, { "kind": "null" }, { "kind": "object" }, { "kind": "array" }, { "kind": "regex" }, { "kind": "class" }, { "kind": "generator_function" }] },
+                { "any": [{ "kind": "identifier" }, { "kind": "undefined" }], "regex": "^undefined$" },
+                { "kind": "unary_expression", "regex": "^(?:void\\b|typeof\\b|[+~!\\-]|delete\\b)" },
+                { "kind": "update_expression" },
+                { "any": [{ "kind": "arrow_function" }, { "kind": "function_expression" }], "regex": "^async\\b" },
+                {
+                  "any": [{ "kind": "parenthesized_expression" }, { "kind": "as_expression" }, { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }],
+                  "has": { "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } }, "matches": "invalid-create" }
+                }
+              ]
+            },
+            "invalid-system-factory": {
+              "any": [
+                { "matches": "invalid-object", "not": { "matches": "class-value" } },
+                {
+                  "matches": "plain-object",
+                  "any": [
+                    {
+                      "not": { "has": { "any": [
+                        { "kind": "pair", "has": { "field": "key", "regex": "^[\"']?__semanticIdentifier[\"']?$" } },
+                        { "kind": "shorthand_property_identifier", "regex": "^__semanticIdentifier$" }
+                      ] } }
+                    },
+                    {
+                      "not": { "has": { "any": [
+                        { "kind": "pair", "has": { "field": "key", "regex": "^[\"']?create[\"']?$" } },
+                        { "kind": "shorthand_property_identifier", "regex": "^create$" }
+                      ] } }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          { "has": { "field": "key", "regex": "^[\"']?__semanticIdentifier[\"']?$" } },
+                          { "has": { "field": "value", "matches": "invalid-string" } },
+                          { "not": { "precedes": { "stopBy": "end", "any": [
+                            { "kind": "pair", "has": { "field": "key", "regex": "^[\"']?__semanticIdentifier[\"']?$" } },
+                            { "kind": "shorthand_property_identifier", "regex": "^__semanticIdentifier$" }
+                          ] } } }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          { "has": { "field": "key", "regex": "^[\"']?create[\"']?$" } },
+                          { "has": { "field": "value", "matches": "invalid-create" } },
+                          { "not": { "precedes": { "stopBy": "end", "any": [
+                            { "kind": "pair", "has": { "field": "key", "regex": "^[\"']?create[\"']?$" } },
+                            { "kind": "shorthand_property_identifier", "regex": "^create$" }
+                          ] } } }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "any": [{ "kind": "parenthesized_expression" }, { "kind": "as_expression" }, { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }],
+                  "has": { "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } }, "matches": "invalid-system-factory" }
+                }
+              ]
+            },
+            "system-factory-pair": {
+              "kind": "pair",
+              "has": { "field": "value", "matches": "invalid-system-factory" },
+              "any": [
+                {
+                  "has": { "field": "key", "regex": "^[\"']?Logger[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?Logger[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^Logger$" }] } }
+                },
+                {
+                  "has": { "field": "key", "regex": "^[\"']?EventBus[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?EventBus[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^EventBus$" }] } }
+                },
+                {
+                  "has": { "field": "key", "regex": "^[\"']?MessageBus[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?MessageBus[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^MessageBus$" }] } }
+                },
+                {
+                  "has": { "field": "key", "regex": "^[\"']?DCast[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?DCast[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^DCast$" }] } }
+                },
+                {
+                  "has": { "field": "key", "regex": "^[\"']?IQueue[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?IQueue[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^IQueue$" }] } }
+                },
+                {
+                  "has": { "field": "key", "regex": "^[\"']?IQueuePersistence[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?IQueuePersistence[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^IQueuePersistence$" }] } }
+                },
+                {
+                  "has": { "field": "key", "regex": "^[\"']?MessageBrokerAdapter[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?MessageBrokerAdapter[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^MessageBrokerAdapter$" }] } }
+                },
+                {
+                  "has": { "field": "key", "regex": "^[\"']?EventBrokerAdapter[\"']?$" },
+                  "not": { "precedes": { "stopBy": "end", "any": [{ "kind": "pair", "has": { "field": "key", "regex": "^[\"']?EventBrokerAdapter[\"']?$" } }, { "kind": "shorthand_property_identifier", "regex": "^EventBrokerAdapter$" }] } }
+                }
+              ]
+            },
+            "invalid-system-dependencies": {
+              "any": [
+                { "matches": "invalid-object" },
+                {
+                  "matches": "plain-object",
+                  "has": { "any": [
+                    { "matches": "system-factory-pair" },
+                    { "kind": "pair", "has": { "field": "key", "not": { "regex": "^[\"']?(?:Logger|EventBus|MessageBus|DCast|IQueue|IQueuePersistence|MessageBrokerAdapter|EventBrokerAdapter)[\"']?$" } } },
+                    { "kind": "shorthand_property_identifier", "not": { "regex": "^(?:Logger|EventBus|MessageBus|DCast|IQueue|IQueuePersistence|MessageBrokerAdapter|EventBrokerAdapter)$" } }
+                  ] }
+                },
+                {
+                  "any": [{ "kind": "parenthesized_expression" }, { "kind": "as_expression" }, { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }],
+                  "has": { "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } }, "matches": "invalid-system-dependencies" }
+                }
+              ]
+            },
+            "invalid-mode": {
+              "any": [
+                {
+                  "matches": "invalid-string",
+                  "not": {
+                    "any": [
+                      {
+                        "any": [{ "kind": "identifier" }, { "kind": "undefined" }],
+                        "regex": "^undefined$"
+                      },
+                      {
+                        "kind": "unary_expression",
+                        "regex": "^void\\b"
+                      },
+                      {
+                        "any": [
+                          {
+                            "kind": "parenthesized_expression"
+                          },
+                          {
+                            "kind": "as_expression"
+                          },
+                          {
+                            "kind": "satisfies_expression"
+                          },
+                          {
+                            "kind": "non_null_expression"
+                          }
+                        ],
+                        "has": {
+                          "nthChild": {
+                            "position": 1,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          },
+                          "matches": "optional-undefined"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "string",
+                      "not": {
+                        "regex": "\\\\"
+                      },
+                      "all": [
+                        {
+                          "not": {
+                            "regex": "^[\"'](?:run|test)[\"']$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "template_string",
+                      "not": {
+                        "has": {
+                          "kind": "template_substitution"
+                        }
+                      },
+                      "all": [
+                        {
+                          "not": {
+                            "regex": "\\\\"
+                          }
+                        },
+                        {
+                          "not": {
+                            "regex": "^`(?:run|test)`$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-mode"
+                  }
+                }
+              ]
+            },
+            "optional-undefined": {
+              "any": [
+                {
+                  "any": [{ "kind": "identifier" }, { "kind": "undefined" }],
+                  "regex": "^undefined$"
+                },
+                {
+                  "kind": "unary_expression",
+                  "regex": "^void\\b"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "optional-undefined"
+                  }
+                }
+              ]
+            },
+            "invalid-forbidden-item": {
+              "any": [
+                {
+                  "matches": "invalid-string"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "string",
+                      "not": {
+                        "regex": "\\\\"
+                      },
+                      "all": [
+                        {
+                          "not": {
+                            "regex": "^[\"'](?:console|process|fetch|localStorage|sessionStorage|document|window|WebSocket|Math\\.random|Date\\.now)[\"']$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "template_string",
+                      "not": {
+                        "has": {
+                          "kind": "template_substitution"
+                        }
+                      },
+                      "all": [
+                        {
+                          "not": {
+                            "regex": "\\\\"
+                          }
+                        },
+                        {
+                          "not": {
+                            "regex": "^`(?:console|process|fetch|localStorage|sessionStorage|document|window|WebSocket|Math\\.random|Date\\.now)`$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-forbidden-item"
+                  }
+                }
+              ]
+            },
+            "invalid-forbidden": {
+              "any": [
+                {
+                  "matches": "invalid-array"
+                },
+                {
+                  "kind": "array",
+                  "has": {
+                    "matches": "invalid-forbidden-item"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-forbidden"
+                  }
+                }
+              ]
+            },
+            "numeric-global-binding": {
+              "any": [
+                { "kind": "variable_declarator", "has": { "field": "name", "regex": "(?:\\b(?:Infinity|NaN|Number|globalThis)\\b|\\\\)" } },
+                { "kind": "formal_parameters", "regex": "(?:\\b(?:Infinity|NaN|Number|globalThis)\\b|\\\\)" },
+                { "kind": "import_statement", "regex": "(?:\\b(?:Infinity|NaN|Number|globalThis)\\b|\\\\)" },
+                { "kind": "catch_clause", "has": { "field": "parameter", "regex": "(?:\\b(?:Infinity|NaN|Number|globalThis)\\b|\\\\)" } },
+                { "kind": "arrow_function", "has": { "field": "parameter", "regex": "(?:\\b(?:Infinity|NaN|Number|globalThis)\\b|\\\\)" } },
+                { "kind": "with_statement" },
+                {
+                  "any": [{ "kind": "function_declaration" }, { "kind": "generator_function_declaration" }, { "kind": "class_declaration" }, { "kind": "function_expression" }, { "kind": "generator_function" }, { "kind": "class" }],
+                  "has": { "field": "name", "regex": "(?:\\b(?:Infinity|NaN|Number|globalThis)\\b|\\\\)" }
+                }
+              ]
+            },
+            "non-finite-inspector-value": {
+              "all": [
+                { "not": { "inside": { "kind": "program", "stopBy": "end", "has": { "matches": "numeric-global-binding", "stopBy": "end" } } } },
+                { "any": [
+                  { "kind": "identifier", "regex": "^(?:Infinity|NaN)$" },
+                  { "all": [
+                    { "has": { "field": "object", "kind": "identifier", "regex": "^Number$" } },
+                    { "any": [
+                      { "kind": "member_expression", "has": { "field": "property", "regex": "^(?:POSITIVE_INFINITY|NEGATIVE_INFINITY|NaN)$" } },
+                      { "kind": "subscript_expression", "has": { "field": "index", "regex": "^[\"'`](?:POSITIVE_INFINITY|NEGATIVE_INFINITY|NaN)[\"'`]$" } }
+                    ] }
+                  ] },
+                  { "all": [
+                    { "has": { "field": "object", "kind": "identifier", "regex": "^globalThis$" } },
+                    { "any": [
+                      { "kind": "member_expression", "has": { "field": "property", "regex": "^(?:Infinity|NaN)$" } },
+                      { "kind": "subscript_expression", "has": { "field": "index", "regex": "^[\"'`](?:Infinity|NaN)[\"'`]$" } }
+                    ] }
+                  ] },
+                  { "kind": "unary_expression", "regex": "^[+-]", "has": { "field": "argument", "matches": "non-finite-inspector-value" } },
+                  {
+                    "any": [{ "kind": "parenthesized_expression" }, { "kind": "as_expression" }, { "kind": "satisfies_expression" }, { "kind": "non_null_expression" }],
+                    "has": { "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } }, "matches": "non-finite-inspector-value" }
+                  }
+                ] }
+              ]
+            },
+            "invalid-inspector-number": {
+              "any": [
+                { "matches": "non-finite-inspector-value" },
+                { "kind": "number", "regex": "n$" },
+                { "kind": "unary_expression", "regex": "^[~\\-]", "has": { "field": "argument", "kind": "number", "regex": "n$" } },
+                {
+                  "any": [
+                    {
+                      "kind": "string"
+                    },
+                    {
+                      "kind": "template_string"
+                    },
+                    {
+                      "kind": "true"
+                    },
+                    {
+                      "kind": "false"
+                    },
+                    {
+                      "kind": "null"
+                    },
+                    {
+                      "kind": "object"
+                    },
+                    {
+                      "kind": "array"
+                    },
+                    {
+                      "kind": "regex"
+                    },
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    },
+                    {
+                      "kind": "generator_function"
+                    },
+                    {
+                      "kind": "class"
+                    }
+                  ]
+                },
+                {
+                  "kind": "unary_expression",
+                  "regex": "^(?:typeof\\b|!|delete\\b)"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-inspector-number"
+                  }
+                }
+              ]
+            },
+            "invalid-debug-console": {
+              "any": [
+                {
+                  "matches": "invalid-object",
+                  "not": {
+                    "any": [{ "matches": "boolean-value" }, { "matches": "class-value" }]
+                  }
+                },
+                {
+                  "matches": "plain-object",
+                  "any": [
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?enabled[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-boolean",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?enabled[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^enabled$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?path[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-string",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?path[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^path$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "not": {
+                                "regex": "^[\"']?(?:enabled|path)[\"']?$"
+                              }
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "not": {
+                              "regex": "^(?:enabled|path)$"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-debug-console"
+                  }
+                }
+              ]
+            },
+            "invalid-inspector-options": {
+              "any": [
+                {
+                  "matches": "plain-object",
+                  "any": [
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?host[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-string",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?host[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^host$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?port[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-inspector-number",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?port[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^port$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?maxEvents[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-inspector-number",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?maxEvents[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^maxEvents$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?captureOnStart[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-boolean",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?captureOnStart[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^captureOnStart$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?instanceId[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-string",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?instanceId[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^instanceId$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?announce[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-boolean",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?announce[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^announce$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?debugConsole[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-debug-console",
+                              "not": {
+                                "matches": "optional-undefined"
+                              }
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?debugConsole[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^debugConsole$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "not": {
+                                "regex": "^[\"']?(?:host|port|maxEvents|captureOnStart|instanceId|announce|debugConsole)[\"']?$"
+                              }
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "not": {
+                              "regex": "^(?:host|port|maxEvents|captureOnStart|instanceId|announce|debugConsole)$"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-inspector-options"
+                  }
+                }
+              ]
+            },
+            "invalid-inspector": {
+              "any": [
+                { "matches": "invalid-inspector-options" },
+                {
+                  "matches": "invalid-object",
+                  "not": {
+                    "any": [
+                      { "matches": "class-value" },
+                      {
+                        "any": [
+                          {
+                            "kind": "true"
+                          },
+                          {
+                            "kind": "false"
+                          }
+                        ]
+                      },
+                      {
+                        "any": [
+                          {
+                            "kind": "parenthesized_expression"
+                          },
+                          {
+                            "kind": "as_expression"
+                          },
+                          {
+                            "kind": "satisfies_expression"
+                          },
+                          {
+                            "kind": "non_null_expression"
+                          }
+                        ],
+                        "has": {
+                          "nthChild": {
+                            "position": 1,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          },
+                          "matches": "boolean-value"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-inspector"
+                  }
+                }
+              ]
+            },
+            "boolean-value": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "true"
+                    },
+                    {
+                      "kind": "false"
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "boolean-value"
+                  }
+                }
+              ]
+            },
+            "invalid-config": {
+              "any": [
+                {
+                  "matches": "invalid-object"
+                },
+                {
+                  "matches": "optional-undefined"
+                },
+                {
+                  "matches": "plain-object",
+                  "any": [
+                    {
+                      "not": {
+                        "has": {
+                          "any": [
+                            {
+                              "kind": "pair",
+                              "has": {
+                                "field": "key",
+                                "regex": "^[\"']?charEncoding[\"']?$"
+                              }
+                            },
+                            {
+                              "kind": "shorthand_property_identifier",
+                              "regex": "^charEncoding$"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?charEncoding[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-string"
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?charEncoding[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^charEncoding$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?mode[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-mode"
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?mode[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^mode$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?ephemeral[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-boolean"
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?ephemeral[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^ephemeral$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?forbiddenElements[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-forbidden"
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?forbiddenElements[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^forbiddenElements$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?inspector[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-inspector"
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?inspector[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^inspector$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?systemDependencies[\"']?$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "value",
+                              "matches": "invalid-system-dependencies"
+                            }
+                          },
+                          {
+                            "not": {
+                              "precedes": {
+                                "any": [
+                                  {
+                                    "kind": "pair",
+                                    "has": {
+                                      "field": "key",
+                                      "regex": "^[\"']?systemDependencies[\"']?$"
+                                    }
+                                  },
+                                  {
+                                    "kind": "shorthand_property_identifier",
+                                    "regex": "^systemDependencies$"
+                                  }
+                                ],
+                                "stopBy": "end"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "pair",
+                        "has": {
+                          "field": "key",
+                          "not": {
+                            "regex": "^[\"']?(?:charEncoding|mode|forbiddenElements|ephemeral|inspector|systemDependencies)[\"']?$"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "has": {
+                        "kind": "shorthand_property_identifier",
+                        "not": {
+                          "regex": "^(?:charEncoding|mode|forbiddenElements|ephemeral|inspector|systemDependencies)$"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-config"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Use the public setup/inspector fields and types and supported systemDependencies keys. Each supplied system factory needs a string __semanticIdentifier and a callable synchronous create. Inspector flags are booleans, host/instanceId/path are strings, and port/maxEvents must be finite numbers. Direct inspector options are an object. Do not use unknown literal keys."
+  }
+}

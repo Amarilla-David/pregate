@@ -1,0 +1,3 @@
+export const audit = pgTable("audit", {
+  deletedAt: timestamp("deleted_at", { precision: 3 }),
+});

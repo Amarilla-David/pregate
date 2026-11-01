@@ -1,0 +1,42 @@
+{
+  "id": "go/context/no-context-field",
+  "version": "1.0.0",
+  "area": "context",
+  "cardinality": "singleton",
+  "dimension": "go.context.field",
+  "minSeverity": null,
+  "languages": [
+    "go"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "go": [
+        {
+          "id": "context-field",
+          "rule": {
+            "kind": "field_declaration",
+            "has": {
+              "field": "type",
+              "regex": "^\\*?\\s*context\\s*\\.\\s*Context$"
+            }
+          },
+          "ignores": [
+            "**/*_test.go"
+          ],
+          "x-note": "A named or embedded struct field typed context.Context. An interface that embeds context.Context is not a struct field, and table-test case structs in _test.go files are not checked. A renamed context import is not resolved."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: A struct stores a context.Context; pass the context to each call instead."
+  }
+}

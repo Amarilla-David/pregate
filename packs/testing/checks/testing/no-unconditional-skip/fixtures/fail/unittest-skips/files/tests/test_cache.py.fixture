@@ -1,0 +1,8 @@
+import unittest
+
+
+@unittest.skip("rewrite later")
+class CacheTest(unittest.TestCase):
+    def test_get(self):
+        self.skipTest("broken")
+        self.assertEqual(get("a"), 1)

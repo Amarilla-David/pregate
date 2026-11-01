@@ -1,0 +1,9 @@
+export function combinations(items: readonly number[]) {
+  for (const a of items) {
+    for (const b of items) {
+      for (const c of items) {
+        console.log(a, b, c);
+      }
+    }
+  }
+}

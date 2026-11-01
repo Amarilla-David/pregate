@@ -1,0 +1,6 @@
+import { recalculateInvoice } from "../commands/recalculate-invoice";
+import { invoiceViews } from "../read-models/invoice-view";
+
+export function openInvoices(): string[] {
+  return invoiceViews.filter((view) => recalculateInvoice(view.id).open).map((view) => view.id);
+}

@@ -1,0 +1,7 @@
+
+export function spin(items: string[]): number {
+  while (0) {
+    items.pop();
+  }
+  return items.length;
+}

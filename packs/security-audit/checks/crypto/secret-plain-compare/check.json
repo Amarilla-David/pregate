@@ -1,0 +1,476 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/crypto/secret-plain-compare",
+  "version": "1.0.0",
+  "area": "crypto",
+  "cardinality": "singleton",
+  "dimension": "security-audit.crypto.secret-comparison",
+  "minSeverity": null,
+  "languages": [
+    "typescript",
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "secret-equality",
+          "utils": {
+            "secret-operand": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "identifier"
+                    },
+                    {
+                      "kind": "member_expression"
+                    }
+                  ],
+                  "regex": "(?i)(?:hmac|secret)$"
+                },
+                {
+                  "kind": "call_expression",
+                  "regex": "^(?:crypto\\.)?createHmac\\([\\s\\S]*\\.digest\\([^()]*\\)$"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "call_expression"
+                    },
+                    {
+                      "kind": "subscript_expression"
+                    }
+                  ],
+                  "regex": "(?i)headers[\\s\\S]*[\"'`][^\"'`]*(?:signature|hmac)[^\"'`]*[\"'`]"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "(?:^|\\.)(?:hmac|\\w+Hmac|\\w+Signature|makeToken)$"
+                  }
+                },
+                {
+                  "kind": "template_string",
+                  "regex": "^`Bearer \\$\\{"
+                }
+              ]
+            },
+            "signature-operand": {
+              "any": [
+                {
+                  "kind": "identifier"
+                },
+                {
+                  "kind": "member_expression"
+                }
+              ],
+              "regex": "(?i)(?:sig|signature|mac|digest)$"
+            },
+            "excluded": {
+              "any": [
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "undefined"
+                },
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "template_string",
+                  "not": {
+                    "has": {
+                      "kind": "template_substitution"
+                    }
+                  }
+                },
+                {
+                  "kind": "identifier",
+                  "regex": "^[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]*)*$"
+                },
+                {
+                  "kind": "member_expression",
+                  "regex": "^[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]*)*\\.(?:[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]*)*|[A-Z][A-Z0-9_]*)$"
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "binary_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "operator",
+                  "regex": "^[!=]==?$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "has": {
+                      "matches": "secret-operand"
+                    }
+                  },
+                  {
+                    "has": {
+                      "matches": "signature-operand"
+                    },
+                    "inside": {
+                      "stopBy": "end",
+                      "any": [
+                        {
+                          "kind": "function_declaration"
+                        },
+                        {
+                          "kind": "method_definition"
+                        },
+                        {
+                          "kind": "arrow_function"
+                        },
+                        {
+                          "kind": "function_expression"
+                        }
+                      ],
+                      "regex": "(?i)hmac"
+                    }
+                  },
+                  {
+                    "all": [
+                      {
+                        "has": {
+                          "nthChild": 1,
+                          "kind": "identifier",
+                          "pattern": "$S"
+                        }
+                      },
+                      {
+                        "inside": {
+                          "stopBy": {
+                            "kind": "@fn"
+                          },
+                          "kind": "@fn",
+                          "has": {
+                            "stopBy": "end",
+                            "kind": "variable_declarator",
+                            "all": [
+                              {
+                                "has": {
+                                  "field": "name",
+                                  "pattern": "$S"
+                                }
+                              },
+                              {
+                                "has": {
+                                  "field": "value",
+                                  "regex": "^process\\.env(?:\\.|\\[\\s*[\"'`])\\w*(?:SECRET|TOKEN|KEY|PASSWORD|PASSWD)|^`Bearer \\$\\{"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "all": [
+                      {
+                        "has": {
+                          "nthChild": 2,
+                          "kind": "identifier",
+                          "pattern": "$S"
+                        }
+                      },
+                      {
+                        "inside": {
+                          "stopBy": {
+                            "kind": "@fn"
+                          },
+                          "kind": "@fn",
+                          "has": {
+                            "stopBy": "end",
+                            "kind": "variable_declarator",
+                            "all": [
+                              {
+                                "has": {
+                                  "field": "name",
+                                  "pattern": "$S"
+                                }
+                              },
+                              {
+                                "has": {
+                                  "field": "value",
+                                  "regex": "^process\\.env(?:\\.|\\[\\s*[\"'`])\\w*(?:SECRET|TOKEN|KEY|PASSWORD|PASSWD)|^`Bearer \\$\\{"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "not": {
+              "any": [
+                {
+                  "has": {
+                    "matches": "excluded"
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "@fn",
+                    "has": {
+                      "field": "name",
+                      "regex": "(?i)crack|brute|livetest|selftest|self_test"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/test/**",
+            "**/__tests__/**",
+            "**/test_*.py",
+            "**/*_test.py",
+            "**/conftest.py",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "**/*.spec.ts",
+            "**/*.spec.tsx",
+            "**/*.test.js",
+            "**/*.spec.js",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ],
+      "python": [
+        {
+          "id": "secret-equality",
+          "utils": {
+            "secret-operand": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "identifier"
+                    },
+                    {
+                      "kind": "attribute"
+                    }
+                  ],
+                  "regex": "(?i)(?:hmac|secret)$"
+                },
+                {
+                  "kind": "call",
+                  "regex": "^hmac\\.(?:new|HMAC)\\([\\s\\S]*\\.(?:hex)?digest\\(\\)$"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "call"
+                    },
+                    {
+                      "kind": "subscript"
+                    }
+                  ],
+                  "regex": "(?i)headers[\\s\\S]*[\"'`][^\"'`]*(?:signature|hmac)[^\"'`]*[\"'`]"
+                },
+                {
+                  "kind": "call",
+                  "has": {
+                    "field": "function",
+                    "regex": "(?:^|\\.)(?:hmac|\\w+_hmac|\\w+_signature|\\w+_token)$"
+                  }
+                },
+                {
+                  "kind": "string",
+                  "regex": "^[fF][rR]?[\"']Bearer \\{"
+                }
+              ]
+            },
+            "signature-operand": {
+              "any": [
+                {
+                  "kind": "identifier"
+                },
+                {
+                  "kind": "attribute"
+                }
+              ],
+              "regex": "(?i)(?:sig|signature|mac|digest)$"
+            },
+            "excluded": {
+              "any": [
+                {
+                  "kind": "none"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "string",
+                  "not": {
+                    "has": {
+                      "kind": "interpolation"
+                    }
+                  }
+                },
+                {
+                  "kind": "concatenated_string"
+                },
+                {
+                  "kind": "integer"
+                },
+                {
+                  "kind": "float"
+                },
+                {
+                  "kind": "identifier",
+                  "regex": "^[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]*)*$"
+                },
+                {
+                  "kind": "attribute",
+                  "regex": "^[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]*)*\\.(?:[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]*)*|[A-Z][A-Z0-9_]*)$"
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "comparison_operator",
+            "all": [
+              {
+                "has": {
+                  "field": "operators",
+                  "regex": "^(?:==|!=)$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "has": {
+                      "matches": "secret-operand"
+                    }
+                  },
+                  {
+                    "has": {
+                      "matches": "signature-operand"
+                    },
+                    "inside": {
+                      "stopBy": "end",
+                      "any": [
+                        {
+                          "kind": "function_definition"
+                        }
+                      ],
+                      "regex": "(?i)hmac"
+                    }
+                  },
+                  {
+                    "has": {
+                      "kind": "identifier",
+                      "regex": "(?i)(?:token|secret|password|passwd|api_?key)$"
+                    },
+                    "inside": {
+                      "stopBy": {
+                        "kind": "@fn"
+                      },
+                      "kind": "@fn",
+                      "has": {
+                        "stopBy": "end",
+                        "kind": "assignment",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "left",
+                              "kind": "identifier",
+                              "regex": "(?i)(?:token|secret|password|passwd|api_?key)$"
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "right",
+                              "regex": "^(?:(?:os\\.environ(?:\\.get)?\\s*[\\[(]|os\\.getenv\\s*\\(|get_app_config\\s*\\(|(?:current_)?app\\.config(?:\\.get)?\\s*[\\[(])\\s*[\"']|settings\\.)\\w*(?:SECRET|TOKEN|KEY|PASSWORD|PASSWD)"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "not": {
+              "any": [
+                {
+                  "has": {
+                    "matches": "excluded"
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "@fn",
+                    "has": {
+                      "field": "name",
+                      "regex": "(?i)crack|brute|livetest|selftest|self_test"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/test/**",
+            "**/__tests__/**",
+            "**/test_*.py",
+            "**/*_test.py",
+            "**/conftest.py",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "**/*.spec.ts",
+            "**/*.spec.tsx",
+            "**/*.test.js",
+            "**/*.spec.js",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} compares a secret or signature with ==, which can leak its value through timing. Use crypto.timingSafeEqual or hmac.compare_digest."
+  }
+}

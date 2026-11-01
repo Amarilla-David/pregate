@@ -1,0 +1,7 @@
+import { error } from "@sveltejs/kit";
+
+export const actions = {
+	login: async () => {
+		throw error(400, "Invalid credentials");
+	}
+};

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/domain/widen.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "double-assertion",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Casting through unknown is the usual way to silence a mismatch. Both assertions are still lies about the row."
+  }
+}

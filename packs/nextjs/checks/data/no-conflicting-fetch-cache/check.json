@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-conflicting-fetch-cache",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.conflicting-fetch-cache",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-store-and-positive-revalidate",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              { "has": { "field": "function", "regex": "^fetch$" } },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "kind": "object",
+                    "all": [
+                      { "has": { "kind": "pair", "regex": "^cache\\s*:\\s*['\"]no-store['\"]" } },
+                      {
+                        "has": {
+                          "kind": "pair",
+                          "regex": "^next\\s*:",
+                          "has": {
+                            "stopBy": "end",
+                            "kind": "pair",
+                            "regex": "^revalidate\\s*:\\s*[1-9][0-9]*\\b"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} combines cache: no-store with a positive next.revalidate; Next.js ignores the conflicting options. Choose one cache policy." }
+}

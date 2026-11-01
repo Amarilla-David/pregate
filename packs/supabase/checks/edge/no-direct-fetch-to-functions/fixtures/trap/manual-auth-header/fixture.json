@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/secure.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "manual-auth-header",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A hand-set Authorization header does not make a raw functions fetch equivalent to invoke. The call still skips the client's auth handling."
+  }
+}

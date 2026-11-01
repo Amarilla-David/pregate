@@ -1,0 +1,14 @@
+const assert = require("node:assert/strict");
+const { read, write } = require("../src/documents.cjs");
+assert.equal(read("alpha", "alice", "one").content, "private");
+for (const [tenant, user] of [["beta", "alice"], ["alpha", "bob"], ["beta", "bob"]]) {
+  assert.throws(() => read(tenant, user, "one"), /Denied/);
+  assert.throws(() => write(tenant, user, "one", "corrupted"), /Denied/);
+}
+assert.throws(() => read("alpha", "alice", "missing"), /Denied/);
+assert.equal(read("alpha", "alice", "one").content, "private");
+const returned = read("alpha", "alice", "one");
+returned.content = "unexpected alias mutation";
+assert.equal(read("alpha", "alice", "one").content, "private");
+write("alpha", "alice", "one", "changed by its owner");
+assert.equal(read("alpha", "alice", "one").content, "changed by its owner");

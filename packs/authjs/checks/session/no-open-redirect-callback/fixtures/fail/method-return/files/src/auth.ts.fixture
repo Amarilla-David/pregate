@@ -1,0 +1,11 @@
+import type { NextAuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+
+export const authOptions: NextAuthOptions = {
+  providers: [GoogleProvider({ clientId: "id", clientSecret: process.env.GOOGLE_SECRET! })],
+  callbacks: {
+    async redirect({ url }) {
+      return url;
+    },
+  },
+};

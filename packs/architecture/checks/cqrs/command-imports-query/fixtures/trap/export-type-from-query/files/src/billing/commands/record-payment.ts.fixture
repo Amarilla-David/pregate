@@ -1,0 +1,6 @@
+
+export type { InvoiceView } from "../queries/invoice-view";
+
+export function record(id: string): string {
+  return id;
+}

@@ -1,0 +1,2 @@
+const view = <Total value={15} />;
+expect(view).toEqual(view);

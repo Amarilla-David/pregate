@@ -1,0 +1,5 @@
+import jwt
+
+def claims(token, key):
+    # Expiry off is the Python form of ignoreExpiration: true.
+    return jwt.decode(token, key, algorithms=["RS256"], options={"verify_exp": False})

@@ -1,0 +1,23 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.0.9"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": []
+  },
+  "errors": [
+    "sources: core 0.0.9 does not match this binary (0.1.0); set sources[core].version to 0.1.0"
+  ]
+}

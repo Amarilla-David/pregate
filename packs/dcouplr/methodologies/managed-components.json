@@ -1,0 +1,127 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/managed-components",
+  "version": "1.4.1",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-AMBIENT-001",
+      "check": "dcouplr/boundaries/no-ambient-effects",
+      "defaults": {
+        "paths": [
+          "src/application/**",
+          "src/services/**"
+        ],
+        "exclude": [
+          "**/*.test.*",
+          "**/*.spec.*"
+        ],
+        "allow": []
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "dist/eslint/index.mjs factory references; dist/index.mjs DKernel gates",
+        "paraphrase": "Managed components must use injected ports or kernel gates for logging, time, randomness, process access and I/O."
+      },
+      "why": "Managed components must use injected ports or kernel gates for logging, time, randomness, process access and I/O.",
+      "fixHint": "Resolve a registered dependency, pass data to the decision, or move the external effect to an adapter.",
+      "avoid": "Project policy, broader than the upstream factory-only rules. Configure paths for managed components, not adapters or pure value modules. Erased TypeScript typeof type queries are admitted; executable typeof expressions and value references beside type annotations remain checked.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "DCP-NEW-001",
+      "check": "dcouplr/boundaries/no-direct-construction",
+      "defaults": {
+        "paths": [
+          "src/application/**",
+          "src/services/**"
+        ],
+        "exclude": [
+          "**/*.test.*",
+          "**/*.spec.*"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "dist/eslint/index.mjs noNewInDecoupledTypes; PREGATE managed-path project policy",
+        "paraphrase": "Managed components must resolve collaborators through the injected kernel instead of constructing them directly."
+      },
+      "why": "Managed components must resolve collaborators through the injected kernel instead of constructing them directly.",
+      "fixHint": "Register at the composition root and use dependencies.resolve or resolveSingleton. Direct root construction in an inline addFactoryMethod is allowed.",
+      "avoid": "Identifies the first inline arrow/function creator argument through literal dot/bracket/template members, optional calls, comments and parenthesized/as/satisfies/non-null wrappers. Also follows an immutable const initialized with an arrow/function expression when its direct first-argument reference follows initialization in the same lexical scope. A direct call of that name in the same scope, a declaration export or a local named/default value export removes the root exception. Type-only exports and foreign re-exports do not export the local creator; nested calls, other escapes and full call-graph ownership remain unresolved. Extra callbacks and leading spreads do not establish ownership. Strict policy over selected paths, including local classes; scope out value-only modules deliberately. Exclusive ownership of declared/exported creators, aliases, mutable/cross-scope/imported creators, dynamic/escaped names, generators, type assertions, indirect values and returned-constructor value wrappers remain unresolved.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "DCP-LOCATOR-001",
+      "check": "dcouplr/boundaries/no-runtime-locator-import",
+      "defaults": {
+        "paths": [
+          "src/application/**",
+          "src/services/**"
+        ],
+        "exclude": [
+          "**/*.test.*",
+          "**/*.spec.*"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "dist/index.mjs runtime/setupDcouplr/getDcouplr; DFactoryFunction injection",
+        "paraphrase": "Managed components must receive the kernel; they must not import the global dcouplr runtime."
+      },
+      "why": "Managed components must receive the kernel; they must not import the global dcouplr runtime.",
+      "fixHint": "Pass the injected IDKernel from addFactoryMethod. Initialize the runtime at the composition boundary.",
+      "avoid": "Value named imports, including renamed imports, and direct namespace dot/bracket references and object destructuring are checked. Type-only imports, unrelated namespaces and lexical shadowing are admitted. Namespace aliases, computed members, dynamic/CommonJS imports and re-export barrels still need data-flow/import-graph coverage; nested-block var hoisting remains conservative.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "DCP-EDGE-001",
+      "relations": [
+        {
+          "with": "architecture/CA-DEP-001",
+          "kind": "duplicates",
+          "why": "Both check imports against the preset layers; DCP-EDGE-001 covers the core layer, which CA-DEP-001 already checks, so one forbidden core edge is reported twice.",
+          "settle": "Turn DCP-EDGE-001 off while CA-DEP-001 is active, unless its managed-component wording is wanted."
+        },
+        {
+          "with": "architecture/FCIS-DEP-001",
+          "kind": "duplicates",
+          "why": "Both check imports from core-layer files against the preset layers, so one forbidden edge is reported twice.",
+          "settle": "Keep one of them: both run the same layer-edge evaluation on the core layer."
+        }
+      ],
+      "check": "dcouplr/boundaries/layer-direction",
+      "defaults": {
+        "paths": [
+          "@layers:core"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "dist/index.mjs DependenciesGate and DFactoryFunction; explicit project construction boundaries",
+        "paraphrase": "Managed components must depend on declared ports, not concrete adapters or undeclared implementation modules."
+      },
+      "why": "Managed components must depend on declared ports, not concrete adapters or undeclared implementation modules.",
+      "fixHint": "Declare managed, port, adapter and composition layers. Register adapters at the composition root and resolve a named port through the kernel.",
+      "avoid": "This is an explicit project import-graph policy. It requires a declared core layer and allowed edges; it does not infer the library receiver type.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+vi.mock("stripe");
+const view = <Total />;

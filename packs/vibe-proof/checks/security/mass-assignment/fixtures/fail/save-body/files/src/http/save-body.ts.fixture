@@ -1,0 +1,7 @@
+
+export async function update(req: Req, repo: Repo): Promise<void> {
+  await repo.save(req.body);
+}
+
+interface Req { body: { id: string; role?: string } }
+interface Repo { save(body: unknown): Promise<void> }

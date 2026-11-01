@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/web/vite-token.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "vite-prefix",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "VITE_ is a client prefix. TOKEN in that name is a secret-shaped value in the bundle."
+  }
+}

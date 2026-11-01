@@ -1,0 +1,7 @@
+interface Database {
+  execute(sql: string): Promise<void>;
+}
+
+export async function up(db: Database): Promise<void> {
+  await db.execute("update invoices set currency = 'EUR' where currency is null");
+}

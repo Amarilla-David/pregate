@@ -1,0 +1,9 @@
+declare function calc(x: number): void;
+
+export function run(x: number): void {
+  try {
+    calc(x);
+  } catch (err: any) {
+    throw new Error(`Calculation failed: ${err?.message}`);
+  }
+}

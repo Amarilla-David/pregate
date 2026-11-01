@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shop/legacy-only.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "single-entry",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "One entry does not make styleUrls singular. The legacy key is banned even when the array holds a single file."
+  }
+}

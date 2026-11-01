@@ -1,0 +1,1 @@
+{ "language": "typescript", "params": { "packages": ["legacy-web-kit"], "paths": ["src/**"] }, "target": "src/a.ts", "before": null, "expect": { "verdict": "fail", "violations": [{ "line": 1 }] }, "trap": { "family": "literal-require", "origin": "forge", "discovered": "2026-10-03", "note": "Require must not evade the retired-package condition." } }

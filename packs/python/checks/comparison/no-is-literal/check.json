@@ -1,0 +1,105 @@
+{
+  "id": "python/comparison/no-is-literal",
+  "version": "1.0.0",
+  "area": "comparison",
+  "cardinality": "singleton",
+  "dimension": "python.comparison.is-literal",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "is-literal",
+          "utils": {
+            "plain-string": {
+              "kind": "string",
+              "not": {
+                "has": {
+                  "kind": "string_start",
+                  "regex": "[fFtT]"
+                }
+              }
+            },
+            "literal": {
+              "any": [
+                {
+                  "kind": "integer"
+                },
+                {
+                  "kind": "float"
+                },
+                {
+                  "matches": "plain-string"
+                },
+                {
+                  "kind": "concatenated_string",
+                  "not": {
+                    "has": {
+                      "kind": "string",
+                      "not": {
+                        "matches": "plain-string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "unary_operator",
+                  "has": {
+                    "field": "argument",
+                    "any": [
+                      {
+                        "kind": "integer"
+                      },
+                      {
+                        "kind": "float"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "matches": "literal"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "comparison_operator",
+            "has": {
+              "matches": "literal",
+              "any": [
+                {
+                  "follows": {
+                    "regex": "^is(\\s+not)?$"
+                  }
+                },
+                {
+                  "precedes": {
+                    "regex": "^is(\\s+not)?$"
+                  }
+                }
+              ]
+            }
+          },
+          "x-note": "The operand directly beside is or is not is a number, string or bytes literal, which CPython reports as a SyntaxWarning. None, True, False, Ellipsis and f-strings are not covered; == against a literal passes."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: is compares identity; a literal's identity is not guaranteed, so compare the value with ==."
+  }
+}

@@ -1,0 +1,2 @@
+import { useRouter } from 'next/navigation';
+function Observer() { const router = useRouter(); const single: string[] = []; single.push('next' + lastPageParam); }

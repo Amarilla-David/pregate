@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/exports/no-default-export",
+  "version": "1.0.0",
+  "area": "exports",
+  "cardinality": "singleton",
+  "dimension": "modules.default-export",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "default-export",
+          "rule": {
+            "kind": "export_statement",
+            "any": [
+              {
+                "regex": "^\\s*export\\s+default\\b"
+              },
+              {
+                "has": {
+                  "stopBy": "end",
+                  "kind": "export_specifier",
+                  "regex": "^default$|\\bas\\s+default$"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} default-exports a binding. Export it by name."
+  }
+}

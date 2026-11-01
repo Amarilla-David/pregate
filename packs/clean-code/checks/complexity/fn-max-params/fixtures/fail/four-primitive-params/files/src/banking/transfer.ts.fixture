@@ -1,0 +1,6 @@
+import type { Ledger } from "./ledger";
+
+export function transfer(ledger: Ledger, from: string, to: string, cents: number): void {
+  ledger.debit(from, cents);
+  ledger.credit(to, cents);
+}

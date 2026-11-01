@@ -1,0 +1,2 @@
+def main(socketio, app):
+    socketio.run(app, debug=True)

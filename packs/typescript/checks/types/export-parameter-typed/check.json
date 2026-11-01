@@ -1,0 +1,93 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/export-parameter-typed",
+  "version": "1.0.2",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.export-param",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "untyped-export-param",
+          "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+          "rule": {
+            "any": [
+              {
+                "kind": "required_parameter"
+              },
+              {
+                "kind": "optional_parameter"
+              }
+            ],
+            "not": {
+              "has": {
+                "kind": "type_annotation"
+              }
+            },
+            "inside": {
+              "kind": "formal_parameters",
+              "inside": {
+                "any": [
+                  {
+                    "any": [
+                      {
+                        "kind": "function_declaration"
+                      },
+                      {
+                        "kind": "function_expression"
+                      },
+                      {
+                        "kind": "arrow_function"
+                      }
+                    ],
+                    "inside": {
+                      "kind": "export_statement"
+                    }
+                  },
+                  {
+                    "any": [
+                      {
+                        "kind": "arrow_function"
+                      },
+                      {
+                        "kind": "function_expression"
+                      }
+                    ],
+                    "inside": {
+                      "kind": "variable_declarator",
+                      "not": {
+                        "has": {
+                          "field": "type",
+                          "kind": "type_annotation"
+                        }
+                      },
+                      "inside": {
+                        "kind": "lexical_declaration",
+                        "inside": {
+                          "kind": "export_statement"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} exports a parameter without an explicit annotation required by this project's public-boundary policy. Annotate this signature, not its inferred inner callbacks."
+  }
+}

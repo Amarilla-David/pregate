@@ -1,0 +1,2 @@
+
+export const place = (order) => order;

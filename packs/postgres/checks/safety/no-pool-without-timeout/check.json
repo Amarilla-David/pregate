@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/safety/no-pool-without-timeout",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "postgres.pool-without-timeout",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "pool-no-timeout",
+          "rule": {
+            "kind": "new_expression",
+            "regex": "\\bnew\\s+Pool\\s*\\(",
+            "not": {
+              "regex": "(statement_timeout|idleTimeoutMillis|query_timeout)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} builds a Pool with no statement or idle timeout. A runaway query can hold a connection forever."
+  }
+}

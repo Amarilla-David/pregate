@@ -1,0 +1,6 @@
+
+export function city(order: Order): string {
+  return order.customer.city;
+}
+
+interface Order { customer: { city: string } }

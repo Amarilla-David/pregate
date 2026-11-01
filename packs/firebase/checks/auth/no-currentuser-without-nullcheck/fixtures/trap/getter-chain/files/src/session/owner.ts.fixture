@@ -1,0 +1,3 @@
+export function ownerEmail(): string {
+  return getAuth().currentUser.email;
+}

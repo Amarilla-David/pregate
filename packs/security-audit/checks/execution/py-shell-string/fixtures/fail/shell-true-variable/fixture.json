@@ -1,0 +1,14 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "tools/build.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/mass-assign.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "mass-assign-alias",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Object.assign copies the same caller-controlled fields as a spread. The absence of ... does not make the write-through safe."
+  }
+}

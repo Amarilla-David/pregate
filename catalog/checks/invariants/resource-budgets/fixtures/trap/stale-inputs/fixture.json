@@ -1,0 +1,43 @@
+{
+  "language": "typescript",
+  "params": {
+    "verifier": "CORE-INV-047"
+  },
+  "context": {
+    "fitness": {
+      "contractHash": "reviewed-contract-v1",
+      "inputHash": "current-code-tree",
+      "command": [
+        "fixture-verifier"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "contractHash": "reviewed-contract-v1",
+        "inputHash": "old-code-tree",
+        "verifier": "CORE-INV-047",
+        "command": [
+          "fixture-verifier"
+        ],
+        "exitCode": 0,
+        "completed": true,
+        "recordedAt": "2026-10-04T00:00:00Z"
+      }
+    }
+  },
+  "target": ".pregate/preset.json",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "stale-fitness-evidence",
+    "origin": "forge",
+    "discovered": "2026-10-04",
+    "note": "A prior green verification must not admit changed inputs."
+  }
+}

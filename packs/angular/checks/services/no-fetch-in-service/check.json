@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/services/no-fetch-in-service",
+  "version": "1.0.0",
+  "area": "services",
+  "cardinality": "singleton",
+  "dimension": "angular.fetch-in-service",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "fetch-in-service",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "(^|\\.)fetch$"
+            }
+          },
+          "files": [
+            "**/*.service.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls global fetch inside a service. Use HttpClient so interceptors and tests see the request."
+  }
+}

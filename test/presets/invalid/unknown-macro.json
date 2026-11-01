@@ -1,0 +1,43 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/functional-core-imperative-shell"
+    ],
+    "layers": {
+      "domain": {
+        "paths": [
+          "src/domain/**"
+        ],
+        "mayImport": [],
+        "kind": "core"
+      }
+    },
+    "overrides": {
+      "FCIS-IO-001": {
+        "params": {
+          "paths": [
+            "@knowledge:moneyPaths"
+          ]
+        }
+      }
+    }
+  },
+  "errors": [
+    "example/FCIS-IO-001: params.paths: unknown macro @knowledge:moneyPaths"
+  ]
+}

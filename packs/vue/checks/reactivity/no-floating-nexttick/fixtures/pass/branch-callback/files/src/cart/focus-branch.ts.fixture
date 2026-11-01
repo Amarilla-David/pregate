@@ -1,0 +1,7 @@
+import { nextTick } from "vue";
+
+declare function focus(): void;
+declare const ok: boolean;
+export function focusInput(): void {
+  if (ok) nextTick(() => focus());
+}

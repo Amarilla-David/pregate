@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/logout/+page.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "cookies-delete-in-universal-load",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Calling cookies.delete in +page.ts relies on the same server-only cookies capability as cookies.set."
+  }
+}

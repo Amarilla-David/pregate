@@ -1,0 +1,6 @@
+import { getDocs, limit, query } from "firebase/firestore";
+
+export async function loadRecent(col: ColRef, toItem: Mapper): Promise<Item[]> {
+  const snap = await getDocs(query(col, limit(25)));
+  return snap.docs.map((d) => toItem(d.data()));
+}

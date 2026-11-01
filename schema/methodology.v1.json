@@ -1,0 +1,80 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$" },
+    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    "status": { "enum": ["complete", "preview"] },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "with": { "type": "string", "pattern": "^[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$" },
+          "dimension": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)*$" },
+          "suggest": {
+            "type": "object",
+            "properties": { "use": { "type": "string" } },
+            "required": ["use"],
+            "additionalProperties": false
+          },
+          "why": { "type": "string" }
+        },
+        "required": ["with", "dimension", "suggest", "why"],
+        "additionalProperties": false
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$" },
+          "check": { "type": "string", "pattern": "^[a-z][a-z0-9-]*/[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$" },
+          "defaults": { "type": "object" },
+          "severity": { "enum": ["deny", "ask", "warn", "off"] },
+          "source": {
+            "type": "object",
+            "properties": {
+              "work": { "type": "string" },
+              "locator": { "type": "string" },
+              "paraphrase": { "type": "string" }
+            },
+            "required": ["work", "locator", "paraphrase"],
+            "additionalProperties": false
+          },
+          "why": { "type": "string" },
+          "fixHint": { "type": "string" },
+          "avoid": { "type": "string" },
+          "examples": {
+            "type": "object",
+            "properties": {
+              "pass": { "type": "string" },
+              "fail": { "type": "string" }
+            },
+            "required": ["pass", "fail"],
+            "additionalProperties": false
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "with": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(/[A-Z][A-Z0-9]*(-[A-Z0-9]+)*)?$" },
+                "kind": { "enum": ["contradicts", "duplicates", "idiom"] },
+                "why": { "type": "string", "pattern": "\\S" },
+                "settle": { "type": "string", "pattern": "\\S" }
+              },
+              "required": ["with", "kind", "why", "settle"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "check", "defaults", "severity", "source", "why", "fixHint", "avoid"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "version", "status", "conflicts", "invariants"],
+  "additionalProperties": false
+}

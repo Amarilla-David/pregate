@@ -1,0 +1,4 @@
+
+export function customerName(order: { customer?: { name: string } }): string {
+  return order.customer?.name ?? "unknown";
+}

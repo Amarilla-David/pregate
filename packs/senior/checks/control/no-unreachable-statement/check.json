@@ -1,0 +1,104 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/control/no-unreachable-statement",
+  "version": "1.0.0",
+  "area": "control",
+  "cardinality": "singleton",
+  "dimension": "control.unreachable",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unreachable",
+          "rule": {
+            "any": [
+              {
+                "kind": "expression_statement"
+              },
+              {
+                "kind": "lexical_declaration"
+              },
+              {
+                "kind": "variable_declaration"
+              },
+              {
+                "kind": "return_statement"
+              },
+              {
+                "kind": "throw_statement"
+              },
+              {
+                "kind": "if_statement"
+              },
+              {
+                "kind": "for_statement"
+              },
+              {
+                "kind": "while_statement"
+              },
+              {
+                "kind": "do_statement"
+              },
+              {
+                "kind": "switch_statement"
+              },
+              {
+                "kind": "try_statement"
+              },
+              {
+                "kind": "break_statement"
+              },
+              {
+                "kind": "continue_statement"
+              },
+              {
+                "kind": "debugger_statement"
+              },
+              {
+                "kind": "function_declaration"
+              },
+              {
+                "kind": "class_declaration"
+              },
+              {
+                "kind": "empty_statement"
+              },
+              {
+                "kind": "with_statement"
+              }
+            ],
+            "follows": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "return_statement"
+                },
+                {
+                  "kind": "throw_statement"
+                },
+                {
+                  "kind": "break_statement"
+                },
+                {
+                  "kind": "continue_statement"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sits after a return, throw, break, or continue. Delete it or move it above the exit."
+  }
+}

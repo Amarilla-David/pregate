@@ -1,0 +1,6 @@
+export interface PipeTransform<T = unknown, R = unknown> { transform(value: T): R; }
+export class TrimPipe implements PipeTransform<string, string> {
+  transform(value: string): string {
+    return value.trim();
+  }
+}

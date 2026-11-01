@@ -1,0 +1,3 @@
+import OpenAI from "openai";
+// dangerouslyAllowBrowser: true is never set here.
+export const client = new OpenAI({ baseURL: "/api/llm", apiKey: "proxy", dangerouslyAllowBrowser: false });

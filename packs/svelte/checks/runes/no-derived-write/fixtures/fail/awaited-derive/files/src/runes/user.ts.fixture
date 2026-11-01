@@ -1,0 +1,7 @@
+declare function loadUser(id: string): Promise<string>;
+
+const user = $derived(await loadUser("ada"));
+
+export function name(): string {
+  return "ada";
+}

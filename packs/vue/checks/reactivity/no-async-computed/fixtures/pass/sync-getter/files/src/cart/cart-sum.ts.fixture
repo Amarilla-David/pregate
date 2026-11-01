@@ -1,0 +1,5 @@
+import { computed, ref } from "vue";
+
+const prices = ref<number[]>([]);
+
+export const total = computed(() => prices.value.reduce((sum, price) => sum + price, 0));

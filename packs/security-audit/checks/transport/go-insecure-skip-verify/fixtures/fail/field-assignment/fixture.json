@@ -1,0 +1,14 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "internal/client/http.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      }
+    ]
+  }
+}

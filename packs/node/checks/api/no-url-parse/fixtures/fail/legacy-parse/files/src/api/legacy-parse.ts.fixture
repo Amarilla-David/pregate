@@ -1,0 +1,5 @@
+import url from "node:url";
+
+export function host(u: string): string | null {
+  return url.parse(u).host;
+}

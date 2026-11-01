@@ -1,0 +1,4 @@
+export function isTheme(name: string): boolean {
+  const theme = process.env.UI_THEME ?? "MONKEY";
+  return name === theme;
+}

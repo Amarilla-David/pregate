@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/timer.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 2 }] },
+  "trap": { "family": "interval-handle", "origin": "forge", "discovered": "2026-10-08", "note": "A cleanup reader of another field in the same type does not cover the stored timer handle." }
+}

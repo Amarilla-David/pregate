@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/exp-template.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-url",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Building the exp:// URL from a template hides the scheme from a literal search. The dev channel is the same."
+  }
+}

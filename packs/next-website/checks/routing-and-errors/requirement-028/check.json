@@ -1,0 +1,27 @@
+{
+  "id": "next-website/routing-and-errors/requirement-028",
+  "version": "1.0.0",
+  "area": "routing-and-errors",
+  "cardinality": "singleton",
+  "dimension": "next-website.r028",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "NEXT-WEBSITE-028"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "NEXT-WEBSITE-028 requires current passing project verification: {symbol}."
+  }
+}

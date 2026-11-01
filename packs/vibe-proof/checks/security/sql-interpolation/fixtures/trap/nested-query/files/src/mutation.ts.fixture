@@ -1,0 +1,8 @@
+export async function mutate(db: Database, id: string): Promise<unknown> {
+  return db.transaction(async tx => {
+    return tx.query(`select id from items where id = ${id}`);
+  });
+}
+
+interface Transaction { query(text: string): Promise<unknown> }
+interface Database { transaction(run: (tx: Transaction) => Promise<unknown>): Promise<unknown> }

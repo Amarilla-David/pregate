@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "tailwind/classes/no-space-in-arbitrary-value",
+  "version": "1.0.0",
+  "area": "classes",
+  "cardinality": "singleton",
+  "dimension": "tailwind.no-space-in-arbitrary-value",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "space-in-arbitrary-value",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "\\[[^\\]\\s]*\\s+[^\\[\\]]*\\]",
+            "inside": {
+              "any": [
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                }
+              ],
+              "inside": {
+                "stopBy": "end",
+                "any": [
+                  {
+                    "regex": "^(className|class)\\s*=",
+                    "has": {
+                      "kind": "property_identifier",
+                      "regex": "^(className|class)$"
+                    }
+                  },
+                  {
+                    "kind": "call_expression",
+                    "has": {
+                      "field": "function",
+                      "kind": "identifier",
+                      "regex": "^(clsx|cn|cx|classnames|classNames|twMerge|twJoin|cva|tv)$"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} has a space inside an arbitrary value, which splits it into broken classes. Use an underscore: grid-cols-[1fr_2fr]."
+  }
+}

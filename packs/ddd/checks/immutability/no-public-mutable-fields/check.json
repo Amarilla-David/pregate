@@ -1,0 +1,122 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "ddd/immutability/no-public-mutable-fields",
+  "version": "1.0.0",
+  "area": "immutability",
+  "cardinality": "singleton",
+  "dimension": "immutability.public-fields",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "public-mutable-field",
+          "utils": {
+            "modifier": {
+              "not": {
+                "any": [
+                  {
+                    "kind": "property_identifier"
+                  },
+                  {
+                    "kind": "identifier"
+                  }
+                ]
+              }
+            },
+            "readonly-modifier": {
+              "has": {
+                "regex": "^readonly$",
+                "matches": "modifier"
+              }
+            },
+            "static-modifier": {
+              "has": {
+                "regex": "^static$",
+                "matches": "modifier"
+              }
+            },
+            "non-public": {
+              "any": [
+                {
+                  "has": {
+                    "kind": "accessibility_modifier",
+                    "regex": "^(private|protected)$"
+                  }
+                },
+                {
+                  "has": {
+                    "field": "name",
+                    "kind": "private_property_identifier"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "public_field_definition",
+                "not": {
+                  "any": [
+                    {
+                      "matches": "readonly-modifier"
+                    },
+                    {
+                      "matches": "static-modifier"
+                    },
+                    {
+                      "matches": "non-public"
+                    },
+                    {
+                      "has": {
+                        "field": "value",
+                        "any": [
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "function_expression"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "any": [
+                  {
+                    "kind": "required_parameter"
+                  },
+                  {
+                    "kind": "optional_parameter"
+                  }
+                ],
+                "has": {
+                  "kind": "accessibility_modifier",
+                  "regex": "^public$"
+                },
+                "not": {
+                  "matches": "readonly-modifier"
+                }
+              }
+            ]
+          },
+          "x-note": "Instance state a caller can assign directly: a field or public parameter property that is neither readonly, private, protected nor #private. Static fields and function-valued fields are behavior or class data, not entity state."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is a public mutable field: any caller can overwrite the object's state without going through a domain operation."
+  }
+}

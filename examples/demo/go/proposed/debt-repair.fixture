@@ -1,0 +1,3 @@
+package domain
+
+func Legacy() int { return 10 }

@@ -1,0 +1,15 @@
+import { ImportError, type Row, type Store } from "./store";
+
+export class Importer {
+  constructor(private readonly store: Store) {}
+
+  run(rows: Row[]): void {
+    if (rows.length > 0) {
+      try {
+        this.store.save(rows);
+      } catch (error) {
+        throw new ImportError("save failed", { cause: error });
+      }
+    }
+  }
+}

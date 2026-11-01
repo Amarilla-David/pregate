@@ -1,0 +1,10 @@
+export class SearchIndex {
+  constructor(private readonly db: Database) {}
+
+  rebuild(postId: number, title: string) {
+    return this.db.transaction(async (tx) => {
+      await tx.update(posts).set({ title }).where(eq(posts.id, postId));
+      await this.db.execute(sql`update search_index set title = ${title} where post_id = ${postId}`);
+    });
+  }
+}

@@ -1,0 +1,4 @@
+export async function save(path: string, file: unknown): Promise<unknown> {
+  const { data } = await storage.from("public").upload(path, file);
+  return data;
+}

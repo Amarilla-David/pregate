@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/events/compat.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "legacy-import",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "The import path does not matter. The dispatcher call is the legacy API wherever it was imported from."
+  }
+}

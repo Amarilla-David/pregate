@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "architecture/repository",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "REPO-ROW-001",
+      "check": "architecture/repository/returns-raw-row",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Patterns of Enterprise Application Architecture (M. Fowler, 2002)",
+        "locator": "Repository",
+        "paraphrase": "A repository looks like a collection of domain objects. Callers do not see the query rows the infrastructure used to load them."
+      },
+      "why": "The row is the database's shape. Returning it makes every caller depend on column names and nullability the domain did not choose.",
+      "fixHint": "Map the columns onto the domain type in the repository and return that value. Keep the row type private to the repository file.",
+      "avoid": "return row as Invoice and return { ...row } are the same leak. return row.id is a field read, not this rule; a mapper that still returns the whole row is.",
+      "examples": {
+        "pass": "pass/maps-columns",
+        "fail": "fail/returns-row"
+      }
+    }
+  ]
+}

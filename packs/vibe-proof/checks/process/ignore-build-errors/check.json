@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/process/ignore-build-errors",
+  "version": "1.0.0",
+  "area": "process",
+  "cardinality": "singleton",
+  "dimension": "process.ignore-build",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "ignore-build",
+          "rule": {
+            "kind": "pair",
+            "regex": "^\\s*(ignoreBuildErrors|ignoreDuringBuilds)\\s*:\\s*true\\b"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} turns build or lint failures off."
+  }
+}

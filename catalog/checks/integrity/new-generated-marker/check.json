@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../schema/check.v1.json",
+  "id": "core/integrity/new-generated-marker",
+  "version": "1.1.0",
+  "area": "integrity",
+  "cardinality": "singleton",
+  "dimension": "integrity.generated-marker",
+  "minSeverity": "deny",
+  "params": {
+    "markers": { "type": "array", "items": { "type": "string" } }
+  },
+  "impl": { "kind": "primitive", "primitive": "diff", "op": "no-increase", "count": "markers" },
+  "phase": ["pre", "stop"],
+  "feedback": { "message": "A generated-code marker was added: the file now has {measured}, it had {limit}." }
+}

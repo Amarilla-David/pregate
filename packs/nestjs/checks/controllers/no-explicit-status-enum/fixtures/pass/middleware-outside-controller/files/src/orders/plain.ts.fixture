@@ -1,0 +1,4 @@
+import type { Response } from "express";
+export function sendOk(res: Response, body: unknown): void {
+  res.status(200).json(body);
+}

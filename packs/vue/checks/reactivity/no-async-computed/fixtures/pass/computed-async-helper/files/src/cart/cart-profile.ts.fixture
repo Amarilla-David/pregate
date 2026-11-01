@@ -1,0 +1,7 @@
+import { ref } from "vue";
+import { computedAsync } from "@vueuse/core";
+
+declare function loadUser(id: string): Promise<{ name: string }>;
+const userId = ref("u1");
+
+export const profile = computedAsync(async () => await loadUser(userId.value), null);

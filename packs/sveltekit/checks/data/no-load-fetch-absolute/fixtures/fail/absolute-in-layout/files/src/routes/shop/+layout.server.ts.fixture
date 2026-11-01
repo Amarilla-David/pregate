@@ -1,0 +1,6 @@
+import type { LayoutServerLoad } from "./$types";
+
+export const load: LayoutServerLoad = async ({ fetch }) => {
+	const res = await fetch("https://api.example.com/config");
+	return { config: await res.json() };
+};

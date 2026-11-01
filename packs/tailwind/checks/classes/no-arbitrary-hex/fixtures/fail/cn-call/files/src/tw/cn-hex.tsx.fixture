@@ -1,0 +1,5 @@
+import { cn } from "@/lib/utils";
+
+export function Card({ on }: { on: boolean }) {
+  return <div className={cn("rounded", on && "bg-[#1a2b3c]")} />;
+}

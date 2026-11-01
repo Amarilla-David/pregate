@@ -1,0 +1,5 @@
+import type { Request, Response } from "express";
+
+export function back(req: Request, res: Response): void {
+  res.redirect(req.params.returnTo);
+}

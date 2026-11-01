@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/client/serum-anchor.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "pre-0.30-project-serum-anchor-import",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Importing the pre-0.30 @project-serum/anchor package pulls in the even older legacy Anchor client stack."
+  }
+}

@@ -1,0 +1,19 @@
+import { taxCatalogMigration } from "./migration-probe";
+
+export async function door(name: string, code: string): Promise<unknown[]> {
+  await taxCatalogMigration.require();
+  const comma = (0, globalThis).eval(code);
+  const angle = (<any>globalThis).eval(code);
+  const boxed = Object(globalThis).eval(code);
+  const main = process.mainModule.require(name);
+  const bun = import.meta.require(name);
+  const frame = top.eval(code);
+  const opener = parent["eval"](code);
+  const view = document.defaultView.eval(code);
+  return [comma, angle, boxed, main, bun, frame, opener, view];
+}
+
+export function viaBox(): unknown {
+  const { eval: run } = (0, globalThis);
+  return run;
+}

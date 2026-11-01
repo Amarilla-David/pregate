@@ -1,0 +1,5 @@
+
+export function tax(total: number): number {
+  // HACK ada will fix the rounding
+  return total;
+}

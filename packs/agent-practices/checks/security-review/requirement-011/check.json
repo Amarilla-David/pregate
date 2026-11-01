@@ -1,0 +1,27 @@
+{
+  "id": "agent-practices/security-review/requirement-011",
+  "version": "1.0.0",
+  "area": "security-review",
+  "cardinality": "singleton",
+  "dimension": "agent-practices.r011",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PRACTICE-011"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PRACTICE-011 requires current passing project verification: {symbol}."
+  }
+}

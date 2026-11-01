@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/readonly-exported-property",
+  "version": "1.0.1",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.readonly-export",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "mutable-export-field",
+          "rule": {
+            "kind": "property_signature",
+            "not": {
+              "regex": "^\\s*readonly\\b"
+            },
+            "inside": {
+              "stopBy": {
+                "any": [
+                  { "kind": "statement_block" },
+                  { "kind": "as_expression" },
+                  { "kind": "satisfies_expression" },
+                  { "kind": "call_expression" },
+                  { "kind": "new_expression" },
+                  {
+                    "all": [
+                      { "has": { "kind": "type_arguments" } },
+                      { "not": { "kind": "generic_type" } }
+                    ]
+                  }
+                ]
+              },
+              "kind": "export_statement"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} exports a mutable property. Mark the public field readonly."
+  }
+}

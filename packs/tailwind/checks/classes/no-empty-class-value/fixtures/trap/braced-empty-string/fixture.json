@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/Badge.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "jsx-expression-empty-class",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Wrapping an empty string literal inside a JSX expression container className={\"\"} still renders an empty class attribute."
+  }
+}

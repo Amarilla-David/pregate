@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function purge(ids: number[]) {
+  return prisma.session.deleteMany({ where: { userId: { in: ids } } });
+}

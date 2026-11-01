@@ -1,0 +1,12 @@
+package worker
+
+import "context"
+
+func Wait(ctx context.Context, ch <-chan int) int {
+	select {
+	case v := <-ch:
+		return v
+	case <-ctx.Done():
+		return 0
+	}
+}

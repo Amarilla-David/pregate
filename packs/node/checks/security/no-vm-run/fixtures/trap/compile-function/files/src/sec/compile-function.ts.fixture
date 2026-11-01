@@ -1,0 +1,5 @@
+import vm from "node:vm";
+
+export function build(): unknown {
+  return vm.compileFunction("return 1");
+}

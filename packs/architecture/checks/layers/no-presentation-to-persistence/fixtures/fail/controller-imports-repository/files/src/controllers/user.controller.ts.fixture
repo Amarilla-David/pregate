@@ -1,0 +1,6 @@
+import { Request, Response } from "express";
+import { UserRepository } from "../repositories/user.repository";
+
+export class UserController {
+  constructor(private readonly repo: UserRepository) {}
+}

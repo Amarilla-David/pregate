@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/bootstrap/factory.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "immutable-creator-alias",
+    "origin": "forge",
+    "discovered": "2026-10-07",
+    "note": "One immutable creator alias must retain the admitted callback policy; wrappers do not change runtime injection."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/logging/requirement-004",
+  "version": "1.0.0",
+  "area": "logging",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.logging.r004",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DCP-LOGGING-004"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DCP-LOGGING-004 requires current passing project logging verification: {symbol}."
+  }
+}

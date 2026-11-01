@@ -1,0 +1,5 @@
+import { defineProps } from "vue";
+
+const props = defineProps<{ title: string }>();
+
+props["title"] = "New";

@@ -1,0 +1,1 @@
+await fetch(url, { body: JSON.stringify({ cache: "no-store", next: { revalidate: 60 } }) });

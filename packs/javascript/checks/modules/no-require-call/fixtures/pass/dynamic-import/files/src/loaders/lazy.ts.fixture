@@ -1,0 +1,4 @@
+export async function load() {
+  const fs = await import("node:fs");
+  return fs.sep;
+}

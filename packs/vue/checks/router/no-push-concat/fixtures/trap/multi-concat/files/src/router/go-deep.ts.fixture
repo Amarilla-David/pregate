@@ -1,0 +1,7 @@
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+export function goDeep(org: string, team: string, id: string): void {
+  router.push("/orgs/" + org + "/teams/" + team + "/users/" + id);
+}

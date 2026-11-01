@@ -1,0 +1,3 @@
+import { writeBatch } from "firebase/firestore";
+
+writeBatch(db);

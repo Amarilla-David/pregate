@@ -1,0 +1,100 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "language": { "enum": ["typescript", "python", "go", "rust"] },
+    "params": { "type": "object" },
+    "context": {
+      "type": "object",
+      "properties": {
+        "layers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "paths": { "type": "array", "items": { "type": "string" } },
+              "mayImport": { "type": "array", "items": { "type": "string" } },
+              "kind": { "enum": ["core", "port", "adapter", "main"] }
+            },
+            "required": ["paths", "mayImport", "kind"],
+            "additionalProperties": false
+          }
+        },
+        "scope": {
+          "type": "object",
+          "properties": {
+            "include": { "type": "array", "items": { "type": "string" } },
+            "exclude": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        },
+        "generatedMarkers": { "type": "array", "items": { "type": "string" } },
+        "fitness": {
+          "type": "object",
+          "properties": {
+            "command": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "receipt": { "oneOf": [{ "type": "object" }, { "type": "null" }] },
+            "contractHash": { "type": "string" },
+            "inputHash": { "type": "string" }
+          },
+          "required": ["command", "receipt", "contractHash", "inputHash"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "target": { "type": "string" },
+    "before": { "enum": [null, "before/"] },
+    "expect": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": { "verdict": { "const": "pass" } },
+          "required": ["verdict"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "verdict": { "const": "fail" },
+            "violations": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "line": { "type": "integer", "minimum": 1 },
+                  "measured": { "type": "number" }
+                },
+                "required": ["line"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": ["verdict", "violations"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "trap": {
+      "type": "object",
+      "properties": {
+        "family": { "type": "string" },
+        "origin": { "enum": ["real", "corpus", "forge"] },
+        "discovered": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "note": { "type": "string" }
+      },
+      "required": ["family", "origin", "discovered", "note"],
+      "additionalProperties": false
+    }
+  },
+  "dependentSchemas": {
+    "trap": {
+      "properties": {
+        "expect": { "properties": { "verdict": { "const": "fail" } } }
+      }
+    }
+  },
+  "required": ["language", "params", "target", "before", "expect"],
+  "additionalProperties": false
+}

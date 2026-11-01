@@ -1,0 +1,3 @@
+export async function touch(ref: DocRef, data: Profile, now: number): Promise<void> {
+  await setDoc(ref, { ...data, updatedAt: now });
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["@layers"] },
+  "context": {
+    "layers": {
+      "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" },
+      "infra": { "paths": ["src/infra/**"], "mayImport": ["domain"], "kind": "adapter" }
+    }
+  },
+  "target": "src/domain/door.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 5 }, { "line": 6 }, { "line": 7 }, { "line": 8 }, { "line": 9 }, { "line": 10 }, { "line": 11 }, { "line": 12 }, { "line": 17 }] },
+  "trap": {
+    "family": "dynamic-import",
+    "origin": "corpus",
+    "discovered": "2026-10-02",
+    "note": "Review of O35: the global object or the module reached without its plain name at the start of the expression (comma operator, angle-bracket cast, Object(globalThis)), the main module through process, Bun's import.meta.require, and the window aliases top, parent and document.defaultView. Before O35 every one was denied as a property named eval or require."
+  }
+}

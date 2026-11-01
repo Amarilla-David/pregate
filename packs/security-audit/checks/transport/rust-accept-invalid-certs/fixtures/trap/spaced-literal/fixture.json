@@ -1,0 +1,20 @@
+{
+  "language": "rust",
+  "params": {},
+  "target": "src/client.rs",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "spaced-argument",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "Whitespace or a line break around the literal true still disables verification."
+  }
+}

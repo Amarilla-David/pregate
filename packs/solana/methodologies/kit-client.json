@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "solana/kit-client",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SOL-KIT-001",
+      "check": "solana/kit/no-web3js-import",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "recommended-stack and client pages",
+        "paraphrase": "New TypeScript speaks @solana/kit v8 with plugins; web3.js v1 stays only inside one legacy adapter."
+      },
+      "why": "web3.js v1 is legacy: unmodular, un-tree-shakeable, and its idioms teach the agent 2023 code.",
+      "fixHint": "Use @solana/kit with plugins (createClient().use(...)). If legacy code remains, isolate it in one adapter module instead of importing it everywhere.",
+      "avoid": "Re-exporting web3.js from a shared barrel so every module keeps importing it.",
+      "examples": {
+        "pass": "pass/kit-import",
+        "fail": "fail/legacy-import"
+      }
+    },
+    {
+      "id": "SOL-KIT-002",
+      "check": "solana/kit/no-wallet-adapter-import",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "recommended-stack and wallets pages",
+        "paraphrase": "Wallet UI goes through Wallet Standard or an embedded wallet, not the legacy adapter packages."
+      },
+      "why": "The old wallet-adapter packages pull the legacy stack back in and bypass Wallet Standard.",
+      "fixHint": "Use @solana/kit-plugin-wallet with @solana/react (Wallet Standard), or Privy for embedded wallets.",
+      "avoid": "Wrapping the old adapter in a hook and calling that the new wallet layer.",
+      "examples": {
+        "pass": "pass/kit-wallet",
+        "fail": "fail/adapter-import"
+      }
+    },
+    {
+      "id": "SOL-KIT-003",
+      "check": "solana/kit/no-legacy-anchor-import",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "install page, Anchor 1.x migration note",
+        "paraphrase": "Anchor programs pair with the client package of their own line, and one repo pins one line."
+      },
+      "why": "Anchor 1.x moved the TypeScript client to @anchor-lang/core; the old package pins the repo to the 0.32 line.",
+      "fixHint": "Import from @anchor-lang/core and pin one Anchor line per repo from Anchor.toml. Prefer a Codama-generated client from the IDL over hand-written calls.",
+      "avoid": "Aliasing the old package to the new name so both lines coexist.",
+      "examples": {
+        "pass": "pass/core-anchor",
+        "fail": "fail/legacy-anchor"
+      }
+    },
+    {
+      "id": "SOL-KIT-004",
+      "check": "solana/kit/no-spl-token-import",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Solana cookbook, tokens (https://solana.com/developers/cookbook/tokens/get-token-mint)",
+        "locator": "Kit and Legacy tabs",
+        "paraphrase": "Kit examples build token instructions with @solana-program/token and @solana-program/token-2022; @solana/spl-token appears only in the Legacy examples next to web3.js v1, which it requires as a peer dependency."
+      },
+      "why": "@solana/spl-token takes and returns web3.js v1 PublicKey and Transaction objects, so importing it pulls the legacy client back into a Kit codebase even when web3.js itself is never imported.",
+      "fixHint": "Use the Codama-generated program clients: @solana-program/token for the Token program and @solana-program/token-2022 for Token Extensions.",
+      "avoid": "Barrel re-exports, require() and deep subpath imports load the same package. Mentions in comments or plain strings are not matched.",
+      "examples": {
+        "pass": "pass/kit-token-program",
+        "fail": "fail/legacy-transfer"
+      }
+    }
+  ]
+}

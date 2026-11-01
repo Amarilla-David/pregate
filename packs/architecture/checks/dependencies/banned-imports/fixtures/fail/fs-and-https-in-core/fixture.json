@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {
+    "paths": ["@layers:core"],
+    "packages": ["fs", "child_process", "net", "http", "https", "http2", "dgram", "dns", "tls", "cluster", "worker_threads", "readline", "os", "process", "perf_hooks", "timers", "vm", "bun", "bun:sqlite", "bun:ffi", "undici", "node-fetch", "axios", "ws", "pg", "mysql2", "mongodb", "redis", "ioredis", "@prisma/client", "pino", "winston"]
+  },
+  "context": {
+    "layers": {
+      "core": { "paths": ["src/core/**"], "mayImport": [], "kind": "core" },
+      "shell": { "paths": ["src/shell/**"], "mayImport": ["core"], "kind": "adapter" }
+    }
+  },
+  "target": "src/core/report.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 2 }] }
+}

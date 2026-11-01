@@ -1,0 +1,4 @@
+export function natives(): unknown {
+  const b = process.binding("natives");
+  return b;
+}

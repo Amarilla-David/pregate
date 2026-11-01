@@ -1,0 +1,5 @@
+import admin from "firebase-admin";
+
+export function app(): admin.app.App {
+  return admin.app();
+}

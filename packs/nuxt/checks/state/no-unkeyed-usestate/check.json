@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/state/no-unkeyed-usestate",
+  "version": "1.0.0",
+  "area": "state",
+  "cardinality": "singleton",
+  "dimension": "nuxt.no-unkeyed-usestate",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unkeyed-usestate",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^useState$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "^\\(\\s*\\)$"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls useState with no key. Pass a key and an initializer so instances do not share one slot."
+  }
+}

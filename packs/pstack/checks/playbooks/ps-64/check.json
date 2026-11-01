@@ -1,0 +1,27 @@
+{
+  "id": "pstack/playbooks/ps-64",
+  "version": "1.0.0",
+  "area": "playbooks",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-64",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-64"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-64 requires current passing project verification: {symbol}."
+  }
+}

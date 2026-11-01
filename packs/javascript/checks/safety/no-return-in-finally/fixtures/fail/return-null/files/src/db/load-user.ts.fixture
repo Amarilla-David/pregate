@@ -1,0 +1,9 @@
+import type { Db, User } from "./db";
+
+export async function loadUser(db: Db, id: string): Promise<User | null> {
+  try {
+    return await db.users.find(id);
+  } finally {
+    return null;
+  }
+}

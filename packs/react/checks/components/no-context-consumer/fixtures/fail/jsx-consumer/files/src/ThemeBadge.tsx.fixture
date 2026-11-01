@@ -1,0 +1,5 @@
+import { createContext } from "react";
+const ThemeContext = createContext("light");
+export function ThemeBadge() {
+  return <ThemeContext.Consumer>{(theme) => <span>{theme}</span>}</ThemeContext.Consumer>;
+}

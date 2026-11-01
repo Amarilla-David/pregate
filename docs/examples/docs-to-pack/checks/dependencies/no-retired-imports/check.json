@@ -1,0 +1,12 @@
+{
+  "id": "docs-demo/dependencies/no-retired-imports",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "multi",
+  "dimension": "deps.packages",
+  "minSeverity": null,
+  "params": { "packages": { "type": "array", "items": { "type": "string" } } },
+  "impl": { "kind": "primitive", "primitive": "banned-import" },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": { "message": "{symbol} imports a retired package; migrate to modern-web-kit." }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "context": {
+    "layers": {
+      "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" },
+      "application": { "paths": ["src/application/**"], "mayImport": ["domain"], "kind": "core" },
+      "infra": { "paths": ["src/infra/**"], "mayImport": ["domain", "application"], "kind": "adapter" }
+    }
+  },
+  "target": "src/application/register-user.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 2 }] }
+}

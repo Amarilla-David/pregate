@@ -1,0 +1,10 @@
+export function Title(props: { text: string }) {
+  return <h1>{props.text}</h1>;
+}
+export function Page(props: { text: string }) {
+  return (
+    <main>
+      <Title text={props.text} />
+    </main>
+  );
+}

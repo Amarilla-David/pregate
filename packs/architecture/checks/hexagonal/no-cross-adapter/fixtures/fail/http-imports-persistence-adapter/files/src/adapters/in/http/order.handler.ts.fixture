@@ -1,0 +1,5 @@
+import { PostgresOrderRepo } from "../../out/postgres/order.repo";
+
+export class OrderHandler {
+  constructor(private readonly repo: PostgresOrderRepo) {}
+}

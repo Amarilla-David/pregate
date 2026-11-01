@@ -1,0 +1,2 @@
+builder.declareIntent('ORDER')[nextStage](creator);
+builder.declareIntent('ORDER').customStage(creator);

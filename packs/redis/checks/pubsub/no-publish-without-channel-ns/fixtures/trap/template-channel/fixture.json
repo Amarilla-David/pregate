@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/events/tpl-bus.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "template-channel",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Backticks do not add a namespace. A template channel without a colon collides on the same global bus."
+  }
+}

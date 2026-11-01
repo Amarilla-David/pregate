@@ -1,0 +1,16 @@
+import { Router } from "express";
+
+export const usersRouter = Router();
+
+usersRouter.delete("/users/:id", (req, res) => {
+  const id = req.params.id;
+  res.status(200).json({ id });
+});
+
+usersRouter.get("/users/back", (req, res) => {
+  res.redirect(req.get("Referrer") || "/");
+});
+
+usersRouter.get("/users/:id/avatar", (_req, res) => {
+  res.sendFile("/srv/avatars/default.png");
+});

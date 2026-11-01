@@ -1,0 +1,9 @@
+type Order = { id: string; total: number };
+
+export function parseOrder(json: string): Order {
+  const raw = JSON.parse(json) as unknown;
+  if (typeof raw !== "object" || raw === null) throw new Error("Not an object");
+  const order = raw as Order;
+  const legacy = <Order>raw;
+  return order.id ? order : legacy;
+}

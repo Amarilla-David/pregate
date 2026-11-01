@@ -1,0 +1,37 @@
+import { Date, performance as perf } from "./calendar";
+import * as crypto from "./ids";
+
+export interface Viewport {
+  readonly width: number;
+}
+
+export function window(text: string, around: number): [number, number] {
+  return [Math.max(0, around - 10), Math.min(text.length, around + 10)];
+}
+
+export function errorIn(text: string, window: [number, number] | null): number {
+  const [from, to] = window ?? [0, text.length];
+  return to - from;
+}
+
+export function fits(window: Viewport, { process }: { process: number }, [fetch]: [(url: string) => number]): boolean {
+  return window.width > process + fetch("/width");
+}
+
+export function total(entries: readonly number[]): number {
+  let sum = 0;
+  for (const Bun of entries) sum += Bun;
+  return sum + Date.days(1) + perf.mark(crypto.randomUUID());
+}
+
+export function parsed(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch (process) {
+    return process;
+  }
+}
+
+export const label = (self: { name: string }): string => [self][0]!.name;
+export const width = (globalThis: { innerWidth: number }) => globalThis.innerWidth;
+export type Render = (window: Viewport, Date: number) => number;

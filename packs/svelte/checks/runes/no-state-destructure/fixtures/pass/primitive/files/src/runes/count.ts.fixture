@@ -1,0 +1,5 @@
+let count = $state(0);
+
+export function reset(): void {
+  count = 0;
+}

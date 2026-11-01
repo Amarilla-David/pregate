@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/platform/no-exit-app",
+  "version": "1.0.0",
+  "area": "platform",
+  "cardinality": "singleton",
+  "dimension": "react-native.no-exit-app",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "exit-app",
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "regex": "^BackHandler\\.exitApp$"
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "regex": "^exitApp$"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} kills the app process. Move the user back through navigation and let the OS own process lifetime."
+  }
+}

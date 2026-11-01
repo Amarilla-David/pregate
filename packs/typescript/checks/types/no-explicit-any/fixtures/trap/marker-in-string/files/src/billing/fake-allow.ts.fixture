@@ -1,0 +1,3 @@
+
+const note = "pregate-allow-any: not a directive";
+export const payload: any = note;

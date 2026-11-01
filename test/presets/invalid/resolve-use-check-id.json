@@ -1,0 +1,30 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [
+      "example/clean-code"
+    ],
+    "resolve": {
+      "fn.params": {
+        "use": "example/complexity/fn-max-params"
+      }
+    }
+  },
+  "errors": [
+    "resolve.fn.params.use: example/complexity/fn-max-params is not an active methodology or invariant in this dimension"
+  ]
+}

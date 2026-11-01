@@ -1,0 +1,9 @@
+import { exec } from "node:child_process";
+
+const SHA = /^[0-9a-f]{40}$/;
+
+export function status(ref: string, done: (out: string) => void): boolean {
+  exec("git status --short", (_error, stdout) => done(stdout));
+  exec(`git log -1 --format=%H`, (_error, stdout) => done(stdout));
+  return SHA.exec(`${ref}`) !== null;
+}

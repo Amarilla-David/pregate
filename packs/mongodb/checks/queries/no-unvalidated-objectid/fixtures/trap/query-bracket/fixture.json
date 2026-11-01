@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mongo/id-query-bracket.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "bracket-access",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Bracket access still reads request input. req.query[\"id\"] throws the same way as req.query.id when it is garbage."
+  }
+}

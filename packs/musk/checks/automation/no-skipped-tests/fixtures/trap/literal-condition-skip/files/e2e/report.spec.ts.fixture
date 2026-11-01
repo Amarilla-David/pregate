@@ -1,0 +1,17 @@
+import { test } from "@playwright/test";
+import { it } from "mocha";
+
+test("report", async () => {
+  test.skip(1, "r");
+  test.skip(!0, "r");
+  test.skip(`later`, "r");
+  test.skip(true, `later`);
+  test.skip("x", () => {});
+  it.skip(caseName, "r");
+  test.skip((true), "r");
+  test.skip(1 === 1, "r");
+  test.skip(true as boolean, "r");
+});
+test.describe("group", () => {
+  test.skip(!!1, "r");
+});

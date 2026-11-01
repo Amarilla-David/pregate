@@ -1,0 +1,3 @@
+await rpc.getTransaction(sig, { maxSupportedTransactionVersion: String(1) });
+await rpc.getTransaction(sig, { maxSupportedTransactionVersion: `${1}` });
+await rpc.getTransaction(sig, { maxSupportedTransactionVersion: "" + 1 });

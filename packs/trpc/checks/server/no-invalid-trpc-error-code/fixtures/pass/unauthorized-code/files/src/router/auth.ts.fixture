@@ -1,0 +1,7 @@
+declare class TRPCError extends Error { constructor(opts: { code: string; message?: string }); }
+export function requireUser(userId: string | null): string {
+  if (!userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return userId;
+}

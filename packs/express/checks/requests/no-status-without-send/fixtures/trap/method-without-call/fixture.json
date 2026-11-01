@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/hanging-ref.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "method-without-call",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Naming .send without calling it reads like a chained response, but no bytes leave the process. The request still hangs."
+  }
+}

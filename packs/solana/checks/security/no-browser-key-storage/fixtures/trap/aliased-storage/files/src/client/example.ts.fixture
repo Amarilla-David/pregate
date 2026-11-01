@@ -1,0 +1,2 @@
+const store = window.localStorage;
+store.setItem("privateKey", wallet.secretKey);

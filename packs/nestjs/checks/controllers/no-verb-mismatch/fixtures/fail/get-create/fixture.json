@@ -1,0 +1,1 @@
+{"$schema": "../../../../../../../schema/fixture.v1.json", "before": null, "expect": {"verdict": "fail", "violations": [{"line": 4}]}, "language": "typescript", "params": {}, "target": "src/orders/controller.ts"}

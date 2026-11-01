@@ -1,0 +1,3 @@
+export function sendToken(token: string): void {
+  window.parent.postMessage({ token }, "*");
+}

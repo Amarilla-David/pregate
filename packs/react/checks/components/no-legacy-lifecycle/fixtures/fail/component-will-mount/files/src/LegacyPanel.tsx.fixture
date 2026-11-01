@@ -1,0 +1,6 @@
+export class LegacyPanel {
+  componentWillMount() {
+    this.load();
+  }
+  load() {}
+}

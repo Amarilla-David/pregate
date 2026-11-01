@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/writes/no-deletemany-without-where",
+  "version": "1.0.0",
+  "area": "writes",
+  "cardinality": "singleton",
+  "dimension": "prisma.deletemany-where",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "deletemany-no-where",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.deleteMany\\s*\\(",
+            "not": {
+              "regex": "\\bwhere\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls deleteMany with no where clause, which wipes the table. Pass a where filter that names exactly the rows to remove."
+  }
+}

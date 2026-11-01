@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/runtime/no-private-package-imports",
+  "version": "1.0.0",
+  "area": "runtime",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.no-private-package-imports",
+  "minSeverity": null,
+  "params": {
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "banned-import"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Import dcouplr through its public package exports, not internal source or distribution paths."
+  }
+}

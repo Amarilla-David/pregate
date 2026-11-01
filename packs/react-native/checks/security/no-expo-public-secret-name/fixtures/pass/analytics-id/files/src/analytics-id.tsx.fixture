@@ -1,0 +1,5 @@
+const analyticsId = process.env.EXPO_PUBLIC_ANALYTICS_ID;
+
+export function tag(): string {
+  return analyticsId;
+}

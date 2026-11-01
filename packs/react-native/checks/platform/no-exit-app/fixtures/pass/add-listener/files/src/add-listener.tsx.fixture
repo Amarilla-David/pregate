@@ -1,0 +1,5 @@
+import { BackHandler } from "react-native";
+
+export function watch(handler: () => boolean): void {
+  BackHandler.addEventListener("hardwareBackPress", handler);
+}

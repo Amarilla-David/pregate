@@ -1,0 +1,1 @@
+const row = db.select().from(users).where(eq(users.key, key)).get();

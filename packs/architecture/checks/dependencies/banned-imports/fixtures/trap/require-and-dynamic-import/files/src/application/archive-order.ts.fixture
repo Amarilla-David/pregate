@@ -1,0 +1,7 @@
+const { PrismaClient } = require("@prisma/client");
+
+export async function archiveOrder(id: string): Promise<void> {
+  const { DataSource } = await import("typeorm");
+  await new PrismaClient().order.update({ where: { id }, data: { archived: true } });
+  await new DataSource({ type: "postgres" }).destroy();
+}

@@ -1,0 +1,7 @@
+export class Pager {
+  skip(n: number): this {
+    return this;
+  }
+}
+
+export const pager = new Pager().skip(10);

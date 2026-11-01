@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "nextjs-fullstack",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "path",
+      "path": "packs/typescript"
+    },
+    {
+      "ns": "nextjs",
+      "kind": "path",
+      "path": "packs/nextjs"
+    },
+    {
+      "ns": "prisma",
+      "kind": "path",
+      "path": "packs/prisma"
+    },
+    {
+      "ns": "authjs",
+      "kind": "path",
+      "path": "packs/authjs"
+    }
+  ],
+  "methodologies": [
+    "core/pregate-integrity",
+    "typescript/strict-types",
+    "typescript/async-results",
+    "typescript/discipline",
+    "typescript/named-exports",
+    "typescript/framework-entries",
+    "nextjs/routing",
+    "nextjs/rendering",
+    "prisma/client",
+    "prisma/writes",
+    "authjs/config",
+    "authjs/session",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "shadow",
+  "overrides": {
+    "typescript/TS-DEFAULT-001": {
+      "severity": "deny",
+      "params": {
+        "exclude": [
+          "**/pages/**",
+          "**/app/**/page.ts",
+          "**/app/**/page.tsx",
+          "**/app/**/layout.ts",
+          "**/app/**/layout.tsx"
+        ]
+      },
+      "note": "Entry files must default-export. Named exports stay deny everywhere else. Do not resolve modules.default-export to one alias."
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

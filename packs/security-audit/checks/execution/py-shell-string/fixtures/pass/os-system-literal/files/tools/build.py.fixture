@@ -1,0 +1,6 @@
+import os
+
+
+def clear(cmd):
+    os.system("clear")
+    os.system(cmd)

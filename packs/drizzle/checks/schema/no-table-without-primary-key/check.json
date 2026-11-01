@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/schema/no-table-without-primary-key",
+  "version": "1.0.0",
+  "area": "schema",
+  "cardinality": "singleton",
+  "dimension": "drizzle.table-pk",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "table-pk",
+          "rule": {
+            "kind": "call_expression",
+            "any": [
+              {
+                "all": [
+                  {
+                    "regex": "^pgTable\\s*\\("
+                  },
+                  {
+                    "regex": "\\btext\\s*\\(\\s*[\"']id[\"']"
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "regex": "^pgTable\\s*\\("
+                  },
+                  {
+                    "regex": "\\buuid\\s*\\(\\s*[\"']id[\"']"
+                  }
+                ]
+              }
+            ],
+            "not": {
+              "regex": "\\bprimaryKey\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} defines a pgTable whose text or uuid id has no primaryKey. Chain .primaryKey() onto the id column."
+  }
+}

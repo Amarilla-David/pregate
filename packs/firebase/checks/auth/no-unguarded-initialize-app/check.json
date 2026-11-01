@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "firebase/auth/no-unguarded-initialize-app",
+  "version": "1.0.0",
+  "area": "auth",
+  "cardinality": "singleton",
+  "dimension": "firebase.unguarded-init",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unguarded-initialize-app",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "(^|\\.)initializeApp$"
+            },
+            "inside": {
+              "stopBy": "end",
+              "kind": "@fn",
+              "not": {
+                "has": {
+                  "stopBy": "end",
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "(^|\\.)(getApps|getApp)$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls initializeApp() inside a function without checking getApps(). Guard initialization so repeated calls or hot reloads do not throw duplicate-app errors."
+  }
+}

@@ -1,0 +1,6 @@
+import { View, Text, Image } from "react-native";
+
+export function Hero(): unknown {
+  const uri = "https://cdn.example.com/hero.png";
+  return <View><Image source={{ uri }} /><Text>hi</Text></View>;
+}

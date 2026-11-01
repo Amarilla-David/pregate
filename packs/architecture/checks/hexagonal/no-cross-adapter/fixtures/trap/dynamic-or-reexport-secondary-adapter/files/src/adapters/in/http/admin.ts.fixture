@@ -1,0 +1,5 @@
+export { MongoDbAdapter } from "../../out/persistence/mongodb";
+
+export async function loadStorage() {
+  return import("../../out/secondary/storage");
+}

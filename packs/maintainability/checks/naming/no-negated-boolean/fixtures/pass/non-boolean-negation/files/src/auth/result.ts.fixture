@@ -1,0 +1,5 @@
+export interface ErrorStatus {
+  noErrorReason: string;
+}
+
+export const isNotActiveMessage = "Account is inactive";

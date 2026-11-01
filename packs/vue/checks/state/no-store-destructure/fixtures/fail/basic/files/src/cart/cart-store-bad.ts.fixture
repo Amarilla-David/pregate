@@ -1,0 +1,5 @@
+import { useCartStore } from "./store";
+
+const { count } = useCartStore();
+
+export { count };

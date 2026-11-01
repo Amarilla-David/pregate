@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "go",
+  "params": { "paths": ["**/test_*.py", "**/*_test.py", "**/*_test.go"] },
+  "target": "orders/orders_test.go",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 7 }] },
+  "trap": {
+    "family": "subtest-skipnow",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A renamed *testing.T inside a subtest closure still skips unconditionally."
+  }
+}

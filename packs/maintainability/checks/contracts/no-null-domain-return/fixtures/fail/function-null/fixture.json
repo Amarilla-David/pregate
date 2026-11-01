@@ -1,0 +1,1 @@
+{"language":"typescript","params":{},"target":"src/domain/order.ts","before":null,"expect":{"verdict":"fail","violations":[{"line":2}]}}

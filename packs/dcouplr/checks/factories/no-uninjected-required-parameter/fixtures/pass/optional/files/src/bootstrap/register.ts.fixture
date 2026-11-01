@@ -1,0 +1,1 @@
+admission.addFactoryMethod((input, kernel, optional?: string) => ({ optional }));

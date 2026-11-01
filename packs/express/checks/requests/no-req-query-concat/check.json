@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-req-query-concat",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.query-redirect",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "redirect-from-query",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.redirect\\s*\\([^)]*req\\.(query|params)"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} redirects to a URL taken from req.query or req.params. Redirect to a fixed path or a validated allowlist entry."
+  }
+}

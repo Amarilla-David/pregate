@@ -1,0 +1,27 @@
+{
+  "id": "next-website/server-and-client-boundary/requirement-013",
+  "version": "1.0.0",
+  "area": "server-and-client-boundary",
+  "cardinality": "singleton",
+  "dimension": "next-website.r013",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "NEXT-WEBSITE-013"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "NEXT-WEBSITE-013 requires current passing project verification: {symbol}."
+  }
+}

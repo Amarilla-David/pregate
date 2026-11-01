@@ -1,0 +1,6 @@
+
+export default function place(order: Order): string {
+  return order.id;
+}
+
+interface Order { id: string }

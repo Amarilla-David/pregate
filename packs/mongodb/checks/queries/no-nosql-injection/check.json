@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/queries/no-nosql-injection",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "mongodb.queries.nosql-injection",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "nosql-injection",
+          "rule": {
+            "kind": "object",
+            "regex": "\\$(where|expr)\\b",
+            "has": {
+              "regex": "req\\."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds a $where/$expr query from request input. Use field comparisons or an allowlisted operator set instead."
+  }
+}

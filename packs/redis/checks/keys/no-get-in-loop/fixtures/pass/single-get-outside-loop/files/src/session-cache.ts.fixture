@@ -1,0 +1,4 @@
+declare const redis: { get(key: string): Promise<string | null> };
+export async function loadSession(id: string): Promise<string | null> {
+  return await redis.get(`session:${id}`);
+}

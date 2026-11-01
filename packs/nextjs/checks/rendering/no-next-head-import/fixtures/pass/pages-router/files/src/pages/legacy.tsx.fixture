@@ -1,0 +1,2 @@
+import Head from "next/head";
+export default function Legacy() { return <Head><title>Legacy</title></Head>; }

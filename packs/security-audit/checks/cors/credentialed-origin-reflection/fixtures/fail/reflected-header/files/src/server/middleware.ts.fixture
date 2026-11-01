@@ -1,0 +1,5 @@
+export function allowAll(req: Request, res: Response, next: () => void): void {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin ?? "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+}

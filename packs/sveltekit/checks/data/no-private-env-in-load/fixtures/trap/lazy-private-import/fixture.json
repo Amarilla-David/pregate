@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/items/+page.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "dynamic-import",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Deferring the private-env import does not keep it off the client. A universal load ships every module it can reach to the browser."
+  }
+}

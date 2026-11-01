@@ -1,0 +1,9 @@
+import os
+
+
+def do_shell(self, line):
+    print(os.popen(line).read())
+
+
+def alert(conf):
+    os.system(conf.alert_command)

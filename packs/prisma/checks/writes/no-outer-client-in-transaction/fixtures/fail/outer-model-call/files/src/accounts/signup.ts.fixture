@@ -1,0 +1,9 @@
+import { prisma } from "~/server/db";
+
+export async function signup(email: string) {
+  return prisma.$transaction(async (tx) => {
+    const user = await tx.user.create({ data: { email } });
+    await prisma.profile.create({ data: { userId: user.id } });
+    return user;
+  });
+}

@@ -1,0 +1,8 @@
+export function priceInCents(amount: number): number {
+  return Math.round(amount * 100);
+}
+
+/** @deprecated */
+export function toCents(amount: number): number {
+  return priceInCents(amount);
+}

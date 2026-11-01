@@ -1,0 +1,25 @@
+const assert = require('node:assert/strict');
+const { stopOwnedSaga } = require('../src/stop-owned-saga.cjs');
+
+async function verifyCompletion(failure) {
+  let release, settled = false, stopped = 0;
+  const held = new Promise(resolve => { release = resolve; });
+  const inFlight = failure ? [Promise.reject(failure), held] : [held];
+  let result;
+  const stopping = stopOwnedSaga({ stop() { stopped++; } }, inFlight)
+    .then(() => { settled = true; }, error => { settled = true; result = error; });
+  for (let i = 0; i < 5; i++) await Promise.resolve();
+  const early = settled;
+  release();
+  await stopping;
+  assert.equal(stopped, 1, 'Admission was not stopped');
+  assert.equal(early, false, 'Shutdown completed before owned handler work settled');
+  assert.equal(result, failure);
+}
+
+async function main() {
+  await verifyCompletion(undefined);
+  await verifyCompletion(new Error('handler failed'));
+}
+
+main().catch(error => { console.error(error.message); process.exitCode = 1; });

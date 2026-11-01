@@ -1,0 +1,4 @@
+
+export function customerId(order: { customer: { id: string } | null }): string {
+  return order.customer!.id;
+}

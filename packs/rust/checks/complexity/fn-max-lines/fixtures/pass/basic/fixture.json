@@ -1,0 +1,11 @@
+{
+  "language": "rust",
+  "params": {
+    "max": 45
+  },
+  "target": "src/a.rs",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

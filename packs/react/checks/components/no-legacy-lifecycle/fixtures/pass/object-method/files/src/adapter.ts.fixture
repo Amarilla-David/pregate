@@ -1,0 +1,5 @@
+export const lifecycleAdapter = {
+  componentWillMount() {
+    return "not-a-class";
+  },
+};

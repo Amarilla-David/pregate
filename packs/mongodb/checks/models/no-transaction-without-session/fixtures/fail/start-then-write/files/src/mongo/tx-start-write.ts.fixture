@@ -1,0 +1,7 @@
+import type { ClientSession } from "mongodb";
+export async function run(s: ClientSession, col: Col): Promise<void> {
+  s.startTransaction();
+  await col.insertOne({ a: 1 }, { session: s });
+}
+
+interface Col { insertOne(d: unknown, o: unknown): Promise<void> }

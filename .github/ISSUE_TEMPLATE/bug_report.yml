@@ -1,0 +1,56 @@
+name: Bug Report
+description: Report a crash, CLI error, or unexpected harness hook behavior
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue with **Pregate**. If you are reporting a false positive or rule finding inside a gated repository, you can also run `pregate issue draft --last` to generate a deterministic reproduction.
+  - type: input
+    id: version
+    attributes:
+      label: Pregate Version
+      description: Output of `pregate --version`
+      placeholder: "pregate 0.0.1 (core 0.0.1)"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Operating System & Architecture
+      options:
+        - macOS (Apple Silicon / darwin-arm64)
+        - macOS (Intel / darwin-x64)
+        - Linux (x86_64 / linux-x64)
+        - Linux (ARM64 / linux-arm64)
+        - Windows (x64 / windows-x64)
+    validations:
+      required: true
+  - type: dropdown
+    id: harness
+    attributes:
+      label: Agent Harness / Environment
+      options:
+        - CLI / Git Hook / CI only
+        - Claude Code
+        - Cursor
+        - Codex
+        - Grok
+        - Antigravity (agy)
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the bug and how to reproduce it.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect Pregate to do instead?
+    validations:
+      required: true

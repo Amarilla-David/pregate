@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/dyn.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "expression-href",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A braces-wrapped literal is still a literal internal href. The rule reads the expression text, so quoting the path inside braces does not hide it."
+  }
+}

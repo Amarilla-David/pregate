@@ -1,0 +1,7 @@
+import { tick } from "svelte";
+
+declare const ok: boolean;
+
+export function settle(): void {
+  if (ok) tick();
+}

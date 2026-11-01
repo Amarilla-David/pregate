@@ -1,0 +1,9 @@
+function getDefaults(): { count: number } {
+  return { count: 0 };
+}
+
+const { count } = $state(getDefaults());
+
+export function current(): number {
+  return count;
+}

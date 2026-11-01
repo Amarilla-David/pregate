@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/router/user.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "update-in-query",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "An update hidden in a query still runs on every refetch. The verb does not matter; any write belongs in a mutation."
+  }
+}

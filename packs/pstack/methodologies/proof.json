@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "pstack/proof",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PS-WEAK-001",
+      "check": "pstack/tests/no-weak-matcher",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "test behavior, not implementation",
+        "paraphrase": "A test that would still pass when the code returns undefined is not asserting the behavior the caller observes. Assert a literal expected value."
+      },
+      "why": "Those matchers pass when the value is merely present or the function was merely called. A wrong total, a wrong argument, and undefined-returning fakes still go green.",
+      "fixHint": "Assert the literal the caller should observe, or toHaveBeenCalledWith the arguments that matter.",
+      "avoid": "toHaveBeenCalledWith is not this list. A bracket call such as expect(x)[\"toBeDefined\"]() is a hole. The rule only sees test files.",
+      "examples": {
+        "pass": "pass/literal-total",
+        "fail": "fail/to-be-defined"
+      }
+    },
+    {
+      "id": "PS-EXPECT-001",
+      "check": "pstack/tests/test-has-assertion",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "prove it works",
+        "paraphrase": "Before calling the work done, check the real result. A test that does not assert a value is a self-report that the function ran."
+      },
+      "why": "A test that never asserts stays green when the behavior is wrong. Running a function is not a proof of what it returned.",
+      "fixHint": "Assert the value the caller observes, with expect(...) or assert.equal(...).",
+      "avoid": "it.each and test.skip are not exactly the names it and test, so they are holes. A local named expect that is never called does not count. Core's assertion ratchet covers a drop in assertion count across a diff; this rule covers a test that has none.",
+      "examples": {
+        "pass": "pass/expect-call",
+        "fail": "fail/render-only"
+      }
+    },
+    {
+      "id": "PS-AAA-001",
+      "check": "pstack/tests/no-branch-in-test",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "One Hundred Invariant Rules for the Software Engineer–Architect",
+        "locator": "SE-84",
+        "paraphrase": "A test case reads as a linear arrange, act, assert story without selecting a result through its own branches."
+      },
+      "why": "When the test chooses the expected result based on the same condition as production code, it can mirror the bug instead of detecting it.",
+      "fixHint": "Split concrete cases and assert a literal result in each. Review intentional branches in property-based tests.",
+      "avoid": "Only if, switch, and ternary expressions inside direct test/it calls in test files are matched; helper control flow is out of scope.",
+      "examples": { "pass": "pass/separate-cases", "fail": "fail/if-case" }
+    }
+  ]
+}

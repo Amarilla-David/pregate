@@ -1,0 +1,8 @@
+import os
+
+PLAYER = "aplay"
+
+
+def beep(filename):
+    os.system("%s '%s'" % (PLAYER, filename))
+    os.system(f"{PLAYER} {filename.strip()}")

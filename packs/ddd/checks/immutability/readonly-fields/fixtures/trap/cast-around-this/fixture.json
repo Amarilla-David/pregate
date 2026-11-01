@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["**/domain/**/values/**", "**/domain/**/value-objects/**"] },
+  "target": "src/domain/values/percentage.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 11 }, { "line": 12 }, { "line": 17 }] },
+  "trap": {
+    "family": "readonly-bypass",
+    "origin": "corpus",
+    "discovered": "2026-10-02",
+    "note": "readonly holds only for the compiler: a cast around this, Object.defineProperty and Object.assign on a cast this change the value after construction."
+  }
+}

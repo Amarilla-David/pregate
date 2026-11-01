@@ -1,0 +1,9 @@
+/* eslint-disable */
+export function work(queue: string[]): number {
+  let done = 0;
+  while (queue.length > 0) {
+    queue.pop();
+    done++;
+  }
+  return done;
+}

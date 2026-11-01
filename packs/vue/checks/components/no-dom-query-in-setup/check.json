@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vue/components/no-dom-query-in-setup",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "vue.dom-query",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "dom-query-in-setup",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^(document|window\\.document|globalThis\\.document)\\.(getElementById|querySelector|querySelectorAll|getElementsByClassName|getElementsByTagName)$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} queries the global DOM directly. Use a Vue template ref (ref or useTemplateRef) so component nodes stay scoped and SSR-safe."
+  }
+}

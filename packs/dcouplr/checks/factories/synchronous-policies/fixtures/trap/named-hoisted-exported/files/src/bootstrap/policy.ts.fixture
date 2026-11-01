@@ -1,0 +1,3 @@
+stage.addValidationPolicy(check);
+export default async function check() { return true; }
+stage.addVerificationPolicy(check);

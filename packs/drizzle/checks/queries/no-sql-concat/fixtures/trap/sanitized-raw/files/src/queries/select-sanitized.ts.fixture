@@ -1,0 +1,2 @@
+const clean = sanitizeTable(userInput);
+const rows = await db.execute(sql.raw(clean));

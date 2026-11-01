@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/error-handling/requirement-032",
+  "version": "1.0.0",
+  "area": "error-handling",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r032",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-032"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-032 requires current passing project verification: {symbol}."
+  }
+}

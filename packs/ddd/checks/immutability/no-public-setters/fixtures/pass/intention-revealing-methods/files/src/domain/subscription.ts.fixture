@@ -1,0 +1,26 @@
+type Plan = "free" | "pro";
+
+export class Subscription {
+  private plan: Plan = "free";
+  private cancelledAt: string | null = null;
+
+  constructor(readonly id: string, private owner: string) {}
+
+  get currentPlan(): Plan {
+    return this.plan;
+  }
+
+  upgrade(plan: Plan): void {
+    if (this.cancelledAt !== null) throw new Error("A cancelled subscription cannot change plan");
+    this.plan = plan;
+  }
+
+  cancel(on: string): void {
+    if (this.cancelledAt !== null) return;
+    this.cancelledAt = on;
+  }
+
+  private assignOwner(owner: string): void {
+    this.owner = owner;
+  }
+}

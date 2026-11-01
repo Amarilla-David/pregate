@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/router/chat.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "emitter-no-observable",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A raw emitter subscription is not wrapped in observable(). The caller gets no typed unsubscribe contract."
+  }
+}

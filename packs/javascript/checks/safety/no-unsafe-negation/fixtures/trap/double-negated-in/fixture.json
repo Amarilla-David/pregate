@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/double-neg.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "double-negation-left-operand",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "!!key in map still coerces key to boolean before testing property membership in map."
+  }
+}

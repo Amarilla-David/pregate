@@ -1,0 +1,4 @@
+
+export function fail(error: Error): void {
+  console.error(error.message);
+}

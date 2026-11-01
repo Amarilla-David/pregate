@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/client/no-new-client-per-query",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "postgres.new-client-per-query",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "new-client",
+          "rule": {
+            "kind": "new_expression",
+            "has": {
+              "field": "constructor",
+              "regex": "^Client$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} builds a Client per query. Share one Pool for concurrent queries."
+  }
+}

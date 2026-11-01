@@ -1,0 +1,33 @@
+type Order = {
+  id: string;
+  customer: string;
+  placedOn: string;
+  taxRate: number;
+  note?: string;
+  lines: { sku: string; quantity: number; price: number; discount: number }[];
+};
+
+export function describeOrder(order: Order): string {
+  const parts: string[] = [];
+  parts.push(`Order ${order.id}`);
+  parts.push(`Customer ${order.customer}`);
+  parts.push(`Placed ${order.placedOn}`);
+  if (order.lines.length === 0) {
+    parts.push("No lines");
+  }
+  for (const line of order.lines) {
+    parts.push(`${line.quantity} x ${line.sku}`);
+    if (line.discount > 0) {
+      parts.push(`  discount ${line.discount}`);
+    }
+  }
+  const subtotal = order.lines.reduce((sum, line) => sum + line.quantity * line.price, 0);
+  parts.push(`Subtotal ${subtotal}`);
+  const tax = Math.round(subtotal * order.taxRate);
+  parts.push(`Tax ${tax}`);
+  parts.push(`Total ${subtotal + tax}`);
+  if (order.note !== undefined) {
+    parts.push(`Note ${order.note}`);
+  }
+  return parts.join("\n");
+}

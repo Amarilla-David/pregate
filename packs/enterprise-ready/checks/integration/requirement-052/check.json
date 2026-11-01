@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/integration/requirement-052",
+  "version": "1.0.0",
+  "area": "integration",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r052",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-052"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-052 requires current passing project verification: {symbol}."
+  }
+}

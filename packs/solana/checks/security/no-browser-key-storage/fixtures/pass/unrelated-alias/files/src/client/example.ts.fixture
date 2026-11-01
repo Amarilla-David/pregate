@@ -1,0 +1,2 @@
+const store = cache;
+store.setItem("privateKey", wallet.secretKey);

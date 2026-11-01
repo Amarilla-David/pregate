@@ -1,0 +1,113 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "authjs/session/no-open-redirect-callback",
+  "version": "1.0.0",
+  "area": "session",
+  "cardinality": "singleton",
+  "dimension": "authjs.open-redirect-callback",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "redirect-returns-url",
+          "utils": {
+            "only-returns-url": {
+              "any": [
+                {
+                  "has": {
+                    "field": "body",
+                    "regex": "^(\\w+\\.)?url$"
+                  }
+                },
+                {
+                  "has": {
+                    "field": "body",
+                    "kind": "statement_block",
+                    "has": {
+                      "kind": "return_statement",
+                      "regex": "^return\\s+(\\w+\\.)?url\\s*;?$",
+                      "all": [
+                        {
+                          "nthChild": {
+                            "position": 1,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "nthChild": {
+                            "position": 1,
+                            "reverse": true,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "all": [
+              {
+                "any": [
+                  {
+                    "kind": "pair",
+                    "regex": "^[\"']?redirect[\"']?\\s*:",
+                    "has": {
+                      "field": "value",
+                      "any": [
+                        {
+                          "kind": "arrow_function"
+                        },
+                        {
+                          "kind": "function_expression"
+                        }
+                      ],
+                      "matches": "only-returns-url"
+                    }
+                  },
+                  {
+                    "kind": "method_definition",
+                    "has": {
+                      "field": "name",
+                      "regex": "^redirect$"
+                    },
+                    "matches": "only-returns-url"
+                  }
+                ]
+              },
+              {
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "pair",
+                  "regex": "^[\"']?callbacks[\"']?\\s*:"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} returns the requested url without checking it. Auth.js then redirects to any host; allow relative paths and URLs on baseUrl, and fall back to baseUrl."
+  }
+}

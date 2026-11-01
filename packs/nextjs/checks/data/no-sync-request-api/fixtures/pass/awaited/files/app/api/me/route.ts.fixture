@@ -1,0 +1,8 @@
+import { cookies, headers } from "next/headers";
+
+export async function GET() {
+  const store = await cookies();
+  const token = store.get("token")?.value;
+  const agent = (await headers()).get("user-agent");
+  return Response.json({ token, agent });
+}

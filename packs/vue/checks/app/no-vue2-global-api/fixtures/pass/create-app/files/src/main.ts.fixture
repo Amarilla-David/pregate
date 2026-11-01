@@ -1,0 +1,11 @@
+import { createApp } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
+import App from "./App.vue";
+import CartBadge from "./cart/CartBadge.vue";
+
+const router = createRouter({ history: createWebHistory(), routes: [] });
+const app = createApp(App);
+app.use(router);
+app.component("CartBadge", CartBadge);
+app.config.errorHandler = (err) => console.error(err);
+app.mount("#app");

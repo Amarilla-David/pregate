@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "serve.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "explicit-host",
+    "origin": "corpus",
+    "discovered": "2026-10-25",
+    "note": "Only a literal loopback host keeps the debugger local; 0.0.0.0 or a computed host serves it to the network."
+  }
+}

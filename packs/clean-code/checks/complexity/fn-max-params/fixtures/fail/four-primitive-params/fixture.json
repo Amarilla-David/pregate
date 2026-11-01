@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "max": 3, "exempt": ["constructor"] },
+  "target": "src/banking/transfer.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 3, "measured": 4 }] }
+}

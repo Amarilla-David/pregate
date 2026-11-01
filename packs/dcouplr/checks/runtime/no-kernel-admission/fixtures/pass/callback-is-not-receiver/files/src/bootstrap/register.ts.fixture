@@ -1,0 +1,1 @@
+app.declareIntent('ORDER').addFactoryMethod(() => app.declareIntent('DKERNEL').addFactoryMethod(factory).createOnly()).register();

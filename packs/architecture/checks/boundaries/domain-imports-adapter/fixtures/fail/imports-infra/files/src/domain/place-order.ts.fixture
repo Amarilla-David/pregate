@@ -1,0 +1,6 @@
+
+import { db } from "../infra/postgres";
+
+export function place(): string {
+  return db;
+}

@@ -1,0 +1,6 @@
+let next = 0;
+
+export function newId(): string {
+  next += 1;
+  return `id-${next}`;
+}

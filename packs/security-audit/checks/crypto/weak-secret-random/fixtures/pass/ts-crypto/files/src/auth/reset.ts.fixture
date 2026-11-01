@@ -1,0 +1,7 @@
+import { randomBytes } from "node:crypto";
+
+export function issue() {
+  const resetToken = randomBytes(32).toString("hex");
+  const jitter = Math.random() * 100;
+  return { resetToken, jitter };
+}

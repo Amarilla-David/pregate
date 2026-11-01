@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function wipe(table: string) {
+  return prisma.$executeRawUnsafe("DELETE FROM " + table);
+}

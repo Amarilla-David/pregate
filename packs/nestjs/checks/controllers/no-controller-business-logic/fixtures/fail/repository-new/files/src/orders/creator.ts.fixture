@@ -1,0 +1,10 @@
+import { Controller, Post, Body } from "@nestjs/common";
+import { OrdersRepository } from "./orders.repository";
+@Controller("orders")
+export class OrdersAdmin {
+  @Post()
+  create(@Body() dto: unknown) {
+    const repo = new OrdersRepository(dto);
+    return repo.save();
+  }
+}

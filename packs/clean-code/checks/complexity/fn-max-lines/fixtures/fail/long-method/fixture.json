@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "max": 12 },
+  "target": "src/sales/receipt.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 6, "measured": 16 }] }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/components/dyn-font.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "expression-href",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A braces-wrapped font URL is still a googleapis stylesheet link. The rule reads the expression text, so quoting the URL inside braces does not hide it."
+  }
+}

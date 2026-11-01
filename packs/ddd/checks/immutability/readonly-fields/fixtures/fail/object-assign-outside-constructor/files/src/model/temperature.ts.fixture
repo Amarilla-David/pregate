@@ -1,0 +1,10 @@
+export class Temperature {
+  readonly celsius: number = 0;
+
+  constructor(celsius: number) { Object.assign(this, { celsius }); }
+
+  withCelsius(celsius: number): Temperature {
+    Object.assign(this, { celsius });
+    return this;
+  }
+}

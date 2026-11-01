@@ -1,0 +1,3 @@
+export function report(rows: string[], header: string): string {
+  return [header, ...rows].join("\n");
+}

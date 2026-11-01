@@ -1,0 +1,3 @@
+export function clearSecret(record: { passwordHash?: string }): void {
+  record.passwordHash = undefined;
+}

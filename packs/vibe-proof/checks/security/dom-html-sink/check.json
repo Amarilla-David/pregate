@@ -1,0 +1,166 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/security/dom-html-sink",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "security.dom-html-sink",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "dom-html-sink",
+          "rule": {
+            "any": [
+              {
+                "any": [
+                  {
+                    "kind": "assignment_expression"
+                  },
+                  {
+                    "kind": "augmented_assignment_expression"
+                  }
+                ],
+                "has": {
+                  "field": "left",
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "has": {
+                        "field": "property",
+                        "regex": "^(innerHTML|outerHTML)$"
+                      }
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "has": {
+                        "field": "index",
+                        "regex": "^[\"'`](innerHTML|outerHTML)[\"'`]$"
+                      }
+                    }
+                  ]
+                },
+                "not": {
+                  "has": {
+                    "field": "right",
+                    "matches": "static-markup"
+                  }
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^insertAdjacentHTML$"
+                  }
+                },
+                "not": {
+                  "has": {
+                    "field": "arguments",
+                    "has": {
+                      "nthChild": {
+                        "position": 2,
+                        "ofRule": {
+                          "not": {
+                            "kind": "comment"
+                          }
+                        }
+                      },
+                      "matches": "static-markup"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "regex": "^document\\.(write|writeln)$"
+                },
+                "not": {
+                  "has": {
+                    "field": "arguments",
+                    "regex": "^\\(\\s*([\"'][^\"'\\\\]*[\"']|`[^`$\\\\]*`)?\\s*\\)$"
+                  }
+                }
+              }
+            ]
+          },
+          "utils": {
+            "static-markup": {
+              "any": [
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string",
+                  "not": {
+                    "has": {
+                      "kind": "template_substitution"
+                    }
+                  }
+                },
+                {
+                  "kind": "ternary_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "consequence",
+                        "any": [
+                          {
+                            "kind": "string"
+                          },
+                          {
+                            "kind": "template_string",
+                            "not": {
+                              "has": {
+                                "kind": "template_substitution"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "alternative",
+                        "any": [
+                          {
+                            "kind": "string"
+                          },
+                          {
+                            "kind": "template_string",
+                            "not": {
+                              "has": {
+                                "kind": "template_substitution"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} writes a computed string into the DOM as HTML. Set textContent or build nodes; if markup is required, sanitize it in one named function."
+  }
+}

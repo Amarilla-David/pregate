@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/security/no-cors-open",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "express.cors-open-header",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "allow-origin-star",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "(?i)\\.(set|header)\\s*\\([^)]*access-control-allow-origin[^)]*\\*"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} answers with Access-Control-Allow-Origin *. Every site can then read the response; list the origins that may call the API."
+  }
+}

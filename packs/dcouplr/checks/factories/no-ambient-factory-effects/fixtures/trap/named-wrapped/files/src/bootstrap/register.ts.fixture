@@ -1,0 +1,1 @@
+const creator = ((() => Date.now()) as Creator); stage['addFactoryMethod']((creator!));

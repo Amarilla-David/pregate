@@ -1,0 +1,125 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "mongodb/queries",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MONGO-FIND-001",
+      "check": "mongodb/queries/no-unbounded-find",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Manual (Cursors: limit and batch size)",
+        "locator": "cursor.limit() and find() behavior",
+        "paraphrase": "A find without limit returns every matching document. Cap the result with limit() before materializing it."
+      },
+      "why": "An unbounded find streams the whole match set into memory, so one request can exhaust the server and the client.",
+      "fixHint": "Chain .limit(n) in the same statement as .find(), or use a paginated query with an explicit page size.",
+      "avoid": "Sorting without a limit only orders the rows; it does not bound them. findOne() is already bounded and needs no limit.",
+      "examples": {
+        "pass": "pass/limited",
+        "fail": "fail/unbounded"
+      }
+    },
+    {
+      "id": "MONGO-INJECT-001",
+      "check": "mongodb/queries/no-nosql-injection",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Manual ($where query operator)",
+        "locator": "$where and $expr evaluate expressions per document",
+        "paraphrase": "$where runs JavaScript per document and $expr evaluates an expression tree. Neither should be built from request input."
+      },
+      "why": "Request-controlled expressions escape field comparison and run attacker-shaped logic inside the query.",
+      "fixHint": "Compare request values against named fields with plain equality, and allowlist any operator the client may choose.",
+      "avoid": "$expr with $eq looks declarative but still evaluates request input. Plain field equality with request values stays allowed.",
+      "examples": {
+        "pass": "pass/literal-filter",
+        "fail": "fail/where-from-req"
+      }
+    },
+    {
+      "id": "MONGO-OBJECTID-001",
+      "check": "mongodb/queries/no-unvalidated-objectid",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Node.js driver API (ObjectId)",
+        "locator": "ObjectId constructor and ObjectId.isValid()",
+        "paraphrase": "The ObjectId constructor throws on values that are not 12 bytes or 24 hex characters. Validate with ObjectId.isValid() first."
+      },
+      "why": "Building an ObjectId straight from request input turns garbage ids into unhandled throws instead of 400s.",
+      "fixHint": "Copy the input to a local, reject it when ObjectId.isValid() is false, then construct the ObjectId from the local.",
+      "avoid": "Bracket access (req.query[\"id\"]) reads the same request input and throws the same way. Validating the local covers both.",
+      "examples": {
+        "pass": "pass/guarded-local",
+        "fail": "fail/params-id"
+      }
+    },
+    {
+      "id": "MONGO-AGG-001",
+      "check": "mongodb/queries/no-unsafe-aggregation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Manual ($function and $accumulator aggregation operators)",
+        "locator": "server-side JavaScript in aggregation stages",
+        "paraphrase": "$where, $function, and $accumulator execute JavaScript on the server for the documents they visit."
+      },
+      "why": "Server-side JavaScript in a pipeline runs per document with the server's privileges and defeats operator-level optimization.",
+      "fixHint": "Rewrite the stage with declarative operators ($match, $group, $project, $addFields) instead of embedded functions.",
+      "avoid": "$function nested inside $project is the same server-side JavaScript, not a safe projection.",
+      "examples": {
+        "pass": "pass/match-only",
+        "fail": "fail/where-stage"
+      }
+    },
+    {
+      "id": "MONGO-UPDATE-001",
+      "check": "mongodb/queries/no-update-without-operator",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Manual (db.collection.updateOne and updateMany) and MongoDB Node.js driver",
+        "locator": "update parameter: update operator expressions or an aggregation pipeline; https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/",
+        "paraphrase": "The update argument holds only update operator expressions such as $set, or an aggregation pipeline. Replacing the whole document is replaceOne's job. The Node.js driver rejects an update document with no operators."
+      },
+      "why": "A plain field object passed as the update throws MongoInvalidArgumentError (\"Update document requires atomic operators\") on every call, so the write never happens.",
+      "fixHint": "Wrap the fields in $set, or use another operator such as $inc or $unset. Use an update pipeline array for computed fields, and replaceOne to replace the whole document.",
+      "avoid": "Model.collection is the raw driver collection; it skips Mongoose's automatic $set cast. Mongoose Model.updateOne(filter, { name }) passes because Mongoose adds $set. The rule reads driver receivers: .collection(...), .collection, or a const bound to .collection(...) in the same file. An update object built in a variable, or one starting with a spread, is not judged.",
+      "examples": {
+        "pass": "pass/set-operator",
+        "fail": "fail/bare-fields"
+      }
+    },
+    {
+      "id": "MONGO-DELETEMANY-001",
+      "check": "mongodb/queries/no-empty-deletemany",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "MongoDB Manual, db.collection.deleteMany() (mongodb.com)",
+        "locator": "https://www.mongodb.com/docs/manual/reference/method/db.collection.deleteMany/",
+        "paraphrase": "Passing an empty filter document {} to deleteMany matches and removes every document in the collection."
+      },
+      "why": "Calling collection.deleteMany({}) or Model.deleteMany() in application code drops every document in the collection in a single command.",
+      "fixHint": "Pass a non-empty filter document such as { tenantId, expiredAt: { $lt: now } } to deleteMany.",
+      "avoid": "Matches literal deleteMany() and deleteMany({}) calls (including with a second options argument). Dynamic filter variables are not evaluated.",
+      "examples": {
+        "pass": "pass/filtered-deletemany",
+        "fail": "fail/empty-object-deletemany"
+      },
+      "relations": [
+        {
+          "with": "prisma/PRISMA-DELETE-001",
+          "kind": "duplicates",
+          "why": "A bare .deleteMany() or .deleteMany({}) call has no where property and an empty filter, so both rules report it when both packs are active.",
+          "settle": "Keep both. Passing a non-empty filter (or a where clause in Prisma) satisfies both; disable the pack for the database you do not use in that module."
+        }
+      ]
+    }
+  ]
+}

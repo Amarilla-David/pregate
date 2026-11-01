@@ -1,0 +1,5 @@
+from ..infra.store import fee
+
+
+def total(value):
+    return value + fee()

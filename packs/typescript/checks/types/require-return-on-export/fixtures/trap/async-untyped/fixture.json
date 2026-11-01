@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/loader.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "async-export",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Marking the function async does not replace a return type. The promise still publishes an untyped boundary."
+  }
+}

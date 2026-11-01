@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/serial.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "comment-await",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "The word await in a comment is not an await expression. The function still never suspends."
+  }
+}

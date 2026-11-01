@@ -1,0 +1,6 @@
+const items = $state<string[]>([]);
+const summary = $derived.by(() => items.join(", "));
+
+export function text(): string {
+  return summary;
+}

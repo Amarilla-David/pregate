@@ -1,0 +1,5 @@
+
+// @ts-ignore
+export function chargeId(value: { id: string }): string {
+  return value.id;
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/broken-alias.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "error-alias",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Renaming err to error does not add the missing fourth parameter. The handler is still ordinary middleware that never receives the error."
+  }
+}

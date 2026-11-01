@@ -1,0 +1,7 @@
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+export function verify(body: string, header: string, key: string): boolean {
+  const expected = Buffer.from(createHmac("sha256", key).update(body).digest("hex"));
+  const given = Buffer.from(header);
+  return given.length === expected.length && timingSafeEqual(given, expected);
+}

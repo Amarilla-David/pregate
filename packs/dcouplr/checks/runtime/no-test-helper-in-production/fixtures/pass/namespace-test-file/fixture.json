@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "target": "src/__tests__/runtime.test.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/**"
+    ],
+    "exclude": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "**/test/**",
+      "**/tests/**",
+      "**/__tests__/**"
+    ]
+  },
+  "expect": {
+    "verdict": "pass"
+  }
+}

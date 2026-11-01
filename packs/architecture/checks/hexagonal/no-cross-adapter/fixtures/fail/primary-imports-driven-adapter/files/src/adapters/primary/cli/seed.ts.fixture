@@ -1,0 +1,5 @@
+import { DatabaseClient } from "../../../persistence/client";
+
+export async function runSeed() {
+  return DatabaseClient.connect();
+}

@@ -1,0 +1,10 @@
+import { readFileSync } from "node:fs";
+import { get } from "https";
+
+export function reportTitle(path: string): string {
+  return readFileSync(path, "utf8").split("\n")[0] ?? "";
+}
+
+export function ping(url: string): void {
+  get(url);
+}

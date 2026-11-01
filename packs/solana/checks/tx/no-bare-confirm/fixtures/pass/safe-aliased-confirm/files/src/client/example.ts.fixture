@@ -1,0 +1,2 @@
+const verify = connection.confirmTransaction;
+await verify({ signature: sig, blockhash, lastValidBlockHeight });

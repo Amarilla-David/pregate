@@ -1,0 +1,8 @@
+export function createFilters(all: string[]) {
+  let query = $state("");
+  const visible = $derived(function () {
+    const needle = query.toLowerCase();
+    return all.filter((name) => name.toLowerCase().includes(needle));
+  });
+  return { get visible() { return visible; } };
+}

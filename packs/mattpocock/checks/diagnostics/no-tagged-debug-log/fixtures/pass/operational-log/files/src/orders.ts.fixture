@@ -1,0 +1,1 @@
+console.info("Order confirmed", order.id);

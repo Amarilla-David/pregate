@@ -1,0 +1,11 @@
+export function isPreview(mode: string): boolean {
+  const configured = process.env.APP_MODE;
+  const token = nextPage();
+  return configured === mode || token === "end";
+}
+
+export function other(header: string): boolean {
+  const expected = process.env.CRON_SECRET;
+  const local = header.trim();
+  return local === header;
+}

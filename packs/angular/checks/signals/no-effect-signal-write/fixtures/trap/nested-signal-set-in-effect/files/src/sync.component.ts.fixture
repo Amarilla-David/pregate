@@ -1,0 +1,12 @@
+declare function effect(fn: () => void): void;
+export class SyncComponent {
+  ready = () => true;
+  status = { set: (_v: string) => {} };
+  init() {
+    effect(() => {
+      if (this.ready()) {
+        this.status.set("active");
+      }
+    });
+  }
+}

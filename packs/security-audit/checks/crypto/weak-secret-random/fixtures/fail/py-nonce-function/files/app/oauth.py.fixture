@@ -1,0 +1,11 @@
+import random
+
+
+def new_nonce():
+    value = random.randint(0, 2**64)
+    return hex(value)
+
+
+class Signer:
+    def salt(self):
+        return random.random()

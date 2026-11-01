@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/components/no-io-alias",
+  "version": "1.0.0",
+  "area": "components",
+  "cardinality": "singleton",
+  "dimension": "angular.io-alias",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "io-alias",
+          "rule": {
+            "any": [
+              {
+                "kind": "decorator",
+                "regex": "@Input\\(\\s*['\"]"
+              },
+              {
+                "kind": "decorator",
+                "regex": "@Output\\(\\s*['\"]"
+              },
+              {
+                "kind": "decorator",
+                "regex": "@Input\\(\\s*\\{[^}]*alias"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} aliases an input or output. Use the plain property name so renames stay searchable."
+  }
+}

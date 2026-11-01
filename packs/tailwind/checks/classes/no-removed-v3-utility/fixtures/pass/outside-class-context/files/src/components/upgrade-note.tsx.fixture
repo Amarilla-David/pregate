@@ -1,0 +1,9 @@
+const removed = ["bg-opacity-50", "flex-grow", "overflow-ellipsis"];
+
+export function UpgradeNote() {
+  return (
+    <ul className="list-disc pl-4" aria-label="flex-grow was renamed">
+      {removed.map((name) => <li key={name}>{name}</li>)}
+    </ul>
+  );
+}

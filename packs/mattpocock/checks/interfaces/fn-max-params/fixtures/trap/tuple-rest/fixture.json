@@ -1,0 +1,23 @@
+{
+  "language": "typescript",
+  "params": {
+    "max": 4
+  },
+  "target": "src/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1,
+        "measured": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "tuple-rest",
+    "origin": "forge",
+    "discovered": "2026-10-06",
+    "note": "A tuple rest parameter still exposes five positional inputs to callers."
+  }
+}

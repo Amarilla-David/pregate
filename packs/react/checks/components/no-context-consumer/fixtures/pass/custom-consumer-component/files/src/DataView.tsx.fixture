@@ -1,0 +1,6 @@
+function Consumer({ label }: { label: string }) {
+  return <div>{label}</div>;
+}
+export function DataView() {
+  return <Consumer label="active" />;
+}

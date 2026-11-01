@@ -1,0 +1,9 @@
+import { createClient } from "redis";
+
+const client = createClient({ url: process.env.REDIS_URL });
+const subscriber = client.duplicate();
+await Promise.all([client.connect(), subscriber.connect()]);
+
+await subscriber.subscribe("orders:created", (message) => console.log(message));
+await client.set("orders:last-seen", Date.now().toString());
+await client.publish("orders:created", "42");

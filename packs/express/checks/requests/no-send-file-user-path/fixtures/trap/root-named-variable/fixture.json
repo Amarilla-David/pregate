@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/docs.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "lookalike-root",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A variable named rootDir inside path.resolve is not the root option. ../ segments in the parameter still escape the directory."
+  }
+}

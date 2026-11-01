@@ -1,0 +1,196 @@
+{
+  "id": "python/quality",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PY-FN-001",
+      "check": "python/complexity/fn-max-lines",
+      "defaults": {
+        "max": 50
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "python fn.lines, revision 1",
+        "paraphrase": "Function size exceeds the selected limit."
+      },
+      "why": "Function size exceeds the selected limit.",
+      "fixHint": "Extract a cohesive operation and preserve behavior with relevant tests.",
+      "avoid": "Do not compress statements onto one line or split a single state machine into arbitrary fragments.",
+      "examples": {
+        "pass": "pass/small",
+        "fail": "fail/long"
+      }
+    },
+    {
+      "id": "PY-FN-002",
+      "check": "python/complexity/fn-max-params",
+      "defaults": {
+        "max": 4
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "python fn.params, revision 1",
+        "paraphrase": "Function parameter count exceeds the selected limit."
+      },
+      "why": "Function parameter count exceeds the selected limit.",
+      "fixHint": "Review whether the inputs describe a cohesive domain object.",
+      "avoid": "Do not hide unrelated inputs in a generic options map; Python self/cls and variadic parameters count, Go receivers do not.",
+      "examples": {
+        "pass": "pass/four",
+        "fail": "fail/five"
+      }
+    },
+    {
+      "id": "PY-NEST-001",
+      "check": "python/control/max-nesting",
+      "defaults": {
+        "max": 2
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "python control.nesting, revision 1",
+        "paraphrase": "Control-flow nesting exceeds the selected limit."
+      },
+      "why": "Control-flow nesting exceeds the selected limit.",
+      "fixHint": "Use an early return or name a cohesive inner operation.",
+      "avoid": "Do not hide nesting in loops, switch/match branches or exception handlers.",
+      "examples": {
+        "pass": "pass/two",
+        "fail": "fail/three"
+      }
+    },
+    {
+      "id": "PY-CLASS-001",
+      "check": "python/complexity/class-max-public-methods",
+      "defaults": {
+        "max": 10
+      },
+      "severity": "deny",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "python class.publicMethods, revision 1",
+        "paraphrase": "Declared public-method count exceeds the selected limit."
+      },
+      "why": "Declared public-method count exceeds the selected limit.",
+      "fixHint": "Separate cohesive responsibilities while preserving the public API.",
+      "avoid": "Do not rename public methods to private to hide the count; decorated definitions count as declarations.",
+      "examples": {
+        "pass": "pass/ten",
+        "fail": "fail/eleven"
+      }
+    },
+    {
+      "id": "PY-EXCEPT-001",
+      "check": "python/errors/no-bare-except",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "PREGATE language starter policies",
+        "locator": "python errors.bare-except, revision 1",
+        "paraphrase": "A bare except also catches process-control exceptions."
+      },
+      "why": "A bare except also catches process-control exceptions.",
+      "fixHint": "Name the intended exception classes or document a deliberately broad boundary.",
+      "avoid": "Do not swallow KeyboardInterrupt/SystemExit during ordinary error handling.",
+      "examples": {
+        "pass": "pass/named",
+        "fail": "fail/bare"
+      }
+    },
+    {
+      "id": "PY-DEFAULT-001",
+      "check": "python/state/no-mutable-default",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Python documentation, The Python Tutorial and Programming FAQ",
+        "locator": "https://docs.python.org/3/tutorial/controlflow.html#default-argument-values (Important warning); https://docs.python.org/3/faq/programming.html#why-are-default-values-shared-between-objects",
+        "paraphrase": "A default value is evaluated only once, so a mutable default such as a list or dict is shared by every call. Use None and create the value inside the function."
+      },
+      "why": "Every call that relies on the default reads and changes the same list, dict or set, so state leaks from one call into the next.",
+      "fixHint": "Default to None and create the value in the body: items = [] if items is None else items. Use field(default_factory=list) in a dataclass.",
+      "avoid": "Do not hide the shared value behind list(), dict(), set() or a collections constructor. A deliberate shared cache keeps the FAQ's underscore name, such as _cache={}.",
+      "examples": {
+        "pass": "pass/none-sentinel",
+        "fail": "fail/list-default"
+      }
+    },
+    {
+      "id": "PY-IS-001",
+      "check": "python/comparison/no-is-literal",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Python documentation, What's New In Python 3.8",
+        "locator": "https://docs.python.org/3/whatsnew/3.8.html#changes-in-python-behavior (SyntaxWarning for is with a literal)",
+        "paraphrase": "Identity checks with is and is not against string or number literals can work by accident in CPython but are not guaranteed by the language; use == and != instead."
+      },
+      "why": "is compares object identity. Whether two equal numbers or strings are the same object is an interpreter detail, so the check can flip between runs, versions or values.",
+      "fixHint": "Compare values with == or != . Keep is only for None, True, False and sentinel objects.",
+      "avoid": "Do not wrap the literal in parentheses, negate it or move it to the left side; those are still literals.",
+      "examples": {
+        "pass": "pass/equality",
+        "fail": "fail/number"
+      }
+    },
+    {
+      "id": "PY-STAR-001",
+      "check": "python/dependencies/no-wildcard-import",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "PEP 8, Style Guide for Python Code",
+        "locator": "https://peps.python.org/pep-0008/#imports (wildcard imports)",
+        "paraphrase": "Wildcard imports should be avoided because they make it unclear which names are present in the namespace. Republishing an internal interface as a public API is the defensible exception."
+      },
+      "why": "A wildcard import hides where a name comes from and lets a later change in the imported module silently shadow local names.",
+      "fixHint": "Import the names the module uses, or import the module and qualify its names.",
+      "avoid": "Package __init__.py files that republish submodules are not checked. An accelerator-module fallback elsewhere needs a reviewed exclusion, not a copied name list.",
+      "examples": {
+        "pass": "pass/named",
+        "fail": "fail/star"
+      }
+    },
+    {
+      "id": "PY-ASSERT-001",
+      "check": "python/errors/no-assert-tuple",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Python Reference Manual & Flake8-Bugbear",
+        "locator": "B011 / assert statement syntax",
+        "paraphrase": "assert (a, b) is an assertion of a tuple, which always evaluates to True."
+      },
+      "why": "A non-empty tuple is always truthy in Python. assert (x > 0, 'must be positive') never fails, disabling the assertion completely.",
+      "fixHint": "Remove parentheses: write assert x > 0, 'must be positive'.",
+      "avoid": "Do not enclose assert condition and error message inside parentheses or leave a trailing comma in assert (x,).",
+      "examples": {
+        "pass": "pass/normal-assert",
+        "fail": "fail/assert-tuple"
+      }
+    },
+    {
+      "id": "PY-RAISE-001",
+      "check": "python/errors/no-raise-notimplemented",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Python Reference Manual: Built-in Constants",
+        "locator": "NotImplemented",
+        "paraphrase": "NotImplemented is a constant returned by rich comparisons; it should never be raised."
+      },
+      "why": "NotImplemented is not an Exception class. Raising it raises a TypeError at runtime when caught by an except clause expecting Exception.",
+      "fixHint": "Use raise NotImplementedError() instead of raise NotImplemented.",
+      "avoid": "Do not raise NotImplemented or NotImplemented() in abstract methods or stubs.",
+      "examples": {
+        "pass": "pass/normal-raise",
+        "fail": "fail/raise-notimplemented"
+      }
+    }
+  ]
+}

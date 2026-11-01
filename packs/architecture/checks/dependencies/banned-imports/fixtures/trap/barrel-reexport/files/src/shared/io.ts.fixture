@@ -1,0 +1,1 @@
+export { readFileSync as readText } from "node:fs";

@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/audit/requirement-020",
+  "version": "1.0.0",
+  "area": "audit",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r020",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-020"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-020 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,7 @@
+import { useCartStore } from "./store";
+import type { Pinia } from "pinia";
+
+declare const pinia: Pinia;
+const { count } = useCartStore(pinia);
+
+export { count };

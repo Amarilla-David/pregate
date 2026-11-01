@@ -1,0 +1,24 @@
+interface ProfileProps {
+  name: string;
+  id: string;
+  bio: string;
+  role: string;
+  active: boolean;
+  onName: (value: string) => void;
+  onBio: () => void;
+  onToggle: () => void;
+}
+
+export function Profile(props: ProfileProps) {
+  return (
+    <form>
+      <input value={props.name} onChange={(e) => props.onName(e.target.value)} />
+      <input value={props.id} readOnly />
+      <textarea value={props.bio} onInput={props.onBio} />
+      <select value={props.role} disabled>
+        <option value="admin">Admin</option>
+      </select>
+      <input type="checkbox" checked={props.active} onChange={props.onToggle} />
+    </form>
+  );
+}

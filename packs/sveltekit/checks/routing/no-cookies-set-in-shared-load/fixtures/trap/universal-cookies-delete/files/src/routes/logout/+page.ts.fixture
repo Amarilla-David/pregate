@@ -1,0 +1,4 @@
+export function load({ cookies }: { cookies: { delete: (k: string, o: { path: string }) => void } }) {
+  cookies.delete("session", { path: "/" });
+  return {};
+}

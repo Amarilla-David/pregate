@@ -1,0 +1,14 @@
+{
+  "language": "rust",
+  "params": {},
+  "target": "src/stub.rs",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  }
+}

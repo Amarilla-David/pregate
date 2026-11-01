@@ -1,0 +1,5668 @@
+{
+  "version": 2,
+  "note": "status/references describe existing syntactic slices or workflow provenance, not semantic proof. evidence identifies an optional enforcing project-fitness owner for each complete source clause. The 313 ledger entries map to 286 authored clauses: grouped PS entries share one obligation and require proof of the whole group. Missing project evidence remains unverified.",
+  "entries": [
+    {
+      "id": "FH-01",
+      "text": "Every module is intelligible to a competent engineer who has never seen the repository, given only the module and its public contract. *(Review invariant)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 14,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-01",
+        "check": "maintainability/future-humans/fh-01",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-02",
+      "text": "No understanding of a change requires oral history, a Slack thread, or the presence of the original author. *(ADR & PR governance)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 15,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-02",
+        "check": "maintainability/future-humans/fh-02",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-03",
+      "text": "The bus factor of every critical path is greater than one: a second person can modify it without a guided tour. *(Team governance)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 16,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-03",
+        "check": "maintainability/future-humans/fh-03",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-04",
+      "text": "Every assumption a future reader must not violate is written next to the code that embodies it, not in a separate document that can drift. *(Colocated contracts)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 17,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-04",
+        "check": "maintainability/future-humans/fh-04",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-05",
+      "text": "No identifier requires the reader to know the author's private abbreviation, ticket number, or nickname. *(Enforced: `maintainability/MAINT-NAME-001` & naming review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 18,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-NAME-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-05",
+        "check": "maintainability/future-humans/fh-05",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-06",
+      "text": "The happy path of every module is readable in one pass, top to bottom, without jumping to a definition to recover intent. *(Layout & structure)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 19,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-06",
+        "check": "maintainability/future-humans/fh-06",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-07",
+      "text": "Every surprise relative to the principle of least astonishment is marked at the point of surprise, with the reason it exists. *(Documented exceptions)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 20,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-07",
+        "check": "maintainability/future-humans/fh-07",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-08",
+      "text": "No comment restates what the code already says; every comment that remains answers a question the code cannot. *(AST slice: `pstack/PS-COMMENT-001`; semantic review remains)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 21,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-COMMENT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-08",
+        "check": "maintainability/future-humans/fh-08",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-09",
+      "text": "Deleted explanations are deleted with the code they explained; no comment describes a world the code has left. *(Refactoring hygiene)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 22,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-09",
+        "check": "maintainability/future-humans/fh-09",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-10",
+      "text": "A future reader can answer \"what does this do, and what must not change?\" from the names and the tests alone. *(Self-describing tests & types)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 23,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-10",
+        "check": "maintainability/future-humans/fh-10",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-11",
+      "text": "Every name denotes a domain concept or an operation, never an implementation accident (`data`, `temp`, `flag`, `obj2`). *(Enforced: `maintainability/MAINT-NAME-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 26,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-NAME-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-11",
+        "check": "maintainability/future-humans/fh-11",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-12",
+      "text": "The ubiquitous language of the domain is the language of the code; a term in the code means the same thing it means to a domain expert. *(Domain modeling)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 27,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-12",
+        "check": "maintainability/future-humans/fh-12",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-13",
+      "text": "Each concept has one name; each name denotes one concept. Synonyms are treated as defects. *(Domain dictionary)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 28,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-13",
+        "check": "maintainability/future-humans/fh-13",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-14",
+      "text": "A rename of a domain concept is atomic across code, tests, and the contract that exposes it. *(Refactoring discipline)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 29,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-14",
+        "check": "maintainability/future-humans/fh-14",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-15",
+      "text": "Boolean names state the true condition (`isClosed`, `hasPendingInvoice`), never a negated or ambiguous predicate. *(Enforced: `maintainability/MAINT-BOOL-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 30,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-BOOL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-15",
+        "check": "maintainability/future-humans/fh-15",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-16",
+      "text": "Units, currencies, and time zones are in the type or the name; a bare number never carries an implicit unit. *(Branded types / naming)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 31,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-16",
+        "check": "maintainability/future-humans/fh-16",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-17",
+      "text": "Abbreviations are expanded unless they are standard in the domain (`HTTP`, `URL`); project-local abbreviations are forbidden. *(Vocabulary review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 32,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-17",
+        "check": "maintainability/future-humans/fh-17",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-18",
+      "text": "The scope of a name matches its lifetime: a name used across a boundary is stable; a name used inside a function may be short only if its role is obvious in one line. *(Scope hygiene)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 33,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-18",
+        "check": "maintainability/future-humans/fh-18",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-19",
+      "text": "No name encodes a layer, a pattern, or a framework (`UserServiceImpl`, `ManagerHelper`) when a domain name would do. *(AST slice: `maintainability/MAINT-IMPL-001` for Impl/Implementation class names; other pattern names need review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 34,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-IMPL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-19",
+        "check": "maintainability/future-humans/fh-19",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-20",
+      "text": "A future reader can pronounce every public name and use it in a sentence about the business. *(Spoken clarity)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 35,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-20",
+        "check": "maintainability/future-humans/fh-20",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-21",
+      "text": "The effect of a function is fully described by its name, its arguments, and its declared result; hidden reads and writes of ambient state do not exist. *(Enforced: `pstack/PS-LET-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 38,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-LET-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-21",
+        "check": "maintainability/future-humans/fh-21",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-22",
+      "text": "No function both answers a question and changes the world. *(Command Query Separation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 39,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-22",
+        "check": "maintainability/future-humans/fh-22",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-23",
+      "text": "Mutable state does not escape the scope in which a reader can see every write. *(Enforced: `typescript/TS-READONLY-001` & `pstack/PS-LET-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 40,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "typescript/TS-READONLY-001",
+          "exists": true
+        },
+        {
+          "alias": "pstack/PS-LET-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-23",
+        "check": "maintainability/future-humans/fh-23",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-24",
+      "text": "Control-flow nesting never exceeds two levels; deeper decisions are named functions. *(Enforced: `maintainability/MAINT-NEST-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 41,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-NEST-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-24",
+        "check": "maintainability/future-humans/fh-24",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-25",
+      "text": "A function fits in working memory: one screen, one responsibility, one level of abstraction. *(Enforced: `clean-code/CC-FN-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 42,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "clean-code/CC-FN-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-25",
+        "check": "maintainability/future-humans/fh-25",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-26",
+      "text": "Arguments are few enough that the call site reads as a sentence; a long argument list is a missing concept. *(Enforced: `clean-code/CC-FN-002`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 43,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "clean-code/CC-FN-002",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-26",
+        "check": "maintainability/future-humans/fh-26",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-27",
+      "text": "No Boolean argument selects a hidden second behaviour. *(Enforced: `senior/SR-FLAG-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 44,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "senior/SR-FLAG-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-27",
+        "check": "maintainability/future-humans/fh-27",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-28",
+      "text": "Order of statements inside a function is the order of the story; setup, action, and result are not interleaved with unrelated concerns. *(Narrative order)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 45,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-28",
+        "check": "maintainability/future-humans/fh-28",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-29",
+      "text": "A reader can predict the next line. When they cannot, the unpredictability is the defect, not the reader's failure. *(Least surprise)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 46,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-29",
+        "check": "maintainability/future-humans/fh-29",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-30",
+      "text": "Cyclomatic complexity of a function is low enough that every path can be named and tested. *(Branch minimization)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 47,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-30",
+        "check": "maintainability/future-humans/fh-30",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-31",
+      "text": "A requirement change touches one module, or a set of modules whose joint reason to change is explicit. *(High cohesion)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 50,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-31",
+        "check": "maintainability/future-humans/fh-31",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-32",
+      "text": "Shotgun surgery — the same concept edited in many unrelated places — is treated as a design defect, not as normal work. *(Architectural smell)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 51,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-32",
+        "check": "maintainability/future-humans/fh-32",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-33",
+      "text": "What changes together lives together; what changes for different reasons does not share a module. *(Enforced: `architecture/MOD-SHARED-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 52,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/MOD-SHARED-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-33",
+        "check": "maintainability/future-humans/fh-33",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-34",
+      "text": "A boundary is drawn where the rate of change differs, not where the technology differs. *(Boundary strategy)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 53,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-34",
+        "check": "maintainability/future-humans/fh-34",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-35",
+      "text": "Feature flags and temporary branches have an owner and an expiry; an expired flag is a defect. *(Release engineering)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 54,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-35",
+        "check": "maintainability/future-humans/fh-35",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-36",
+      "text": "No copy of a business rule exists outside its authoritative module. Callers depend on the rule, they do not reimplement it. *(DRY business logic)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 55,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-36",
+        "check": "maintainability/future-humans/fh-36",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-37",
+      "text": "Configuration that operators change is outside the code; configuration that developers change is code, reviewed and versioned. *(12-factor config)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 56,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-37",
+        "check": "maintainability/future-humans/fh-37",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-38",
+      "text": "A database migration is reversible or explicitly marked irreversible, with the recovery path written down before it runs. *(AST slice: `maintainability/MAINT-MIGR-001` for TS/JS migrations without a down step; SQL migrations and reverse correctness need review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 57,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-MIGR-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-38",
+        "check": "maintainability/future-humans/fh-38",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-39",
+      "text": "Public contracts change by addition or by a versioned break; silent changes of meaning are forbidden. *(Semantic versioning)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 58,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-39",
+        "check": "maintainability/future-humans/fh-39",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-40",
+      "text": "The diff of a change is reviewable by a human in one sitting. A diff that cannot be reviewed is two changes. *(Diff atomicity)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 59,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-40",
+        "check": "maintainability/future-humans/fh-40",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-41",
+      "text": "Every module has a public surface small enough to memorise and a private interior free to change. *(AST slice: `architecture/MOD-EDGE-001`; public-surface size is not checked)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 62,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/MOD-EDGE-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-41",
+        "check": "maintainability/future-humans/fh-41",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-42",
+      "text": "Callers depend on the contract, never on the order of fields, the shape of errors, or the timing of internal calls. *(Encapsulation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 63,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-42",
+        "check": "maintainability/future-humans/fh-42",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-43",
+      "text": "Third-party types do not leak across a boundary the team owns; an adapter is the only place that knows a vendor. *(Enforced: `architecture/HEX-PORT-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 64,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/HEX-PORT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-43",
+        "check": "maintainability/future-humans/fh-43",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-44",
+      "text": "A boundary documents what it guarantees, what it refuses, and what it leaves undefined. *(Contract specification)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 65,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-44",
+        "check": "maintainability/future-humans/fh-44",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-45",
+      "text": "Error types at a boundary are part of the contract; a new failure mode is a contract change. *(Typed errors)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 66,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-45",
+        "check": "maintainability/future-humans/fh-45",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-46",
+      "text": "Timeouts, retries, and idempotency keys are part of the boundary contract, not an implementation detail discovered in production. *(AST slices: `pstack/PS-IDEM-001` and `vibe-proof/VP-TIMEOUT-001`; retry policy is not checked)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 67,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-IDEM-001",
+          "exists": true
+        },
+        {
+          "alias": "vibe-proof/VP-TIMEOUT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-46",
+        "check": "maintainability/future-humans/fh-46",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-47",
+      "text": "A module can be deleted. If it cannot, the reason is written on the module, not left implicit. *(Deletability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 68,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-47",
+        "check": "maintainability/future-humans/fh-47",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-48",
+      "text": "Layering is one-directional. A domain concept does not import a delivery or infrastructure concept. *(AST slices: `architecture/DEP-ENT-001` and `architecture/DEP-UC-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 69,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/DEP-ENT-001",
+          "exists": true
+        },
+        {
+          "alias": "architecture/DEP-UC-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-48",
+        "check": "maintainability/future-humans/fh-48",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-49",
+      "text": "The dependency graph of the system is acyclic at the module level, or every cycle is named and justified. *(Acyclic dependencies)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 70,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-49",
+        "check": "maintainability/future-humans/fh-49",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-50",
+      "text": "A new team member can draw the boundaries of the system from the repository layout without a diagram that lives elsewhere. *(Screaming architecture)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 71,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-50",
+        "check": "maintainability/future-humans/fh-50",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-51",
+      "text": "The reason for a non-obvious decision sits in an architecture decision record linked from the code it constrains. *(ADR governance)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 74,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-51",
+        "check": "maintainability/future-humans/fh-51",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-52",
+      "text": "ADRs are immutable records; a reversed decision is a new record that supersedes the old one, not an edit of history. *(Immutable decision records)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 75,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-52",
+        "check": "maintainability/future-humans/fh-52",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-53",
+      "text": "Comments explain why, never what. A \"what\" comment is a failed name. *(AST slice: `pstack/PS-COMMENT-001`; meaning still needs review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 76,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-COMMENT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-53",
+        "check": "maintainability/future-humans/fh-53",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-54",
+      "text": "TODO and FIXME carry an owner and a condition of removal; an ownerless TODO is deleted or promoted to a tracked defect. *(Enforced: `musk/MUSK-REQ-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 77,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "musk/MUSK-REQ-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-54",
+        "check": "maintainability/future-humans/fh-54",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-55",
+      "text": "No commented-out code remains. History lives in version control. *(Enforced: `pstack/PS-COMMENT-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 78,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-COMMENT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-55",
+        "check": "maintainability/future-humans/fh-55",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-56",
+      "text": "The README of a module states its purpose, its non-purpose, and how to run its tests, in under one screen. *(Module documentation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 79,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-56",
+        "check": "maintainability/future-humans/fh-56",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-57",
+      "text": "Onboarding to a critical path is a written path — build, test, change, observe — not a pairing session that vanishes. *(Written onboarding)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 80,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-57",
+        "check": "maintainability/future-humans/fh-57",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-58",
+      "text": "Runbooks for operational failure live next to the code that fails, or link to it; they are exercised, not merely stored. *(Operability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 81,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-58",
+        "check": "maintainability/future-humans/fh-58",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-59",
+      "text": "Glossaries of domain terms are generated from the code's public names or checked against them; a glossary that diverges is a defect. *(Glossary sync)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 82,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-59",
+        "check": "maintainability/future-humans/fh-59",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-60",
+      "text": "A future reader can reconstruct the sequence of decisions that produced a module from the record, without interviewing anyone. *(Traceability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 83,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-60",
+        "check": "maintainability/future-humans/fh-60",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-61",
+      "text": "Tests describe behaviour in the language of the domain, not in the language of the implementation. *(Behavioral tests)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 86,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-61",
+        "check": "maintainability/future-humans/fh-61",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-62",
+      "text": "A failing test names the behaviour that broke, without requiring the reader to open production code first. *(Clear assertions)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 87,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-62",
+        "check": "maintainability/future-humans/fh-62",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-63",
+      "text": "Every behaviour a future editor must preserve has a test that fails if it is lost. *(Living specification)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 88,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-63",
+        "check": "maintainability/future-humans/fh-63",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-64",
+      "text": "Tests do not duplicate production logic; they state examples and boundaries. *(Anti-mirrored test logic)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 89,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-64",
+        "check": "maintainability/future-humans/fh-64",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-65",
+      "text": "A test that fails intermittently is a defect in the test or in the system, and is not ignored. *(Flaky test zero-tolerance)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 90,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-65",
+        "check": "maintainability/future-humans/fh-65",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-66",
+      "text": "Test data is recognisable as domain data. Obscure fixtures (`user1`, `foo`, `xxx`) are forbidden on public behaviour. *(Meaningful fixtures)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 91,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-66",
+        "check": "maintainability/future-humans/fh-66",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-67",
+      "text": "The test suite is the living specification: when the test and the comment disagree, the test is the authority, and the comment is fixed or removed. *(Test supremacy)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 92,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-67",
+        "check": "maintainability/future-humans/fh-67",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-68",
+      "text": "Characterisation tests pin behaviour before a legacy module is changed; unpinned legacy behaviour is not modified. *(Golden master / pinning)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 93,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-68",
+        "check": "maintainability/future-humans/fh-68",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-69",
+      "text": "A test runs in seconds at the unit boundary and does not require a human environment, a secret, or a particular clock. *(Deterministic hermetic tests)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 94,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-69",
+        "check": "maintainability/future-humans/fh-69",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-70",
+      "text": "Deleting a test requires a recorded reason. A deleted test is a deleted promise. *(Enforced: `testing/TDD-DEL-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 95,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "testing/TDD-DEL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-70",
+        "check": "maintainability/future-humans/fh-70",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-71",
+      "text": "Code does not depend on the current date, the author's timezone, or the locale of the machine that builds it, except through an explicit clock and locale port. *(AST slice: `maintainability/MAINT-CLOCK-001` for direct domain clock calls; locale and indirect calls need flow analysis)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 98,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-CLOCK-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-71",
+        "check": "maintainability/future-humans/fh-71",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-72",
+      "text": "No certificate, key, URL, or vendor endpoint is assumed permanent; each has a rotation or replacement path. *(Secret lifecycle)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 99,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-72",
+        "check": "maintainability/future-humans/fh-72",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-73",
+      "text": "Deprecated surfaces announce their replacement and their removal condition at the point of use. *(AST slice: `maintainability/MAINT-DEPR-001` for empty JSDoc deprecation tags; the stated replacement and removal condition need review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 100,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-DEPR-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-73",
+        "check": "maintainability/future-humans/fh-73",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-74",
+      "text": "A compatibility shim has a deletion criterion written on the shim. *(Enforced: `musk/MUSK-DEL-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 101,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "musk/MUSK-DEL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-74",
+        "check": "maintainability/future-humans/fh-74",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-75",
+      "text": "Log lines and error messages remain meaningful after the author has left: they name the operation, the entity, and the failure, not an internal nickname. *(Structured error messages)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 102,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-75",
+        "check": "maintainability/future-humans/fh-75",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-76",
+      "text": "Metrics and traces use stable names. Renaming an observability field is a contract change for the people who page on it. *(Observability stability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 103,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-76",
+        "check": "maintainability/future-humans/fh-76",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-77",
+      "text": "Data written today can be read by the code of next year, or a migration exists before the write format changes. *(Schema evolution)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 104,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-77",
+        "check": "maintainability/future-humans/fh-77",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-78",
+      "text": "A feature removed from the product is removed from the code. Dead feature paths are not kept \"in case.\" *(Enforced: `musk/MUSK-DEL-001` & dead code removal)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 105,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "musk/MUSK-DEL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-78",
+        "check": "maintainability/future-humans/fh-78",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-79",
+      "text": "Dependencies pin versions and record why a major upgrade is blocked; an unexplained pin is a defect. *(Dependency management)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 106,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-79",
+        "check": "maintainability/future-humans/fh-79",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-80",
+      "text": "The oldest code in the repository is still approachable: it meets the same naming and test invariants, or it is isolated behind a boundary marked legacy. *(Legacy quarantine)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 107,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-80",
+        "check": "maintainability/future-humans/fh-80",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-81",
+      "text": "A future editor can run the relevant tests with one command and trust a green result. *(Single-command verification)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 110,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-81",
+        "check": "maintainability/future-humans/fh-81",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-82",
+      "text": "A wrong change fails in the test or at the boundary, not silently in production a week later. *(Shift-left verification)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 111,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-82",
+        "check": "maintainability/future-humans/fh-82",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-83",
+      "text": "Rollback of a release is a documented, practiced path, not a theory. *(Release rollback)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 112,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-83",
+        "check": "maintainability/future-humans/fh-83",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-84",
+      "text": "Feature introduction can be separated from feature activation, so a bad change can be disabled without a redeploy of logic. *(Decoupled release)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 113,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-84",
+        "check": "maintainability/future-humans/fh-84",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-85",
+      "text": "Observability is sufficient for a stranger to tell whether their change worked in production, without asking the author. *(Production telemetery)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 114,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-85",
+        "check": "maintainability/future-humans/fh-85",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-86",
+      "text": "No global mutable singleton is the hidden input of a module a stranger must change. *(Enforced: `pstack/PS-LET-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 115,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-LET-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-86",
+        "check": "maintainability/future-humans/fh-86",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-87",
+      "text": "Construction of collaborators is visible at the composition root; a stranger can substitute a fake without editing the module. *(Composition root)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 116,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-87",
+        "check": "maintainability/future-humans/fh-87",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-88",
+      "text": "Invariants of a data structure are enforced by the type or by a constructor, not by the hope that every caller remembers them. *(Parse, don't validate)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 117,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-88",
+        "check": "maintainability/future-humans/fh-88",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-89",
+      "text": "Partial failure is explicit. A function does not return success while having done half the work, unless the contract says the operation is partial and how to resume it. *(Explicit failure modes)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 118,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-89",
+        "check": "maintainability/future-humans/fh-89",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-90",
+      "text": "The cost of a mistake on a critical path is bounded: limits, quotas, and kill switches exist before they are needed. *(Blast radius containment)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 119,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-90",
+        "check": "maintainability/future-humans/fh-90",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-91",
+      "text": "Code review checks maintainability for a future stranger, not style preference and not the author's intent as privately understood. *(Maintainability-first review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 122,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-91",
+        "check": "maintainability/future-humans/fh-91",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-92",
+      "text": "Review comments that encode a real invariant are promoted into code, a test, or an ADR; they do not remain only in the review. *(Promote lessons to structure)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 123,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-92",
+        "check": "maintainability/future-humans/fh-92",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-93",
+      "text": "Ownership of a module is a name a future reader can find. Unowned code is assigned or deleted. *(Named code ownership)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 124,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-93",
+        "check": "maintainability/future-humans/fh-93",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-94",
+      "text": "A module no one can explain is a risk, and is scheduled for characterisation or isolation. *(Risk register)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 125,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-94",
+        "check": "maintainability/future-humans/fh-94",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-95",
+      "text": "Onboarding material is updated in the same change that invalidates it. *(Documentation freshness)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 126,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-95",
+        "check": "maintainability/future-humans/fh-95",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-96",
+      "text": "Commit messages state the problem and the reason, not only the file touched. A future bisect can be read as a narrative. *(Narrative commits)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 127,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-96",
+        "check": "maintainability/future-humans/fh-96",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-97",
+      "text": "Large rewrites are not the plan for unmaintainable code. Incremental characterisation and boundary extraction are. *(Strangler fig refactoring)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 128,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-97",
+        "check": "maintainability/future-humans/fh-97",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-98",
+      "text": "Cleverness that saves lines at the cost of a future reader's hour is rejected. The reader's hour is the scarce resource. *(Clarity over cleverness)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 129,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-98",
+        "check": "maintainability/future-humans/fh-98",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-99",
+      "text": "The team can delete code. Addition without a path to removal is treated as debt. *(Enforced: `musk/MUSK-DEL-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 130,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "musk/MUSK-DEL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/FH-99",
+        "check": "maintainability/future-humans/fh-99",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "FH-100",
+      "text": "Every change leaves the touched region easier for the next stranger than it was found, or the reason it could not is written on the change. *(Boy Scout rule)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 131,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/FH-100",
+        "check": "maintainability/future-humans/fh-100",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-01",
+      "text": "Every line of code exists to satisfy a verifiable problem; code with no associated problem is not written. *(Requirement traceability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 138,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-01",
+        "check": "maintainability/engineering/se-01",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-02",
+      "text": "Every fragment of code is intelligible to an engineer who did not author it, without reconstruction of the author's mental context. *(Intelligibility)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 139,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-02",
+        "check": "maintainability/engineering/se-02",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-03",
+      "text": "Every non-obvious design decision has a recorded trade-off (ADR) stating context and the rejected alternative. *(ADRs)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 140,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-03",
+        "check": "maintainability/engineering/se-03",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-04",
+      "text": "No line of code exists without a justification of value; dead code is deleted. *(Enforced: `senior/SR-DEAD-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 141,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "senior/SR-DEAD-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-04",
+        "check": "maintainability/engineering/se-04",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-05",
+      "text": "Every third-party dependency is declared, isolated, audited, and replaceable. *(Dependency isolation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 142,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-05",
+        "check": "maintainability/engineering/se-05",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-06",
+      "text": "No known design or code defect remains without an owner and a correction plan. *(Defect ownership)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 143,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-06",
+        "check": "maintainability/engineering/se-06",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-07",
+      "text": "The adopted solution is the simplest one that satisfies the current requirement. *(Simplicity principle)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 144,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-07",
+        "check": "maintainability/engineering/se-07",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-08",
+      "text": "No abstraction, parameter, or extension exists for a requirement that has not yet been confirmed. *(Enforced: `maintainability/MAINT-EMPTY-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 145,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-EMPTY-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-08",
+        "check": "maintainability/engineering/se-08",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-09",
+      "text": "Each item of system knowledge has exactly one authoritative representation. *(Single source of truth)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 146,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-09",
+        "check": "maintainability/engineering/se-09",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-10",
+      "text": "Every module admits a one-sentence explanation containing no exceptional qualifiers. *(Single responsibility)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 147,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-10",
+        "check": "maintainability/engineering/se-10",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-11",
+      "text": "The intent of the code is evident to a human reader before it is evident to the compiler. *(Human-readable intent)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 148,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-11",
+        "check": "maintainability/engineering/se-11",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-12",
+      "text": "No module is retained out of attachment; it is retained only while it remains the best representation of the problem. *(Objective retention)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 149,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-12",
+        "check": "maintainability/engineering/se-12",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-13",
+      "text": "Every corrected defect has an identified root cause, not merely a suppressed symptom. *(Root-cause debugging)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 150,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-13",
+        "check": "maintainability/engineering/se-13",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-14",
+      "text": "No unexpected behaviour is left without a verified hypothesis. *(Empirical investigation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 151,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-14",
+        "check": "maintainability/engineering/se-14",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-15",
+      "text": "Every behavioural change is introduced singly, with verification between changes. *(Atomic increments)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 152,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-15",
+        "check": "maintainability/engineering/se-15",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-16",
+      "text": "Every communicated estimate is a range with explicit assumptions, never a point value. *(Range estimation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 153,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-16",
+        "check": "maintainability/engineering/se-16",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-17",
+      "text": "Every prototype is discarded or rewritten before it enters production; its only permanent product is learning. *(Throwaway prototypes)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 154,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-17",
+        "check": "maintainability/engineering/se-17",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-18",
+      "text": "Every large feature has at least one vertical slice operating end to end before it is widened. *(Workflow invariant; path-shape checks cannot establish an end-to-end running slice)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 155,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-18",
+        "check": "maintainability/engineering/se-18",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-19",
+      "text": "No irreversible decision is taken before the information that would make it reversible, or cheap to reverse, is available. *(Reversibility)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 156,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-19",
+        "check": "maintainability/engineering/se-19",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-20",
+      "text": "No technology is adopted by fashion; every adoption has a documented criterion of fit to the problem. *(Technology evaluation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 157,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-20",
+        "check": "maintainability/engineering/se-20",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-21",
+      "text": "Every name discloses the intent of the entity without a comment. *(Self-documenting names)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 160,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-21",
+        "check": "maintainability/engineering/se-21",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-22",
+      "text": "Every name is pronounceable and searchable across the repository. *(Searchable identifiers)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 161,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-22",
+        "check": "maintainability/engineering/se-22",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-23",
+      "text": "Every type bears a noun name; every function bears a verb or verb–noun name. *(Grammatical naming)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 162,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-23",
+        "check": "maintainability/engineering/se-23",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-24",
+      "text": "Each domain concept has exactly one term in the code. *(Consistent domain terms)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 163,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-24",
+        "check": "maintainability/engineering/se-24",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-25",
+      "text": "No name encodes type, scope, or visibility. *(No Hungarian prefixing)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 164,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-25",
+        "check": "maintainability/engineering/se-25",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-26",
+      "text": "No numeric or string literal carrying domain meaning appears outside a named constant. *(Magic literal elimination)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 165,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-26",
+        "check": "maintainability/engineering/se-26",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-27",
+      "text": "The entire repository conforms to a single set of formatting rules, enforced by tooling. *(Automated formatters)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 166,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-27",
+        "check": "maintainability/engineering/se-27",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-28",
+      "text": "Vertical whitespace separates distinct ideas; visual proximity groups what changes together. *(Visual grouping)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 167,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-28",
+        "check": "maintainability/engineering/se-28",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-29",
+      "text": "Every variable is declared in the narrowest scope that permits its use. *(Enforced: `pstack/PS-LET-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 168,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-LET-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-29",
+        "check": "maintainability/engineering/se-29",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-30",
+      "text": "No condition is expressed in negative form when an equivalent positive form exists. *(Enforced: `maintainability/MAINT-BOOL-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 169,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-BOOL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-30",
+        "check": "maintainability/engineering/se-30",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-31",
+      "text": "Every function has a single responsibility and a single level of abstraction. *(Single level of abstraction)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 172,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-31",
+        "check": "maintainability/engineering/se-31",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-32",
+      "text": "Every function fits on one screen and is comprehensible without scrolling. *(Enforced: `clean-code/CC-FN-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 173,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "clean-code/CC-FN-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-32",
+        "check": "maintainability/engineering/se-32",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-33",
+      "text": "Every function has at most three arguments, or a single options object if more are required. *(Enforced: `clean-code/CC-FN-002`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 174,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "clean-code/CC-FN-002",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-33",
+        "check": "maintainability/engineering/se-33",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-34",
+      "text": "No function receives a Boolean that selects between two behaviours. *(Enforced: `senior/SR-FLAG-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 175,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "senior/SR-FLAG-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-34",
+        "check": "maintainability/engineering/se-34",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-35",
+      "text": "Every function is either a command or a query, never both. *(Command Query Separation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 176,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-35",
+        "check": "maintainability/engineering/se-35",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-36",
+      "text": "Every side effect is declared in the function name or in its contract. *(Declared effects)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 177,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-36",
+        "check": "maintainability/engineering/se-36",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-37",
+      "text": "No function mutates its arguments unless the contract so declares. *(Argument immutability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 178,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-37",
+        "check": "maintainability/engineering/se-37",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-38",
+      "text": "Every non-trivial conditional branch body is extracted to a named function. *(Branch extraction)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 179,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-38",
+        "check": "maintainability/engineering/se-38",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-39",
+      "text": "Every boundary condition is encapsulated in a single place. *(Encapsulated boundary conditions)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 180,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-39",
+        "check": "maintainability/engineering/se-39",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-40",
+      "text": "No function has a control-nesting depth greater than two. *(Enforced: `maintainability/MAINT-NEST-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 181,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-NEST-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-40",
+        "check": "maintainability/engineering/se-40",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-41",
+      "text": "Every module has exactly one reason to change. *(Single Responsibility Principle)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 184,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-41",
+        "check": "maintainability/engineering/se-41",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-42",
+      "text": "Every new case of a known variation is added by extension, without modifying the module that already works. *(Open/Closed Principle)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 185,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-42",
+        "check": "maintainability/engineering/se-42",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-43",
+      "text": "Every subtype is substitutable for its base type without altering the observable behaviour of the client. *(Liskov Substitution Principle)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 186,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-43",
+        "check": "maintainability/engineering/se-43",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-44",
+      "text": "Every interface exposes only operations that all of its implementers use. *(Interface Segregation Principle)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 187,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-44",
+        "check": "maintainability/engineering/se-44",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-45",
+      "text": "Every high-level module depends on abstractions it owns, never on infrastructure concretions. *(Enforced: `architecture/HEX-PORT-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 188,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/HEX-PORT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-45",
+        "check": "maintainability/engineering/se-45",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-46",
+      "text": "Every module has high cohesion: its parts change for the same reason. Coupling between modules is explicit and minimal. *(Enforced: `architecture/MOD-SHARED-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 189,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/MOD-SHARED-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-46",
+        "check": "maintainability/engineering/se-46",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-47",
+      "text": "Every “has-a” relation is modelled by composition; inheritance is used only when substitutability holds. *(Composition over inheritance)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 190,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-47",
+        "check": "maintainability/engineering/se-47",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-48",
+      "text": "No method navigates more than one level of indirection over objects it did not create, receive, or own. *(Enforced: `senior/SR-CHAIN-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 191,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "senior/SR-CHAIN-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-48",
+        "check": "maintainability/engineering/se-48",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-49",
+      "text": "Every decision that depends on an object's state is taken by that object. *(Tell, don't ask)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 192,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-49",
+        "check": "maintainability/engineering/se-49",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-50",
+      "text": "Every point of variation lies behind a stable boundary. *(Protected variation)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 193,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-50",
+        "check": "maintainability/engineering/se-50",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-51",
+      "text": "Construction of the object graph is separated from its use. *(Dependency injection / composition root)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 194,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-51",
+        "check": "maintainability/engineering/se-51",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-52",
+      "text": "Every dependency is received by constructor or parameter; no module resolves it from a global. *(Explicit dependencies)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 195,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-52",
+        "check": "maintainability/engineering/se-52",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-53",
+      "text": "Every domain concept with value equality is immutable. *(Immutable value objects)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 196,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-53",
+        "check": "maintainability/engineering/se-53",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-54",
+      "text": "No domain function returns null; absence is an explicit type. *(AST slice: `maintainability/MAINT-NULL-001`; other paths and indirect values need type/flow analysis)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 197,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-NULL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-54",
+        "check": "maintainability/engineering/se-54",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-55",
+      "text": "Every type has a name that a reviewer can speak aloud and understand. *(Pronounceable types)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 198,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-55",
+        "check": "maintainability/engineering/se-55",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-56",
+      "text": "Domain, application, infrastructure, and delivery occupy separate boundaries; none imports inward across a boundary. *(AST slices: `architecture/DEP-ENT-001`, `architecture/DEP-UC-001` and `architecture/DEP-IA-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 201,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/DEP-ENT-001",
+          "exists": true
+        },
+        {
+          "alias": "architecture/DEP-UC-001",
+          "exists": true
+        },
+        {
+          "alias": "architecture/DEP-IA-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-56",
+        "check": "maintainability/engineering/se-56",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-57",
+      "text": "The domain references neither frameworks, drivers, nor transport protocols. *(AST slice: `architecture/HEX-EDGE-001`; builtin layer checks may cover more when configured)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 202,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/HEX-EDGE-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-57",
+        "check": "maintainability/engineering/se-57",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-58",
+      "text": "Every complex system in production evolved from a simple system that already worked. *(Gall's Law)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 203,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-58",
+        "check": "maintainability/engineering/se-58",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-59",
+      "text": "The boundary between modules reflects a real communication boundary of the team, or the discrepancy is documented. *(Conway's Law)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 204,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-59",
+        "check": "maintainability/engineering/se-59",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-60",
+      "text": "Every module can be understood, tested, and replaced without reading the interior of its neighbours. *(AST slice: `architecture/MOD-EDGE-001`; understandability is not checked)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 205,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "architecture/MOD-EDGE-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-60",
+        "check": "maintainability/engineering/se-60",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-61",
+      "text": "Every published API preserves backward compatibility, or the break is versioned and announced. *(API contract versioning)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 206,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-61",
+        "check": "maintainability/engineering/se-61",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-62",
+      "text": "Every invalid state is unrepresentable in the types of the public API. *(Parse, don't validate)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 207,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-62",
+        "check": "maintainability/engineering/se-62",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-63",
+      "text": "No secret, environment URL, or feature flag resides in source code. *(AST slices: `vibe-proof/VP-SECRET-001` and `vibe-proof/VP-CLIENT-SECRET-001`; not every URL or flag is detected)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 208,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "vibe-proof/VP-SECRET-001",
+          "exists": true
+        },
+        {
+          "alias": "vibe-proof/VP-CLIENT-SECRET-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-63",
+        "check": "maintainability/engineering/se-63",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-64",
+      "text": "Every backing service is interchangeable by configuration, without recompilation. *(Pluggable infrastructure)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 209,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-64",
+        "check": "maintainability/engineering/se-64",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-65",
+      "text": "No application process stores session state in local memory as the source of truth. *(Stateless processes)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 210,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-65",
+        "check": "maintainability/engineering/se-65",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-66",
+      "text": "Every retryable operation is idempotent. *(Enforced: `pstack/PS-IDEM-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 211,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-IDEM-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-66",
+        "check": "maintainability/engineering/se-66",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-67",
+      "text": "Every call to an external system has a timeout, a bounded retry policy, and a circuit breaker. *(AST slice: `vibe-proof/VP-TIMEOUT-001`; retries and circuit breakers are not checked)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 212,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "vibe-proof/VP-TIMEOUT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-67",
+        "check": "maintainability/engineering/se-67",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-68",
+      "text": "Failure of one component does not propagate resource exhaustion to its neighbours. *(Bulkheads / fault tolerance)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 213,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-68",
+        "check": "maintainability/engineering/se-68",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-69",
+      "text": "Every business operation emits a structured log, metric, or trace sufficient to diagnose it in production. *(Observability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 214,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-69",
+        "check": "maintainability/engineering/se-69",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-70",
+      "text": "The development environment executes the same boundaries and contracts as production, or the difference is isolated and tested. *(Dev/prod parity)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 215,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-70",
+        "check": "maintainability/engineering/se-70",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-71",
+      "text": "Every impossible state aborts immediately; no error is swallowed silently. *(Enforced: `clean-code/CC-ER-002`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 218,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "clean-code/CC-ER-002",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-71",
+        "check": "maintainability/engineering/se-71",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-72",
+      "text": "Every failure carries sufficient context to diagnose it without reproducing the case. *(Diagnostic error context)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 219,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-72",
+        "check": "maintainability/engineering/se-72",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-73",
+      "text": "The happy path of a module can be read without traversing error handling. *(Separation of errors and logic)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 220,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-73",
+        "check": "maintainability/engineering/se-73",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-74",
+      "text": "Every assumption of the form “this cannot happen” is guarded by an assertion. *(Exhaustive switch & assertions)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 221,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-74",
+        "check": "maintainability/engineering/se-74",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-75",
+      "text": "Every input that crosses a boundary is validated before use. *(Boundary parsing requires data flow; `pstack/PS-ZOD-001` only constrains validator placement)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 222,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-ZOD-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-75",
+        "check": "maintainability/engineering/se-75",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-76",
+      "text": "Every process, credential, and role holds only the minimum permissions its function requires. *(Principle of least privilege)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 223,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-76",
+        "check": "maintainability/engineering/se-76",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-77",
+      "text": "No secret appears in the repository, in the image, or in the logs. *(AST slice: `vibe-proof/VP-SECRET-001`; images and runtime logs are outside this check)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 224,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "vibe-proof/VP-SECRET-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-77",
+        "check": "maintainability/engineering/se-77",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-78",
+      "text": "No query or command is constructed by concatenating external input. *(Enforced: `vibe-proof/VP-SQL-001`)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 225,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "vibe-proof/VP-SQL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-78",
+        "check": "maintainability/engineering/se-78",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-79",
+      "text": "Every ingress boundary verifies authentication and authorisation; none trusts a prior check. *(Zero trust at ingress)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 226,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-79",
+        "check": "maintainability/engineering/se-79",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-80",
+      "text": "Every dependency has an update owner and a security-patch policy. *(Vulnerability management)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 227,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-80",
+        "check": "maintainability/engineering/se-80",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-81",
+      "text": "Test code satisfies the same naming and structural rules as production code. *(Test code quality)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 230,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-81",
+        "check": "maintainability/engineering/se-81",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-82",
+      "text": "Every test asserts a single behaviour. *(Review invariant; assertion presence cannot prove behavioural focus)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 231,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-82",
+        "check": "maintainability/engineering/se-82",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-83",
+      "text": "Every test is deterministic, order-independent, and self-evaluating. *(Hermetic testing)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 232,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-83",
+        "check": "maintainability/engineering/se-83",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-84",
+      "text": "Every test reads as Arrange–Act–Assert and contains no conditional logic of its own. *(AST slice: `pstack/PS-AAA-001`; helper flow and AAA structure still need review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 233,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-AAA-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-84",
+        "check": "maintainability/engineering/se-84",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-85",
+      "text": "Every corrected defect has a test that failed before the correction. *(Regression tests)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 234,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-85",
+        "check": "maintainability/engineering/se-85",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-86",
+      "text": "Every assumption about a library or an external environment is covered by a boundary test. *(Contract testing)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 235,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-86",
+        "check": "maintainability/engineering/se-86",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-87",
+      "text": "The test suite passes in full before integration; a broken test blocks the change. *(Pre-commit / CI gate)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 236,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-87",
+        "check": "maintainability/engineering/se-87",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-88",
+      "text": "Every third-party adapter has tests that fix the usage contract. *(Adapter integration test)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 237,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-88",
+        "check": "maintainability/engineering/se-88",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-89",
+      "text": "The majority of domain behaviours are covered by unit tests; integration and end-to-end tests cover boundaries, not internal logic. *(Test pyramid)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 238,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-89",
+        "check": "maintainability/engineering/se-89",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-90",
+      "text": "No test depends on a private implementation detail. *(Public behavior testing)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 239,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-90",
+        "check": "maintainability/engineering/se-90",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-91",
+      "text": "No optimisation is merged without a measurement that demonstrates the bottleneck. *(Empirical optimization)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 242,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-91",
+        "check": "maintainability/engineering/se-91",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-92",
+      "text": "Every algorithm over unbounded data has known complexity and an explicit bound. *(Algorithmic complexity)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 243,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-92",
+        "check": "maintainability/engineering/se-92",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-93",
+      "text": "No mutable state is shared across threads without a demonstrated synchronisation protocol. *(Thread safety)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 244,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-93",
+        "check": "maintainability/engineering/se-93",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-94",
+      "text": "No concurrent code exists unless a throughput or latency requirement demands it. *(Simplicity over premature concurrency)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 245,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-94",
+        "check": "maintainability/engineering/se-94",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-95",
+      "text": "Every non-deterministic failure is treated as a concurrency or timing defect until shown otherwise. *(Race condition vigilance)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 246,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-95",
+        "check": "maintainability/engineering/se-95",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-96",
+      "text": "Every data transformation has explicit input, output, and error policy. *(Pure transformation pipelines)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 247,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-96",
+        "check": "maintainability/engineering/se-96",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-97",
+      "text": "Every datum is immutable by default; mutation is local and visible. *(Default immutability)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 248,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-97",
+        "check": "maintainability/engineering/se-97",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-98",
+      "text": "Every API that returns or accepts collections has a limit, pagination, or backpressure. *(AST slices: `vibe-proof/VP-FIND-MANY-001` and `vibe-proof/VP-SELECT-001`; other APIs need review)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 249,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "vibe-proof/VP-FIND-MANY-001",
+          "exists": true
+        },
+        {
+          "alias": "vibe-proof/VP-SELECT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "maintainability/SE-98",
+        "check": "maintainability/engineering/se-98",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-99",
+      "text": "Every change is under version control, in a commit whose message explains the why, and does not break the build. *(Conventional commits)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 252,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-99",
+        "check": "maintainability/engineering/se-99",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "SE-100",
+      "text": "Every repeatable step of build, test, lint, and deploy is automated; no release depends on an undocumented manual step. *(Automated release engineering)*",
+      "source": {
+        "path": "packs/maintainability/INVARIANTS.md",
+        "line": 253,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "maintainability/SE-100",
+        "check": "maintainability/engineering/se-100",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-01",
+      "text": "**PS-01 (Laziness protocol):** The merged change is the smallest diff that solves the stated problem. Dead code, unused abstractions, and speculative generality are absent. *(Enforced: `maintainability/MAINT-EMPTY-001` & diff minimization)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 10,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "maintainability/MAINT-EMPTY-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-01",
+        "check": "pstack/principles/ps-01",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-02",
+      "text": "**PS-02 (Foundational thinking):** Core types, data structures, and the sharing relation among concurrent actors are fixed before behavioral logic is written.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 11,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-02",
+        "check": "pstack/principles/ps-02",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-03",
+      "text": "**PS-03 (Redesign from first principles):** A new requirement is integrated as if it had been a foundational assumption from day one. It is not bolted onto the previous shape.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 12,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-03",
+        "check": "pstack/principles/ps-03",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-04",
+      "text": "**PS-04 (Attack the premise):** After two or more fixes that share one premise fail the same gate, the premise is rejected before another patch that assumes it is written.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 13,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-04",
+        "check": "pstack/principles/ps-04",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-05",
+      "text": "**PS-05 (Subtract before you add):** Dead weight, redundant validators, and stub references are removed before new structure is built on what remains. *(Enforced: `musk/MUSK-DEL-001`)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 14,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "musk/MUSK-DEL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-05",
+        "check": "pstack/principles/ps-05",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-06",
+      "text": "**PS-06 (Minimize reader load):** The number of layers between a question and its answer is minimal. One-caller wrappers are collapsed. Mutable state a reader must hold in their head is absent. *(Enforced: `pstack/PS-LET-001`)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 15,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-LET-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-06",
+        "check": "pstack/principles/ps-06",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-07",
+      "text": "**PS-07 (Outcome-oriented execution):** A planned rewrite converges on the target architecture. Throwaway compatibility states are not preserved to keep intermediate diffs smooth.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 16,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-07",
+        "check": "pstack/principles/ps-07",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-08",
+      "text": "**PS-08 (Experience first):** When implementation convenience conflicts with the consumer’s experience, the consumer wins. Fewer polished capabilities ship in preference to more rough ones.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 17,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-08",
+        "check": "pstack/principles/ps-08",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-09",
+      "text": "**PS-09 (Exhaust the design space):** Where no precedent decides the design, two or three competing prototypes are compared before a commitment.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 18,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-09",
+        "check": "pstack/principles/ps-09",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-10",
+      "text": "**PS-10 (Build the lever):** Non-trivial edits, migrations, analyses, and checks are performed by a rerunnable tool — codemod, script, generator, or skill — not by unreproducible hand work.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 19,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-10",
+        "check": "pstack/principles/ps-10",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-11",
+      "text": "**PS-11 (Model the domain):** A repeated domain rule lives in one structure — a state machine, a typed model, a table — not in scattered conditionals.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 22,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-11",
+        "check": "pstack/principles/ps-11",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-12",
+      "text": "**PS-12 (Boundary discipline):** Guards, parsing, and validation sit at system boundaries (CLI, config, network, external APIs). Internal business logic is pure and trusts its types. *(AST slice: `pstack/PS-ZOD-001`; other boundaries need review)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 23,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-ZOD-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-12",
+        "check": "pstack/principles/ps-12",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-13",
+      "text": "**PS-13 (Type-system discipline):** Illegal states are unrepresentable. Semantic primitives are branded. External data is parsed at the boundary. Variants are exhaustive. The compiler is not lied to. *(AST slices: `pstack/PS-AS-001` and `pstack/PS-PARTIAL-001`)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 24,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-AS-001",
+          "exists": true
+        },
+        {
+          "alias": "pstack/PS-PARTIAL-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-13",
+        "check": "pstack/principles/ps-13",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-14",
+      "text": "**PS-14 (Idempotent operations):** A retried or partially rerun operation converges to the same end state as a single successful run. *(Enforced: `pstack/PS-IDEM-001`)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 25,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-IDEM-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-14",
+        "check": "pstack/principles/ps-14",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-15",
+      "text": "**PS-15 (Migrate callers, then delete):** Callers of a legacy API are migrated and the old API is deleted in the same wave. A compatibility layer is not the resting state. *(Enforced: `pstack/PS-LEGACY-001`)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 26,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-LEGACY-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-15",
+        "check": "pstack/principles/ps-15",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-16",
+      "text": "**PS-16 (Separate before serializing):** Shared mutable state is eliminated before coordination is added. Serialization is introduced only when a single shared writer is a real invariant.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 27,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-16",
+        "check": "pstack/principles/ps-16",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-17",
+      "text": "**PS-17 (Prove it works):** A task is not done until the real artifact has been exercised — the feature run, the value read, the diff inspected.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 30,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-17",
+        "check": "pstack/principles/ps-17",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-18",
+      "text": "**PS-18 (Fix root causes):** A defect is reproduced and traced to its cause before code changes. A nil-check or guard whose only effect is to silence the crash is absent.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 31,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-18",
+        "check": "pstack/principles/ps-18",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-19",
+      "text": "**PS-19 (Sequence verifiable units):** Multi-step work is broken into units that each end in a checked state. The next unit does not start until the current unit is verified.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 32,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-19",
+        "check": "pstack/principles/ps-19",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-20",
+      "text": "**PS-20 (Test behavior, not implementation):** A test calls the code as its user does and asserts an observed value against a literal expectation. *(AST slices: `pstack/PS-WEAK-001` and `pstack/PS-EXPECT-001`; observed behavior needs review)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 33,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-WEAK-001",
+          "exists": true
+        },
+        {
+          "alias": "pstack/PS-EXPECT-001",
+          "exists": true
+        }
+      ],
+      "status": "existing-slice",
+      "evidence": {
+        "alias": "pstack/PS-20",
+        "check": "pstack/principles/ps-20",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-21",
+      "text": "**PS-21 (Guard the context window):** Bulk evidence is routed to a subagent. The coordinating thread holds the summary, not the raw payload.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 36,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-21",
+        "check": "pstack/principles/ps-21",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-22",
+      "text": "**PS-22 (Never block on the human):** Reversible work proceeds and the result is presented. Confirmation is reserved for irreversible actions.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 37,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-22",
+        "check": "pstack/principles/ps-22",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-23",
+      "text": "**PS-23 (Encode lessons in structure):** A lesson that has fired twice is encoded as a lint, a metadata flag, a runtime check, or a script. It is not left as additional prose.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 38,
+        "grouped": false
+      },
+      "references": [],
+      "status": "candidate",
+      "evidence": {
+        "alias": "pstack/PS-23",
+        "check": "pstack/principles/ps-23",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-24",
+      "text": "**poteto-mode:** Every non-trivial task is routed through a named playbook. The playbook’s steps are copied into the working list before reasoning begins.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 44,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-24",
+        "check": "pstack/operations/ps-24",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-25",
+      "text": "**how:** An explanation of a subsystem is grounded in the code path that implements it, not in recollection.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 45,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-25",
+        "check": "pstack/operations/ps-25",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-26",
+      "text": "**why:** A claim about why something was built cites evidence from the record — commits, issues, decision records — not an unsupported assertion.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 46,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-26",
+        "check": "pstack/operations/ps-26",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-27",
+      "text": "**recall:** Resumed work rebuilds recent context on the topic from the repository and the session record before new edits start.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 47,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-27",
+        "check": "pstack/operations/ps-27",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-28",
+      "text": "**blast-radius:** The safety of a small-looking change is established by executing the code it can affect, not by asserting locality.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 48,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-28",
+        "check": "pstack/operations/ps-28",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-29",
+      "text": "**architect:** Types, caller usage, and module shape are settled before code that crosses a function boundary is written.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 49,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-29",
+        "check": "pstack/operations/ps-29",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-30",
+      "text": "**arena:** N parallel attempts at the same problem are reduced to one selected result. Competing diffs are not left as the deliverable.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 50,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-30",
+        "check": "pstack/operations/ps-30",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-31",
+      "text": "**swarm:** N parallel workers on distinct slices or races produce one aggregated report.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 51,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-31",
+        "check": "pstack/operations/ps-31",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-32",
+      "text": "**interrogate:** A diff is attacked by an independent reviewer before it is called done.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 52,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-32",
+        "check": "pstack/operations/ps-32",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-33",
+      "text": "**automate-me:** A personal mode skill is drafted from observed working patterns, not from an invented persona.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 53,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-33",
+        "check": "pstack/operations/ps-33",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-34",
+      "text": "**make-bot-ui:** A control surface that wakes an agent does so over an explicit webhook contract.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 54,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-34",
+        "check": "pstack/operations/ps-34",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-35",
+      "text": "**setup-pstack:** Model assignment per role is written in one rule file. An unstated role keeps its default.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 55,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-35",
+        "check": "pstack/operations/ps-35",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-36",
+      "text": "**reflect:** A finished hard task updates the skill or check that would have prevented the miss.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 56,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-36",
+        "check": "pstack/operations/ps-36",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-37",
+      "text": "**teach:** A teaching pass leaves the reader able to reconstruct the change.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 57,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-37",
+        "check": "pstack/operations/ps-37",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-38",
+      "text": "**tdd:** A bug fix on a cheap local test path has a test that failed before the fix and passes after it.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 58,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-38",
+        "check": "pstack/operations/ps-38",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-39",
+      "text": "**no-comments:** Comments that restate the code are absent at review. *(AST slice: `pstack/PS-COMMENT-001`; meaning needs review)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 59,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "pstack/PS-COMMENT-001",
+          "exists": true
+        }
+      ],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-39",
+        "check": "pstack/operations/ps-39",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-40",
+      "text": "**typescript-best-practices:** TypeScript edits obey type-system discipline in syntax: no escaped `any`, exhaustive unions, parsed boundaries. *(Enforced: `typescript/TS-ANY-001`)*",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 60,
+        "grouped": false
+      },
+      "references": [
+        {
+          "alias": "typescript/TS-ANY-001",
+          "exists": true
+        }
+      ],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-40",
+        "check": "pstack/operations/ps-40",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-41",
+      "text": "**figure-it-out:** When no bundled playbook fits, a rigorous auditable playbook is designed for the task before execution.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 61,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-41",
+        "check": "pstack/operations/ps-41",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-42",
+      "text": "**show-me-your-work:** Decisions of a non-trivial task are logged in a reviewable trail a later reader can open.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 62,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-42",
+        "check": "pstack/operations/ps-42",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-43",
+      "text": "**create-verification-skill:** A project with no scripted proof of app behavior gains a project-local verify skill before “done” is claimed.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 63,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-43",
+        "check": "pstack/operations/ps-43",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-44",
+      "text": "**maintain-verification-skill:** A verify skill whose feature map has drifted from the app is updated from source plus one live pass.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 64,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-44",
+        "check": "pstack/operations/ps-44",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-45",
+      "text": "**unslop:** Delivered prose and code contain no filler a maintainer would have to delete to recover the claim.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 65,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-45",
+        "check": "pstack/operations/ps-45",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-46",
+      "text": "**bro:** A restatement in plain language preserves the claim and drops the jargon.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 66,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-46",
+        "check": "pstack/operations/ps-46",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-47",
+      "text": "**technical-writing:** Docs, RFCs, READMEs, PR descriptions, and commit messages follow a layered standard: claim, evidence, consequence.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 67,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-47",
+        "check": "pstack/operations/ps-47",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-48",
+      "text": "**Investigation** is read-only. It answers how, why, or whether, and it does not edit.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 73,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-48",
+        "check": "pstack/playbooks/ps-48",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-49",
+      "text": "**Bug fix** reproduces the defect, names the root cause, and fixes it against runtime evidence.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 74,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-49",
+        "check": "pstack/playbooks/ps-49",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-50",
+      "text": "**Performance** traces a measured slowness and reports the change against a baseline.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 75,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-50",
+        "check": "pstack/playbooks/ps-50",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-51",
+      "text": "**Hill climb** improves one metric against a target by hypotheses with before-and-after measurement.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 76,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-51",
+        "check": "pstack/playbooks/ps-51",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-52",
+      "text": "**Runtime forensics** diagnoses a live symptom from instrumentation, not from a guessed patch.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 77,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-52",
+        "check": "pstack/playbooks/ps-52",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-53",
+      "text": "**Trace forensics** diagnoses a captured profile, trace, spindump, or heap snapshot.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 78,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-53",
+        "check": "pstack/playbooks/ps-53",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-54",
+      "text": "**Feature** builds new or changed behavior from a named data shape.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 79,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-54",
+        "check": "pstack/playbooks/ps-54",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-55",
+      "text": "**Refactoring** preserves observable behavior. A refactor that changes behavior is a feature or a bug fix.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 80,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-55",
+        "check": "pstack/playbooks/ps-55",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-56",
+      "text": "**Prototype** is throwaway. Its product is a decision. It does not enter production without a rewrite.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 81,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-56",
+        "check": "pstack/playbooks/ps-56",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-57",
+      "text": "**Visual parity** claims pixel-exact equivalence only after both implementations have been compared.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 82,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-57",
+        "check": "pstack/playbooks/ps-57",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-58",
+      "text": "**Authoring a skill** produces a `SKILL.md` whose trigger, steps, and exit criteria a later agent can follow.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 83,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-58",
+        "check": "pstack/playbooks/ps-58",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-59",
+      "text": "**Eval** tests a skill or prompt change with a blinded comparison.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 84,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-59",
+        "check": "pstack/playbooks/ps-59",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-60",
+      "text": "**Babysit** drives a PR or a stack to merge-ready: conflicts, review threads, and CI are closed or deferred.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 85,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-60",
+        "check": "pstack/playbooks/ps-60",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-61",
+      "text": "**Shipping** independently verifies a green stack, then lands the contiguous verified run bottom-up.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 86,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-61",
+        "check": "pstack/playbooks/ps-61",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-62",
+      "text": "**Autonomous run** drives a long task to completion without stopping for reversible choices.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 87,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-62",
+        "check": "pstack/playbooks/ps-62",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-63",
+      "text": "**Orchestrate** assigns a multi-day project to one coordinator.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 88,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-63",
+        "check": "pstack/playbooks/ps-63",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-64",
+      "text": "**Autopilot full** runs independent PRs to merged with one owner per PR.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 89,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-64",
+        "check": "pstack/playbooks/ps-64",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-65",
+      "text": "**Autopilot stack** builds and verifies one linear stack for the operator to review and land.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 90,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-65",
+        "check": "pstack/playbooks/ps-65",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-66",
+      "text": "**Session pickup** resumes in-flight work from the recorded state, not from a reconstructed guess.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 91,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-66",
+        "check": "pstack/playbooks/ps-66",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-67",
+      "text": "**Pause safely** suspends in-flight work so a later session can resume it.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 92,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-67",
+        "check": "pstack/playbooks/ps-67",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-68",
+      "text": "**Multi-phase plan** names phases, the verifiable exit of each phase, and the order.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 93,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-68",
+        "check": "pstack/playbooks/ps-68",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-69",
+      "text": "**Worktree cleanup** leaves no orphan worktree whose branch is unrecorded.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 94,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-69",
+        "check": "pstack/playbooks/ps-69",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-70",
+      "text": "**Opening a PR** states the problem, the change, and the proof.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 95,
+        "grouped": false
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-70",
+        "check": "pstack/playbooks/ps-70",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-71",
+      "text": "**Scale-stack framework:** Stack decisions record ownership, control plane, edge; self-service is default; immutable delivery; not applied to tiny MVPs.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 101,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-71-74",
+        "check": "pstack/workspace/ps-71-74",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-72",
+      "text": "**Scale-stack framework:** Stack decisions record ownership, control plane, edge; self-service is default; immutable delivery; not applied to tiny MVPs.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 101,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-71-74",
+        "check": "pstack/workspace/ps-71-74",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-73",
+      "text": "**Scale-stack framework:** Stack decisions record ownership, control plane, edge; self-service is default; immutable delivery; not applied to tiny MVPs.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 101,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-71-74",
+        "check": "pstack/workspace/ps-71-74",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-74",
+      "text": "**Scale-stack framework:** Stack decisions record ownership, control plane, edge; self-service is default; immutable delivery; not applied to tiny MVPs.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 101,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-71-74",
+        "check": "pstack/workspace/ps-71-74",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-75",
+      "text": "**Grok god mode:** Tools and first-principles over bulk prose; claims cite observations.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 102,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-75-76",
+        "check": "pstack/workspace/ps-75-76",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-76",
+      "text": "**Grok god mode:** Tools and first-principles over bulk prose; claims cite observations.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 102,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-75-76",
+        "check": "pstack/workspace/ps-75-76",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-77",
+      "text": "**Musk algorithm builder:** Deletion before optimization; question requirements; critical path visible daily; named responsible ownership.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 103,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-77-80",
+        "check": "pstack/workspace/ps-77-80",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-78",
+      "text": "**Musk algorithm builder:** Deletion before optimization; question requirements; critical path visible daily; named responsible ownership.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 103,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-77-80",
+        "check": "pstack/workspace/ps-77-80",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-79",
+      "text": "**Musk algorithm builder:** Deletion before optimization; question requirements; critical path visible daily; named responsible ownership.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 103,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-77-80",
+        "check": "pstack/workspace/ps-77-80",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-80",
+      "text": "**Musk algorithm builder:** Deletion before optimization; question requirements; critical path visible daily; named responsible ownership.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 103,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-77-80",
+        "check": "pstack/workspace/ps-77-80",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-81",
+      "text": "**Webapp from first principles:** Phases advance only when gates are met; final artifact is implementation doc; open questions asked until answered.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 104,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-81-83",
+        "check": "pstack/workspace/ps-81-83",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-82",
+      "text": "**Webapp from first principles:** Phases advance only when gates are met; final artifact is implementation doc; open questions asked until answered.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 104,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-81-83",
+        "check": "pstack/workspace/ps-81-83",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-83",
+      "text": "**Webapp from first principles:** Phases advance only when gates are met; final artifact is implementation doc; open questions asked until answered.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 104,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-81-83",
+        "check": "pstack/workspace/ps-81-83",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-84",
+      "text": "**Learn-anything coach:** User language; retrieval and proof-of-learning gates; live performance required.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 105,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-84-86",
+        "check": "pstack/workspace/ps-84-86",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-85",
+      "text": "**Learn-anything coach:** User language; retrieval and proof-of-learning gates; live performance required.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 105,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-84-86",
+        "check": "pstack/workspace/ps-84-86",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-86",
+      "text": "**Learn-anything coach:** User language; retrieval and proof-of-learning gates; live performance required.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 105,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-84-86",
+        "check": "pstack/workspace/ps-84-86",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-87",
+      "text": "**Cotizador universal:** Pricing derived from load, scope, value, not raw guesswork; opportunity cost included; options presented.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 106,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-87-89",
+        "check": "pstack/workspace/ps-87-89",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-88",
+      "text": "**Cotizador universal:** Pricing derived from load, scope, value, not raw guesswork; opportunity cost included; options presented.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 106,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-87-89",
+        "check": "pstack/workspace/ps-87-89",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-89",
+      "text": "**Cotizador universal:** Pricing derived from load, scope, value, not raw guesswork; opportunity cost included; options presented.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 106,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-87-89",
+        "check": "pstack/workspace/ps-87-89",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-90",
+      "text": "**Estimador de horas:** Parkinson, Hofstadter, Murphy, Pareto applied explicitly; separate 20% driver from buffer.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 107,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-90-91",
+        "check": "pstack/workspace/ps-90-91",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-91",
+      "text": "**Estimador de horas:** Parkinson, Hofstadter, Murphy, Pareto applied explicitly; separate 20% driver from buffer.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 107,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-90-91",
+        "check": "pstack/workspace/ps-90-91",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-92",
+      "text": "**Browser-game prototype:** Single-file HTML5 canvas; keyboard/touch loop; seven-step process followed.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 108,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-92-94",
+        "check": "pstack/workspace/ps-92-94",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-93",
+      "text": "**Browser-game prototype:** Single-file HTML5 canvas; keyboard/touch loop; seven-step process followed.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 108,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-92-94",
+        "check": "pstack/workspace/ps-92-94",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-94",
+      "text": "**Browser-game prototype:** Single-file HTML5 canvas; keyboard/touch loop; seven-step process followed.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 108,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-92-94",
+        "check": "pstack/workspace/ps-92-94",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-95",
+      "text": "**Mega webapp generator:** One-sentence idea yields complete architecture; `ELEMENTOS_CLAVE.md` included.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 109,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-95-96",
+        "check": "pstack/workspace/ps-95-96",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-96",
+      "text": "**Mega webapp generator:** One-sentence idea yields complete architecture; `ELEMENTOS_CLAVE.md` included.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 109,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-95-96",
+        "check": "pstack/workspace/ps-95-96",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-97",
+      "text": "**Modelado de casos de uso:** Actors, goals, success scenario before extensions; functional requirements traceable; exception flows explicit.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 110,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-97-99",
+        "check": "pstack/workspace/ps-97-99",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-98",
+      "text": "**Modelado de casos de uso:** Actors, goals, success scenario before extensions; functional requirements traceable; exception flows explicit.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 110,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-97-99",
+        "check": "pstack/workspace/ps-97-99",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-99",
+      "text": "**Modelado de casos de uso:** Actors, goals, success scenario before extensions; functional requirements traceable; exception flows explicit.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 110,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-97-99",
+        "check": "pstack/workspace/ps-97-99",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-100",
+      "text": "**Winston / charla épica:** Empowerment promise opener; 3 cycles per major idea; slides minimal; close returns to promise.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 111,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-100-103",
+        "check": "pstack/workspace/ps-100-103",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-101",
+      "text": "**Winston / charla épica:** Empowerment promise opener; 3 cycles per major idea; slides minimal; close returns to promise.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 111,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-100-103",
+        "check": "pstack/workspace/ps-100-103",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-102",
+      "text": "**Winston / charla épica:** Empowerment promise opener; 3 cycles per major idea; slides minimal; close returns to promise.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 111,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-100-103",
+        "check": "pstack/workspace/ps-100-103",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-103",
+      "text": "**Winston / charla épica:** Empowerment promise opener; 3 cycles per major idea; slides minimal; close returns to promise.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 111,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-100-103",
+        "check": "pstack/workspace/ps-100-103",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-104",
+      "text": "**Gmail importance triage:** Ordered by urgency/importance with signals; no full unprioritized dump.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 112,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-104-105",
+        "check": "pstack/workspace/ps-104-105",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-105",
+      "text": "**Gmail importance triage:** Ordered by urgency/importance with signals; no full unprioritized dump.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 112,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-104-105",
+        "check": "pstack/workspace/ps-104-105",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-106",
+      "text": "**Gmail summarizer:** Read under label; summary precedes permanent deletion.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 113,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-106-107",
+        "check": "pstack/workspace/ps-106-107",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-107",
+      "text": "**Gmail summarizer:** Read under label; summary precedes permanent deletion.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 113,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-106-107",
+        "check": "pstack/workspace/ps-106-107",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-108",
+      "text": "**Revisor de calendarios:** Inspects every calendar; report overlaps; clear calendar explicitly reported.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 114,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-108-109",
+        "check": "pstack/workspace/ps-108-109",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-109",
+      "text": "**Revisor de calendarios:** Inspects every calendar; report overlaps; clear calendar explicitly reported.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 114,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-108-109",
+        "check": "pstack/workspace/ps-108-109",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-110",
+      "text": "**Daily AI news:** Deduplicated against prior days; readable chat summary.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 115,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-110-111",
+        "check": "pstack/workspace/ps-110-111",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-111",
+      "text": "**Daily AI news:** Deduplicated against prior days; readable chat summary.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 115,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-110-111",
+        "check": "pstack/workspace/ps-110-111",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-112",
+      "text": "**Cloudflared tunnel:** Tunnel duration bounded; credentials never written to chat transcript.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 116,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-112-113",
+        "check": "pstack/workspace/ps-112-113",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    },
+    {
+      "id": "PS-113",
+      "text": "**Cloudflared tunnel:** Tunnel duration bounded; credentials never written to chat transcript.",
+      "source": {
+        "path": "packs/pstack/INVARIANTS.md",
+        "line": 116,
+        "grouped": true
+      },
+      "references": [],
+      "status": "workflow",
+      "evidence": {
+        "alias": "pstack/PS-112-113",
+        "check": "pstack/workspace/ps-112-113",
+        "kind": "project-fitness",
+        "exists": true
+      }
+    }
+  ]
+}

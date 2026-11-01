@@ -1,0 +1,7 @@
+import { createClient } from "redis";
+
+const client = createClient({ RESP: 3 });
+await client.connect();
+
+await client.subscribe("jobs:done", (id) => console.log(id));
+await client.set("jobs:last-check", Date.now().toString());

@@ -1,0 +1,8 @@
+import { ticks$ } from "./ticks";
+import { logs$ } from "./logs";
+import { save } from "./store";
+export function watchTicks(): void {
+  ticks$.subscribe(() => {
+    logs$.subscribe(save);
+  });
+}

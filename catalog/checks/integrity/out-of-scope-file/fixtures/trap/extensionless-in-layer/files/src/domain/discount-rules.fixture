@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+module.exports = (total) => (total > 10000 ? total * 0.1 : 0);

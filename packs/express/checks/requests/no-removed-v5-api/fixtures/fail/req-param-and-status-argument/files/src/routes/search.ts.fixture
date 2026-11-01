@@ -1,0 +1,8 @@
+import { Router } from "express";
+
+export const router = Router();
+
+router.get("/search", (req, res) => {
+  const term = req.param("q");
+  res.json({ term }, 200);
+});

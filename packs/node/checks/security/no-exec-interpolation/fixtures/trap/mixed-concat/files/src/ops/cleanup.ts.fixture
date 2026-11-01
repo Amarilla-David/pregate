@@ -1,0 +1,5 @@
+import cp from "node:child_process";
+
+export function cleanup(dir: string): void {
+  cp.exec("rm -rf " + `${dir}/tmp`);
+}

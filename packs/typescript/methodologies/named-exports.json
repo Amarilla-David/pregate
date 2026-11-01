@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "typescript/named-exports",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [
+    {
+      "with": "typescript/framework-entries",
+      "dimension": "modules.default-export",
+      "suggest": {
+        "use": "TS-DEFAULT-001"
+      },
+      "why": "Next.js, Remix, and similar routers require a default export on page and layout modules. Resolving modules.default-export to TS-ENTRY-001 turns the named-export ban off for every file. Keep both methodologies: TS-DEFAULT-001 excludes pages/** and app/**/page and layout files by default, so the ban still applies everywhere else and TS-ENTRY-001 still requires a default export on those entries. An override that replaces that exclude must keep the entry globs."
+    }
+  ],
+  "invariants": [
+    {
+      "id": "TS-DEFAULT-001",
+      "relations": [
+        {
+          "with": "nuxt",
+          "kind": "idiom",
+          "why": "Nuxt loads server routes, middleware and plugins from their default export (export default defineEventHandler(...)).",
+          "settle": "Exclude server/**, middleware/**, plugins/** and nuxt.config.ts from TS-DEFAULT-001."
+        },
+        {
+          "with": "react-native",
+          "kind": "idiom",
+          "why": "Expo Router loads screens and layouts under app/ from their default export.",
+          "settle": "Exclude the app/** route files from TS-DEFAULT-001 and keep named exports for components and modules elsewhere."
+        }
+      ],
+      "check": "typescript/exports/no-default-export",
+      "defaults": {
+        "exclude": [
+          "**/pages/**",
+          "**/app/**/page.ts",
+          "**/app/**/page.tsx",
+          "**/app/**/layout.ts",
+          "**/app/**/layout.tsx"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Google TypeScript style and Airbnb JavaScript style",
+        "locator": "named exports",
+        "paraphrase": "Prefer named exports so the binding has one name at the definition and at the import."
+      },
+      "why": "A default export is renamed by every importer, so a search for the function's name misses call sites.",
+      "fixHint": "Export the function or class by name. Page and layout entries are excluded by default; enable typescript/framework-entries to require their default export.",
+      "avoid": "export { Page as default } is a default export. A comment that contains the words export default is not one. exports.default = Page is an assignment, not this syntax, and is a hole.",
+      "examples": {
+        "pass": "pass/named-function",
+        "fail": "fail/default-function"
+      }
+    }
+  ]
+}

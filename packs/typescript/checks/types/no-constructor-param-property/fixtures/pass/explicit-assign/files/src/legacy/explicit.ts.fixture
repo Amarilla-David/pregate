@@ -1,0 +1,7 @@
+class Store {
+  private repo: Repo;
+  constructor(repo: Repo) {
+    this.repo = repo;
+  }
+}
+interface Repo {}

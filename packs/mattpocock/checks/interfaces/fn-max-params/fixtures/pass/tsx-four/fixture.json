@@ -1,0 +1,11 @@
+{
+  "language": "typescript",
+  "params": {
+    "max": 4
+  },
+  "target": "src/view.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

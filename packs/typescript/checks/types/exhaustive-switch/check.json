@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/exhaustive-switch",
+  "version": "1.0.0",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "types.exhaustive-switch",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "switch-default",
+          "rule": {
+            "kind": "switch_statement",
+            "not": {
+              "has": {
+                "stopBy": "neighbor",
+                "kind": "switch_body",
+                "has": {
+                  "stopBy": "neighbor",
+                  "kind": "switch_default",
+                  "has": {
+                    "stopBy": "end",
+                    "any": [
+                      {
+                        "kind": "throw_statement"
+                      },
+                      {
+                        "kind": "return_statement"
+                      },
+                      {
+                        "kind": "predefined_type",
+                        "regex": "^never$"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} switches without an exhaustive default. End the default with throw, return, or a never value."
+  }
+}

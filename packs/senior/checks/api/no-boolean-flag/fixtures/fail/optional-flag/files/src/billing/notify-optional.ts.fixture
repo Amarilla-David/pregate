@@ -1,0 +1,4 @@
+
+export function notify(userId: string, sendEmail?: boolean): string {
+  return sendEmail ? userId : "";
+}

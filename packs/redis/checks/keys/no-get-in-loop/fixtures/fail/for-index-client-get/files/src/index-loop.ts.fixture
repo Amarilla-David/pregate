@@ -1,0 +1,8 @@
+declare const client: { get(key: string): Promise<string | null> };
+export async function fetchAll(keys: string[]): Promise<(string | null)[]> {
+  const list: (string | null)[] = [];
+  for (let i = 0; i < keys.length; i++) {
+    list.push(await client.get(`item:${keys[i]}`));
+  }
+  return list;
+}

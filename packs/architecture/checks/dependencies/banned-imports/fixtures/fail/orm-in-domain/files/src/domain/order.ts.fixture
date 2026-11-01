@@ -1,0 +1,10 @@
+import { PrismaClient } from "@prisma/client";
+
+export class Order {
+  constructor(readonly id: string) {}
+
+  static async load(id: string): Promise<Order> {
+    const row = await new PrismaClient().order.findUniqueOrThrow({ where: { id } });
+    return new Order(row.id);
+  }
+}

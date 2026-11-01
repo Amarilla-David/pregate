@@ -1,0 +1,8 @@
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const base = "/admin";
+
+export function goSection(section: string): void {
+  router.push(base + "/" + section);
+}

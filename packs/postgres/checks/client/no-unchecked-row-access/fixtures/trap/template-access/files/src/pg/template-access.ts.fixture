@@ -1,0 +1,6 @@
+
+interface Res { rows: Array<{ email: string }> }
+
+export function labelOf(res: Res): string {
+  return `email: ${res.rows[0].email}`;
+}

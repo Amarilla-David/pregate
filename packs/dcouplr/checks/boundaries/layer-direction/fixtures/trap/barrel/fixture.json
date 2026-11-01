@@ -1,0 +1,53 @@
+{
+  "language": "typescript",
+  "target": "src/application/order.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "@layers:core"
+    ]
+  },
+  "context": {
+    "layers": {
+      "managed": {
+        "paths": [
+          "src/application/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "core"
+      },
+      "ports": {
+        "paths": [
+          "src/ports/**"
+        ],
+        "mayImport": [],
+        "kind": "port"
+      },
+      "adapters": {
+        "paths": [
+          "src/adapters/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "adapter"
+      }
+    }
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "architectural-bypass",
+    "origin": "forge",
+    "discovered": "2026-10-04",
+    "note": "Import indirection must not bypass a declared boundary."
+  }
+}

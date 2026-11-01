@@ -1,0 +1,16 @@
+import NextAuth from "next-auth";
+import GitHub from "next-auth/providers/github";
+import Credentials from "next-auth/providers/credentials";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { db } from "./db";
+import { verify } from "./password";
+
+export const web = NextAuth({
+  adapter: DrizzleAdapter(db),
+  session: { strategy: "database", maxAge: 60 * 60 * 24 },
+  providers: [GitHub],
+});
+
+export const cli = NextAuth({
+  providers: [Credentials({ authorize: (credentials) => verify(credentials) })],
+});

@@ -1,0 +1,426 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/sagas/constructor-literal-contract",
+  "version": "1.0.0",
+  "area": "sagas",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.saga-construction",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "constructor-literal-contract",
+          "rule": {
+            "matches": "saga-new",
+            "any": [
+              {
+                "all": [
+                  {
+                    "not": {
+                      "has": {
+                        "field": "arguments",
+                        "has": {
+                          "kind": "spread_element"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "has": {
+                        "field": "arguments",
+                        "has": {
+                          "nthChild": {
+                            "position": 1,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "not": {
+                      "has": {
+                        "field": "arguments",
+                        "has": {
+                          "kind": "spread_element"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "has": {
+                        "field": "arguments",
+                        "has": {
+                          "nthChild": {
+                            "position": 2,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "not": {
+                      "has": {
+                        "field": "arguments",
+                        "has": {
+                          "kind": "spread_element"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "has": {
+                        "field": "arguments",
+                        "has": {
+                          "nthChild": {
+                            "position": 3,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-id",
+                    "not": {
+                      "follows": {
+                        "kind": "spread_element",
+                        "stopBy": "end"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": {
+                      "position": 2,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-id",
+                    "not": {
+                      "follows": {
+                        "kind": "spread_element",
+                        "stopBy": "end"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": {
+                      "position": 3,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-kernel",
+                    "not": {
+                      "follows": {
+                        "kind": "spread_element",
+                        "stopBy": "end"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "utils": {
+            "saga-constructor": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "identifier",
+                      "regex": "^DStructuredSaga$"
+                    },
+                    {
+                      "any": [
+                        {
+                          "kind": "member_expression",
+                          "has": {
+                            "field": "property",
+                            "regex": "^DStructuredSaga$"
+                          }
+                        },
+                        {
+                          "kind": "subscript_expression",
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\"'`]DStructuredSaga[\"'`]$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "saga-constructor"
+                  }
+                }
+              ]
+            },
+            "saga-new": {
+              "kind": "new_expression",
+              "has": {
+                "field": "constructor",
+                "matches": "saga-constructor"
+              }
+            },
+            "invalid-id": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "any": [
+                        {
+                          "kind": "number"
+                        },
+                        {
+                          "kind": "true"
+                        },
+                        {
+                          "kind": "false"
+                        },
+                        {
+                          "kind": "null"
+                        },
+                        {
+                          "kind": "array"
+                        },
+                        {
+                          "kind": "object"
+                        },
+                        {
+                          "kind": "arrow_function"
+                        },
+                        {
+                          "kind": "function_expression"
+                        },
+                        {
+                          "kind": "generator_function"
+                        }
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "kind": "undefined",
+                          "regex": "^undefined$"
+                        },
+                        {
+                          "kind": "unary_expression",
+                          "regex": "^void\\b"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "string",
+                      "regex": "^[\"']\\s*[\"']$"
+                    },
+                    {
+                      "kind": "template_string",
+                      "regex": "^`\\s*`$"
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-id"
+                  }
+                }
+              ]
+            },
+            "invalid-kernel": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "any": [
+                        {
+                          "kind": "number"
+                        },
+                        {
+                          "kind": "string"
+                        },
+                        {
+                          "kind": "template_string"
+                        },
+                        {
+                          "kind": "true"
+                        },
+                        {
+                          "kind": "false"
+                        },
+                        {
+                          "kind": "null"
+                        },
+                        {
+                          "kind": "array"
+                        },
+                        {
+                          "kind": "arrow_function"
+                        },
+                        {
+                          "kind": "function_expression"
+                        },
+                        {
+                          "kind": "generator_function"
+                        }
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "kind": "undefined",
+                          "regex": "^undefined$"
+                        },
+                        {
+                          "kind": "unary_expression",
+                          "regex": "^void\\b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-kernel"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Structured sagas require nonempty sagaType and sagaId strings and the injected IDKernel. Keep the public constructor at the composition boundary."
+  }
+}

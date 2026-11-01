@@ -1,0 +1,192 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*/[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$" },
+    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    "area": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "cardinality": { "enum": ["singleton", "multi"] },
+    "dimension": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)*$" },
+    "minSeverity": { "enum": ["deny", "ask", "warn", null] },
+    "params": { "type": "object", "additionalProperties": { "type": "object" } },
+    "impl": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "primitive" },
+            "primitive": { "const": "fitness" },
+            "requirement": { "type": "string", "pattern": "^[A-Z][A-Z0-9-]+$" }
+          },
+          "required": ["kind", "primitive", "requirement"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "pattern" },
+            "patterns": {
+              "type": "object",
+              "properties": {
+                "typescript": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "rule": { "type": "object" },
+                      "constraints": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "utils": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "files": { "type": "array", "items": { "type": "string" } },
+                      "ignores": { "type": "array", "items": { "type": "string" } }
+                    },
+                    "required": ["id", "rule"]
+                  }
+                },
+                "python": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "rule": { "type": "object" },
+                      "constraints": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "utils": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "files": { "type": "array", "items": { "type": "string" } },
+                      "ignores": { "type": "array", "items": { "type": "string" } }
+                    },
+                    "required": ["id", "rule"]
+                  }
+                },
+                "rust": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "rule": { "type": "object" },
+                      "constraints": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "utils": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "files": { "type": "array", "items": { "type": "string" } },
+                      "ignores": { "type": "array", "items": { "type": "string" } }
+                    },
+                    "required": ["id", "rule"]
+                  }
+                },
+                "go": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "rule": { "type": "object" },
+                      "constraints": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "utils": { "type": "object", "additionalProperties": { "type": "object" } },
+                      "files": { "type": "array", "items": { "type": "string" } },
+                      "ignores": { "type": "array", "items": { "type": "string" } }
+                    },
+                    "required": ["id", "rule"]
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": ["kind", "patterns"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "primitive" },
+            "primitive": { "const": "metric" },
+            "metric": { "enum": ["fn.lines", "fn.params", "class.publicMethods", "control.nesting"] }
+          },
+          "required": ["kind", "primitive", "metric"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "primitive" },
+            "primitive": { "enum": ["drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal"] }
+          },
+          "required": ["kind", "primitive"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "primitive" },
+            "primitive": { "const": "banned-import" }
+          },
+          "required": ["kind", "primitive"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "primitive" },
+            "primitive": { "const": "layer-edge" }
+          },
+          "required": ["kind", "primitive"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "primitive" },
+            "primitive": { "const": "diff" },
+            "op": { "enum": ["no-decrease", "no-increase"] },
+            "count": {
+              "oneOf": [
+                { "const": "markers" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "pattern": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "string" },
+                        "rule": { "type": "object" },
+                        "constraints": { "type": "object", "additionalProperties": { "type": "object" } },
+                        "utils": { "type": "object", "additionalProperties": { "type": "object" } },
+                        "files": { "type": "array", "items": { "type": "string" } },
+                        "ignores": { "type": "array", "items": { "type": "string" } }
+                      },
+                      "required": ["id", "rule"]
+                    }
+                  },
+                  "required": ["pattern"],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": ["kind", "primitive", "op", "count"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "primitive" },
+            "primitive": { "const": "placement" },
+            "cases": {
+              "type": "array",
+              "items": { "enum": ["new-in-exclude", "edit-generated-or-excluded", "no-language-pack-in-layer"] }
+            }
+          },
+          "required": ["kind", "primitive", "cases"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "phase": { "type": "array", "items": { "enum": ["pre", "stop", "commit", "ci"] } },
+    "languages": { "type": "array", "items": { "enum": ["typescript", "python", "go", "rust"] }, "minItems": 1 },
+    "feedback": {
+      "type": "object",
+      "properties": { "message": { "type": "string" } },
+      "required": ["message"]
+    }
+  },
+  "required": ["id", "version", "area", "cardinality", "dimension", "minSeverity", "params", "impl", "phase", "feedback"]
+}

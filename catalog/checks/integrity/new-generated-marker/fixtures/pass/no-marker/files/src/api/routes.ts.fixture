@@ -1,0 +1,5 @@
+// Route table for the public API; edit by hand.
+export const routes = {
+  orders: "/v1/orders",
+  invoices: "/v1/invoices",
+} as const;

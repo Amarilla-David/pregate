@@ -1,0 +1,4 @@
+
+export function orderId(order: { id: string }): string {
+  return order.id;
+}

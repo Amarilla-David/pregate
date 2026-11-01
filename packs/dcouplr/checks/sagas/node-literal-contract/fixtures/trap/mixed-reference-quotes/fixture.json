@@ -1,0 +1,16 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/sagas.ts",
+  "before": null,
+  "params": { "paths": ["src/**"] },
+  "expect": {
+    "verdict": "fail",
+    "violations": [{"line": 1}, {"line": 2}, {"line": 3}]
+  },
+  "trap": {
+    "family": "duplicate-saga-reference",
+    "origin": "forge",
+    "discovered": "2026-10-06",
+    "note": "Changing literal quote delimiters must not hide the same join reference."
+  }
+}

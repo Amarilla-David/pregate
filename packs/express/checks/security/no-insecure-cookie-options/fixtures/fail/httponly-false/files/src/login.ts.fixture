@@ -1,0 +1,4 @@
+interface Res { cookie(name: string, val: string, opts?: Record<string, unknown>): void; }
+export function setLoginCookie(res: Res, sid: string): void {
+  res.cookie("sid", sid, { httpOnly: false, secure: true });
+}

@@ -1,0 +1,4 @@
+import * as legacy from "@coral-xyz/anchor";
+export * from "@coral-xyz/anchor";
+const loaded = require("@coral-xyz/anchor");
+const lazy = await import("@coral-xyz/anchor");

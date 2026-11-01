@@ -1,0 +1,1 @@
+{"$schema":"../../../../../../../schema/fixture.v1.json","language":"typescript","params":{},"target":"src/measure.tsx","before":null,"expect":{"verdict":"fail","violations":[{"line":6}]},"trap":{"family":"namespace-alias","origin":"forge","discovered":"2026-10-09","note":"A namespace import under another local name still reaches findDOMNode, which React 19 removed."}}

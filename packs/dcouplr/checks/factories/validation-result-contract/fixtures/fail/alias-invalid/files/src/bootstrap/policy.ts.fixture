@@ -1,0 +1,3 @@
+const check = () => ({ valid: 'false' });
+const alias = check;
+stage.addValidationPolicy(alias);

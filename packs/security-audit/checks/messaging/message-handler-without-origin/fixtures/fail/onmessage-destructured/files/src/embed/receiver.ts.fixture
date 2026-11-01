@@ -1,0 +1,3 @@
+export function attach(apply: (patch: unknown) => void): void {
+  window.onmessage = ({ data }: MessageEvent) => apply(data.patch);
+}

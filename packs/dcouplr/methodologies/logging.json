@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/logging",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-LOGGING-001",
+      "check": "dcouplr/logging/requirement-001",
+      "defaults": {
+        "verifier": "DCP-LOGGING-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:1564-1576,1921-1929; dist/index-C3YI4Tf9.d.mts:496-511",
+        "paraphrase": "Managed application logging must use the injected kernel logger or a child of that logger. A concrete logger must be constructed only in its declared adapter or composition root."
+      },
+      "why": "Managed application logging must use the injected kernel logger or a child of that logger. A concrete logger must be constructed only in its declared adapter or composition root. The application uses dcouplr-managed components and logging. Pure value construction and a declared logger adapter are valid exceptions.",
+      "fixHint": "Assert the real construction and call graph, configured logger replacement, and child propagation. Add a failing control that creates or imports an unrelated logger in a managed component. Bind DCP-LOGGING-001 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-LOGGING-001.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-LOGGING-002",
+      "check": "dcouplr/logging/requirement-002",
+      "defaults": {
+        "verifier": "DCP-LOGGING-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:2102-2133,2187-2195; dist/index-C3YI4Tf9.d.mts:498-504",
+        "paraphrase": "A scoped logger must preserve its parent and sibling contexts. The application must verify the intended binding precedence and must not assume that a child logger deep-copies nested data."
+      },
+      "why": "A scoped logger must preserve its parent and sibling contexts. The application must verify the intended binding precedence and must not assume that a child logger deep-copies nested data. The application uses child loggers for request, organization, correlation, or other shared bindings.",
+      "fixHint": "Assert parent, sibling, child and call-local contexts through the actual configured adapter. Verify that context ownership prevents cross-request mutation and that sensitive data is removed before logging. Include a wrong-scope failing control. Bind DCP-LOGGING-002 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-LOGGING-002.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-LOGGING-003",
+      "check": "dcouplr/logging/requirement-003",
+      "defaults": {
+        "verifier": "DCP-LOGGING-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:1574-1583,2094-2133; dist/index-C3YI4Tf9.d.mts:506-511",
+        "paraphrase": "The configured logger must enforce its level policy on writes. A caller must check isLevelEnabled before it constructs expensive optional logging data. The caller must not assume that the gate prevents adapter calls for a disabled level."
+      },
+      "why": "The configured logger must enforce its level policy on writes. A caller must check isLevelEnabled before it constructs expensive optional logging data. The caller must not assume that the gate prevents adapter calls for a disabled level. The logger has disabled levels or a caller constructs costly optional context or messages.",
+      "fixHint": "Assert actual enabled and disabled writes for the configured adapter and confirm that a disabled expensive context builder is not called. Include a non-filtering adapter and an eager-context failing control. Bind DCP-LOGGING-003 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-LOGGING-003.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-LOGGING-004",
+      "check": "dcouplr/logging/requirement-004",
+      "defaults": {
+        "verifier": "DCP-LOGGING-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:1618-1633,1660-1707,2143-2173; dist/index-C3YI4Tf9.d.mts:513-563",
+        "paraphrase": "A caller must use the public logging overload that preserves its intended message, error, structured context and source attribution. A fatal log must not replace the actual throw, rejection, return or shutdown required by the application."
+      },
+      "why": "A caller must use the public logging overload that preserves its intended message, error, structured context and source attribution. A fatal log must not replace the actual throw, rejection, return or shutdown required by the application. The application uses context-first, source-instance or Error-first overloads, or relies on failure control flow.",
+      "fixHint": "Assert actual adapter arguments and caller control flow, including an Error with a message override. Keep attribution separate from identity or authorization. Include a fatal-only failing control when termination is required. Bind DCP-LOGGING-004 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-LOGGING-004.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-LOGGING-005",
+      "check": "dcouplr/logging/requirement-005",
+      "defaults": {
+        "verifier": "DCP-LOGGING-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:1634-1636,2175-2177; dist/index-C3YI4Tf9.d.mts:565-570",
+        "paraphrase": "A buffered logger must have an owned flush and failure policy. A shutdown or checkpoint that requires completed logging must await the actual flush. A synchronous unbuffered logger may omit flush."
+      },
+      "why": "A buffered logger must have an owned flush and failure policy. A shutdown or checkpoint that requires completed logging must await the actual flush. A synchronous unbuffered logger may omit flush. The application buffers logging data or requires logging completion before it ends an operation or process.",
+      "fixHint": "Hold the configured adapter flush with a deferred promise and assert that the actual shutdown waits. Verify rejection handling and the unbuffered no-flush case. Include a missing-await failing control. A resolved flush does not prove remote retention unless the adapter contract says so. Bind DCP-LOGGING-005 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-LOGGING-005.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-LOGGING-006",
+      "check": "dcouplr/logging/requirement-006",
+      "defaults": {
+        "verifier": "DCP-LOGGING-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:696-725,1618-1659; dist/index.d.mts:427-438",
+        "paraphrase": "An application must not treat a logger monitor event as proof of sink delivery, complete child bindings, serialized error data or authorization. Required audit evidence must come from an explicit tested contract."
+      },
+      "why": "An application must not treat a logger monitor event as proof of sink delivery, complete child bindings, serialized error data or authorization. Required audit evidence must come from an explicit tested contract. The application consumes logging monitor events, inspector output or logs as audit evidence.",
+      "fixHint": "Assert sink records and monitor payloads separately through the actual adapters, including child bindings, Error-first calls and disabled levels. Verify the required audit fields and retention at their owning boundary. Include a monitor-only failing control. Bind DCP-LOGGING-006 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-LOGGING-006.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

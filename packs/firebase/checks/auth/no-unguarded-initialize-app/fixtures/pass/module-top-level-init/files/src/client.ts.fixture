@@ -1,0 +1,2 @@
+declare function initializeApp(cfg: Record<string, string>): unknown;
+export const app = initializeApp({ projectId: "demo-app" });

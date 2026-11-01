@@ -1,0 +1,3 @@
+function Widget() {
+  return load().then(() => useState(0));
+}

@@ -1,0 +1,9 @@
+import NextAuth from "next-auth";
+
+export const { auth } = NextAuth({
+  callbacks: {
+    authorized: () => {
+      return true;
+    },
+  },
+});

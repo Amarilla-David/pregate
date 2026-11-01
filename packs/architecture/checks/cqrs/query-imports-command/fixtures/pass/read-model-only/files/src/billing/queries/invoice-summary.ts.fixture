@@ -1,0 +1,6 @@
+import type { InvoiceView } from "../read-models/invoice-view";
+import { invoiceById } from "./invoice-by-id";
+
+export function invoiceSummary(id: string): InvoiceView {
+  return invoiceById(id);
+}

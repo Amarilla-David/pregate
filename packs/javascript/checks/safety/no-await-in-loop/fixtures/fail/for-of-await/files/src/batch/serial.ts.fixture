@@ -1,0 +1,9 @@
+async function load(users) {
+  const out = [];
+  for (const u of users) {
+    out.push(await fetchUser(u));
+  }
+  return out;
+}
+
+export const runner = load;

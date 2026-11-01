@@ -1,0 +1,9 @@
+import { CreateOrderUseCase } from "../../../application/ports/in/create-order";
+
+export class OrderController {
+  constructor(private readonly useCase: CreateOrderUseCase) {}
+
+  async handle(req: any) {
+    return this.useCase.execute(req.body);
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "next-website/build-and-access/requirement-051",
+  "version": "1.0.0",
+  "area": "build-and-access",
+  "cardinality": "singleton",
+  "dimension": "next-website.r051",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "NEXT-WEBSITE-051"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "NEXT-WEBSITE-051 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "language": "rust",
+  "params": {
+    "max": 45
+  },
+  "target": "src/a.rs",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1,
+        "measured": 46
+      }
+    ]
+  }
+}

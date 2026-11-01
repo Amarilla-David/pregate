@@ -1,0 +1,169 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/queue-runtime",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-QUEUE-RUNTIME-001",
+      "check": "dcouplr/queue-runtime/requirement-001",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:2911-2959,3118-3122; dist/index.d.mts:39-63",
+        "paraphrase": "A queue producer must await admission and handle a false result with a named reject, retry or backpressure policy. Memory capacity and pending-persistence capacity must have explicit budgets."
+      },
+      "why": "A queue producer must await admission and handle a false result with a named reject, retry or backpressure policy. Memory capacity and pending-persistence capacity must have explicit budgets. The application submits work through IQueue or a compatible configured queue.",
+      "fixHint": "Hold an admission promise and assert that the actual producer does not report acceptance early. Fill memory and pending-persistence budgets separately and assert the false-result policy. Include missing-await and ignored-false failing controls. Bind DCP-QUEUE-RUNTIME-001 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-001.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-002",
+      "check": "dcouplr/queue-runtime/requirement-002",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:811-827,842-844,2927-2936,3563-3575; dist/index.d.mts:447-453",
+        "paraphrase": "A durability requirement must verify the queue's actual repository and persistence mode. Setting enabled to true or registering a system persistence singleton must not be treated as proof of persistence."
+      },
+      "why": "A durability requirement must verify the queue's actual repository and persistence mode. Setting enabled to true or registering a system persistence singleton must not be treated as proof of persistence. A queue must survive process loss or satisfy a stored-work contract. Deliberately volatile queues are valid when their loss policy is explicit.",
+      "fixHint": "Observe actual writes and recovery through the configured queue and repository. For the pinned default queue, pass the resolved singleton repository explicitly: its fallback uses a transient has lookup that does not see the registered singleton. Verify a direct repository's precedence and include an enabled-but-unpersisted failing control. Bind DCP-QUEUE-RUNTIME-002 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-002.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-003",
+      "check": "dcouplr/queue-runtime/requirement-003",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:2947-2986,3092-3106,3129-3133; dist/index.d.mts:55-63,107-113",
+        "paraphrase": "A leading-persistence queue caller must await the actual append or delete outcome and handle failure before it reports the corresponding admission or removal. A rejected operation must not be treated as a completed durable effect."
+      },
+      "why": "A leading-persistence queue caller must await the actual append or delete outcome and handle failure before it reports the corresponding admission or removal. A rejected operation must not be treated as a completed durable effect. The queue uses leading persistence or an adapter promises equivalent stored-before-return behavior.",
+      "fixHint": "Hold actual repository append and delete promises; assert memory and caller state before and after completion. Reject each operation and assert retained work, later operation progress and the named retry or rejection policy. Verify storage idempotency separately when retries can repeat effects. Bind DCP-QUEUE-RUNTIME-003 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-003.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-004",
+      "check": "dcouplr/queue-runtime/requirement-004",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3108-3127,3134-3184; dist/index.d.mts:39-45,107-114",
+        "paraphrase": "A lagging-persistence queue must have an owned loss window, background lifetime and failure policy. Successful enqueue must not be reported as durable completion. A background storage failure must be observed and acted on."
+      },
+      "why": "A lagging-persistence queue must have an owned loss window, background lifetime and failure policy. Successful enqueue must not be reported as durable completion. A background storage failure must be observed and acted on. The queue uses lagging persistence. A caller can select leading persistence when its contract needs stored-before-return behavior.",
+      "fixHint": "Exercise real scheduled batches, coalesced appends and inclusive deletions. Hold and reject the storage operation and verify the application's recovery, retry and shutdown policy. The pinned timer can emit an unhandled rejection after enqueue succeeds; do not assume caller catch handles it. Include early-durability and lost-background-failure controls. Bind DCP-QUEUE-RUNTIME-004 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-004.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-005",
+      "check": "dcouplr/queue-runtime/requirement-005",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3003-3020,3203-3225; dist/index.d.mts:55-63,107-114",
+        "paraphrase": "A queue flush must be an explicit discard decision. It must not stand in for a persistence commit, a storage deletion or completed shutdown. A discard owner must first stop or settle concurrent writers that could refill the queue."
+      },
+      "why": "A queue flush must be an explicit discard decision. It must not stand in for a persistence commit, a storage deletion or completed shutdown. A discard owner must first stop or settle concurrent writers that could refill the queue. The application calls IQueue.flush or clears work during shutdown, cancellation or recovery.",
+      "fixHint": "Assert memory, pending timer and storage effects separately. Hold a leading enqueue across flush and verify the application's writer barrier. Use an actual owned storage removal or drain contract when deletion or durability is required. Include a flush-as-commit and pending-writer failing control. Bind DCP-QUEUE-RUNTIME-005 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-005.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-006",
+      "check": "dcouplr/queue-runtime/requirement-006",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:3022-3052,3065-3075; dist/index.d.mts:91-109",
+        "paraphrase": "A recovery owner must verify claim ownership and snapshot validity before it admits recovered work. The repository must provide valid bounded entries with unique ordered sequences. A failed or partial recovery must not be treated as a healthy queue."
+      },
+      "why": "A recovery owner must verify claim ownership and snapshot validity before it admits recovered work. The repository must provide valid bounded entries with unique ordered sequences. A failed or partial recovery must not be treated as a healthy queue. The application uses IQueue.recover or a storage adapter returns IQueueRecoveryClaim snapshots.",
+      "fixHint": "Validate acquired, snapshot shape, capacity, item values and finite valid unique sequence order at the adapter boundary. Exercise denied, missing, rejected, oversized and malformed claims. The pinned runtime trusts item order and duplicate sequences, ignores snapshot.size, and can retain partial memory or disable later persistence after malformed input. Reject unsafe recovery before business processing. Bind DCP-QUEUE-RUNTIME-006 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-006.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-007",
+      "check": "dcouplr/queue-runtime/requirement-007",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:2922-2924,3059-3075; dist/index.d.mts:99-114,447-453",
+        "paraphrase": "Each durable queue identity must have an explicit storage scope and writer-conflict rule. Independent queue instances must not be assumed to share sequence allocation or enforce exclusive ownership."
+      },
+      "why": "Each durable queue identity must have an explicit storage scope and writer-conflict rule. Independent queue instances must not be assumed to share sequence allocation or enforce exclusive ownership. More than one instance, process, organization or restart can use the same durable queue identity.",
+      "fixHint": "Verify stable queue IDs, organization partitioning and actual claim or atomic storage conflict handling. The pinned code trims IDs but hashes their original case; two instances of the same ID can append sequence zero without automatic writer admission. Include duplicate-writer, wrong-scope and restart controls. A normalized storage key is not authorization. Bind DCP-QUEUE-RUNTIME-007 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-007.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "DCP-QUEUE-RUNTIME-008",
+      "check": "dcouplr/queue-runtime/requirement-008",
+      "defaults": {
+        "verifier": "DCP-QUEUE-RUNTIME-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta integrity-pinned published declarations and runtime",
+        "locator": "dist/index.mjs:2983-3002,3439-3450; dist/index.d.mts:55-63,185-186",
+        "paraphrase": "A custom queue must satisfy its declared contract and every operation its consumers use. Read views must not be treated as consumption, a concurrent snapshot or a deep copy of item data."
+      },
+      "why": "A custom queue must satisfy its declared contract and every operation its consumers use. Read views must not be treated as consumption, a concurrent snapshot or a deep copy of item data. The product replaces IQueue or uses size, isEmpty, peek, stream, flush or returned values in its decisions.",
+      "fixHint": "Check actual return types, promises, metadata, mutation ownership and the consumer's required operations. The pinned callable-member admission permits missing size and flush and a nonboolean nonpromise enqueue result. Verify nonconsuming peek/stream and shared item references; add an incomplete-adapter and mutated-item control. Bind DCP-QUEUE-RUNTIME-008 to a human-reviewed project assertion with explicit applicability, owner, actual application inputs and freshness. Include a failing control. Run pregate fitness run DCP-QUEUE-RUNTIME-008.",
+      "avoid": "Project evidence gate, not a syntax detector or complete library certification. Source canaries verify the upstream contrast, not consumer compliance. Receipt fixtures verify evidence admission only. No executable command is supplied by this pack. Missing bindings remain UNVERIFIED; an adopted enforcing binding blocks stale or failed evidence, while shadow stays diagnostic. Conditional non-use requires an explicit reviewed reason and evidence, not an unexplained success.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

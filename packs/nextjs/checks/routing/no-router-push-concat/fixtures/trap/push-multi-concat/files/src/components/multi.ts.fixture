@@ -1,0 +1,1 @@
+import Router from 'next/router'; export function go(id: string, t: string) { Router.push("/users/" + id + "?t=" + t); }

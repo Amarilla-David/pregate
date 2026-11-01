@@ -1,0 +1,11 @@
+import type { Lock } from "./lock-port";
+
+export class Worker {
+  async withLock(lock: Lock, work: () => Promise<void>): Promise<void> {
+    try {
+      await work();
+    } finally {
+      lock.release();
+    }
+  }
+}

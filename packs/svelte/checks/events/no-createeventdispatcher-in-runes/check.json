@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/events/no-createeventdispatcher-in-runes",
+  "version": "1.0.0",
+  "area": "events",
+  "cardinality": "singleton",
+  "dimension": "svelte.legacy-dispatcher",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "create-event-dispatcher",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^createEventDispatcher$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls createEventDispatcher. Runes components notify parents through callback props."
+  }
+}

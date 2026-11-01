@@ -1,0 +1,7 @@
+import { useState } from "react";
+export function Pick(props: { cond: boolean }) {
+  const value = props.cond
+    ? useState(true)[0]
+    : useState(false)[0];
+  return <div>{value ? "yes" : "no"}</div>;
+}

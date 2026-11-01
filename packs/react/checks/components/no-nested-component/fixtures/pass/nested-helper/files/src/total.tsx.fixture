@@ -1,0 +1,6 @@
+export function Total(props: { items: number[] }) {
+  function sum(list: number[]) {
+    return list.reduce((a, b) => a + b, 0);
+  }
+  return <div>{sum(props.items)}</div>;
+}

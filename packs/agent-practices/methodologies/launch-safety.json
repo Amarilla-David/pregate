@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "agent-practices/launch-safety",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PRACTICE-001",
+      "check": "agent-practices/launch-safety/requirement-001",
+      "defaults": {
+        "verifier": "PRACTICE-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied launch-risk post, qualified by the authoritative sources and selected privacy policies in the feature document",
+        "locator": "docs/features/agent-practices-pack.md, rule 1; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Before collecting personal data in signup, the product must have a reviewed audience and jurisdiction assessment and enforce any applicable child-access restrictions or parental-consent requirements at the server boundary; an age gate alone must not be treated as COPPA compliance."
+      },
+      "why": "Before collecting personal data in signup, the product must have a reviewed audience and jurisdiction assessment and enforce any applicable child-access restrictions or parental-consent requirements at the server boundary; an age gate alone must not be treated as COPPA compliance.",
+      "fixHint": "Bind PRACTICE-001 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-001; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-002",
+      "check": "agent-practices/launch-safety/requirement-002",
+      "defaults": {
+        "verifier": "PRACTICE-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied launch-risk post, qualified by the authoritative sources and selected privacy policies in the feature document",
+        "locator": "docs/features/agent-practices-pack.md, rule 2; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Browser font delivery must use self-hosted assets by default; any third-party font requests must have an explicit reviewed privacy/transfer basis and matching disclosures, verified against the built application's actual network traffic."
+      },
+      "why": "Browser font delivery must use self-hosted assets by default; any third-party font requests must have an explicit reviewed privacy/transfer basis and matching disclosures, verified against the built application's actual network traffic.",
+      "fixHint": "Bind PRACTICE-002 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-002; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-003",
+      "check": "agent-practices/launch-safety/requirement-003",
+      "defaults": {
+        "verifier": "PRACTICE-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied launch-risk post, qualified by the authoritative sources and selected privacy policies in the feature document",
+        "locator": "docs/features/agent-practices-pack.md, rule 3; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Session replay must remain disabled unless its actual collection has been reviewed; enabled replay must enforce the applicable consent policy before capture, stop on withdrawal and exclude sensitive inputs and payloads, including dynamically added fields."
+      },
+      "why": "Session replay must remain disabled unless its actual collection has been reviewed; enabled replay must enforce the applicable consent policy before capture, stop on withdrawal and exclude sensitive inputs and payloads, including dynamically added fields.",
+      "fixHint": "Bind PRACTICE-003 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-003; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-004",
+      "check": "agent-practices/launch-safety/requirement-004",
+      "defaults": {
+        "verifier": "PRACTICE-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied launch-risk post, qualified by the authoritative sources and selected privacy policies in the feature document",
+        "locator": "docs/features/agent-practices-pack.md, rule 4; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Every commercial email must include the applicable sender identification, valid postal address and working opt-out mechanism, and deliveries must honor suppression within the applicable deadline; transactional classification must match the actual content."
+      },
+      "why": "Every commercial email must include the applicable sender identification, valid postal address and working opt-out mechanism, and deliveries must honor suppression within the applicable deadline; transactional classification must match the actual content.",
+      "fixHint": "Bind PRACTICE-004 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-004; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-005",
+      "check": "agent-practices/launch-safety/requirement-005",
+      "defaults": {
+        "verifier": "PRACTICE-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied launch-risk post, qualified by the authoritative sources and selected privacy policies in the feature document",
+        "locator": "docs/features/agent-practices-pack.md, rule 5; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "Subscription checkout must show the price, billing interval, renewal and trial-conversion terms clearly beside the request for consent, record the required affirmative acceptance and provide the applicable cancellation and renewal-notice behavior."
+      },
+      "why": "Subscription checkout must show the price, billing interval, renewal and trial-conversion terms clearly beside the request for consent, record the required affirmative acceptance and provide the applicable cancellation and renewal-notice behavior.",
+      "fixHint": "Bind PRACTICE-005 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-005; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PRACTICE-006",
+      "check": "agent-practices/launch-safety/requirement-006",
+      "defaults": {
+        "verifier": "PRACTICE-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied launch-risk post, qualified by the authoritative sources and selected privacy policies in the feature document",
+        "locator": "docs/features/agent-practices-pack.md, rule 6; interpretation/provenance and evidence ledger; reviewed 2026-10-07",
+        "paraphrase": "When a user-content service relies on a DMCA safe harbor requiring an agent, it must have a reviewed applicability decision, current agent designation and public contact, plus the applicable notice/takedown and repeat-infringer process; registration alone must not be treated as safe-harbor certification."
+      },
+      "why": "When a user-content service relies on a DMCA safe harbor requiring an agent, it must have a reviewed applicability decision, current agent designation and public contact, plus the applicable notice/takedown and repeat-infringer process; registration alone must not be treated as safe-harbor certification.",
+      "fixHint": "Bind PRACTICE-006 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run PRACTICE-006; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

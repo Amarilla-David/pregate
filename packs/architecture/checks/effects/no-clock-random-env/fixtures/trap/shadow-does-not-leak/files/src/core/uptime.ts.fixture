@@ -1,0 +1,41 @@
+import type { Clock as performance } from "./clock";
+
+declare const Date: { now(): number };
+
+export function elapsed(process: { uptime(): number }): number {
+  return process.uptime();
+}
+
+export function uptime(): number {
+  return process.uptime() + performance.now();
+}
+
+export function created(options: { clock?: { now(): number } }): number {
+  const { clock = Date } = options;
+  return clock.now();
+}
+
+const W = window;
+
+export function seed(): number {
+  return globalThis.window.crypto.getRandomValues(new Uint32Array(1))[0] ?? 0;
+}
+
+export function host(): string {
+  return W.location.host;
+}
+
+export type Reader = (fetch: (url: string) => Promise<string>) => Promise<string>;
+
+export const read: Reader = (get) => fetch("/config").then(() => get("/config"));
+
+namespace Deno {
+  export type Env = Record<string, string>;
+}
+
+const enum performance { Start }
+
+export function drain(queue: unknown[]): number {
+  for (Date of queue) break;
+  return Deno.pid + performance.now() + Date.now();
+}

@@ -1,0 +1,4 @@
+
+export async function getInvoice(id: string): Promise<Response> {
+  return new Response(id);
+}

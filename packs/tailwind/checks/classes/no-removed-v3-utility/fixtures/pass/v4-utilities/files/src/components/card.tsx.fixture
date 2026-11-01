@@ -1,0 +1,10 @@
+import { cn } from "@/lib/utils";
+
+export function Card({ wide }: { wide: boolean }) {
+  return (
+    <div className="bg-black/50 opacity-50 backdrop-opacity-50 grow shrink-0">
+      <p className={cn("text-ellipsis overflow-hidden", wide && "flex-1 flex-row")}>Title</p>
+      <span className="box-decoration-slice decoration-dotted text-white/75">Tag</span>
+    </div>
+  );
+}

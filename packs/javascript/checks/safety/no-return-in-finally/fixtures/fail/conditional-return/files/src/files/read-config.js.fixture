@@ -1,0 +1,11 @@
+export function readConfig(read, path) {
+  let config = null;
+  try {
+    config = JSON.parse(read(path));
+  } finally {
+    if (config === null) {
+      return {};
+    }
+  }
+  return config;
+}

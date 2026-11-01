@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/security/no-fs-exists",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "node.fs.exists",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "fs-exists",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "regex": "^(fs|fsPromises|promises)\\.(exists|existsSync)$"
+                },
+                {
+                  "kind": "identifier",
+                  "regex": "^existsSync$"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls fs.exists/existsSync. This creates a TOCTOU race condition. Open or read the file directly and handle errors."
+  }
+}

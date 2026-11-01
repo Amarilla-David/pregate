@@ -1,0 +1,9 @@
+import { Injectable } from "@nestjs/common";
+import { OrdersService } from "./orders.service";
+@Injectable()
+export class BillingService {
+  total(em: unknown) {
+    const s = new OrdersService(em);
+    return s.count();
+  }
+}

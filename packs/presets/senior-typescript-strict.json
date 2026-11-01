@@ -1,0 +1,68 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "senior-typescript-strict",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "typescript",
+      "kind": "path",
+      "path": "packs/typescript"
+    },
+    {
+      "ns": "senior",
+      "kind": "path",
+      "path": "packs/senior"
+    },
+    {
+      "ns": "clean-code",
+      "kind": "library",
+      "version": "1.2.0"
+    },
+    {
+      "ns": "testing",
+      "kind": "library",
+      "version": "1.2.1"
+    }
+  ],
+  "methodologies": [
+    "clean-code/clean-code",
+    "testing/tdd",
+    "core/pregate-integrity",
+    "typescript/strict-types",
+    "typescript/async-results",
+    "typescript/named-exports",
+    "senior/fowler",
+    "senior/style",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "enforce",
+  "resolve": {
+    "fn.size": {
+      "use": "CC-FN-001",
+      "params": {
+        "max": 40
+      },
+      "note": "The only fn.size alias in this preset. The max shows the per-dimension knob."
+    }
+  },
+  "overrides": {
+    "senior/SR-NEST-001": {
+      "enforcement": "shadow"
+    },
+    "senior/SR-CHAIN-001": {
+      "enforcement": "shadow"
+    },
+    "senior/SR-BRACE-001": {
+      "enforcement": "shadow"
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/proc/env-logical-assign.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "logical-assign",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A defaulting assignment still writes the environment. The operator does not make it a read."
+  }
+}

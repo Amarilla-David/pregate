@@ -1,0 +1,13 @@
+import io
+import pickle
+
+
+class RestrictedUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        raise pickle.UnpicklingError(name)
+
+
+def restore(blob):
+    safe = RestrictedUnpickler(io.BytesIO(blob)).load()
+    raw = pickle.Unpickler(io.BytesIO(blob)).load()
+    return safe, raw

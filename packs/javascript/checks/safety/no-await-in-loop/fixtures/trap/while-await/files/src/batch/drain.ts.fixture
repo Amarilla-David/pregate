@@ -1,0 +1,7 @@
+async function drain(queue) {
+  while (queue.length > 0) {
+    await flush(queue.shift());
+  }
+}
+
+export const runner = drain;

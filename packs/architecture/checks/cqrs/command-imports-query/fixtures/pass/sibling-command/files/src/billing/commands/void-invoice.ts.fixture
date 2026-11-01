@@ -1,0 +1,6 @@
+
+import { pay } from "./pay-invoice";
+
+export function voidInvoice(id: string): string {
+  return pay.length ? id : id;
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "javascript/safety/no-return-in-finally",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "javascript.return-in-finally",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "return-in-finally",
+          "rule": {
+            "kind": "return_statement",
+            "inside": {
+              "stopBy": {
+                "any": [
+                  {
+                    "kind": "function_declaration"
+                  },
+                  {
+                    "kind": "function_expression"
+                  },
+                  {
+                    "kind": "arrow_function"
+                  },
+                  {
+                    "kind": "generator_function"
+                  },
+                  {
+                    "kind": "generator_function_declaration"
+                  },
+                  {
+                    "kind": "method_definition"
+                  }
+                ]
+              },
+              "kind": "finally_clause"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} returns from a finally block, which replaces the try block's result and silently discards a thrown error. Return after the try statement instead."
+  }
+}

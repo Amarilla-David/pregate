@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/http/no-untyped-http-call",
+  "version": "1.0.0",
+  "area": "http",
+  "cardinality": "singleton",
+  "dimension": "angular.untyped-http-call",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "untyped-http-call",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.http\\.(get|post|put|patch|delete)\\s*\\("
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls HttpClient without a type argument. Give the response a type so callers do not get any."
+  }
+}

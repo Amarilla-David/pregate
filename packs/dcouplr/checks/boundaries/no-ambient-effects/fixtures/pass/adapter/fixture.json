@@ -1,0 +1,19 @@
+{
+  "language": "typescript",
+  "target": "src/adapters/http.ts",
+  "before": null,
+  "params": {
+    "paths": [
+      "src/application/**",
+      "src/services/**"
+    ],
+    "exclude": [
+      "**/*.test.*",
+      "**/*.spec.*"
+    ],
+    "allow": []
+  },
+  "expect": {
+    "verdict": "pass"
+  }
+}

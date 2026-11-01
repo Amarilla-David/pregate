@@ -1,0 +1,5 @@
+import { auth } from "firebase-admin/auth";
+
+export async function getUid(token: string): Promise<string> {
+  return auth().verifyIdToken(token).then((t) => t.uid);
+}

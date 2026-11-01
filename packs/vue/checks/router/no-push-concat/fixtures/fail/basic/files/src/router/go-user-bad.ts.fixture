@@ -1,0 +1,7 @@
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+export function goUser(id: string): void {
+  router.push("/users/" + id);
+}

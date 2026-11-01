@@ -1,0 +1,6 @@
+
+import { rows } from "../persistence/invoices";
+
+export function save(id: string): string {
+  return rows.name + id;
+}

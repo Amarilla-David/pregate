@@ -1,0 +1,1 @@
+{ "language": "typescript", "params": { "packages": ["legacy-web-kit"], "paths": ["src/**"] }, "target": "src/a.ts", "before": null, "expect": { "verdict": "pass" } }

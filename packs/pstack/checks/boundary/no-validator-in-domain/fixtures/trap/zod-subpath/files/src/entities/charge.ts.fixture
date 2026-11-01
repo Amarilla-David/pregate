@@ -1,0 +1,4 @@
+
+import { z } from "zod/v4";
+
+export const Charge = z.object({ id: z.string(), amount: z.number() });

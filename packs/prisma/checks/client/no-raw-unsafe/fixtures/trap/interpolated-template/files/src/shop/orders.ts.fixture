@@ -1,0 +1,6 @@
+
+import { prisma } from "~/server/db";
+
+export async function findByEmail(email: string) {
+  return prisma.$queryRawUnsafe(`SELECT * FROM users WHERE email = '${email}'`, email);
+}

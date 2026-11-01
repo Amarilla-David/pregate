@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/db/products.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "order-by-placeholder",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "ORDER BY $1 runs without an error, so the query looks parameterized and working, but the parameter is a constant value, not a column, and the rows come back unsorted."
+  }
+}

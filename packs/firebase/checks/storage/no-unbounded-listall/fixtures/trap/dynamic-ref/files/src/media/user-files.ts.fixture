@@ -1,0 +1,4 @@
+export async function userFiles(userFolderRef: ListRef): Promise<string[]> {
+  const page = await listAll(userFolderRef);
+  return page.items.map((i) => i.name);
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/loose.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-options",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "An empty options object sets no cache policy. Passing a second argument is not the same as passing a cache decision."
+  }
+}

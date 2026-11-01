@@ -1,0 +1,38 @@
+{
+  "id": "rust/completeness/no-unimplemented-macro",
+  "version": "1.0.0",
+  "area": "completeness",
+  "cardinality": "singleton",
+  "dimension": "rust.completeness.unimplemented",
+  "minSeverity": null,
+  "languages": [
+    "rust"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "rust": [
+        {
+          "id": "unimplemented",
+          "rule": {
+            "kind": "macro_invocation",
+            "has": {
+              "field": "macro",
+              "regex": "^(::\\s*)?((std|core)\\s*::\\s*)?unimplemented$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: unimplemented! marks placeholder code that panics when reached. Complete the implementation."
+  }
+}

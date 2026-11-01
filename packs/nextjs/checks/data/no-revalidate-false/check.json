@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-revalidate-false",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-revalidate-false",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "revalidate-false",
+          "rule": {
+            "kind": "lexical_declaration",
+            "regex": "\\brevalidate\\s*=\\s*false\\b"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} disables revalidation with revalidate = false. Set an explicit revalidate interval instead."
+  }
+}

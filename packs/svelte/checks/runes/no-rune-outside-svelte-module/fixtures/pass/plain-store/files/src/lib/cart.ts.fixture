@@ -1,0 +1,6 @@
+import { derived, writable } from "svelte/store";
+
+const $format = (cents: number): string => `$${(cents / 100).toFixed(2)}`;
+
+export const items = writable<number[]>([]);
+export const total = derived(items, ($items) => $format($items.reduce((sum, cents) => sum + cents, 0)));

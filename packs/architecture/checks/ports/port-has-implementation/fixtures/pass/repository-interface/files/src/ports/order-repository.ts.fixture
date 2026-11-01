@@ -1,0 +1,10 @@
+
+export interface OrderRepository {
+  save(order: Order): Promise<void>;
+  byId(id: string): Promise<Order | null>;
+}
+
+export interface Order {
+  id: string;
+  total: number;
+}

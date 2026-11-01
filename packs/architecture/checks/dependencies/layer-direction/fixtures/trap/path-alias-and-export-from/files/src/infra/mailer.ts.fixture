@@ -1,0 +1,3 @@
+export async function sendWelcome(to: string): Promise<void> {
+  await fetch("https://mail.example.test/send", { method: "POST", body: to });
+}

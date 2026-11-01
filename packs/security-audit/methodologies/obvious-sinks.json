@@ -1,0 +1,251 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "security-audit/obvious-sinks",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SA-PY-YAML-001",
+      "check": "security-audit/deserialization/py-yaml-unsafe-load",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Resource and file handling (unsafe deserialization)",
+        "paraphrase": "Deserializers that rebuild arbitrary objects from input are a dangerous sink to trace untrusted data into."
+      },
+      "why": "Hardening invariant: PyYAML's default and full loaders can construct Python objects named in the document, so parsing a file becomes a way to run code. A finding marks a missing safe loader, not a confirmed exploit.",
+      "fixHint": "Use yaml.safe_load / yaml.safe_load_all, or pass Loader=yaml.SafeLoader (CSafeLoader for speed).",
+      "avoid": "Detects yaml.load and yaml.load_all with no Loader argument, or with Loader, UnsafeLoader, FullLoader or their C variants by name, as a keyword or the second positional argument, and the yaml.unsafe_load and yaml.full_load shortcuts (and their _all forms). A Loader held in a variable or a project subclass is treated as reviewed and passes. A bare load imported with from yaml import load is not resolved. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/safe-load",
+        "fail": "fail/no-loader"
+      }
+    },
+    {
+      "id": "SA-PY-DESER-001",
+      "check": "security-audit/deserialization/py-unsafe-deserializer",
+      "defaults": {},
+      "severity": "ask",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Resource and file handling (unsafe deserialization)",
+        "paraphrase": "Deserializers that rebuild arbitrary objects from input are a dangerous sink to trace untrusted data into."
+      },
+      "why": "Hardening invariant: pickle-family, marshal and shelve loads can execute code embedded in the data. Whether the bytes are trusted cannot be decided from syntax, so a finding asks for that review.",
+      "fixHint": "Load only bytes this process wrote to storage it controls, or switch to a data-only format (JSON, msgpack) for anything that crosses a trust boundary. If pickle is unavoidable, subclass Unpickler and restrict find_class.",
+      "avoid": "Detects calls to pickle, cPickle, _pickle, dill and cloudpickle load, loads and Unpickler, marshal.load(s) and shelve.open. A subclass of Unpickler that restricts find_class passes; a renamed module import, joblib, torch.load and pandas.read_pickle are not detected. Test files (tests/, test_*.py, *_test.py, conftest.py) are skipped. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/json",
+        "fail": "fail/pickle-loads"
+      }
+    },
+    {
+      "id": "SA-PY-TLS-001",
+      "check": "security-audit/transport/py-unverified-tls",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Obvious things (TLS enforcement)",
+        "paraphrase": "Check that transport security is actually enforced rather than switched off."
+      },
+      "why": "Hardening invariant: with certificate verification off, any network peer can impersonate the server, so TLS no longer authenticates the connection. A finding marks a removed control, not a confirmed exploit.",
+      "fixHint": "Remove verify=False. For a private CA pass its bundle path (verify=\"/path/ca.pem\") or load it with ssl.create_default_context(cafile=...); never patch ssl._create_default_https_context.",
+      "avoid": "Detects verify=False in requests and httpx module calls, client and session HTTP methods (get, post, request, send, stream and similar), httpx Client constructors, project wrappers named like fetch*, *request, urlopen or download*, bare get/post/put/patch/delete/head/send calls, and any call whose first argument is named like a URL (url, page_url, self.base_url); verify = False assigned on an object named s, sess, or ending in session or client, or containing http; any reference to ssl._create_unverified_context; and verify_mode = ssl.CERT_NONE. A value computed at run time, a verify=False parameter default, aiohttp's ssl=False and urllib3 cert_reqs are not detected. HTTP libraries that implement a verify=False option themselves contain the CERT_NONE form; exclude vendored copies with paths/exclude. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/ca-bundle",
+        "fail": "fail/requests-verify-false"
+      }
+    },
+    {
+      "id": "SA-PY-SHELL-001",
+      "check": "security-audit/execution/py-shell-string",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Injection (shell commands); Obvious things (dynamic input to exec and child processes)",
+        "paraphrase": "Shell command construction is a dangerous sink: trace whether input reaches it, and look for process execution with dynamic input."
+      },
+      "why": "Hardening invariant: a shell parses its command string, so a value built into that string can add commands, redirections or substitutions. A finding marks a string-built shell command, not a confirmed injection.",
+      "fixHint": "Pass an argument list (subprocess.run([\"tar\", \"czf\", name])) without shell=True. If a shell is required, keep the script literal and quote values with shlex.quote.",
+      "avoid": "Detects any call with shell=True (subprocess functions, from-imported or renamed ones and project wrappers alike) whose command, as the first argument or the args= keyword, is not a string literal (a variable, f-string, concatenation or call); subprocess.getoutput and getstatusoutput with a non-literal command; and os.system or os.popen with an f-string, + or % concatenation or .format() argument. A command that is an UPPER_CASE constant, or is built only from string literals and UPPER_CASE constants, is treated as fixed and passes. A shell=True value held in a variable is not detected; argument lists pass. os.system or os.popen with a command held in a variable is SA-PY-SHELL-002. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/argv-list",
+        "fail": "fail/shell-true-fstring"
+      }
+    },
+    {
+      "id": "SA-PY-SHELL-002",
+      "check": "security-audit/execution/py-os-shell-variable",
+      "defaults": {},
+      "severity": "ask",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Injection (shell commands); Obvious things (dynamic input to exec and child processes)",
+        "paraphrase": "Shell command construction is a dangerous sink: trace whether input reaches it, and look for process execution with dynamic input."
+      },
+      "why": "Hardening invariant: os.system and os.popen always run their argument through the shell. Whether a command held in a variable can carry input is a reachability question, so a finding asks for that review.",
+      "fixHint": "Pass an argument list to subprocess.run without shell=True. If a shell is required, build the command from literals and quote each value with shlex.quote.",
+      "avoid": "Detects os.system and os.popen whose first argument is a name, attribute or subscript (line, conf.alert_command, sys.argv[1]) other than an UPPER_CASE constant. Literals pass; a built string is SA-PY-SHELL-001's form and is not repeated here. A from-imported system or popen, and commands returned by a call, are not detected. Test files are skipped. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/literal-or-constant",
+        "fail": "fail/variable-command"
+      }
+    },
+    {
+      "id": "SA-PY-EVAL-001",
+      "check": "security-audit/execution/py-dynamic-eval",
+      "defaults": {},
+      "severity": "ask",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Obvious things (eval and exec with dynamic input)",
+        "paraphrase": "Look for eval, exec and similar code-evaluating calls that receive dynamic input."
+      },
+      "why": "Hardening invariant: eval and exec run whatever Python the string contains. Whether the argument can carry input is a reachability question, so a finding asks for that review.",
+      "fixHint": "Parse data with ast.literal_eval or json.loads, or map names to a fixed table of functions instead of evaluating text.",
+      "avoid": "Detects calls to the builtins eval and exec whose first argument is not a string literal or compile() of a string literal. Methods named eval or exec (model.eval(), cursor.exec()) pass, as do literal strings. builtins.eval and aliases are not detected. Test files are skipped. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/literal-eval",
+        "fail": "fail/eval-input"
+      }
+    },
+    {
+      "id": "SA-PY-DEBUG-001",
+      "check": "security-audit/exposure/py-flask-debug-run",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Obvious things (debug mode gating)",
+        "paraphrase": "Check that debug or development mode cannot be left on or switched on in production."
+      },
+      "why": "Hardening invariant: the Werkzeug debugger served by app.run(debug=True) lets anyone who reaches it run code in the server process. A finding marks a hard-coded debug switch; whether that entry point ships to production needs review.",
+      "fixHint": "Read debug from configuration or an environment flag that defaults to off, and serve production through a WSGI server instead of app.run.",
+      "avoid": "Detects .run(debug=True) on an object whose name ends in app (app, flask_app, self.app, webapp) or is application or socketio, unless host= is the literal \"127.0.0.1\", \"localhost\" or \"::1\". Django's DEBUG = True in settings is deliberately not checked because every new project scaffold has it. asyncio.run(debug=True) and other runners pass, and debug set from a variable is not detected. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/debug-from-config",
+        "fail": "fail/app-run-debug"
+      }
+    },
+    {
+      "id": "SA-GO-TLS-001",
+      "check": "security-audit/transport/go-insecure-skip-verify",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Obvious things (TLS enforcement); Cryptography and secrets (misuse of crypto primitives)",
+        "paraphrase": "Check that transport security is actually enforced and that cryptographic controls are not switched off."
+      },
+      "why": "Hardening invariant: with certificate verification off, any network peer can impersonate the server, so TLS no longer authenticates the connection. A finding marks a removed control, not a confirmed exploit.",
+      "fixHint": "Remove InsecureSkipVerify. To trust a private or self-signed CA, load it into tls.Config.RootCAs; for a pinned peer, verify it in VerifyConnection instead of skipping verification.",
+      "avoid": "Detects InsecureSkipVerify set to the literal true in a composite literal or a field assignment. A value computed at run time (an environment flag, a variable) is not detected, and a renamed or embedded tls.Config field set through reflection is outside scope. Test-only clients that talk to httptest TLS servers can be excluded with paths/exclude. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/default-config",
+        "fail": "fail/composite-literal"
+      }
+    },
+    {
+      "id": "SA-GO-SHELL-001",
+      "check": "security-audit/execution/go-shell-string",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Injection (shell commands); Obvious things (dynamic input to exec and child processes)",
+        "paraphrase": "Shell command construction is a dangerous sink: trace whether input reaches it, and look for process execution with dynamic input."
+      },
+      "why": "Hardening invariant: sh -c parses its script, so a value formatted into that script can add commands. A finding marks a string-built shell script, not a confirmed injection.",
+      "fixHint": "Run the program directly with exec.Command(name, arg1, arg2) so each value is one argument. If a shell is required, keep the script literal and pass values as positional parameters (\"sh\", \"-c\", \"grep -r \\\"$1\\\"\", \"sh\", value).",
+      "avoid": "Detects exec.Command and exec.CommandContext calls that pass sh, bash, zsh, dash, ksh or cmd (optionally under /bin or /usr/bin) with -c or /c and an argument built with fmt.Sprintf or + concatenation. A script assembled in an earlier variable, strings.Join and a renamed os/exec import are not detected. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/direct-argv",
+        "fail": "fail/sprintf"
+      }
+    },
+    {
+      "id": "SA-RS-TLS-001",
+      "check": "security-audit/transport/rust-accept-invalid-certs",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Obvious things (TLS enforcement)",
+        "paraphrase": "Check that transport security is actually enforced rather than switched off."
+      },
+      "why": "Hardening invariant: accepting invalid certificates or hostnames lets any network peer impersonate the server. A finding marks a removed control, not a confirmed exploit.",
+      "fixHint": "Remove the danger_accept_invalid_* call. To trust a private CA, add it with add_root_certificate (reqwest) or the connector's root store.",
+      "avoid": "Detects .danger_accept_invalid_certs(true) and .danger_accept_invalid_hostnames(true) method calls (reqwest, native-tls and their builders) with the literal true. A value from configuration and custom rustls certificate verifiers are not detected. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/root-certificate",
+        "fail": "fail/invalid-certs"
+      }
+    },
+    {
+      "id": "SA-ECB-001",
+      "relations": [
+        {
+          "with": "node/NODE-CIPHER-001",
+          "kind": "duplicates",
+          "why": "createCipher or createDecipher with an ECB algorithm literal is reported by both rules.",
+          "settle": "Keep both: NODE-CIPHER-001 flags the deprecated key derivation, SA-ECB-001 the mode. createCipheriv with aes-256-gcm satisfies both."
+        }
+      ],
+      "check": "security-audit/crypto/ecb-cipher-mode",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Cryptography and secrets (misuse of crypto primitives)",
+        "paraphrase": "Review for misused cryptographic primitives such as ECB mode, unauthenticated encryption and static IVs."
+      },
+      "why": "Hardening invariant: ECB encrypts equal plaintext blocks to equal ciphertext blocks and has no integrity, so structure leaks and blocks can be swapped. A finding marks a weak mode, not a demonstrated attack.",
+      "fixHint": "Use an authenticated mode such as aes-256-gcm with a fresh random 12-byte IV per message, and store the auth tag with the ciphertext.",
+      "avoid": "Detects createCipheriv, createDecipheriv, createCipher and createDecipher calls (directly or through a member such as crypto. or forge.cipher.) whose first argument is a string literal ending in -ecb, in any case. An algorithm held in a variable or configuration is not detected. Python and other languages are not covered by this rule. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/gcm",
+        "fail": "fail/create-cipheriv"
+      }
+    },
+    {
+      "id": "SA-RANDOM-001",
+      "check": "security-audit/crypto/weak-secret-random",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Cryptography and secrets (weak randomness)",
+        "paraphrase": "Values that must be unguessable, such as tokens, keys and nonces, need a cryptographic random source."
+      },
+      "why": "Hardening invariant: Math.random and Python's random module are predictable generators; a token, password, nonce, salt or OTP drawn from them can be guessed. The rule uses names, so a finding needs review of what the value protects.",
+      "fixHint": "Use crypto.randomBytes, crypto.randomUUID or crypto.getRandomValues in JavaScript, and the secrets module (secrets.token_urlsafe, secrets.choice) or random.SystemRandom in Python.",
+      "avoid": "Detects Math.random() and module-level random functions (random, randint, randrange, choice, choices, sample, getrandbits, randbytes, uniform, shuffle) inside a variable, assignment, compound assignment (token += ...), object key or Python keyword argument, or the nearest enclosing function, whose name contains token, secret, nonce, salt, password, passwd, passphrase or OTP; and, in TypeScript, Math.random() in a same-file helper that a generator-named secret function (generate, create, make, new, random or issue, then a secret word, such as generateTemporaryPassword) calls. key is deliberately not a trigger because it names React keys and map keys. Request guards named fetch, request, render, load, cancel, page, next, cursor, continuation or cache plus Token (or _token), refreshToken inside a React hook (a use* function), and anything named like a multipart boundary pass. Callbacks passed as arguments are looked through; a nested named helper stops the search. Renamed values, aliases of random and test files are not checked. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/ts-crypto",
+        "fail": "fail/ts-token-declarator"
+      }
+    },
+    {
+      "id": "SA-COMPARE-001",
+      "check": "security-audit/crypto/secret-plain-compare",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Cryptography and secrets (timing side-channels on secret comparison)",
+        "paraphrase": "Comparisons against secrets can leak them through timing differences."
+      },
+      "why": "Hardening invariant: == and === stop at the first differing character, so response time can reveal how much of a guessed signature or secret matched. The rule uses names, so a finding needs review of whether the value is secret.",
+      "fixHint": "Compare fixed-length buffers with crypto.timingSafeEqual (after checking lengths) or use hmac.compare_digest in Python.",
+      "avoid": "Detects ==, ===, != and !== where one operand is named like a secret (ending in secret or hmac), is an HMAC digest computed inline (createHmac(...).digest(), hmac.new(...).hexdigest()), is a call that produces a digest or token (hmac, *_hmac, *_signature or *_token such as make_token in Python; hmac, *Hmac, *Signature or makeToken in TypeScript; a bare sign is not one, since Math.sign and numpy.sign compare numbers), reads a header whose name contains signature or hmac, is named like a signature (ending in signature, sig, mac or digest) inside a function that mentions HMAC, or holds a configured secret: in TypeScript a `Bearer ${...}` template, or a name the same function assigned from process.env with SECRET, TOKEN, KEY, PASSWORD or PASSWD in the environment variable name, or from such a template (a module-level constant is not linked); in Python an f\"Bearer {...}\" string, or a token-, secret-, password- or api_key-named operand in a function that assigns such a name from os.environ, os.getenv, get_app_config, app.config or settings with such a key (Python patterns cannot bind the two names, so they are linked by naming); and neither side is null, undefined, None, a boolean, a number, a string literal, a PascalCase identifier (a class or sentinel) or a PascalCase.Member enum reference such as Kind.Secret or Kind.SECRET; a secret kept as such a class constant is therefore not detected. Outside HMAC code, signature and digest names usually mean content fingerprints or file-format magic numbers, so they are not triggers. Comparisons inside offline crackers and self-tests (an enclosing function named like crack, brute, livetest or selftest) pass. Test files are skipped. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/ts-timing-safe",
+        "fail": "fail/ts-signature"
+      }
+    }
+  ]
+}

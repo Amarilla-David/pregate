@@ -1,0 +1,7 @@
+export function useCheckout() {
+  async function checkout(cartId: string): Promise<void> {
+    await $fetch("/api/checkout", { method: "POST", body: { cartId } });
+    await navigateTo({ name: "orders-id", params: { id: cartId } });
+  }
+  return { checkout };
+}

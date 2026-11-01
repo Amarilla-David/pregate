@@ -1,0 +1,1 @@
+stage.addFactoryMethod((((input, kernel) => new Order(input, kernel)) as Creator));

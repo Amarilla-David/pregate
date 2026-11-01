@@ -1,0 +1,6 @@
+import type { Request, Response } from "express";
+
+export function home(req: Request, res: Response): void {
+  const next = "/home";
+  res.redirect(next);
+}

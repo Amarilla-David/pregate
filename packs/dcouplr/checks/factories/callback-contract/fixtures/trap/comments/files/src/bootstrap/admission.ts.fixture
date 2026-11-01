@@ -1,0 +1,1 @@
+stage?.['addFactoryMethod']?.(/* ignored */ ((false as unknown as Creator)));

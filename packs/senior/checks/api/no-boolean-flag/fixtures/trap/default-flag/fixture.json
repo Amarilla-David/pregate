@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/notify-default.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "default-boolean",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A default of false is still a boolean flag. The call notify(id) hides the choice."
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/naming/no-placeholder-name",
+  "version": "1.0.0",
+  "area": "naming",
+  "cardinality": "singleton",
+  "dimension": "naming.placeholder-name",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "placeholder-name",
+          "rule": {
+            "any": [
+              {
+                "kind": "variable_declarator",
+                "has": {
+                  "field": "name",
+                  "regex": "^(temp|tmp|foo|bar|baz|obj[0-9]*|flag)$"
+                },
+                "inside": {
+                  "kind": "export_statement",
+                  "stopBy": "end"
+                },
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "any": [
+                      { "kind": "function_declaration" },
+                      { "kind": "arrow_function" },
+                      { "kind": "method_definition" },
+                      { "kind": "function_expression" }
+                    ]
+                  }
+                }
+              },
+              {
+                "kind": "function_declaration",
+                "has": {
+                  "field": "name",
+                  "regex": "^(temp|tmp|foo|bar|baz|obj[0-9]*|flag)$"
+                },
+                "inside": {
+                  "kind": "export_statement",
+                  "stopBy": "end"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a placeholder name in an exported declaration. Use a descriptive domain name."
+  }
+}

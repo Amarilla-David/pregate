@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/compat.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

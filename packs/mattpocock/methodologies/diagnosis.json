@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "mattpocock/diagnosis",
+  "version": "1.0.1",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MP-DEBUG-001",
+      "relations": [
+        {
+          "with": "vibe-proof/VP-CONSOLE-001",
+          "kind": "duplicates",
+          "why": "A console.log tagged [DEBUG-...] outside tests is reported by both rules.",
+          "settle": "Turn MP-DEBUG-001 off while VP-CONSOLE-001 already reports every console.log, or keep both for its debugging-session wording."
+        }
+      ],
+      "check": "mattpocock/diagnostics/no-tagged-debug-log",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Matt Pocock — Skills For Real Engineers",
+        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/diagnosing-bugs/SKILL.md — Phase 4: Instrument; Phase 6: Cleanup",
+        "paraphrase": "Remove temporary debug instrumentation once the original reproduction and regression checks pass."
+      },
+      "why": "A tagged console message is a concrete remnant of temporary diagnostic instrumentation.",
+      "fixHint": "Remove the temporary tagged log after diagnosis, preserving any permanent operational logging the project needs.",
+      "avoid": "Detects direct console.log/debug/info/warn/error/trace calls with a string/template argument beginning [DEBUG-...]. It runs at all phases and can warn during active diagnosis; it cannot know when debugging is finished. Comments, unused strings and ordinary logs are allowed. Logger wrappers, console aliases, bracket calls, constructed prefixes and untagged instrumentation are outside scope. Use paths/exclude for deliberate debug artifacts.",
+      "examples": {
+        "pass": "pass/operational-log",
+        "fail": "fail/log"
+      }
+    }
+  ]
+}

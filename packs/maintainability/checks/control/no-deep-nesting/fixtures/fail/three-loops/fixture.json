@@ -1,0 +1,4 @@
+{
+  "language": "typescript", "params": { "max": 2 }, "target": "src/nested.ts", "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 4, "measured": 3 }] }
+}

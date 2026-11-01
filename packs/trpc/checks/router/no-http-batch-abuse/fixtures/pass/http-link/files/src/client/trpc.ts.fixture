@@ -1,0 +1,2 @@
+import { httpLink } from "@trpc/client";
+export const link = httpLink({ url: "/api/trpc" });

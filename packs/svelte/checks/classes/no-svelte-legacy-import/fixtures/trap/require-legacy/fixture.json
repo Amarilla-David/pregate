@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/legacy/needed.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "require-legacy",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "The loader does not matter. A require of the compatibility path is the same legacy dependency as an import."
+  }
+}

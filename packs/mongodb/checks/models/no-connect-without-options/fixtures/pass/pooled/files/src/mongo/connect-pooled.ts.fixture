@@ -1,0 +1,4 @@
+import mongoose from "mongoose";
+export async function start(uri: string): Promise<void> {
+  await mongoose.connect(uri, { maxPoolSize: 10 });
+}

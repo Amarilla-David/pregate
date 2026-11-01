@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/server/middleware.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

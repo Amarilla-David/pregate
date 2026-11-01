@@ -1,0 +1,12 @@
+declare const Vue: typeof import("vue");
+
+const Counter = Vue.defineComponent({
+  setup() {
+    const count = Vue.ref(0);
+    return { count };
+  },
+  template: "<button @click=\"count++\">{{ count }}</button>",
+});
+
+Vue.createApp(Counter).mount("#widget");
+Vue.nextTick(() => document.body.classList.add("ready"));

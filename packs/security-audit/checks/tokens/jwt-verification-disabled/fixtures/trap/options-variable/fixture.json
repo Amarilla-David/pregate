@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/inspect.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "split-arguments",
+    "note": "The options dictionary built apart from the decode call still disables signature verification wherever it is passed.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

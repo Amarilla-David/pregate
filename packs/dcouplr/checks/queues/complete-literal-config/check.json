@@ -1,0 +1,781 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/queues/complete-literal-config",
+  "version": "1.0.0",
+  "area": "queues",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.queue-input-shape",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "queue-input-shape",
+          "utils": {
+            "plain-object": {
+              "kind": "object",
+              "not": {
+                "has": {
+                  "any": [
+                    {
+                      "kind": "spread_element"
+                    },
+                    {
+                      "kind": "method_definition"
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "kind": "computed_property_name"
+                      }
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "kind": "string",
+                        "regex": "\\\\"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "queue-call": {
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "any": [
+                  {
+                    "kind": "member_expression",
+                    "has": {
+                      "field": "property",
+                      "regex": "^resolve$"
+                    }
+                  },
+                  {
+                    "kind": "subscript_expression",
+                    "has": {
+                      "field": "index",
+                      "regex": "^[\"'`]resolve[\"'`]$"
+                    }
+                  }
+                ]
+              },
+              "all": [
+                {
+                  "has": {
+                    "field": "arguments",
+                    "kind": "arguments",
+                    "has": {
+                      "nthChild": {
+                        "position": 1,
+                        "ofRule": {
+                          "not": {
+                            "kind": "comment"
+                          }
+                        }
+                      },
+                      "regex": "^(?:[\"'`]I_QUEUE[\"'`]|[A-Za-z_$][A-Za-z0-9_$.]*\\.DependencyKeys\\.IQueue)$"
+                    }
+                  }
+                }
+              ]
+            },
+            "queue-config": {
+              "matches": "plain-object",
+              "nthChild": {
+                "position": 2,
+                "ofRule": {
+                  "not": {
+                    "kind": "comment"
+                  }
+                }
+              },
+              "inside": {
+                "kind": "arguments",
+                "inside": {
+                  "matches": "queue-call"
+                }
+              }
+            },
+            "persistence-config": {
+              "matches": "plain-object",
+              "not": {
+                "has": {
+                  "kind": "pair",
+                  "has": { "field": "key", "regex": "^[\"']?__proto__[\"']?$" }
+                }
+              },
+              "inside": {
+                "field": "value",
+                "matches": "active-persistence",
+                "inside": {
+                  "matches": "queue-config"
+                }
+              }
+            },
+            "invalid-string": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "number"
+                    },
+                    {
+                      "kind": "true"
+                    },
+                    {
+                      "kind": "false"
+                    },
+                    {
+                      "kind": "null"
+                    },
+                    {
+                      "kind": "array"
+                    },
+                    {
+                      "kind": "object"
+                    },
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    }
+                  ]
+                },
+                {
+                  "kind": "string",
+                  "regex": "^[\"']\\s*[\"']$"
+                },
+                {
+                  "kind": "template_string",
+                  "regex": "^`\\s*`$"
+                }
+              ]
+            },
+            "invalid-number": {
+              "any": [
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "array"
+                },
+                {
+                  "kind": "object"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ]
+            },
+            "invalid-object": {
+              "any": [
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "array"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ]
+            },
+            "invalid-boolean": {
+              "any": [
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                },
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "array"
+                },
+                {
+                  "kind": "object"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ]
+            },
+            "invalid-mode-type": {
+              "any": [
+                {
+                  "kind": "string",
+                  "not": {
+                    "any": [
+                      { "regex": "\\\\" },
+                      { "regex": "^[\"'](?:leading|lagging)[\"']$" }
+                    ]
+                  }
+                },
+                {
+                  "kind": "template_string",
+                  "not": {
+                    "any": [
+                      { "has": { "kind": "template_substitution" } },
+                      { "regex": "\\\\" },
+                      { "regex": "^`(?:leading|lagging)`$" }
+                    ]
+                  }
+                },
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "array"
+                },
+                {
+                  "kind": "object"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                }
+              ]
+            },
+            "active-queueId": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?queueId[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?queueId[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^queueId$"
+                    }
+                  ]
+                }
+              }
+            },
+            "active-segmentCapacity": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?segmentCapacity[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?segmentCapacity[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^segmentCapacity$"
+                    }
+                  ]
+                }
+              }
+            },
+            "active-maxSegments": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?maxSegments[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?maxSegments[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^maxSegments$"
+                    }
+                  ]
+                }
+              }
+            },
+            "active-persistence": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?persistence[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?persistence[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^persistence$"
+                    }
+                  ]
+                }
+              }
+            },
+            "active-enabled": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?enabled[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?enabled[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^enabled$"
+                    }
+                  ]
+                }
+              }
+            },
+            "active-mode": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?mode[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?mode[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^mode$"
+                    }
+                  ]
+                }
+              }
+            },
+            "active-aotMs": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?aotMs[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?aotMs[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^aotMs$"
+                    }
+                  ]
+                }
+              }
+            },
+            "active-maxPendingOps": {
+              "kind": "pair",
+              "has": {
+                "field": "key",
+                "regex": "^[\"']?maxPendingOps[\"']?$"
+              },
+              "not": {
+                "precedes": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?maxPendingOps[\"']?$"
+                      }
+                    },
+                    {
+                      "kind": "shorthand_property_identifier",
+                      "regex": "^maxPendingOps$"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "matches": "queue-call",
+                "not": {
+                  "has": {
+                    "field": "arguments",
+                    "has": {
+                      "nthChild": {
+                        "position": 2,
+                        "ofRule": {
+                          "not": {
+                            "kind": "comment"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "matches": "invalid-object",
+                "nthChild": {
+                  "position": 2,
+                  "ofRule": {
+                    "not": {
+                      "kind": "comment"
+                    }
+                  }
+                },
+                "inside": {
+                  "kind": "arguments",
+                  "inside": {
+                    "matches": "queue-call"
+                  }
+                }
+              },
+              {
+                "matches": "queue-config",
+                "not": {
+                  "all": [
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?queueId[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^queueId$"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?segmentCapacity[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^segmentCapacity$"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?maxSegments[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^maxSegments$"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?persistence[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^persistence$"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "matches": "persistence-config",
+                "not": {
+                  "all": [
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?enabled[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^enabled$"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?mode[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^mode$"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?aotMs[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^aotMs$"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?maxPendingOps[\"']?$"
+                            }
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^maxPendingOps$"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "matches": "invalid-string",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-queueId",
+                  "inside": {
+                    "matches": "queue-config"
+                  }
+                }
+              },
+              {
+                "matches": "invalid-number",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-segmentCapacity",
+                  "inside": {
+                    "matches": "queue-config"
+                  }
+                }
+              },
+              {
+                "matches": "invalid-number",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-maxSegments",
+                  "inside": {
+                    "matches": "queue-config"
+                  }
+                }
+              },
+              {
+                "matches": "invalid-object",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-persistence",
+                  "inside": {
+                    "matches": "queue-config"
+                  }
+                }
+              },
+              {
+                "matches": "invalid-boolean",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-enabled",
+                  "inside": {
+                    "matches": "persistence-config"
+                  }
+                }
+              },
+              {
+                "matches": "invalid-mode-type",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-mode",
+                  "inside": {
+                    "matches": "persistence-config"
+                  }
+                }
+              },
+              {
+                "matches": "invalid-number",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-aotMs",
+                  "inside": {
+                    "matches": "persistence-config"
+                  }
+                }
+              },
+              {
+                "matches": "invalid-number",
+                "inside": {
+                  "field": "value",
+                  "matches": "active-maxPendingOps",
+                  "inside": {
+                    "matches": "persistence-config"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "The public I_QUEUE configuration contract requires queueId, segmentCapacity, maxSegments and persistence with a boolean enabled flag, leading/lagging mode, aotMs and maxPendingOps. A required field is missing or a literal violates that contract."
+  }
+}

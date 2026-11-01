@@ -1,0 +1,1 @@
+for (const task of tasks) { const worker = { async run() { await task.run(); } }; }

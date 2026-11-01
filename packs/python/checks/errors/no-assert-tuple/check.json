@@ -1,0 +1,37 @@
+{
+  "id": "python/errors/no-assert-tuple",
+  "version": "1.0.0",
+  "area": "errors",
+  "cardinality": "singleton",
+  "dimension": "python.errors.assert-tuple",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "assert-tuple",
+          "rule": {
+            "kind": "assert_statement",
+            "has": {
+              "kind": "tuple"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: assert (condition, message) checks a non-empty tuple which is always True. Write assert condition, message without outer parentheses."
+  }
+}

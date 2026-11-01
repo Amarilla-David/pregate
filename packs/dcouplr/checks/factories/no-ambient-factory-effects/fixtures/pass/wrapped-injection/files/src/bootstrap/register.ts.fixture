@@ -1,0 +1,1 @@
+stage[`addFactoryMethod`](((input, kernel) => ({ run: () => kernel.clock.now() })) satisfies Creator);

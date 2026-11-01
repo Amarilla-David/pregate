@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/operations-and-change/requirement-044",
+  "version": "1.0.0",
+  "area": "operations-and-change",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r044",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-044"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-044 requires current passing project verification: {symbol}."
+  }
+}

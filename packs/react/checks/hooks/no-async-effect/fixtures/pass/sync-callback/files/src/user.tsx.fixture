@@ -1,0 +1,9 @@
+import { useEffect, useState } from "react";
+export function User(props: { id: string }) {
+  const [name, setName] = useState("?");
+  useEffect(() => {
+    void props.id;
+    setName("ready");
+  }, [props.id]);
+  return <div>{name}</div>;
+}

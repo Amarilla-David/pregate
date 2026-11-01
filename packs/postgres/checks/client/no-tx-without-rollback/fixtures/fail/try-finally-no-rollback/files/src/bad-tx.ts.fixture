@@ -1,0 +1,10 @@
+interface Client { query(sql: string): Promise<unknown>; release(): void; }
+export async function runTx(client: Client): Promise<void> {
+  try {
+    await client.query("BEGIN");
+    await client.query("INSERT INTO audit VALUES (1)");
+    await client.query("COMMIT");
+  } finally {
+    client.release();
+  }
+}

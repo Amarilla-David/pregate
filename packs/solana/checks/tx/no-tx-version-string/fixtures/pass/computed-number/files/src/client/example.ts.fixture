@@ -1,0 +1,1 @@
+await rpc.getTransaction(sig, { maxSupportedTransactionVersion: Number("1") });

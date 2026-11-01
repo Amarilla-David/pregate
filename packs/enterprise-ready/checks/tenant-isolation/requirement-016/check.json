@@ -1,0 +1,27 @@
+{
+  "id": "enterprise-ready/tenant-isolation/requirement-016",
+  "version": "1.0.0",
+  "area": "tenant-isolation",
+  "cardinality": "singleton",
+  "dimension": "enterprise-ready.r016",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "ENTERPRISE-016"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "ENTERPRISE-016 requires current passing project verification: {symbol}."
+  }
+}

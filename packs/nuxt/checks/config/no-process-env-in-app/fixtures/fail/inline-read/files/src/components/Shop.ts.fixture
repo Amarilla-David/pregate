@@ -1,0 +1,4 @@
+export const apiUrl = process.env.API_URL;
+export function useApiUrl(): string | undefined {
+  return apiUrl;
+}

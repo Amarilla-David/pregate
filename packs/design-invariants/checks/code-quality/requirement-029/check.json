@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/code-quality/requirement-029",
+  "version": "1.0.0",
+  "area": "code-quality",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r029",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-029"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-029 requires current passing project verification: {symbol}."
+  }
+}

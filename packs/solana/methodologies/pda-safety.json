@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "solana/pda-safety",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SOL-PDA-001",
+      "check": "solana/security/no-create-program-address",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Solana documentation, Program Derived Addresses (solana.com)",
+        "locator": "https://solana.com/docs/core/pda",
+        "paraphrase": "createProgramAddress requires the caller to supply a bump seed that already pushes the point off the ed25519 curve, throwing whenever the seed lands on-curve; findProgramAddressSync / getProgramDerivedAddress derives the canonical bump deterministically."
+      },
+      "why": "Calling createProgramAddress or createProgramAddressSync with user-supplied or unvalidated bump seeds throws when the hash lands on the curve or accepts non-canonical bumps.",
+      "fixHint": "Use getProgramDerivedAddress({ programAddress, seeds }) from @solana/kit (or PublicKey.findProgramAddressSync in legacy code) to derive the canonical bump.",
+      "avoid": "Direct calls and member calls to createProgramAddress or createProgramAddressSync are matched; pre-computed canonical bump caches should pass the address directly.",
+      "examples": {
+        "pass": "pass/get-program-derived-address",
+        "fail": "fail/create-program-address-sync"
+      }
+    }
+  ]
+}

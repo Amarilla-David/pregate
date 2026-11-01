@@ -1,0 +1,29 @@
+import {
+  Component,
+  DestroyRef,
+  EnvironmentInjector,
+  Injector,
+  OnInit,
+  effect,
+  inject,
+  runInInjectionContext,
+  signal,
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { interval } from "rxjs";
+import { Analytics } from "./analytics.service";
+
+@Component({ selector: "app-dashboard", templateUrl: "./dashboard.component.html" })
+export class DashboardComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
+  private readonly environment = inject(EnvironmentInjector);
+  readonly ticks = signal(0);
+
+  ngOnInit(): void {
+    interval(1000).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.ticks.update((n) => n + 1));
+    effect(() => console.log(this.ticks()), { injector: this.injector });
+    runInInjectionContext(this.environment, () => inject(Analytics).track("dashboard"));
+    this.environment.runInContext(() => inject(Analytics).track("ready"));
+  }
+}

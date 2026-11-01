@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/tw/imp-multi.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "multi-important",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Two important prefixes in one class list are still one string node; the rule flags the string, not each bang, so the violation stays on one line."
+  }
+}

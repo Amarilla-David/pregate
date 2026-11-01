@@ -1,0 +1,27 @@
+{
+  "id": "vercel/functions/requirement-011",
+  "version": "1.0.0",
+  "area": "functions",
+  "cardinality": "singleton",
+  "dimension": "vercel.r011",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "VERCEL-011"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "VERCEL-011 requires current passing project verification: {symbol}."
+  }
+}

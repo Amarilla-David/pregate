@@ -1,0 +1,7 @@
+
+export const update = (patch: Partial<Order>): Order => ({
+  id: patch.id ?? "ord_1",
+  total: patch.total ?? 0,
+});
+
+interface Order { id: string; total: number }

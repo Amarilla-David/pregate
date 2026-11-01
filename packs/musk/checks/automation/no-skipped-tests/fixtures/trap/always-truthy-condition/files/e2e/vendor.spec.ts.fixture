@@ -1,0 +1,20 @@
+import { test } from "@playwright/test";
+
+test("vendor", async ({ page }) => {
+  test.skip({ a: b }, "r");
+  test.skip([x], "r");
+  test.skip(new Date(), "r");
+  test.skip((x, true), "r");
+  test.skip(class { y = z }, "r");
+  test.skip(function* () { q }, "r");
+  test.skip(...args, "r");
+  test.skip(globalThis, "r");
+  test.skip(({ a: b }), "r");
+  test.skip((() => x), "r");
+  test.skip((async () => { await y }), "r");
+  test.skip(!!(new Foo()), "r");
+  test.skip(([x]) as unknown, "r");
+  test.skip((x as any), "r");
+  test.skip(x!, "r");
+  test.skip(!(await page.isVisible()), "r");
+});

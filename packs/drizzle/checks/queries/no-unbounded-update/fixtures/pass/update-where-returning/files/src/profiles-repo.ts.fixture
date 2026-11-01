@@ -1,0 +1,6 @@
+declare const tx: { update(t: unknown): { set(v: Record<string, unknown>): { where(c: unknown): { returning(): Promise<unknown[]> } } } };
+declare function eq(a: unknown, b: string): unknown;
+declare const profiles: { id: unknown };
+export async function renameProfile(id: string, name: string): Promise<unknown[]> {
+  return await tx.update(profiles).set({ name }).where(eq(profiles.id, id)).returning();
+}

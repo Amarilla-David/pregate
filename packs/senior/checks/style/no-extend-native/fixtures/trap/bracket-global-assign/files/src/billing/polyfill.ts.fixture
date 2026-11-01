@@ -1,0 +1,4 @@
+
+String["prototype"].cents = function () { return Math.round(Number(this) * 100); };
+globalThis.Promise.prototype.done = function () {};
+Object.assign(Map.prototype, { toJSON() { return [...this]; } });

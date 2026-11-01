@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/timing.interceptor.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "internal-undecorated-interceptor",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "An internal class implementing NestInterceptor without @Injectable() still fails DI metadata emission when registered in a module."
+  }
+}

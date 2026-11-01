@@ -1,0 +1,12 @@
+import { computed, ref, watch } from "vue";
+
+declare function loadUser(id: string): Promise<{ name: string }>;
+
+export function useOwner(userId: { value: string }) {
+  const user = ref<{ name: string } | null>(null);
+  watch(() => userId.value, async (id) => {
+    user.value = await loadUser(id);
+  }, { immediate: true });
+  const label = computed(() => user.value?.name ?? "Loading");
+  return { label };
+}

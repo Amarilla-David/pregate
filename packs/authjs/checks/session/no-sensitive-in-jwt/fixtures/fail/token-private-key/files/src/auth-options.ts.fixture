@@ -1,0 +1,6 @@
+export const callbacks = {
+  async jwt({ token, account }: { token: Record<string, unknown>; account?: { privateKey: string } }) {
+    if (account) token.privateKey = account.privateKey;
+    return token;
+  },
+};

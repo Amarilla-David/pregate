@@ -1,0 +1,4 @@
+
+export function label(status: string): string {
+  return status === "open" ? status === "paid" ? "paid" : "open" : "closed";
+}

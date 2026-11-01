@@ -1,0 +1,5 @@
+import { SECRET } from "$env/static/private";
+
+export async function load() {
+	return { token: SECRET };
+}

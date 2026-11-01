@@ -1,0 +1,425 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/events/subscription-contract",
+  "version": "1.0.0",
+  "area": "events",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.event-subscription-contract",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "subscribe",
+          "utils": {
+            "gate-member": {
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^event$"
+                  }
+                },
+                {
+                  "kind": "subscript_expression",
+                  "has": {
+                    "field": "index",
+                    "regex": "^[\"'`]event[\"'`]$"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "gate-member"
+                  }
+                }
+              ]
+            },
+            "non-callback": {
+              "any": [
+                {
+                  "kind": "string"
+                },
+                {
+                  "kind": "template_string"
+                },
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "object"
+                },
+                {
+                  "kind": "array"
+                },
+                {
+                  "kind": "regex"
+                },
+                {
+                  "kind": "class"
+                },
+                {
+                  "kind": "unary_expression"
+                },
+                {
+                  "kind": "update_expression"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "non-callback"
+                  }
+                }
+              ]
+            },
+            "non-string": {
+              "any": [
+                {
+                  "kind": "number"
+                },
+                {
+                  "kind": "true"
+                },
+                {
+                  "kind": "false"
+                },
+                {
+                  "kind": "null"
+                },
+                {
+                  "kind": "object"
+                },
+                {
+                  "kind": "array"
+                },
+                {
+                  "kind": "regex"
+                },
+                {
+                  "kind": "class"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "kind": "update_expression"
+                },
+                {
+                  "kind": "unary_expression",
+                  "regex": "^(?:[+\\-!~]|void\\b|delete\\b)"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "non-string"
+                  }
+                }
+              ]
+            },
+            "invalid-event-type": {
+              "any": [
+                {
+                  "matches": "non-string"
+                },
+                {
+                  "kind": "string",
+                  "regex": "^(?:''|\"\")$"
+                },
+                {
+                  "kind": "template_string",
+                  "regex": "^``$"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-event-type"
+                  }
+                }
+              ]
+            },
+            "invalid-listener-removal": {
+              "any": [
+                {
+                  "matches": "non-callback"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "parenthesized_expression"
+                    },
+                    {
+                      "kind": "as_expression"
+                    },
+                    {
+                      "kind": "satisfies_expression"
+                    },
+                    {
+                      "kind": "non_null_expression"
+                    }
+                  ],
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "matches": "invalid-listener-removal"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^subscribe$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "gate-member"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\"'`]subscribe[\"'`]$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "matches": "gate-member"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "kind": "arguments",
+                  "not": {
+                    "has": {
+                      "kind": "spread_element"
+                    }
+                  },
+                  "any": [
+                    {
+                      "not": {
+                        "has": {
+                          "nthChild": {
+                            "position": 1,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "has": {
+                        "nthChild": {
+                          "position": 1,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "matches": "non-callback"
+                      }
+                    },
+                    {
+                      "not": {
+                        "has": {
+                          "nthChild": {
+                            "position": 2,
+                            "ofRule": {
+                              "not": {
+                                "kind": "comment"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "has": {
+                        "nthChild": {
+                          "position": 2,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "matches": "invalid-event-type"
+                      }
+                    },
+                    {
+                      "has": {
+                        "nthChild": {
+                          "position": 3,
+                          "ofRule": {
+                            "not": {
+                              "kind": "comment"
+                            }
+                          }
+                        },
+                        "matches": "non-string"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "EventGate.subscribe takes listener first, a nonempty eventType second, and an optional string listenerId."
+  }
+}

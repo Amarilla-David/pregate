@@ -1,0 +1,20 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "src/a.go",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      }
+    ]
+  },
+  "trap": {
+    "family": "pointer-field",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A pointer to a context with a comment beside it still keeps the context in the struct."
+  }
+}

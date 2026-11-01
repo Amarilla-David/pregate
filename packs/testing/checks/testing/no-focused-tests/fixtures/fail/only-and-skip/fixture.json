@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"] },
+  "target": "test/checkout.test.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 4 }, { "line": 8 }] }
+}

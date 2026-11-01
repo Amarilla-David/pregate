@@ -1,0 +1,27 @@
+{
+  "id": "pstack/workspace/ps-108-109",
+  "version": "1.0.0",
+  "area": "workspace",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-108-109",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-108-109"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-108-109 requires current passing project verification: {symbol}."
+  }
+}

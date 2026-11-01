@@ -1,0 +1,7 @@
+export function Outbound(props: { url: string }) {
+  return (
+    <a href={props.url} target="_blank">
+      open
+    </a>
+  );
+}

@@ -1,0 +1,4 @@
+export function useCart(): unknown {
+  const items = useState();
+  return items;
+}

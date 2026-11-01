@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "react-native/platform",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "RN-PLAT-001",
+      "check": "react-native/platform/no-web-components",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React Native docs, Core Components",
+        "locator": "View, Text, Image versus DOM elements",
+        "paraphrase": "React Native renders native views, not DOM nodes. A lowercase DOM tag in a render path has no native counterpart."
+      },
+      "why": "A div or button compiles but renders nothing on device, and the failure is silent until manual QA on a phone.",
+      "fixHint": "Render View, Text, Image, TextInput, or Pressable instead of the DOM tag with the same name.",
+      "avoid": "Wrapping the DOM tag around a native child does not make it native. The outer tag still renders nothing.",
+      "examples": {
+        "pass": "pass/view-text",
+        "fail": "fail/div-return"
+      }
+    },
+    {
+      "id": "RN-LIST-001",
+      "check": "react-native/platform/no-flatlist-without-key",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React Native docs, FlatList",
+        "locator": "keyExtractor prop",
+        "paraphrase": "A FlatList needs a keyExtractor function so rows keep stable keys across inserts, deletes, and reorders."
+      },
+      "why": "Without stable keys a list reuses the wrong row state after an insert, showing one order's data in another order's row.",
+      "fixHint": "Pass keyExtractor={(item) => item.id} with a stable id from the data.",
+      "avoid": "A keyExtractor string names no function and leaves rows keyed by index. A key on an inner View is not the list key.",
+      "examples": {
+        "pass": "pass/with-key",
+        "fail": "fail/bare-list"
+      }
+    },
+    {
+      "id": "RN-PERM-001",
+      "check": "react-native/platform/no-exit-app",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React Native docs, BackHandler",
+        "locator": "exitApp and app lifetime",
+        "paraphrase": "The app never terminates its own process. Exiting is the OS job; screens go back through navigation instead."
+      },
+      "why": "Killing the process looks like a crash to the OS and the user, breaks state restoration, and reads as a guideline violation on review.",
+      "fixHint": "Navigate back to the previous screen and unsubscribe the hardware-back listener instead of exiting.",
+      "avoid": "Calling exitApp through an imported helper or inside a back-press handler is the same kill with one hop in between.",
+      "examples": {
+        "pass": "pass/add-listener",
+        "fail": "fail/back-handler"
+      }
+    },
+    {
+      "id": "RN-STORE-001",
+      "check": "react-native/platform/no-asyncstorage-secret",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React Native AsyncStorage docs, security guidance",
+        "locator": "unencrypted storage",
+        "paraphrase": "AsyncStorage is unencrypted on-device storage. Tokens, passwords, and keys never go through its write calls."
+      },
+      "why": "Anything in AsyncStorage is readable on a rooted device or a backup, so a stored refresh token is a stored credential.",
+      "fixHint": "Keep tokens in the keychain or secure store, and keep only preferences and public state in AsyncStorage.",
+      "avoid": "Batching the secret inside multiSet, or encrypting it with a key that sits next to it in the same store.",
+      "examples": {
+        "pass": "pass/theme-pref",
+        "fail": "fail/set-token"
+      }
+    },
+    {
+      "id": "RN-TEXT-001",
+      "check": "react-native/platform/no-raw-text-in-view",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React Native documentation, Text, https://reactnative.dev/docs/text",
+        "locator": "Containers",
+        "paraphrase": "All text nodes must be wrapped inside a <Text> component. A text node cannot sit directly under a <View>."
+      },
+      "why": "React Native has no implicit text node: a bare string under View throws 'Text strings must be rendered within a <Text> component' and the screen crashes.",
+      "fixHint": "Wrap the string in <Text>. For a pressable label, put <Text> inside the Pressable or TouchableOpacity.",
+      "avoid": "Only literal JSX text, quoted strings and templates with text placed directly inside View, ScrollView, SafeAreaView, KeyboardAvoidingView, Pressable, TouchableOpacity, TouchableHighlight or ImageBackground imported from react-native (renames included) are flagged. Whitespace, comments, variables, numbers and conditional expressions are not checked. Same-named components from other modules, such as themed wrappers that render their own Text, pass.",
+      "examples": {
+        "pass": "pass/wrapped-text",
+        "fail": "fail/text-in-view"
+      }
+    },
+    {
+      "id": "RN-PERF-001",
+      "check": "react-native/platform/no-inline-render-item",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "React Native documentation, Optimizing FlatList Configuration (https://reactnative.dev/docs/optimizing-flatlist-configuration)",
+        "locator": "Avoid anonymous function on renderItem",
+        "paraphrase": "Move the renderItem function outside of the render function or wrap it in useCallback so it does not recreate itself each time the component renders."
+      },
+      "why": "An inline arrow or function expression creates a new function reference on every render, forcing FlatList, SectionList, and VirtualizedList cells to re-render during scroll.",
+      "fixHint": "Hoist the renderItem function to module scope or wrap it in useCallback, and pass the stable reference to renderItem.",
+      "avoid": "Both arrow functions and function expressions passed directly in renderItem={...} on FlatList, SectionList, or VirtualizedList are matched. Non-list custom components are ignored.",
+      "examples": {
+        "pass": "pass/hoisted-render-item",
+        "fail": "fail/inline-arrow"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+admission.addFactoryMethod((input, dKernel) => new OrderService(input, dKernel));

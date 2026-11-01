@@ -1,0 +1,1 @@
+{"language": "typescript","params": {},"target": "src/loaders/legacy.ts","before": null,"expect": {"verdict": "fail","violations": [{"line": 1}]},"$schema": "../../../../../../../schema/fixture.v1.json"}

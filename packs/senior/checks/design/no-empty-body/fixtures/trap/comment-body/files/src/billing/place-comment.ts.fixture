@@ -1,0 +1,6 @@
+
+export function place(order: Order): void {
+  /* reserved for the billing rewrite */
+}
+
+interface Order { id: string }

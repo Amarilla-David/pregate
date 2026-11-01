@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "authjs/config/no-dangerous-email-linking",
+  "version": "1.0.0",
+  "area": "config",
+  "cardinality": "singleton",
+  "dimension": "authjs.dangerous-email-linking",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "dangerous-email-linking",
+          "rule": {
+            "kind": "pair",
+            "regex": "^[\"']?allowDangerousEmailAccountLinking[\"']?\\s*:\\s*(true|!0|!!1)\\s*$"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} lets this provider sign in to any existing account with the same email. Only enable it for providers that verify email ownership."
+  }
+}

@@ -1,0 +1,1 @@
+const pay = require("../billing/legacy/pay");

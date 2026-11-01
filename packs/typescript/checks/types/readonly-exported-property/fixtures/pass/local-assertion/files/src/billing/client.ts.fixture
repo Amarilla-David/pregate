@@ -1,0 +1,6 @@
+export class Client {
+  decode(value: unknown): unknown {
+    const body = value as { bytes?: unknown };
+    return body.bytes;
+  }
+}

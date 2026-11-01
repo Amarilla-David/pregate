@@ -1,0 +1,118 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/modules/prefer-node-prefix",
+  "version": "1.0.1",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "node.prefer-node-prefix",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-builtin",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^(fs|path|os|crypto|events|stream|util|child_process|http|https|url|assert|buffer|querystring|zlib|readline|worker_threads|cluster|dgram|dns|net|tls|perf_hooks|async_hooks)(/.*)?$",
+            "inside": {
+              "any": [
+                {
+                  "inside": {
+                    "field": "source",
+                    "any": [
+                      {
+                        "kind": "import_statement"
+                      },
+                      {
+                        "kind": "export_statement"
+                      },
+                      {
+                        "kind": "import_require_clause"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "nthChild": {
+                    "position": 1,
+                    "ofRule": {
+                      "not": {
+                        "kind": "comment"
+                      }
+                    }
+                  },
+                  "inside": {
+                    "kind": "arguments",
+                    "inside": {
+                      "field": "arguments",
+                      "kind": "call_expression",
+                      "has": {
+                        "field": "function",
+                        "any": [
+                          {
+                            "kind": "import"
+                          },
+                          {
+                            "kind": "identifier",
+                            "regex": "^require$"
+                          },
+                          {
+                            "kind": "member_expression",
+                            "all": [
+                              {
+                                "has": {
+                                  "field": "object",
+                                  "kind": "identifier",
+                                  "regex": "^module$"
+                                }
+                              },
+                              {
+                                "has": {
+                                  "field": "property",
+                                  "kind": "property_identifier",
+                                  "regex": "^require$"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ],
+              "all": [
+                {
+                  "any": [
+                    {
+                      "kind": "string"
+                    },
+                    {
+                      "kind": "template_string",
+                      "not": {
+                        "has": {
+                          "kind": "template_substitution"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a builtin without the node: prefix. Add the prefix."
+  }
+}

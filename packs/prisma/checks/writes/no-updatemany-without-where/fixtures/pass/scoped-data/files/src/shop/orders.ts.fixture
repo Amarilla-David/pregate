@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function rename(teamId: number, name: string) {
+  return prisma.team.updateMany({ where: { id: teamId }, data: { name } });
+}

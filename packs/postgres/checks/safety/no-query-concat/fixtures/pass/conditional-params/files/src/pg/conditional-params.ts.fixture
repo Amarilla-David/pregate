@@ -1,0 +1,8 @@
+
+export async function page(id: number, pool: Pool, next: boolean, tag?: string): Promise<unknown> {
+  await pool.query("SELECT * FROM users WHERE id = $1", [next ? id + 1 : id]);
+  await pool.query("SELECT * FROM users WHERE tag = $1", [tag ?? "user-" + id]);
+  return pool.query(id + 1 > 100 ? "SELECT * FROM archive" : "SELECT * FROM users");
+}
+
+interface Pool { query(sql: string, params?: unknown[]): Promise<unknown> }

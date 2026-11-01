@@ -1,0 +1,15 @@
+import path from "node:path";
+import { Router } from "express";
+
+export const filesRouter = Router();
+const root = path.join(__dirname, "uploads");
+
+filesRouter.get("/files/:name", (req, res, next) => {
+  res.sendFile(req.params.name, { root, dotfiles: "deny" }, (err) => {
+    if (err) next(err);
+  });
+});
+
+filesRouter.get("/exports/:name", (req, res) => {
+  res.download(req.params.name, "export.csv", { root: path.join(__dirname, "exports") });
+});

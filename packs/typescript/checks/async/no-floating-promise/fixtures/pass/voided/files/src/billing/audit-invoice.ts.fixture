@@ -1,0 +1,11 @@
+
+export function audit(order: Order): string {
+  void saveInvoiceAsync(order);
+  return order.id;
+}
+
+async function saveInvoiceAsync(order: Order): Promise<void> {
+  await Promise.resolve(order);
+}
+
+interface Order { id: string }

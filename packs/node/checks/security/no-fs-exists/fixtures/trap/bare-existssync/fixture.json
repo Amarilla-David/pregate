@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/bare.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "destructured-exists-sync",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Importing existsSync directly instead of calling fs.existsSync still performs a separate existence check before file access."
+  }
+}

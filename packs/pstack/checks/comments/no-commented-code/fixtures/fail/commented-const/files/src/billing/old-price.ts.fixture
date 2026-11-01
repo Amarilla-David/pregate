@@ -1,0 +1,3 @@
+
+// const oldPrice = 1;
+export const price = 1200;

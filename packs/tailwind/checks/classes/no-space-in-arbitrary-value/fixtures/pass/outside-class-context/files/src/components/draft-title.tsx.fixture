@@ -1,0 +1,9 @@
+const prefix = "[draft] ";
+
+export function DraftTitle({ title }: { title: string }) {
+  return (
+    <h2 className="text-lg font-semibold" title="[needs review] title">
+      {prefix + title}
+    </h2>
+  );
+}

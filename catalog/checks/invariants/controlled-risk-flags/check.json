@@ -1,0 +1,27 @@
+{
+  "id": "core/invariants/controlled-risk-flags",
+  "version": "1.1.0",
+  "area": "invariants",
+  "cardinality": "singleton",
+  "dimension": "invariant.r058",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CORE-INV-058"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CORE-INV-058 requires current passing project verification: {symbol}."
+  }
+}

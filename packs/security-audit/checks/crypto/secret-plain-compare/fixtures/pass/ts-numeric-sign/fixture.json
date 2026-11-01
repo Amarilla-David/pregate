@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/stats/trend.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

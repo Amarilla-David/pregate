@@ -1,0 +1,7 @@
+
+it("saves the invoice", () => {
+  expect(save).toHaveBeenCalledWith(invoice);
+});
+
+const invoice = { id: "inv_1" };
+declare function save(invoice: { id: string }): void;

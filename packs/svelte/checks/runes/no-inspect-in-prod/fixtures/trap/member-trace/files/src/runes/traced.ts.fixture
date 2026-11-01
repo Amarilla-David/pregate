@@ -1,0 +1,3 @@
+const count = $state(0);
+
+$inspect.trace("count", count);

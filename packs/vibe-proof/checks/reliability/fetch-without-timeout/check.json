@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/reliability/fetch-without-timeout",
+  "version": "1.0.0",
+  "area": "reliability",
+  "cardinality": "singleton",
+  "dimension": "reliability.fetch-timeout",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "fetch-timeout",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "^(fetch|axios\\.(get|post|put|patch|delete|request)|https?\\.(get|request))$"
+            },
+            "not": {
+              "has": {
+                "field": "arguments",
+                "regex": "\\b(signal|timeout|AbortSignal)\\b"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls the network with no signal or timeout."
+  }
+}

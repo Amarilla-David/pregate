@@ -1,0 +1,6 @@
+import { cookies } from "next/headers";
+
+export default function Home() {
+  const theme = cookies().get("theme")?.value ?? "light";
+  return <main className={theme}>Home</main>;
+}

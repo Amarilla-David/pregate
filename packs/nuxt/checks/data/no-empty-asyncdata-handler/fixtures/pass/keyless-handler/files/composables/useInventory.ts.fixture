@@ -1,0 +1,6 @@
+export function useInventory() {
+  return useLazyAsyncData(async () => {
+    const rows = await $fetch<{ sku: string }[]>("/api/inventory");
+    return rows.map((row) => row.sku);
+  });
+}

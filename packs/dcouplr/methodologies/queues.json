@@ -1,0 +1,56 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/queues",
+  "version": "1.1.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-QUEUE-SHAPE-001",
+      "check": "dcouplr/queues/complete-literal-config",
+      "defaults": {
+        "paths": ["src/**"],
+        "exclude": ["**/*.test.*", "**/*.spec.*", "**/test/**", "**/tests/**", "**/__tests__/**"]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations and runtime",
+        "locator": "dist/index.d.mts QueuePersistenceMode, IQueuePersistenceConfig and IDQueueConfigInternal, lines 39–50; dist/index.mjs validateQueueFactoryInput, lines 3425–3438; defaultQueueFactory, lines 3548–3573; DQueue constructor, lines 2912–2920",
+        "paraphrase": "The public built-in queue contract requires a queueId string, numeric capacity bounds and persistence with a boolean enabled flag, leading/lagging mode and numeric aotMs/maxPendingOps. The constructor additionally requires a nonempty ID and positive integer bounds."
+      },
+      "why": "Keep queue configuration within the public typed contract and reject missing inputs before work starts. Runtime tolerance of boolean-like strings or arbitrary modes does not make them valid typed configuration.",
+      "fixHint": "Supply queueId, segmentCapacity, maxSegments and persistence. Supply enabled as a boolean, mode as leading or lagging, and aotMs and maxPendingOps as numbers inside persistence. Use a nonempty queueId and positive integer numeric bounds. Validate dynamic configuration before resolving I_QUEUE.",
+      "avoid": "This is a reviewed method/key policy for direct built-in queue resolve calls, not receiver/import type inference. Review applicability for custom I_QUEUE overrides. Checks missing DTOs, known invalid literal DTO types, missing fields in plain inline objects, wrong literal field types, literal modes outside leading/lagging and directly empty queueId strings. Later literal and shorthand overrides are respected. Variables, expressions, escaped keys, escaped mode/ID string contents, computed keys, getters, spreads and inherited persistence fields are unresolved; silence does not verify them. The runtime's semantic type checker tolerates boolean-like enabled strings and non-string modes; its mode check also accepts arbitrary strings. This rule enforces the stricter public type contract, not equivalent runtime rejection. Numeric positivity/integrality and complete queue budgets require additional checks.",
+      "examples": { "pass": "pass/basic", "fail": "fail/missing-persistence" }
+    },
+    {
+      "id": "DCP-QUEUE-NUM-001",
+      "check": "dcouplr/queues/no-invalid-literal-capacity",
+      "defaults": {
+        "paths": [
+          "src/**"
+        ],
+        "exclude": [
+          "**/*.test.*",
+          "**/*.spec.*",
+          "**/test/**",
+          "**/tests/**",
+          "**/__tests__/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published runtime",
+        "locator": "dist/index.mjs DQueue constructor, lines 2912–2920; buildSystemDependencies defaultQueueFactory, lines 3548–3573",
+        "paraphrase": "Built-in queue capacity and persistence bounds must be positive integer numbers."
+      },
+      "why": "Zero, negative and fractional capacity/persistence values reject queue construction before it can handle work.",
+      "fixHint": "Supply positive integer number limits for segmentCapacity, maxSegments, persistence.aotMs and persistence.maxPendingOps. Validate dynamically supplied values before resolving I_QUEUE.",
+      "avoid": "Checks direct resolve calls with an inline object, a literal I_QUEUE key or a dotted DependencyKeys.IQueue key. This is a reviewed method/key policy for the built-in queue, not receiver/import type inference; review applicability for custom queue overrides. Detects negative numeric literals, supported zero literal forms, ordinary nonintegral decimals and bigint literals. Later literal overrides are respected. Objects with spreads or computed keys are skipped because their effective values are unresolved. Configuration variables, escaped keys, signed-plus or wrapped expressions, nonintegral scientific notation and complete shape/budget requirements are not evaluated. An integer-valued decimal is valid; silence does not prove the complete configuration or its budget is correct.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/zero"
+      }
+    }
+  ]
+}

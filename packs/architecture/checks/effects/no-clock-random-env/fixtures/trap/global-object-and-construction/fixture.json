@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["@layers:core"], "allow": [] },
+  "context": {
+    "layers": {
+      "core": { "paths": ["src/core/**"], "mayImport": [], "kind": "core" },
+      "shell": { "paths": ["src/shell/**"], "mayImport": ["core"], "kind": "adapter" }
+    }
+  },
+  "target": "src/core/ids.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 4 }, { "line": 8 }, { "line": 9 }] },
+  "trap": {
+    "family": "global-object",
+    "origin": "corpus",
+    "discovered": "2026-10-01",
+    "note": "globalThis.Date, new Date() without arguments, Math destructured and crypto.randomUUID reach the same nondeterminism without the obvious spelling."
+  }
+}

@@ -1,0 +1,2 @@
+const opts = { commitment: "confirmed", maxSupportedTransactionVersion: "1" };
+await getTransaction(sig, opts);

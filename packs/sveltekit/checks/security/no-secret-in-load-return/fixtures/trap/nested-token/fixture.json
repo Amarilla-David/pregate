@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/routes/me/+page.server.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-secret",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Nesting the token one level down still serializes it into load data, and load data ships to the client."
+  }
+}

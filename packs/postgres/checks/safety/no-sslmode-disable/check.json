@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/safety/no-sslmode-disable",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "postgres.sslmode-disable",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "ssl-false",
+          "rule": {
+            "kind": "pair",
+            "regex": "^\\s*ssl\\s*:\\s*false\\b"
+          }
+        },
+        {
+          "id": "reject-unauthorized-false",
+          "rule": {
+            "kind": "pair",
+            "regex": "^\\s*rejectUnauthorized\\s*:\\s*false\\b"
+          }
+        },
+        {
+          "id": "sslmode-url",
+          "rule": {
+            "kind": "string",
+            "regex": "sslmode\\s*=\\s*disable"
+          }
+        },
+        {
+          "id": "sslmode-url-template",
+          "rule": {
+            "kind": "template_string",
+            "regex": "sslmode\\s*=\\s*disable"
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} disables TLS verification for the database link. Keep ssl on with rejectUnauthorized true."
+  }
+}

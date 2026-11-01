@@ -1,0 +1,6 @@
+const CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+export function issue() {
+  const resetToken = Array.from({ length: 32 }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join("");
+  return resetToken;
+}

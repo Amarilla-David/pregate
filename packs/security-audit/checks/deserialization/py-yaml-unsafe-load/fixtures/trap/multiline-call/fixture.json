@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/config.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "split-arguments",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "A load call split over lines with a trailing comma still has no safe loader."
+  }
+}

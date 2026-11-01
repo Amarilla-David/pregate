@@ -1,0 +1,125 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "authjs/config",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "AUTH-SECRET-001",
+      "relations": [
+        {
+          "with": "vibe-proof/VP-SECRET-001",
+          "kind": "duplicates",
+          "why": "A token-shaped literal assigned to the Auth.js secret is reported by both rules.",
+          "settle": "Keep both: AUTH-SECRET-001 also catches secrets that do not look like a known token. Reading the secret from the environment satisfies both."
+        }
+      ],
+      "check": "authjs/config/no-hardcoded-secret",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, Configuration section",
+        "locator": "AUTH_SECRET environment variable",
+        "paraphrase": "The library reads its encryption secret from the AUTH_SECRET environment variable. A secret written into the config object ships to the client bundle or the repo."
+      },
+      "why": "A committed secret signs every session token. Anyone holding it can forge sessions for any user.",
+      "fixHint": "Read the secret from the environment: secret: process.env.AUTH_SECRET. Never write the value into the config object.",
+      "avoid": "Renaming the key or moving the literal to a nearby const does not remove the committed value.",
+      "examples": {
+        "pass": "pass/env-secret",
+        "fail": "fail/hardcoded-double"
+      }
+    },
+    {
+      "id": "AUTH-PROVIDER-001",
+      "check": "authjs/config/no-credentials-without-authorize",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, Credentials provider",
+        "locator": "authorize callback",
+        "paraphrase": "The Credentials provider authenticates through the authorize callback. Without it the provider renders a form that never verifies anyone."
+      },
+      "why": "A Credentials provider without authorize accepts the login UI with no verification step behind it.",
+      "fixHint": "Add an authorize callback that checks the credentials and returns the user or null.",
+      "avoid": "Listing credential fields is not verification. The callback is the check.",
+      "examples": {
+        "pass": "pass/with-authorize",
+        "fail": "fail/bare-credentials"
+      }
+    },
+    {
+      "id": "AUTH-DEBUG-001",
+      "check": "authjs/config/no-debug-in-config",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, Configuration section",
+        "locator": "debug flag",
+        "paraphrase": "The debug flag prints the OAuth and session flow to the logs. It exists for local diagnosis, not for committed configuration."
+      },
+      "why": "Committed debug output leaks authorization codes, token responses, and user data into log storage.",
+      "fixHint": "Remove the debug key, or set it to false. Turn it on locally through the environment when diagnosing.",
+      "avoid": "A truthy non-boolean such as 1 is still on. debug: false is the only explicit off.",
+      "examples": {
+        "pass": "pass/no-debug",
+        "fail": "fail/debug-true"
+      }
+    },
+    {
+      "id": "AUTH-PAGES-001",
+      "check": "authjs/config/no-pages-signin-external",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js (NextAuth v5) documentation, pages option",
+        "locator": "custom signIn page",
+        "paraphrase": "The signIn page option points at the app's own login route. An absolute external URL hands credentials to another origin."
+      },
+      "why": "An external sign-in URL sends users and their credentials to a host the app does not control.",
+      "fixHint": "Point signIn at an in-app route such as /auth/signin.",
+      "avoid": "Building the URL from a template or a host variable still leaves the app.",
+      "examples": {
+        "pass": "pass/relative-signin",
+        "fail": "fail/https-signin"
+      }
+    },
+    {
+      "id": "AUTH-STRATEGY-001",
+      "check": "authjs/config/no-credentials-database-session",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Auth.js reference, Credentials provider, https://authjs.dev/reference/core/providers/credentials; Auth.js reference, session.strategy, https://authjs.dev/reference/nextjs",
+        "locator": "Credentials provider description; session.strategy default",
+        "paraphrase": "The Credentials provider can only be used if JSON Web Tokens are enabled for sessions. session.strategy defaults to jwt, but to database when an adapter is set."
+      },
+      "why": "With database sessions the Credentials login writes no session row, so the user appears signed out right after a successful login. An explicit database strategy with only Credentials providers is rejected at startup.",
+      "fixHint": "Set session: { strategy: \"jwt\" } in the same config. Keep the adapter if other providers need it.",
+      "avoid": "Flags a Credentials or CredentialsProvider call in providers when the same object sets strategy \"database\", or sets an adapter with no strategy. A session or config passed as a variable or spread is not resolved and passes.",
+      "examples": {
+        "pass": "pass/credentials-jwt",
+        "fail": "fail/explicit-database"
+      }
+    },
+    {
+      "id": "AUTH-LINK-001",
+      "check": "authjs/config/no-dangerous-email-linking",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Auth.js reference, OAuth provider options, https://authjs.dev/reference/core/providers",
+        "locator": "allowDangerousEmailAccountLinking",
+        "paraphrase": "Auth.js does not link accounts from different providers by email by default, because that is not secure between arbitrary providers. The option is only for providers you trust to verify email addresses."
+      },
+      "why": "A provider that lets users claim an unverified email can sign an attacker in to the existing account that owns that address.",
+      "fixHint": "Remove the option and let users link accounts while signed in. Keep it only for providers that verify email ownership, and record that decision in the preset.",
+      "avoid": "Only a literal true (or !0, !!1) on the allowDangerousEmailAccountLinking key, quoted or not, is flagged. false, a variable value and text that mentions the option pass. Warn only: the option is supported for trusted providers.",
+      "examples": {
+        "pass": "pass/default-linking",
+        "fail": "fail/github-linking"
+      }
+    }
+  ]
+}

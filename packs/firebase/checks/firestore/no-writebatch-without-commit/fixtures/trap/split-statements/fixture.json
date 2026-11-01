@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/batch/split-batch.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "split-statements",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "commit in a later statement is invisible to this single-statement rule. Chain commit onto the writeBatch statement."
+  }
+}

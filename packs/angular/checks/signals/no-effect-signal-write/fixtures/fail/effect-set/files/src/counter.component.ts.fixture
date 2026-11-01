@@ -1,0 +1,10 @@
+declare function effect(fn: () => void): void;
+export class CounterComponent {
+  count = () => 2;
+  doubled = { set: (_v: number) => {} };
+  init() {
+    effect(() => {
+      this.doubled.set(this.count() * 2);
+    });
+  }
+}

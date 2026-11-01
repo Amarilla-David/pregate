@@ -1,0 +1,6 @@
+import { createContext, useContext } from "react";
+const ThemeContext = createContext("light");
+export function ThemeBadge() {
+  const theme = useContext(ThemeContext);
+  return <span>{theme}</span>;
+}

@@ -1,0 +1,2 @@
+const url = "https://api.mainnet-beta.solana.com";
+export { url };

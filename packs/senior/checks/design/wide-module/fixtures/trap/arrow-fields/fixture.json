@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {
+    "max": 8
+  },
+  "target": "src/billing/editor-arrows.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2,
+        "measured": 9
+      }
+    ]
+  },
+  "trap": {
+    "family": "arrow-fields",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A public field that holds a function is a public operation. Writing methods as arrows does not shrink the surface."
+  }
+}

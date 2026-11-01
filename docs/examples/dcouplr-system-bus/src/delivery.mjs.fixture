@@ -1,0 +1,59 @@
+import { setupDcouplr, getDcouplr, BROADCAST_PEER } from 'dcouplr';
+
+function createBus(routingField) {
+  const listeners = new Map();
+  const selected = value => routingField === 'to' && value.to === BROADCAST_PEER
+    ? [...listeners.values()].flat() : (listeners.get(value[routingField]) ?? []);
+  return {
+    subscribe(channel, delegate) {
+      listeners.set(channel, [...(listeners.get(channel) ?? []), delegate]);
+    },
+    unsubscribe(delegate) {
+      for (const [channel, delegates] of listeners) {
+        listeners.set(channel, delegates.filter(value => value !== delegate));
+      }
+    },
+    emit(value, onError) {
+      for (const delegate of selected(value)) {
+        Promise.resolve().then(() => delegate(value)).catch(error => onError?.(error, value));
+      }
+    },
+    emitBlocking(value) {
+      const completed = Promise.allSettled(selected(value).map(delegate => Promise.resolve().then(() => delegate(value)))).then(results => {
+        const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+        if (errors.length) throw Object.assign(new Error(`${errors.length} listener(s) failed`), { errors });
+      });
+      return completed;
+    },
+  };
+}
+
+setupDcouplr({
+  charEncoding: 'UTF-8', ephemeral: true,
+  systemDependencies: {
+    EventBus: { __semanticIdentifier: 'OwnedEventBus', create: () => createBus('eventType') },
+    MessageBus: { __semanticIdentifier: 'OwnedMessageBus', create: () => createBus('to') },
+  },
+});
+
+const app = getDcouplr();
+app.dependencyAdmission.declareIntent('OwnedDelivery')
+  .addMandatoryInputFields({})
+  .addValidationPolicy()
+  .addVerificationPolicy()
+  .addFactoryMethod((_input, kernel) => ({
+    subscribeEvent: (listener, channel = 'PROBE') => kernel.event.subscribe(listener, channel),
+    subscribeMessage: (handler, peer = 'PROBE') => kernel.message.registerHandler(handler, peer),
+    removeEvent: id => kernel.event.unsubscribeBySubscriptionId(id),
+    removeMessage: id => kernel.message.unregisterHandlerBySubscriptionId(id),
+    listEvent: () => kernel.event.listSubscriptions(),
+    listMessage: () => kernel.message.listSubscriptions(),
+    deliverEvent: () => kernel.event.raiseLocalBlocking({ eventType: 'PROBE', payload: {} }),
+    deliverMessage: (peer = 'PROBE') => kernel.message.sendLocalBlocking('PROBE', {}, peer),
+    emitEvent: onError => kernel.event.raiseLocal({ eventType: 'PROBE', payload: {} }, onError),
+    emitMessage: onError => kernel.message.sendLocal('PROBE', {}, 'PROBE', onError),
+  }))
+  .register();
+
+export const delivery = app.resolve('OwnedDelivery');
+export { BROADCAST_PEER };

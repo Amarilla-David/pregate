@@ -1,0 +1,3 @@
+test("status", () => {
+  switch (status) { case "paid": expect(total).toBe(10); break; }
+});

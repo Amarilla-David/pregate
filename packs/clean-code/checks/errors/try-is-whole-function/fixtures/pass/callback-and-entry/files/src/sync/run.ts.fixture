@@ -1,0 +1,18 @@
+import { main, record, sync } from "./jobs";
+
+try {
+  await main();
+} catch (error) {
+  record("main", error);
+}
+
+export function syncAll(ids: string[]): void {
+  ids.forEach((id) => {
+    // one failure must not stop the batch
+    try {
+      sync(id);
+    } catch (error) {
+      record(id, error);
+    }
+  });
+}

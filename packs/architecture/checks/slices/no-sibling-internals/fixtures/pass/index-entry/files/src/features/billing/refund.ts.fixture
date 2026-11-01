@@ -1,0 +1,6 @@
+
+import { placeOrder } from "../orders/index";
+
+export function refund(orderId: string): string {
+  return placeOrder.name + orderId;
+}

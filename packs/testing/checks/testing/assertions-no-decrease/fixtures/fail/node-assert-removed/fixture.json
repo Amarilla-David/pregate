@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["test/**"] },
+  "target": "test/queue.ts",
+  "before": "before/",
+  "expect": { "verdict": "fail", "violations": [{ "line": 1, "measured": 1 }] }
+}

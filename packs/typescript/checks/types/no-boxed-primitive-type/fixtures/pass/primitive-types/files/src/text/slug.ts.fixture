@@ -1,0 +1,7 @@
+export function slug(title: string, max: number, keepCase: boolean): string {
+  const text = keepCase ? String(title) : String(title).toLowerCase();
+  return text.slice(0, Number(max));
+}
+
+export const empty: object = Object.freeze({});
+export const marker: symbol = Symbol("slug");

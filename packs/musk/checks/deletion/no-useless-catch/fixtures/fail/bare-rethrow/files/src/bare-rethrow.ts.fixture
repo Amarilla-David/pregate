@@ -1,0 +1,9 @@
+declare function doStep(): void;
+
+export function execute(): void {
+  try {
+    doStep();
+  } catch (err) {
+    throw err;
+  }
+}

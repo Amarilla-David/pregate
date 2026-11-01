@@ -1,0 +1,9 @@
+{
+  "language": "go",
+  "params": {},
+  "target": "src/worker.go",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

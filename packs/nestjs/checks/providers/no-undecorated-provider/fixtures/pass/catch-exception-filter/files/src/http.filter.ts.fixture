@@ -1,0 +1,6 @@
+declare function Catch(...exceptions: unknown[]): ClassDecorator;
+export interface ExceptionFilter { catch(exception: unknown, host: unknown): void; }
+@Catch()
+export class HttpErrorFilter implements ExceptionFilter {
+  catch(_exception: unknown, _host: unknown): void {}
+}

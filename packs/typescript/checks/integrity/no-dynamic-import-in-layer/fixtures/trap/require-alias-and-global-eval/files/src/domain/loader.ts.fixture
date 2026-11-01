@@ -1,0 +1,30 @@
+const load = require;
+
+export function viaAlias(name: string): unknown {
+  return load(name);
+}
+
+export function viaCall(name: string): unknown {
+  return require.call(null, name);
+}
+
+export function viaModule(name: string): unknown {
+  return module.require(name);
+}
+
+export function viaGlobal(code: string): unknown {
+  return globalThis.eval(code);
+}
+
+export function viaBracket(code: string): unknown {
+  return globalThis["eval"](code);
+}
+
+export function compile(body: string): () => unknown {
+  return new globalThis.Function(body) as () => unknown;
+}
+
+export function viaDestructuring(code: string): unknown {
+  const { eval: run } = globalThis;
+  return run(code);
+}

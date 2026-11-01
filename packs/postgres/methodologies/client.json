@@ -1,0 +1,135 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "postgres/client",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PG-POOL-001",
+      "check": "postgres/client/no-new-client-per-query",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "node-postgres documentation, pooling guide",
+        "locator": "pooling section on Pool versus Client",
+        "paraphrase": "The driver supports both Client and Pool. Pool is useful for concurrency; a standalone Client is valid for one-off work."
+      },
+      "why": "A constructor match cannot tell a short-lived migration client from a client leaked on every request.",
+      "fixHint": "Create one Pool at startup and share it. Take a dedicated client from pool.connect only for multi-statement transactions, and release it in a finally.",
+      "avoid": "Exporting a single Client from a module is still one connection for every query; export a Pool instead.",
+      "examples": {
+        "pass": "pass/pool-shared",
+        "fail": "fail/per-query-client"
+      }
+    },
+    {
+      "id": "PG-ERROR-001",
+      "check": "postgres/client/no-empty-pool-error-handler",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-postgres documentation, pooling guide",
+        "locator": "pool error handling section",
+        "paraphrase": "Idle pool clients can error at any time, so the pool must have an error listener that observes or reports the failure instead of dropping it."
+      },
+      "why": "An empty error callback acknowledges the listener contract while swallowing the failure, so dead connections and auth breaks stay invisible until queries start failing.",
+      "fixHint": "Log the error with the pool identity, or forward it to the app error reporter. Keep the handler to one call that cannot throw.",
+      "avoid": "A function-expression callback with an empty body is the same swallowed error as an empty arrow.",
+      "examples": {
+        "pass": "pass/logged-handler",
+        "fail": "fail/empty-arrow"
+      }
+    },
+    {
+      "id": "PG-TX-001",
+      "check": "postgres/client/no-pool-query-begin",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-postgres documentation, transactions guide",
+        "locator": "transaction section on dedicated clients",
+        "paraphrase": "A transaction must run on one dedicated client checked out with pool.connect. pool.query may route each statement to a different connection, which splits the transaction."
+      },
+      "why": "pool.query borrows any idle connection per call, so BEGIN, the statements, and COMMIT can land on different backends and the transaction never holds.",
+      "fixHint": "Check out one client with pool.connect, run BEGIN through COMMIT on it, roll back on error, and release it in a finally.",
+      "avoid": "Wrapping pool.query BEGIN in backticks or single quotes does not pin it to one connection.",
+      "examples": {
+        "pass": "pass/client-begin",
+        "fail": "fail/pool-begin"
+      }
+    },
+    {
+      "id": "PG-SLEEP-001",
+      "check": "postgres/client/no-pg-sleep-query",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "PostgreSQL documentation, pg_sleep",
+        "locator": "delaying execution functions",
+        "paraphrase": "pg_sleep blocks the backend for the delay. Issued from app code it parks a pooled connection that could serve real queries."
+      },
+      "why": "The sleeping backend holds its pool slot for the whole delay, so a few naps exhaust the pool and queue every other query.",
+      "fixHint": "Sleep in the app with a timer between queries, or move the wait into a job queue. Keep pooled connections for statements that return promptly.",
+      "avoid": "Parameterizing the delay inside a template still blocks the connection for the same seconds.",
+      "examples": {
+        "pass": "pass/select-one",
+        "fail": "fail/pg-sleep"
+      }
+    },
+    {
+      "id": "PG-ROWS-001",
+      "check": "postgres/client/no-unchecked-row-access",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-postgres documentation, query results",
+        "locator": "result object rows array",
+        "paraphrase": "A query result carries rows as a possibly empty array. Reading a property off rows[0] assumes a row came back, which an empty result breaks."
+      },
+      "why": "An empty result makes rows[0] undefined, so the chained property read throws far from the query that returned nothing.",
+      "fixHint": "Bind rows[0] to a name, throw or return early when it is missing, then read its fields. Optional chaining with a fallback also passes.",
+      "avoid": "Moving the chained read inside a template still throws on zero rows; string context is not a guard.",
+      "examples": {
+        "pass": "pass/guarded-row",
+        "fail": "fail/chained-email"
+      }
+    },
+    {
+      "id": "PG-RELEASE-001",
+      "check": "postgres/client/no-unreleased-pool-client",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "node-postgres documentation, pooling guide",
+        "locator": "Checkout, use, and return; https://node-postgres.com/features/pooling",
+        "paraphrase": "You must always return a checked-out client to the pool, whether or not its queries failed. A client that is never released leaks, and once the pool is empty every later checkout waits forever."
+      },
+      "why": "Each unreleased client keeps one pool slot. After max leaks every request that needs the database hangs instead of failing.",
+      "fixHint": "Call client.release() in a finally block after the work, passing the error when the client is broken. For one statement, use pool.query, which checks out and releases for you.",
+      "avoid": "COMMIT or ROLLBACK ends the transaction, not the checkout. The rule looks for any client.release reference or a return of the client in the same file; a release reached only on the error path, or a client handed to a helper that releases it, is not judged.",
+      "examples": {
+        "pass": "pass/finally-release",
+        "fail": "fail/no-release"
+      }
+    },
+    {
+      "id": "PG-TX-ROLLBACK-001",
+      "check": "postgres/client/no-tx-without-rollback",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "node-postgres documentation, Transactions (node-postgres.com)",
+        "locator": "https://node-postgres.com/features/transactions",
+        "paraphrase": "A pooled client that begins a transaction must execute ROLLBACK in its catch block before client.release(), or the connection returns to the pool stuck in an open/aborted transaction."
+      },
+      "why": "Releasing a client after a failed query without issuing ROLLBACK poisons the pooled connection: every subsequent borrower hits 'current transaction is aborted, commands ignored until end of transaction block'.",
+      "fixHint": "Add a catch (err) block that awaits client.query('ROLLBACK') and rethrows err before finally { client.release(); }.",
+      "avoid": "Only try statements containing a literal BEGIN query are checked. Transactions wrapped in a reusable withTransaction(client, fn) helper only need the rollback inside that helper.",
+      "examples": {
+        "pass": "pass/try-catch-rollback",
+        "fail": "fail/try-finally-no-rollback"
+      }
+    }
+  ]
+}

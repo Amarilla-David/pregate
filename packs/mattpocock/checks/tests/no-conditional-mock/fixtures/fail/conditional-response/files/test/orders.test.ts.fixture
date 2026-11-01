@@ -1,0 +1,1 @@
+const fetcher = vi.fn((endpoint) => endpoint === "/orders" ? orders : customers);

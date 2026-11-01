@@ -1,0 +1,161 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "sveltekit/routing",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SK-PAGE-001",
+      "check": "sveltekit/routing/no-page-server-import-in-client",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "Universal vs server load functions",
+        "paraphrase": "Universal load files run on the server and the client, so they must never import a .server module. Server-only reads stay in +page.server.ts; the universal load receives public data."
+      },
+      "why": "A .server import in a universal load drags server-only code into the client bundle, or fails the build once the boundary is enforced.",
+      "fixHint": "Move the server-only read into +page.server.ts and return public data for the universal load to consume.",
+      "avoid": "A lazy import() of the .server module is still a .server import. A re-export through an index file is still the same module.",
+      "examples": {
+        "pass": "pass/helpers-import",
+        "fail": "fail/server-import"
+      }
+    },
+    {
+      "id": "SK-API-001",
+      "check": "sveltekit/routing/no-api-route-without-json",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "redirect and error helpers",
+        "paraphrase": "redirect() takes a 3xx status and a location. A 200, 404 or 500 status is not a redirect, so failure paths throw error() with the real status instead."
+      },
+      "why": "A redirect with a non-3xx status lies about the outcome: clients and caches treat the response as the status says, not as the location says.",
+      "fixHint": "Use a 3xx status (303 after a mutation, 307 to preserve the method) in redirect(). Use error(404, ...) or error(500, ...) for failure paths.",
+      "avoid": "A 404 that should show a page still needs error(), not redirect(). A 500 that should land somewhere still needs error() plus logging.",
+      "examples": {
+        "pass": "pass/redirect-303",
+        "fail": "fail/redirect-200"
+      }
+    },
+    {
+      "id": "SK-FORM-001",
+      "relations": [
+        {
+          "with": "typescript/TS-THROW-001",
+          "kind": "contradicts",
+          "why": "SK-FORM-001 tells form actions to throw error() for unexpected failures, and TS-THROW-001 denies that throw inside the exported actions object.",
+          "settle": "On SvelteKit 2 call error(...) without the throw keyword: it throws itself and no throw statement remains. On SvelteKit 1, exclude **/+page.server.ts and **/+server.ts from TS-THROW-001."
+        }
+      ],
+      "check": "sveltekit/routing/no-form-action-without-fail",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "Form actions: fail and error",
+        "paraphrase": "Actions signal expected form failures by returning fail() and unexpected failures by throwing error(). A thrown plain object reaches neither channel."
+      },
+      "why": "A thrown object bypasses both the use:enhance failure path and the error boundary, so the form never renders the validation message.",
+      "fixHint": "Return fail(status, data) for expected validation failures. Throw error(status, message) for unexpected failures.",
+      "avoid": "An object shaped like fail() output is still wrong when thrown. A thrown status field does not set the response status.",
+      "examples": {
+        "pass": "pass/throw-error",
+        "fail": "fail/throw-object"
+      }
+    },
+    {
+      "id": "SK-CONFIG-001",
+      "check": "sveltekit/routing/no-prerender-typo",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation",
+        "locator": "Page options: prerender",
+        "paraphrase": "Page options are exact lowercase exports such as prerender. A differently cased export is an unused variable the router silently ignores."
+      },
+      "why": "A mis-cased option compiles and deploys, but the route is never prerendered, so the launch checklist passes while the behavior is missing.",
+      "fixHint": "Spell the option exactly `prerender` in lowercase, with a boolean or 'auto' value.",
+      "avoid": "preRender, PreRender and PRERENDER are all dead exports. Assigning 'auto' to a mis-cased name does not fix the casing.",
+      "examples": {
+        "pass": "pass/prerender-true",
+        "fail": "fail/prerender-camel"
+      }
+    },
+    {
+      "id": "SK-LIBSERVER-001",
+      "check": "sveltekit/routing/no-server-dir-import-in-universal",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation, server-only modules (https://svelte.dev/docs/kit/server-only-modules)",
+        "locator": "Your modules",
+        "paraphrase": "Modules placed in a server directory such as $lib/server are server-only. SvelteKit refuses to import them into code that runs in the browser."
+      },
+      "why": "Universal loads and client hooks ship to the browser, so a $lib/server import either fails the build or drags database clients and secrets into the client bundle.",
+      "fixHint": "Do the server-only read in +page.server.ts or +layout.server.ts and return public data; the universal load receives it as data.",
+      "avoid": "A relative ../lib/server path or a lazy import() is the same module. Type-only imports are erased and are not matched; .server file names are covered by SK-PAGE-001.",
+      "examples": {
+        "pass": "pass/public-lib-and-types",
+        "fail": "fail/lib-server-import"
+      }
+    },
+    {
+      "id": "SK-TRY-001",
+      "check": "sveltekit/routing/no-redirect-in-try",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation, loading data (https://svelte.dev/docs/kit/load#Redirects)",
+        "locator": "Redirects",
+        "paraphrase": "Don't use redirect() inside a try block, as the redirect will immediately trigger the catch statement."
+      },
+      "why": "redirect() works by throwing, so a surrounding catch turns the redirect into a failure response or an error page and the user never moves.",
+      "fixHint": "Keep only the fallible work inside try, store its result, and call redirect() after the try/catch block.",
+      "avoid": "A catch that throws a new error still swallows the redirect. Redirects inside catch or finally-only blocks, and catch blocks that rethrow the caught value, are not matched.",
+      "examples": {
+        "pass": "pass/redirect-after-try",
+        "fail": "fail/redirect-in-try"
+      }
+    },
+    {
+      "id": "SK-METHOD-001",
+      "check": "sveltekit/routing/no-lowercase-endpoint-export",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation, routing (https://svelte.dev/docs/kit/routing#server)",
+        "locator": "+server",
+        "paraphrase": "+server files export functions named after HTTP verbs: GET, POST, PATCH, PUT, DELETE, OPTIONS and HEAD. SvelteKit throws on any other export without a _ prefix."
+      },
+      "why": "The pre-1.0 lowercase names (get, post, del) are invalid exports, so the endpoint fails with Invalid export instead of answering the request.",
+      "fixHint": "Rename the handler to the uppercase verb (get to GET, del to DELETE) and type it with RequestHandler.",
+      "avoid": "A RequestHandler annotation or a named export list does not change the exported name. Local helpers named get, _-prefixed exports and page options are not matched.",
+      "examples": {
+        "pass": "pass/uppercase-verbs",
+        "fail": "fail/lowercase-get"
+      }
+    },
+    {
+      "id": "SK-COOKIE-001",
+      "check": "sveltekit/routing/no-cookies-set-in-shared-load",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "SvelteKit documentation, Loading data — Cookies (https://svelte.dev/docs/kit/load#Cookies)",
+        "locator": "Server vs universal load functions",
+        "paraphrase": "The cookies helper is only provided to server load functions (+page.server.ts and +layout.server.ts). Universal load functions (+page.ts and +layout.ts) run in the browser as well and cannot read or set server cookies."
+      },
+      "why": "Calling cookies.set or cookies.delete in a universal load file (+page.ts or +layout.ts) fails at runtime because universal loads do not receive the server cookies API.",
+      "fixHint": "Rename the load file to +page.server.ts or +layout.server.ts, or move the cookie write into a form action or +server.ts endpoint.",
+      "avoid": "Matches cookies.set and cookies.delete inside +page.ts, +layout.ts, +page.js, and +layout.js. Server load files (+page.server.ts) and differently named client cookie helpers pass.",
+      "examples": {
+        "pass": "pass/server-load",
+        "fail": "fail/universal-page-set"
+      }
+    }
+  ]
+}

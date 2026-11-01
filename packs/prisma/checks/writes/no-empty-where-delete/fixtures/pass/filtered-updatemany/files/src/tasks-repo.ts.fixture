@@ -1,0 +1,4 @@
+declare const prisma: { task: { updateMany(args: { where: { orgId: string }; data: { archived: boolean } }): Promise<unknown> } };
+export async function archiveOrgTasks(orgId: string): Promise<void> {
+  await prisma.task.updateMany({ where: { orgId }, data: { archived: true } });
+}

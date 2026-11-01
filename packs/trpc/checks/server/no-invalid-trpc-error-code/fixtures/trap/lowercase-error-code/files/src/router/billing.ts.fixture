@@ -1,0 +1,4 @@
+declare class TRPCError extends Error { constructor(opts: { code: string; message?: string }); }
+export function rejectInvoice(): never {
+  throw new TRPCError({ code: "bad_request" });
+}

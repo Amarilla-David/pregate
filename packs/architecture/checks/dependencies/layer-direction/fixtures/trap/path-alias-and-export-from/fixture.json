@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "context": {
+    "layers": {
+      "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" },
+      "application": { "paths": ["src/application/**"], "mayImport": ["domain"], "kind": "core" },
+      "infra": { "paths": ["src/infra/**"], "mayImport": ["domain", "application"], "kind": "adapter" }
+    }
+  },
+  "target": "src/application/sign-up.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 4 }] },
+  "trap": {
+    "family": "path-alias",
+    "origin": "corpus",
+    "discovered": "2026-10-01",
+    "note": "A tsconfig path alias hides the relative ../infra, and export-from re-exports infra without importing it."
+  }
+}

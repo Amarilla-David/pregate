@@ -1,0 +1,16 @@
+interface CustomState {
+  _custom: {
+    type: string
+    objectType?: string
+    display?: string
+    tooltip?: string
+    value?: unknown
+    abstract?: boolean
+    file?: string
+    uid?: number
+    readOnly?: boolean
+    fields?: {
+      abstract?: boolean
+    }
+  }
+}

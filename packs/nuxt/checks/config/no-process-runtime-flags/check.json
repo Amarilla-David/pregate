@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nuxt/config/no-process-runtime-flags",
+  "version": "1.0.0",
+  "area": "config",
+  "cardinality": "singleton",
+  "dimension": "nuxt.process-runtime-flags",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "process-runtime-flag",
+          "rule": {
+            "kind": "member_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "object",
+                  "regex": "^process$"
+                }
+              },
+              {
+                "has": {
+                  "field": "property",
+                  "regex": "^(browser|client|dev|server|test)$"
+                }
+              }
+            ]
+          },
+          "files": [
+            "pages/**",
+            "components/**",
+            "composables/**",
+            "plugins/**",
+            "middleware/**",
+            "layouts/**",
+            "utils/**",
+            "app/**",
+            "src/pages/**",
+            "src/components/**",
+            "src/composables/**",
+            "src/plugins/**",
+            "src/middleware/**",
+            "src/layouts/**",
+            "src/utils/**",
+            "src/app/**"
+          ],
+          "ignores": [
+            "**/server/**",
+            "server/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reads a deprecated process runtime flag in app code. Use the matching import.meta flag (import.meta.client, import.meta.server, import.meta.dev)."
+  }
+}

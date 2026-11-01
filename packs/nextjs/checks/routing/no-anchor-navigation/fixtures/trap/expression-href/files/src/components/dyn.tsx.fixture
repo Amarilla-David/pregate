@@ -1,0 +1,1 @@
+export function Dyn() { return <a href={'/about'}>About</a>; }

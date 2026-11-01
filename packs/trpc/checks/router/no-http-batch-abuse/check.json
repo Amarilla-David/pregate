@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/router/no-http-batch-abuse",
+  "version": "1.0.0",
+  "area": "router",
+  "cardinality": "singleton",
+  "dimension": "trpc.batch-max-url-length",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "batch-link-without-max-url-length",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "^httpBatchLink\\s*\\(",
+            "not": {
+              "regex": "maxURLLength"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} builds an httpBatchLink with no maxURLLength. Batched GETs share one URL; set maxURLLength so oversized batches split before the server rejects them."
+  }
+}

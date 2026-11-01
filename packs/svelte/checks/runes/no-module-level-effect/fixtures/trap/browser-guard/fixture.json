@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/viewport.svelte.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "browser-guard",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The window guard looks like it defers the effect to the browser, but the block still runs while the module loads, with no parent effect, so Svelte throws effect_orphan."
+  }
+}

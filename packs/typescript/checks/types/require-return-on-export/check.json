@@ -1,0 +1,100 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/types/require-return-on-export",
+  "version": "1.0.1",
+  "area": "types",
+  "cardinality": "singleton",
+  "dimension": "typescript.export-return",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "export-without-return",
+          "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+          "rule": {
+            "any": [
+              {
+                "kind": "function_declaration",
+                "not": {
+                  "any": [
+                    {
+                      "has": {
+                        "field": "return_type",
+                        "kind": "type_annotation"
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": "end",
+                        "any": [
+                          {
+                            "kind": "function_declaration"
+                          },
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "function_expression"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "export_statement"
+                }
+              },
+              {
+                "kind": "arrow_function",
+                "not": {
+                  "any": [
+                    {
+                      "has": {
+                        "field": "return_type",
+                        "kind": "type_annotation"
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": "end",
+                        "any": [
+                          {
+                            "kind": "function_declaration"
+                          },
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "function_expression"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "export_statement"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is exported without a return type. Annotate the return type on the exported signature."
+  }
+}

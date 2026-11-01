@@ -1,0 +1,4 @@
+export async function GET() {
+  async function fits(value: number, maximum: number, minimum: number) { return value<maximum && value>minimum; }
+  return Response.json({ valid: await fits(1, 3, 0) });
+}

@@ -1,0 +1,8 @@
+window.addEventListener("message", (event: MessageEvent) => {
+  const { origin, command } = event.data;
+  if (origin === "https://app.example.com") run(command);
+});
+window.addEventListener("message", ({ data: { origin, command } }: MessageEvent) => {
+  if (origin === "https://app.example.com") run(command);
+});
+declare function run(command: string): void;

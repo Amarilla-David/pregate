@@ -1,0 +1,16 @@
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { adapter, baseConfig, session } from "./auth.config";
+import { verify } from "./password";
+
+export const first = NextAuth({
+  adapter,
+  session,
+  providers: [CredentialsProvider({ authorize: (credentials) => verify(credentials) })],
+});
+
+export const second = NextAuth({
+  ...baseConfig,
+  adapter,
+  providers: [CredentialsProvider({ authorize: (credentials) => verify(credentials) })],
+});

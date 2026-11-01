@@ -1,0 +1,9 @@
+export interface InvoiceService {
+  issue(id: string): Promise<void>;
+}
+
+export class InvoiceServiceImpl implements InvoiceService {
+  async issue(id: string): Promise<void> {
+    if (id.length === 0) throw new Error("An invoice id is required");
+  }
+}

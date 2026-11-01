@@ -1,0 +1,1 @@
+export function Meta() { return <link rel="icon" href="/icon.png" />; }

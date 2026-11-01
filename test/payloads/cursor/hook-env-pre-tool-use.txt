@@ -1,0 +1,16 @@
+# Variables visible to a preToolUse hook in cursor-agent 2026.09.26-dd393fe (sanitized).
+# Injected by the hook executor (buildHookEnvironment):
+CURSOR_PROJECT_DIR=/home/user/project
+CURSOR_VERSION=2026.09.26-dd393fe
+CURSOR_USER_EMAIL=user@example.com
+CURSOR_TRANSCRIPT_PATH=/home/user/.cursor/projects/home-user-project/agent-transcripts/00000000-0000-4000-8000-000000000001/00000000-0000-4000-8000-000000000001.jsonl
+CLAUDE_PROJECT_DIR=/home/user/project
+# Set by the cursor-agent process itself and inherited by hooks:
+CURSOR_INVOKED_AS=cursor-agent
+CURSOR_RIPGREP_PATH=/home/user/.local/share/cursor-agent/versions/2026.09.26-dd393fe/rg
+# Working directory of the hook process:
+#   <repo>/.cursor/hooks.json, <repo>/.claude/settings*.json -> workspace root
+#   ~/.cursor/hooks.json                                      -> ~/.cursor
+#   ~/.claude/settings.json                                   -> ~/.claude
+# CURSOR_TRANSCRIPT_PATH is absent on the first hooks of a session (transcript_path: null in the payload).
+# Everything else is inherited from the process that launched cursor-agent.

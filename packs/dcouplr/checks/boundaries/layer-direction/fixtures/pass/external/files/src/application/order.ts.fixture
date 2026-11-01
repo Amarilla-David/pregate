@@ -1,0 +1,1 @@
+import type { IDKernel } from 'dcouplr';

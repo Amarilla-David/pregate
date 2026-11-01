@@ -1,0 +1,27 @@
+{
+  "id": "core/invariants/idempotency",
+  "version": "1.0.0",
+  "area": "invariants",
+  "cardinality": "singleton",
+  "dimension": "invariant.r021",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CORE-INV-021"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CORE-INV-021 requires current passing project verification: {symbol}."
+  }
+}

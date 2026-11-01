@@ -1,0 +1,6 @@
+
+import { stripe } from "../adapters/stripe";
+
+export function charge(): string {
+  return stripe.name;
+}

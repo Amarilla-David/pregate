@@ -1,0 +1,10 @@
+import subprocess
+
+
+def run(name):
+    subprocess.run(f"echo {name}", shell=False)
+    subprocess.run("ls " "-la", shell=True)
+    subprocess.Popen(
+        "grep -r " + name,
+        shell=True,
+    )

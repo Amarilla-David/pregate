@@ -1,0 +1,14 @@
+import { computed, ref } from "vue";
+
+declare function fetchStock(sku: string): Promise<number>;
+const sku = ref("A-1");
+const override = ref<number | null>(null);
+
+export const stock = computed({
+  async get() {
+    return override.value ?? (await fetchStock(sku.value));
+  },
+  set(next: number) {
+    override.value = next;
+  },
+});

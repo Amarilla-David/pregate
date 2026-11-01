@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "tools/build.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      }
+    ]
+  },
+  "trap": {
+    "family": "shell-false",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "shell=False with a built string is not shell evaluation, but a concatenated literal is still literal."
+  }
+}

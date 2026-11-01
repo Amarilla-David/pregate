@@ -1,0 +1,6 @@
+
+import { Money } from "../value-objects/money";
+
+export function total(lines: { amount: Money }[]): Money | null {
+  return lines[0]?.amount ?? null;
+}

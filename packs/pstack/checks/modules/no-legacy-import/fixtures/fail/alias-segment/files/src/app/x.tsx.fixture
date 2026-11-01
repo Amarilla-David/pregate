@@ -1,0 +1,2 @@
+import { y } from "@/lib/legacy/thing";
+export const z = y;

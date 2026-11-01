@@ -1,0 +1,4 @@
+declare function createError(message: string): Error;
+export function statusRoute() {
+  return createError("Service unavailable");
+}

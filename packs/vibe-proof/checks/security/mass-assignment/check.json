@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/security/mass-assignment",
+  "version": "1.0.0",
+  "area": "security",
+  "cardinality": "singleton",
+  "dimension": "security.mass-assignment",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "raw-body",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\{\\s*\\.\\.\\.(req|request)\\.body\\b|Object\\.assign\\([^)]*\\b(req|request)\\.body\\b|\\.(insert|update|create|save)\\(\\s*(req|request)\\.body\\b"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} writes the raw request body. Copy the fields the operation allows."
+  }
+}

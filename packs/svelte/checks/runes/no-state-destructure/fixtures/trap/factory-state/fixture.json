@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/runes/factory.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "factory-state",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A factory that builds the initial value does not exempt the destructure. The binding still copies once and misses every later update."
+  }
+}

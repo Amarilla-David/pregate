@@ -1,0 +1,8 @@
+import { orderViews } from "../read-models/order-view";
+import { markOrdersViewed } from "../../orders/commands/mark-viewed";
+
+export function orderList(customer: string): string[] {
+  const ids = orderViews.filter((view) => view.customer === customer).map((view) => view.id);
+  markOrdersViewed(ids);
+  return ids;
+}

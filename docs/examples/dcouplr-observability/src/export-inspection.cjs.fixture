@@ -1,0 +1,9 @@
+exports.exportInspection = events => {
+  if (!Array.isArray(events) || events.length > 100) throw new Error('Invalid recording budget');
+  return events.map(event => {
+    if (!event || !Number.isSafeInteger(event.sequence) || event.sequence < 1 ||
+        !Number.isFinite(event.timestamp)) throw new Error('Invalid event identity');
+    const { sequence, timestamp } = event;
+    return { sequence, timestamp };
+  });
+};

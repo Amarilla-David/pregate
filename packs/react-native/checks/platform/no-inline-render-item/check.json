@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/platform/no-inline-render-item",
+  "version": "1.0.0",
+  "area": "platform",
+  "cardinality": "singleton",
+  "dimension": "react-native.render-item-perf",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "inline-render-item",
+          "rule": {
+            "regex": "^renderItem\\s*=",
+            "all": [
+              {
+                "has": {
+                  "kind": "property_identifier",
+                  "regex": "^renderItem$"
+                }
+              },
+              {
+                "has": {
+                  "regex": "^\\{",
+                  "has": {
+                    "any": [
+                      {
+                        "kind": "arrow_function"
+                      },
+                      {
+                        "kind": "function_expression"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "regex": "^<(FlatList|SectionList|VirtualizedList)\\b"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} passes an inline function to renderItem on a virtualized list. Hoist the renderer or wrap it in useCallback so rows do not re-create their render closure on every render."
+  }
+}

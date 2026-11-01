@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/queries/loop-while.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "while-loop-query",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "The loop is a while, not a for, but the shape is the same: one awaited query per iteration."
+  }
+}

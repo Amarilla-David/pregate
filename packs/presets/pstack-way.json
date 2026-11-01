@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schema/preset.v1.json",
+  "name": "pstack-way",
+  "version": "1.0.0",
+  "engine": "0.0.1",
+  "sources": [
+    {
+      "ns": "core",
+      "kind": "builtin",
+      "version": "0.0.1"
+    },
+    {
+      "ns": "pstack",
+      "kind": "path",
+      "path": "packs/pstack"
+    },
+    {
+      "ns": "typescript",
+      "kind": "path",
+      "path": "packs/typescript"
+    },
+    {
+      "ns": "testing",
+      "kind": "library",
+      "version": "1.2.1"
+    }
+  ],
+  "methodologies": [
+    "testing/tdd",
+    "core/pregate-integrity",
+    "pstack/boundaries",
+    "pstack/reader-load",
+    "pstack/proof",
+    "pstack/effects",
+    "typescript/strict-types",
+    "typescript/async-results",
+    "typescript/named-exports",
+    "typescript/anti-evasion"
+  ],
+  "enforcement": "enforce",
+  "overrides": {
+    "pstack/PS-COMMENT-001": {
+      "enforcement": "shadow",
+      "note": "Observe narration findings while the other pstack rules enforce."
+    }
+  },
+  "ratchet": {
+    "mode": "no-new"
+  }
+}

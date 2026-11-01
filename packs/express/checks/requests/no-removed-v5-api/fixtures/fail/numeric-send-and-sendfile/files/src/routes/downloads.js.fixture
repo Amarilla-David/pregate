@@ -1,0 +1,11 @@
+import { Router } from "express";
+
+export const downloadsRouter = Router();
+
+downloadsRouter.get("/downloads/manual", (req, res) => {
+  if (!req.headers.authorization) {
+    res.send(401);
+    return;
+  }
+  res.sendfile("/srv/manual.pdf");
+});

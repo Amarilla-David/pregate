@@ -1,0 +1,106 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-sync-request-api",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-sync-request-api",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sync-request-api-member",
+          "rule": {
+            "kind": "member_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "object",
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "identifier",
+                    "pattern": "$API"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "has": {
+                    "field": "property",
+                    "regex": "^(then|catch|finally)$"
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "source",
+                          "regex": "^[\"']next/headers[\"']$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "kind": "import_specifier",
+                          "stopBy": "end",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "name",
+                                "regex": "^(cookies|headers|draftMode)$"
+                              }
+                            },
+                            {
+                              "any": [
+                                {
+                                  "has": {
+                                    "field": "alias",
+                                    "pattern": "$API"
+                                  }
+                                },
+                                {
+                                  "not": {
+                                    "has": {
+                                      "field": "alias",
+                                      "kind": "identifier"
+                                    }
+                                  },
+                                  "has": {
+                                    "field": "name",
+                                    "pattern": "$API"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reads a next/headers API synchronously. cookies(), headers() and draftMode() return Promises; await them (or unwrap with React's use) before reading."
+  }
+}

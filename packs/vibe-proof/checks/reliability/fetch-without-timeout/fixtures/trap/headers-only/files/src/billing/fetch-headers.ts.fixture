@@ -1,0 +1,4 @@
+
+export async function load(url: string): Promise<Response> {
+  return fetch(url, { headers: { accept: "application/json" } });
+}

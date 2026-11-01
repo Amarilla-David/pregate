@@ -1,0 +1,1 @@
+admission.addFactoryMethod(creator).registerSingleton([]);

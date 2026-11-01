@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function listV2(): Promise<string[]> {
+  return redis.keys("session:v2:*");
+}

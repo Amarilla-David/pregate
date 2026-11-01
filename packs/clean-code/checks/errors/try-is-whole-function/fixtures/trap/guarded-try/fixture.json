@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/imports/importer.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 8 }] },
+  "trap": {
+    "family": "guarded-try",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A try that is alone inside an if block still shares its method with the guard; the error handling is not a function of its own."
+  }
+}

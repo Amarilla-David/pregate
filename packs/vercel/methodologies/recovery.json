@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vercel/recovery",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VERCEL-013",
+      "check": "vercel/recovery/requirement-013",
+      "defaults": {
+        "verifier": "VERCEL-013"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/instant-rollback; checked 2026-10-05; docs/features/vercel-pack.md, rule 13",
+        "paraphrase": "The release must identify and test an eligible rollback target under its current plan and deployment history."
+      },
+      "why": "The release must identify and test an eligible rollback target under its current plan and deployment history.",
+      "fixHint": "Bind VERCEL-013 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-013; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-014",
+      "check": "vercel/recovery/requirement-014",
+      "defaults": {
+        "verifier": "VERCEL-014"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/instant-rollback; checked 2026-10-05; docs/features/vercel-pack.md, rule 14",
+        "paraphrase": "Recovery must verify the restored deployment's domains, configuration, environment variables and cron state instead of assuming current project settings replace the old build."
+      },
+      "why": "Recovery must verify the restored deployment's domains, configuration, environment variables and cron state instead of assuming current project settings replace the old build.",
+      "fixHint": "Bind VERCEL-014 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-014; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "VERCEL-015",
+      "check": "vercel/recovery/requirement-015",
+      "defaults": {
+        "verifier": "VERCEL-015"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "Vercel official documentation and explicitly selected project policy",
+        "locator": "https://vercel.com/docs/instant-rollback; checked 2026-10-05; docs/features/vercel-pack.md, rule 15",
+        "paraphrase": "The rollback procedure must verify compatibility with current external APIs, databases and content systems; deployment rollback must not be treated as data rollback."
+      },
+      "why": "The rollback procedure must verify compatibility with current external APIs, databases and content systems; deployment rollback must not be treated as data rollback.",
+      "fixHint": "Bind VERCEL-015 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run VERCEL-015; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

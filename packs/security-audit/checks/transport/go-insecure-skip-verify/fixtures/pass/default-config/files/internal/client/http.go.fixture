@@ -1,0 +1,11 @@
+package client
+
+import (
+	"crypto/tls"
+	"net/http"
+)
+
+func New() *http.Client {
+	cfg := &tls.Config{MinVersion: tls.VersionTLS12}
+	return &http.Client{Transport: &http.Transport{TLSClientConfig: cfg}}
+}

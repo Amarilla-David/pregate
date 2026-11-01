@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/string-key.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "string-key",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "keyExtractor takes a function, not a field-name string. The string form leaves rows keyed by index."
+  }
+}

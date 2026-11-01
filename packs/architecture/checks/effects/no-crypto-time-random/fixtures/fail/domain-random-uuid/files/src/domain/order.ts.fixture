@@ -1,0 +1,4 @@
+export function createOrder(total: number) {
+  const id = crypto.randomUUID();
+  return { id, total };
+}

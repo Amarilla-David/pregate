@@ -1,0 +1,27 @@
+{
+  "id": "pstack/playbooks/ps-70",
+  "version": "1.0.0",
+  "area": "playbooks",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-70",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-70"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-70 requires current passing project verification: {symbol}."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-next-route-string",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.next-route-string",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "next-string-skip",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\bnext\\s*\\(\\s*[\"']router?[\"']"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} skips the route stack with next(\"route\") or next(\"router\"). Call next() or pass an error so the flow stays explicit."
+  }
+}

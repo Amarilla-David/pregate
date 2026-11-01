@@ -1,0 +1,9 @@
+import { expect, it } from "vitest";
+
+it("rejects expired token", async () => {
+  try {
+    await verifyToken("expired");
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error);
+  }
+});

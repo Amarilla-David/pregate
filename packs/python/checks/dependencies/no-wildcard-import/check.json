@@ -1,0 +1,41 @@
+{
+  "id": "python/dependencies/no-wildcard-import",
+  "version": "1.0.0",
+  "area": "dependencies",
+  "cardinality": "singleton",
+  "dimension": "python.deps.wildcard",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "wildcard",
+          "rule": {
+            "kind": "import_from_statement",
+            "has": {
+              "kind": "wildcard_import"
+            }
+          },
+          "ignores": [
+            "**/__init__.py"
+          ],
+          "x-note": "A package initializer that republishes its internal modules is the defensible use PEP 8 names, so __init__.py is not checked."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: A wildcard import hides which names the module brings in."
+  }
+}

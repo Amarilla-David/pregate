@@ -1,0 +1,1 @@
+setupDcouplr({ charEncoding: 'UTF-8', mode: 'run', ephemeral: false, forbiddenElements: ['console', 'Date.now'] });

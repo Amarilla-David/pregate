@@ -1,0 +1,9 @@
+async function load(users) {
+  const tasks = [];
+  for (const u of users) {
+    tasks.push(fetchUser(u));
+  }
+  return Promise.all(tasks);
+}
+
+export const runner = load;

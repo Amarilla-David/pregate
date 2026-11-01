@@ -1,0 +1,5 @@
+export function withDefault(): string {
+  let mode = "dev";
+  mode = "prod";
+  return mode;
+}

@@ -1,0 +1,9 @@
+import { json } from "@sveltejs/kit";
+import { updateProfile } from "$lib/server/profile";
+import type { RequestHandler } from "./$types";
+
+const put: RequestHandler = async ({ request }) => json(await updateProfile(await request.json()));
+
+export const patch: RequestHandler = async ({ request }) => json(await updateProfile(await request.json()));
+
+export { put };

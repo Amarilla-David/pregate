@@ -1,0 +1,9 @@
+import requests
+
+s = requests.Session()
+s.verify = False
+
+
+class Api:
+    def __init__(self):
+        self.http.verify = False

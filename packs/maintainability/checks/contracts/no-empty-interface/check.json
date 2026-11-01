@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/contracts/no-empty-interface",
+  "version": "1.0.0",
+  "area": "contracts",
+  "cardinality": "singleton",
+  "dimension": "contracts.empty-interface",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "empty-interface",
+          "rule": {
+            "kind": "interface_declaration",
+            "has": {
+              "field": "body",
+              "regex": "^\\{\\s*(//[^\\n]*|/\\*[\\s\\S]*\\*/)?\\s*\\}$"
+            },
+            "not": {
+              "has": {
+                "kind": "extends_type_clause"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is an empty interface with no members or heritage. Declare its members or remove the speculative type."
+  }
+}

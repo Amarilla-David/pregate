@@ -1,0 +1,4 @@
+const audit = console;
+function report(audit: Logger) {
+  audit.debug(wallet.secretKey);
+}

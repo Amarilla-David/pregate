@@ -1,0 +1,13 @@
+import { error, redirect } from "@sveltejs/kit";
+import { requireAdmin } from "$lib/server/session";
+import type { PageServerLoad } from "./$types";
+
+export const load: PageServerLoad = async ({ locals }) => {
+  try {
+    const admin = await requireAdmin(locals);
+    if (!admin) throw redirect(303, "/login");
+    return { admin };
+  } catch (err) {
+    throw error(500, "Admin check failed");
+  }
+};

@@ -1,0 +1,5 @@
+import { secret } from "./+page.server";
+
+export async function load() {
+	return { secret };
+}

@@ -1,0 +1,8 @@
+
+export function place(order: Order): string {
+  return order.id;
+  audit(order);
+}
+
+function audit(order: Order): void { order.id; }
+interface Order { id: string }

@@ -1,0 +1,99 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "musk/algorithm",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "MUSK-REQ-001",
+      "check": "musk/requirements/no-unowned-suppression",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Elon Musk 5-Step Engineering Algorithm",
+        "locator": "Step 1: Make requirements less dumb",
+        "paraphrase": "Requirements are definitely dumb; it does not matter who gave them to you. Every requirement must come from a person with a name, not a department."
+      },
+      "why": "Anonymous type and linter suppressions hide defects behind unaccountable shortcuts. A requirement to bypass safety must have a clear named owner.",
+      "fixHint": "Attribute the suppression to an owner or issue tracker (e.g. @ts-expect-error(owner) or eslint-disable -- owner: reason), or fix the underlying type/lint error.",
+      "avoid": "Bare @ts-ignore, @ts-nocheck, or eslint-disable without an attributed owner.",
+      "examples": {
+        "pass": "pass/owned-ts-expect-error",
+        "fail": "fail/bare-ts-ignore"
+      }
+    },
+    {
+      "id": "MUSK-DEL-001",
+      "check": "musk/deletion/no-useless-catch",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Elon Musk 5-Step Engineering Algorithm",
+        "locator": "Step 2: Delete the part or process step",
+        "paraphrase": "If you are not adding things back 10% of the time, you are not deleting enough. Bias is always towards adding steps 'in case'."
+      },
+      "why": "A try-catch block that only catches an exception and rethrows it unchanged is a redundant process step that adds noise and churn without value.",
+      "fixHint": "Delete the redundant try/catch wrapper and let the caller receive the exception naturally.",
+      "avoid": "Wrapping statements in try { ... } catch (err) { throw err; } 'just in case'.",
+      "examples": {
+        "pass": "pass/catch-handles-or-logs",
+        "fail": "fail/bare-rethrow"
+      }
+    },
+    {
+      "id": "MUSK-SIMP-001",
+      "check": "musk/simplification/no-else-after-return",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Elon Musk 5-Step Engineering Algorithm",
+        "locator": "Step 3: Simplify or optimize",
+        "paraphrase": "The most common error of a smart engineer is to optimize a thing that should not exist. Only simplify after you have deleted."
+      },
+      "why": "An else block following a return or throw statement adds gratuitous nesting and complexity to control flow.",
+      "fixHint": "Remove the else keyword, outdent the alternate block, and use early return guard clauses.",
+      "avoid": "Keeping else blocks when the preceding if branch terminates execution.",
+      "examples": {
+        "pass": "pass/guard-clause",
+        "fail": "fail/else-after-return"
+      }
+    },
+    {
+      "id": "MUSK-FAST-001",
+      "check": "musk/acceleration/no-blocking-sync-io",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Elon Musk 5-Step Engineering Algorithm",
+        "locator": "Step 4: Accelerate cycle time",
+        "paraphrase": "Move faster! But you may only accelerate cycle time after you have worked on the first three steps."
+      },
+      "why": "Synchronous blocking I/O calls stall the single-threaded event loop, serializing tasks and destroying cycle time and throughput.",
+      "fixHint": "Use non-blocking asynchronous APIs (e.g., node:fs/promises) with await instead of synchronous calls.",
+      "avoid": "Using readFileSync, writeFileSync, or execSync in application runtime paths.",
+      "examples": {
+        "pass": "pass/async-fs-promises",
+        "fail": "fail/direct-read-file-sync"
+      }
+    },
+    {
+      "id": "MUSK-AUTO-001",
+      "check": "musk/automation/no-skipped-tests",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Elon Musk 5-Step Engineering Algorithm",
+        "locator": "Step 5: Automate",
+        "paraphrase": "The final step is automate. Only automate after you have designed, simplified, and deleted. And never bypass automated verification."
+      },
+      "why": "Skipping or focusing tests in automated suites creates false confidence by silently dropping regression coverage.",
+      "fixHint": "Remove .skip, .only, fit, or xit modifiers so all automated tests run to completion.",
+      "avoid": "Leaving test.skip or it.only in committed test suites. Not reported: Playwright's runtime skip test.skip(condition, reason) called inside a test body, hook or describe callback, when the condition reads a runtime value (an identifier, member access, call or await) and the reason is a string; from a describe callback it conditionally skips the whole group, which is accepted. A top-level test.skip(cond, reason), a literal or always-true condition (true, 1, !0, !!1, an object, array, new expression, sequence, spread or function, also in parentheses or a cast), test.skip(title, fn), it.skip(...) and every .only stay reported. Known gaps: an always-true condition that still names a value (true || x, a const holding true), Mocha's TDD-UI test.skip(titleVar, 'reason'), and test.describe.skip / test.describe.only, which this check does not match (TDD-FOCUS-001 does).",
+      "examples": {
+        "pass": "pass/normal-tests",
+        "fail": "fail/test-skip"
+      }
+    }
+  ]
+}

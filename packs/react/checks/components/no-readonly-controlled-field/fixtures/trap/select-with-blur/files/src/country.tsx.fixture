@@ -1,0 +1,12 @@
+export function Country(props: { code: string; onCommit: () => void }) {
+  return (
+    <select
+      name="country"
+      value={props.code}
+      onBlur={props.onCommit}
+    >
+      <option value="br">Brazil</option>
+      <option value="pt">Portugal</option>
+    </select>
+  );
+}

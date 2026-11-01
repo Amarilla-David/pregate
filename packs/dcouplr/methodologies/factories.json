@@ -1,0 +1,137 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/factories",
+  "version": "1.10.1",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-FACTORY-SYNC-001",
+      "check": "dcouplr/factories/synchronous-policies",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations/runtime; explicit synchronous-verification policy",
+        "locator": "dist/index.mjs makeFactory.create, lines 513–524; dist/index-C3YI4Tf9.d.mts CreationValidationPolicy/AfterCreationVerificationPolicy, lines 743–760",
+        "paraphrase": "Creation reads the validation result immediately and invokes verification without awaiting completion. Async validation violates its result contract; async/generator verification cannot guarantee that the created value is verified before resolution returns."
+      },
+      "why": "An async validator returns a promise instead of the required result. A generator policy returns an iterator without executing its body. Async verification can finish after an unverified value has already escaped; TypeScript's void callback assignability does not prevent that behavior.",
+      "fixHint": "Use synchronous, nongenerator validation and verification callbacks. Finish required asynchronous work at an explicit boundary before resolving, then pass its admitted result into synchronous creation. Do not move required verification into an unawaited callback.",
+      "avoid": "Reserves addValidationPolicy/addVerificationPolicy member names in selected paths. Covers inline async/generator callbacks and initialized immutable const or unmodified function/generator declarations passed as the direct first argument in the same lexical scope, including exported definitions and hoisted declarations. Also follows one same-scope immutable const alias whose initialization precedes that argument. Explicit writes and duplicate declarations defer declaration inference; the write search conservatively includes nested shadows. Literal dot/bracket/template members, optional calls, comments and transparent expression wrappers are covered. A trailing argument spread cannot replace an explicit first callback; leading spreads remain unresolved. Mutable/imported/cross-scope policies, multiple or destructured aliases, dynamic members and indirect promise/return flow remain unresolved. Async verification is an explicit enforcement policy, not a claim that the public void type rejects it. This rule does not restrict async factory creators or event/message callbacks. Narrow paths for unrelated APIs.",
+      "examples": { "pass": "pass/synchronous", "fail": "fail/async" }
+    },
+    {
+      "id": "DCP-FACTORY-VALIDATION-001",
+      "check": "dcouplr/factories/validation-result-contract",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts ValidationResult, lines 740–754; dist/index.mjs makeFactory.create, lines 517–518",
+        "paraphrase": "Validation returns a boolean or an object with boolean valid and optional string msg. The runtime reads valid synchronously; it does not validate that the result has this typed shape."
+      },
+      "why": "A malformed literal return can crash or reject creation. Truthy nonboolean valid fields can silently admit creation and bypass the intended validator.",
+      "fixHint": "Return true/false or { valid: boolean, msg?: string }. Use false or an explicit throw for rejected input. Keep verification as a separate policy. Correct an invalid return inside the validator itself.",
+      "avoid": "Checks inline arrow/function validation callbacks and initialized immutable const or unmodified function declarations passed as the direct first argument in the same lexical scope, including exported definitions and hoisted declarations. Also follows one same-scope immutable const alias whose initialization precedes that argument. Explicit writes and duplicate declarations defer declaration inference; the write search conservatively includes nested shadows. Known invalid expression returns, empty bodies, empty returns and invalid returns in the callback's own nested control flow are covered; nested helpers/classes are excluded. Plain literal objects use the last valid/msg assignment, including quoted keys and shorthand unknowns. Spreads, computed/escaped keys, getters and custom prototypes remain unresolved. Mutable/imported/cross-scope policies, multiple or destructured aliases, dynamic result values, call results, callable/class/regex values, reachability, fallthrough and complete return inference remain unresolved. Synchronous verification's return value is not restricted; this rule does not prove actual DTO validation or mandatory-field compliance. Narrow paths for unrelated APIs.",
+      "examples": { "pass": "pass/boolean-and-object", "fail": "fail/primitive" }
+    },
+    {
+      "id": "DCP-FACTORY-SEQUENCE-001",
+      "check": "dcouplr/factories/admission-sequence",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts DependencyAdmissionStep1–5 and DependencyAdmissionRegistration, lines 815–882; dist/index.mjs createStep2–5 and DependencyAdmission, lines 529–654",
+        "paraphrase": "Admission follows declareIntent, mandatory fields, validation, verification, creator and a terminal action. Interaction metadata belongs to the returned registration handle, not the factory or unfinished stages."
+      },
+      "why": "Skipping, repeating or reversing a stage calls an unavailable method. createOnly returns a factory, while registration returns a distinct handle whose metadata operations can be chained in any order.",
+      "fixHint": "Call declareIntent(...).addMandatoryInputFields(...).addValidationPolicy(...).addVerificationPolicy(...).addFactoryMethod(creator), then createOnly or a registration method. Optional stage arguments can be omitted, but the stage itself cannot. Add interaction metadata only to the registration handle.",
+      "avoid": "Reserves adjacent direct fluent admission method names in selected paths, not receiver-type inference. Covers the 225 pairs of 15 documented stage/terminal/metadata methods, literal dot/bracket/template members, optional calls, comments and transparent expression wrappers. Unrelated APIs with these names need narrower paths. Named stage handles, aliases, dynamic/escaped methods, custom properties and whole-program bootstrap order remain unresolved. Does not validate arguments, metadata values, intent ownership or mode; separate rules cover some of those contracts. A factory's create call remains valid.",
+      "examples": { "pass": "pass/registration", "fail": "fail/invalid-edges" }
+    },
+    {
+      "id": "DCP-FACTORY-CALLABLE-001",
+      "check": "dcouplr/factories/callback-contract",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations and runtime",
+        "locator": "dist/index.mjs makeFactory/createStep2–5, lines 504–570; dist/index-C3YI4Tf9.d.mts admission steps, lines 815–825",
+        "paraphrase": "A creator is required and callable. Optional validation/verification policies may be omitted; supplied policies must be callable under the public contract."
+      },
+      "why": "A nonfunction creator or validation policy rejects factory construction. A nonfunction verification policy can remain admitted until resolution. Null verification is tolerated at runtime but violates the public typed contract.",
+      "fixHint": "Pass a function or a reviewed function reference to addFactoryMethod. Omit optional policies or pass functions; the default validation policy returns true and default verification does nothing.",
+      "avoid": "Reserves direct addFactoryMethod/addValidationPolicy/addVerificationPolicy method names in selected paths, not receiver-type inference. Checks absent creators and known noncallable literal values, dot/literal-bracket/optional calls, comments and transparent value wrappers. Spreads, dynamic/computed/escaped methods and unknown identifiers/expressions remain unresolved. Bare undefined can be shadowed; omitted arguments and void expressions have distinct coverage. Does not prove policy return types, factory effects, staged order or alias ownership. Narrow paths for unrelated APIs with these names.",
+      "examples": { "pass": "pass/default-policy", "fail": "fail/creator" }
+    },
+    {
+      "id": "DCP-FACTORY-SINGLETON-001",
+      "check": "dcouplr/factories/singleton-input-contract",
+      "defaults": { "paths": ["src/**"] },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published declarations and runtime",
+        "locator": "dist/index.mjs DependencyAdmission.#assertValidSingletonParams, lines 613–632; dist/index-C3YI4Tf9.d.mts terminal admission steps, lines 827–844",
+        "paraphrase": "A supplied singleton input must be a nonnull object; omission is allowed. Arrays and other object values remain accepted."
+      },
+      "why": "Fluent singleton registration rejects a primitive, null or a function before admitting the factory. Omitted input is valid; arrays and regular-expression objects are also objects and must not be denied merely for their form.",
+      "fixHint": "Use registerSingleton(inputDto) or registerSingletonForce(inputDto) with an object, or omit the argument when no creation input is needed. Force registration still requires test mode.",
+      "avoid": "Checks only direct fluent addFactoryMethod(...).registerSingleton/registerSingletonForce chains by method names in selected paths, not receiver-type inference. Dot/literal-bracket/optional calls, comments and transparent value wrappers are covered. Named stage handles, aliases, dynamic/computed/escaped members, spreads and unknown expression types remain unresolved. Does not prove mandatory input fields, singleton ownership, duplicate intent handling or test-mode configuration.",
+      "examples": { "pass": "pass/object", "fail": "fail/null" }
+    },
+    {
+      "id": "DCP-INJECT-001",
+      "check": "dcouplr/factories/no-uninjected-required-parameter",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published runtime",
+        "locator": "dist/index.mjs invokeFactoryCreator, lines 461–465",
+        "paraphrase": "Factory invocation supplies no argument after inputDto and dKernel."
+      },
+      "why": "A third required runtime parameter receives undefined even when the caller supplies an input DTO.",
+      "fixHint": "Put application data in inputDto and resolve collaborators through the injected dKernel. Keep at most two required runtime parameters.",
+      "avoid": "Identifies the first inline arrow/function creator argument through literal dot/bracket/template members, optional calls, comments and parenthesized/as/satisfies/non-null wrappers. Also follows an immutable const initialized with an arrow/function expression when its direct first-argument reference follows initialization in the same lexical scope. Same-scope function declarations, including hoisted and exported declarations, retain these policies only when no explicit assignment/update/loop target, variable declaration or duplicate function declaration can replace the name. The write search is conservative across nested scopes: a shadowed write can defer inference. Exported const creators retain the policies after initialization. These forms do not grant exclusive constructor-root ownership. Also follows one same-scope immutable const alias initialized before registration. Extra callbacks and leading spreads do not establish ownership. Zero/one/two parameters, optional/default later parameters, rest parameters and erased this remain valid. Multiple or destructured aliases, mutable/cross-scope/imported creators, receiver identity, dynamic/escaped names, generators, type assertions and indirect values remain unresolved.",
+      "examples": { "pass": "pass/two", "fail": "fail/third" }
+    },
+    {
+      "id": "DCP-FACTORY-EFFECTS-001",
+      "check": "dcouplr/factories/no-ambient-factory-effects",
+      "defaults": {
+        "allow": []
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "dist/eslint/index.mjs createForbiddenElementInFactoryRule; dist/index.mjs createForbiddenElementsGuardedFactory",
+        "paraphrase": "An admission factory must use injected dependencies instead of ambient effects."
+      },
+      "why": "An admission factory must use injected dependencies instead of ambient effects.",
+      "fixHint": "Receive dKernel as the second factory argument and use a gate or registered port. The adapter that implements that port, and a negative-control test of the runtime guard, are excluded file by file through an override's params.exclude; params.allow exempts a member in every factory.",
+      "avoid": "Identifies the first inline arrow/function creator argument through literal dot/bracket/template members, optional calls, comments and parenthesized/as/satisfies/non-null wrappers. Also follows an immutable const initialized with an arrow/function expression when its direct first-argument reference follows initialization in the same lexical scope. Same-scope function declarations, including hoisted and exported declarations, retain these policies only when no explicit assignment/update/loop target, variable declaration or duplicate function declaration can replace the name. The write search is conservative across nested scopes: a shadowed write can defer inference. Exported const creators retain the policies after initialization. These forms do not grant exclusive constructor-root ownership. Also follows one same-scope immutable const alias initialized before registration. Extra callbacks and leading spreads do not establish ownership. Reserves addFactoryMethod by name in reviewed paths. Erased type queries remain admitted, executable references remain checked. Multiple or destructured aliases, mutable/cross-scope/imported creators, dynamic/escaped names, generators, type assertions, indirect values and receiver identity remain unresolved.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "DCP-ARITY-001",
+      "check": "dcouplr/factories/no-default-factory-parameters",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published source; explicit PREGATE project policies",
+        "locator": "dist/index.mjs invokeFactoryCreator, lines 461–465",
+        "paraphrase": "A default factory parameter can change Function.length and prevent input or kernel injection."
+      },
+      "why": "A default factory parameter can change Function.length and prevent input or kernel injection.",
+      "fixHint": "Keep required positional inputDto and dKernel parameters when needed. Apply defaults in the body.",
+      "avoid": "Identifies the first inline arrow/function creator argument through literal dot/bracket/template members, optional calls, comments and parenthesized/as/satisfies/non-null wrappers. Also follows an immutable const initialized with an arrow/function expression when its direct first-argument reference follows initialization in the same lexical scope. Same-scope function declarations, including hoisted and exported declarations, retain these policies only when no explicit assignment/update/loop target, variable declaration or duplicate function declaration can replace the name. The write search is conservative across nested scopes: a shadowed write can defer inference. Exported const creators retain the policies after initialization. These forms do not grant exclusive constructor-root ownership. Also follows one same-scope immutable const alias initialized before registration. Extra callbacks and leading spreads do not establish ownership. Zero/one-argument creators remain supported. This advisory does not prove both values are needed; later defaults can be harmless. Multiple or destructured aliases, mutable/cross-scope/imported creators, dynamic/escaped names, generators, type assertions and indirect values remain unresolved.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    }
+  ]
+}

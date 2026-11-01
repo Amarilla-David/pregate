@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function checkHealth(): Promise<string> {
+  return redis.ping();
+}

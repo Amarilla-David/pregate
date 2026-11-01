@@ -1,0 +1,83 @@
+import assert from 'node:assert/strict';
+import { delivery, BROADCAST_PEER } from '../src/delivery.mjs';
+
+const tick = () => new Promise(resolve => setTimeout(resolve, 1));
+const causes = error => Array.isArray(error?.errors) ? error.errors.flatMap(causes) : [error];
+
+async function verifyCompletion(kind) {
+  let release, calls = 0, completed = false;
+  const held = new Promise(resolve => { release = resolve; });
+  const id = delivery[`subscribe${kind}`](async () => { calls++; await held; });
+  const operation = delivery[`deliver${kind}`]().then(() => { completed = true; });
+  try {
+    await tick();
+    assert.equal(calls, 1, `${kind}: the configured bus must invoke the actual listener`);
+    assert.equal(completed, false, `${kind}: blocking completion must wait for the listener`);
+  } finally {
+    release();
+    await operation;
+    delivery[`remove${kind}`](id);
+  }
+  assert.equal(completed, true, `${kind}: the operation must finish after listener release`);
+}
+
+async function verifyFailures(kind) {
+  const first = new Error('first'), second = new Error('second');
+  let release, settled = false, failure;
+  const held = new Promise(resolve => { release = resolve; });
+  const ids = [
+    delivery[`subscribe${kind}`](() => { throw first; }),
+    delivery[`subscribe${kind}`](async () => { await held; throw second; }, kind === 'Message' ? 'OTHER' : 'PROBE'),
+  ];
+  const operation = delivery[`deliver${kind}`](kind === 'Message' ? BROADCAST_PEER : undefined)
+    .then(() => { settled = true; }, error => { failure = error; settled = true; });
+  try {
+    await tick();
+    assert.equal(settled, false, `${kind}: one failure must not finish before another listener settles`);
+  } finally {
+    release();
+    await operation;
+    for (const id of ids) delivery[`remove${kind}`](id);
+  }
+  assert.deepEqual(causes(failure), [first, second], `${kind}: the caller must receive both failure causes`);
+}
+
+async function verifyRoutingAndDisposal(kind) {
+  const seen = [];
+  const ids = [
+    delivery[`subscribe${kind}`](() => { seen.push('PROBE'); }),
+    delivery[`subscribe${kind}`](() => { seen.push('OTHER'); }, 'OTHER'),
+  ];
+  await delivery[`deliver${kind}`]();
+  assert.deepEqual(seen, ['PROBE'], `${kind}: direct traffic must stay within its channel`);
+  if (kind === 'Message') {
+    await delivery.deliverMessage(BROADCAST_PEER);
+    assert.deepEqual(seen, ['PROBE', 'PROBE', 'OTHER'], 'Broadcast must reach both registered peers');
+  }
+  for (const id of ids) {
+    assert.equal(delivery[`remove${kind}`](id), true);
+    assert.equal(delivery[`remove${kind}`](id), false, 'Repeated disposal must be safe');
+  }
+  assert.equal(delivery[`list${kind}`]().some(info => ids.includes(info.subscriptionId)), false);
+  const before = [...seen];
+  await delivery[`deliver${kind}`]();
+  if (kind === 'Message') await delivery.deliverMessage(BROADCAST_PEER);
+  assert.deepEqual(seen, before, `${kind}: disposed listeners must not receive traffic`);
+}
+
+async function verifyBackgroundFailure(kind) {
+  const failure = new Error('background listener failed');
+  const id = delivery[`subscribe${kind}`](() => { throw failure; });
+  let captured;
+  assert.equal(delivery[`emit${kind}`](error => { captured = error; }), undefined);
+  await tick();
+  delivery[`remove${kind}`](id);
+  assert.equal(captured, failure, `${kind}: the background error policy must receive the listener failure`);
+}
+
+for (const kind of ['Event', 'Message']) {
+  await verifyCompletion(kind);
+  await verifyFailures(kind);
+  await verifyRoutingAndDisposal(kind);
+  await verifyBackgroundFailure(kind);
+}

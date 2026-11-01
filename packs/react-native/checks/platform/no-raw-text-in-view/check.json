@@ -1,0 +1,127 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/platform/no-raw-text-in-view",
+  "version": "1.0.0",
+  "area": "platform",
+  "cardinality": "singleton",
+  "dimension": "react-native.raw-text-in-view",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "raw-text-in-view",
+          "rule": {
+            "all": [
+              {
+                "any": [
+                  {
+                    "regex": "\\S",
+                    "not": {
+                      "regex": "^[<{]"
+                    }
+                  },
+                  {
+                    "regex": "^\\{",
+                    "has": {
+                      "any": [
+                        {
+                          "kind": "string"
+                        },
+                        {
+                          "kind": "template_string"
+                        }
+                      ],
+                      "has": {
+                        "kind": "string_fragment",
+                        "regex": "\\S"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "inside": {
+                  "regex": "^<",
+                  "has": {
+                    "nthChild": 1,
+                    "regex": "^<",
+                    "has": {
+                      "field": "name",
+                      "kind": "identifier",
+                      "pattern": "$TAG"
+                    }
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "source",
+                          "regex": "^[\"']react-native[\"']$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "kind": "import_specifier",
+                          "stopBy": "end",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "name",
+                                "regex": "^(View|ScrollView|SafeAreaView|KeyboardAvoidingView|Pressable|TouchableOpacity|TouchableHighlight|ImageBackground)$"
+                              }
+                            },
+                            {
+                              "any": [
+                                {
+                                  "has": {
+                                    "field": "alias",
+                                    "pattern": "$TAG"
+                                  }
+                                },
+                                {
+                                  "not": {
+                                    "has": {
+                                      "field": "alias",
+                                      "kind": "identifier"
+                                    }
+                                  },
+                                  "has": {
+                                    "field": "name",
+                                    "pattern": "$TAG"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is text placed directly inside a React Native container. Wrap it in <Text>; a bare string under View throws at render time."
+  }
+}

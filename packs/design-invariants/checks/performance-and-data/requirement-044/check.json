@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/performance-and-data/requirement-044",
+  "version": "1.0.0",
+  "area": "performance-and-data",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r044",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-044"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-044 requires current passing project verification: {symbol}."
+  }
+}

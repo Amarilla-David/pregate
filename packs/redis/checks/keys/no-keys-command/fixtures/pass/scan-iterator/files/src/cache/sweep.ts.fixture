@@ -1,0 +1,7 @@
+import { redis } from "./client";
+
+export async function sweepSessions(): Promise<void> {
+  for await (const key of redis.scanIterator("session:*")) {
+    await redis.del(key);
+  }
+}

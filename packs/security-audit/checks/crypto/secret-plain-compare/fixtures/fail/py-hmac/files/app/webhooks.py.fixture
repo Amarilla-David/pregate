@@ -1,0 +1,7 @@
+import hmac
+
+
+def verify(body, header, key):
+    if hmac.new(key, body, "sha256").hexdigest() != header:
+        return False
+    return header == settings.WEBHOOK_SECRET

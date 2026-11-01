@@ -1,0 +1,5 @@
+import type { Mailer } from "./mailer";
+
+export function notify(mailer: Mailer, to: string): void {
+  mailer.send(to, "Your order shipped").catch(console.error);
+}

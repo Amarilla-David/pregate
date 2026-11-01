@@ -1,0 +1,6 @@
+import type { CommandId } from "../../shared/ids";
+import { auditLog } from "../read-models/command-log";
+
+export function commandHistory(id: CommandId): string[] {
+  return auditLog.filter((entry) => entry.commandId === id).map((entry) => entry.summary);
+}

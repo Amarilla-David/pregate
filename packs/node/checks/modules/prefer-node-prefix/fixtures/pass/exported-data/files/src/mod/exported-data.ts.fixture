@@ -1,0 +1,3 @@
+export const document = { type: "http", format: "url" };
+export type Protocol = "http" | "url";
+export const load = () => import("third-party", { with: { type: "http" } });

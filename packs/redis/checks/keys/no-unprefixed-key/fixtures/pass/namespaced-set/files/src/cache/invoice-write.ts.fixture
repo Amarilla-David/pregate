@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function saveInvoice(body: string): Promise<void> {
+  await redis.set("billing:invoice:481", body, { EX: 600 });
+}

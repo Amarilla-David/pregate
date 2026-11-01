@@ -1,0 +1,7 @@
+
+export async function create(req: Req, db: Db): Promise<void> {
+  await db.invoice.create({ email: req.body.email, name: req.body.name });
+}
+
+interface Req { body: { email: string; name: string; role?: string } }
+interface Db { invoice: { create(row: { email: string; name: string }): Promise<void> } }

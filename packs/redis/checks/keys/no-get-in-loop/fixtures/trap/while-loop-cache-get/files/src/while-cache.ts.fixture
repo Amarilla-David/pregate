@@ -1,0 +1,9 @@
+declare const cache: { get(key: string): Promise<string | null> };
+export async function drainKeys(queue: string[]): Promise<string[]> {
+  const found: string[] = [];
+  while (queue.length > 0) {
+    const val = await cache.get(`job:${queue.pop()}`);
+    if (val) found.push(val);
+  }
+  return found;
+}

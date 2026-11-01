@@ -1,0 +1,13 @@
+import { Test } from "@nestjs/testing";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { UsersModule } from "../src/users/users.module";
+
+export async function createTestingApp() {
+  const moduleRef = await Test.createTestingModule({
+    imports: [
+      TypeOrmModule.forRoot({ type: "sqlite", database: ":memory:", autoLoadEntities: true, synchronize: true }),
+      UsersModule,
+    ],
+  }).compile();
+  return moduleRef.createNestApplication().init();
+}

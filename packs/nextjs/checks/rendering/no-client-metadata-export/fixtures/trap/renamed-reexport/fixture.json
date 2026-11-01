@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "app/about/page.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 11
+      }
+    ]
+  },
+  "trap": {
+    "family": "renamed-export",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Declaring the object under another name and exporting it as metadata at the bottom still exports metadata from a client page."
+  }
+}

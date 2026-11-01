@@ -1,0 +1,8 @@
+enum Kind {
+  Secret = "secret",
+  Note = "note",
+}
+
+export function isSecretField(kind: Kind): boolean {
+  return kind === Kind.Secret;
+}

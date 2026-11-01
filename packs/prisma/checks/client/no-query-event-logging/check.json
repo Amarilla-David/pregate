@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-query-event-logging",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.query-logging",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "query-log",
+          "rule": {
+            "kind": "new_expression",
+            "regex": "PrismaClient",
+            "has": {
+              "regex": "['\"]query['\"]"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} enables query logging on the PrismaClient, which writes SQL and bind parameters into the logs. Log error events only."
+  }
+}

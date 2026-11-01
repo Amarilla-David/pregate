@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/pay-arrow.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "exported-arrow",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "An exported arrow is an exported function. Throwing from it is the same boundary."
+  }
+}

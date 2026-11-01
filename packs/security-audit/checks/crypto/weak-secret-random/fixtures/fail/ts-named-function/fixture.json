@@ -1,0 +1,17 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth/otp.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      },
+      {
+        "line": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+import type { Request } from "express";
+
+export function create(req: Request): object {
+  const dto = Object.assign({}, req.body);
+  return dto;
+}

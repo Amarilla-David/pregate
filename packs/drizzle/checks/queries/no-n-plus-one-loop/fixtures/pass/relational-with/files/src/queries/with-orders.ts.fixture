@@ -1,0 +1,1 @@
+const rows = await db.query.users.findMany({ with: { orders: true } });

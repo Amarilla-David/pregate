@@ -1,0 +1,7 @@
+import jwt from "jsonwebtoken";
+export function readSession(token: string, key: string) {
+  return jwt.verify(token, key, {
+    ignoreExpiration: true,
+    algorithms: ["HS256"],
+  });
+}

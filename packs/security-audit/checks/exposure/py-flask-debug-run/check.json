@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/exposure/py-flask-debug-run",
+  "version": "1.0.0",
+  "area": "exposure",
+  "cardinality": "singleton",
+  "dimension": "security-audit.exposure.python-debug-server",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "app-run-debug",
+          "rule": {
+            "kind": "call",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "attribute",
+                  "regex": "^(?:[\\w.]*\\.)?\\w*[aA]pp\\.run$|^(?:[\\w.]*\\.)?(?:application|socketio)\\.run$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "kind": "keyword_argument",
+                    "regex": "^debug\\s*=\\s*True$"
+                  }
+                }
+              }
+            ],
+            "not": {
+              "has": {
+                "field": "arguments",
+                "has": {
+                  "kind": "keyword_argument",
+                  "regex": "^host\\s*=\\s*[\"'](?:127\\.0\\.0\\.1|localhost|::1)[\"']$"
+                }
+              }
+            }
+          },
+          "ignores": [
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} starts the development server with the debugger on, which allows code execution from the browser. Read debug from configuration and keep it off in production."
+  }
+}

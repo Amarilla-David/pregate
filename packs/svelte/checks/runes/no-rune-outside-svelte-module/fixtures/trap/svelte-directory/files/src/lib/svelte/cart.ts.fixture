@@ -1,0 +1,8 @@
+export class Cart {
+  items = $state<string[]>([]);
+  count = $derived(this.items.length);
+
+  add(item: string): void {
+    this.items.push(item);
+  }
+}

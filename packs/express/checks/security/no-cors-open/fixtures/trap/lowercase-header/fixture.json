@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/cors-lower.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "case-variant",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Header names are case-insensitive on the wire. Lowercasing the name opens the same wildcard policy."
+  }
+}

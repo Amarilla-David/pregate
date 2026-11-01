@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "react-native/platform/no-web-components",
+  "version": "1.0.0",
+  "area": "platform",
+  "cardinality": "singleton",
+  "dimension": "react-native.no-web-components",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "web-component",
+          "rule": {
+            "kind": "return_statement",
+            "regex": "<(div|span|p|a|img|button|input|h[1-6])([\\s>/])"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} returns a DOM element. React Native has no DOM: render View, Text, Image, or Pressable instead."
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/writes/no-updatemany-without-where",
+  "version": "1.0.0",
+  "area": "writes",
+  "cardinality": "singleton",
+  "dimension": "prisma.updatemany-where",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "updatemany-no-where",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.updateMany\\s*\\(",
+            "not": {
+              "regex": "\\bwhere\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls updateMany with no where clause, which rewrites the table. Pass a where filter alongside data so only the intended rows change."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "security-audit/client-and-agents",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SA-POSTMSG-001",
+      "check": "security-audit/messaging/post-message-any-origin",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/CLIENT-SIDE.md — Cross-origin messaging and network attack classes; postMessage origin and source trust",
+        "paraphrase": "A window message sent with a wildcard target origin can be delivered to whatever page currently embeds or opened the sender."
+      },
+      "why": "Hardening invariant: the target origin is the only control that keeps a cross-window message away from an unintended embedder or opener. A finding marks a missing control; whether the payload is sensitive needs review.",
+      "fixHint": "Pass the exact origin of the receiving window, for example from configuration, instead of \"*\". Broadcast only data that any site may read.",
+      "avoid": "Detects postMessage on parent, opener, top (optionally through window., globalThis. or self.) or any .contentWindow, with or without a non-null assertion, when the second argument is the literal \"*\" or an options object whose targetOrigin is \"*\". A window.postMessage to the sending window itself (a nextTick shim) reaches no other page and passes, as do Worker and MessagePort postMessage calls, which have no target origin. A wildcard held in a variable, event.source replies, window.frames[...] and aliased window references are not detected. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/exact-origin",
+        "fail": "fail/parent-star"
+      }
+    },
+    {
+      "id": "SA-ORIGIN-001",
+      "check": "security-audit/messaging/message-handler-without-origin",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/CLIENT-SIDE.md — Cross-origin messaging and network attack classes; postMessage origin and source trust",
+        "paraphrase": "A window message handler that acts on the message data must first match the sender's origin against an exact allowlist."
+      },
+      "why": "Hardening heuristic: any page that can hold a reference to this window can post to it, so a handler that uses event.data without looking at event.origin trusts every sender. A finding marks a missing check, not a confirmed exploit; the handler may only accept harmless data.",
+      "fixHint": "Return early unless event.origin equals an exact, configured origin (a Set lookup or ===, not includes, startsWith or an unanchored regex), and check event.source too when several frames share that origin.",
+      "avoid": "Detects window.addEventListener, globalThis.addEventListener or a bare addEventListener for \"message\", and window.onmessage or globalThis.onmessage assignments, when the handler reads data but never reads the event's origin (a field named origin inside data, or destructured out of it, does not count). The addEventListener handler is the inline function or a const, let, var or function declaration of that name in an enclosing block or the module; an onmessage assignment is checked only when the function is inline. A handler that compares a value with window, self or globalThis itself accepts only its own window's messages and passes; comparing window with one of its properties such as window.top does not. An imported or delegated handler is not resolved and passes, so is a weak origin comparison. WebSocket, MessagePort and Worker objects are not window receivers and pass; files named *worker.*, sw.* or under worker/ or workers/ are excluded. Stays warn until a pilot measures its precision. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/exact-origin",
+        "fail": "fail/window-listener"
+      }
+    },
+    {
+      "id": "SA-CORS-002",
+      "check": "security-audit/cors/credentialed-origin-reflection",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/CLIENT-SIDE.md — Cross-origin messaging and network attack classes; credentialed CORS trust",
+        "paraphrase": "Echoing the request's Origin back while allowing credentials lets any site read credentialed responses; browsers already refuse a bare wildcard with credentials."
+      },
+      "why": "Hardening invariant: reflecting the caller's Origin is an allow-every-origin policy that, unlike \"*\", browsers honor together with cookies. A finding marks a removed control; impact depends on what the credentialed responses expose.",
+      "fixHint": "Pass the cors middleware an explicit list of origins, or set Access-Control-Allow-Origin to the request Origin only after it matches an exact allowlist entry, and add Vary: Origin.",
+      "avoid": "Detects a cors options object with both origin: true and credentials: true in a file that names cors, and an Access-Control-Allow-Origin header (setHeader, header, set or append, or a headers object key) whose value is req.headers.origin, a get(\"origin\") or header(\"origin\") call, either with a fallback, or any of these under a type assertion, in a file that also names Access-Control-Allow-Credentials. The reflection is accepted when the nearest enclosing function has an if or ternary on the origin that does more than test presence (truthiness, a comparison with undefined, null or \"\", or typeof, alone or joined with &&); any such test there counts, even one that only gates another branch. A wildcard origin with credentials is VP-CORS-001's form and is not repeated here; an origin callback that accepts everything, a reflected value held in a variable and a regex or substring allowlist are not detected. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/allowlist-guard",
+        "fail": "fail/cors-origin-true"
+      }
+    },
+    {
+      "id": "SA-JWT-001",
+      "check": "security-audit/tokens/jwt-verification-disabled",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/WEB-PROTOCOL-AND-AUTH.md — Federated-identity attack classes; JWT verification and claim binding",
+        "paraphrase": "A token is trusted only after its signature is checked with an algorithm the server pins and its expiry and other claims are checked."
+      },
+      "why": "Hardening invariant: accepting the none algorithm or skipping signature verification lets anyone mint a token, and ignoring expiry keeps a stolen token valid forever. A finding marks a removed control, not a confirmed exploit.",
+      "fixHint": "Verify with an explicit list of real algorithms (for example [\"RS256\"]), keep expiry checks on, and bind audience and issuer. To read claims before verification, keep the result out of any authorization decision.",
+      "avoid": "Detects, in TypeScript, an options key ignoreExpiration: true or an algorithms array containing \"none\" (any case, quoted keys included); in Python, verify_signature or verify_exp set to False in an options dictionary or dict() call, or an algorithms= keyword list or tuple containing \"none\". Values computed at run time, the PyJWT 1.x verify=False argument, jwt.decode or decodeJwt calls that never verify and missing audience or issuer checks are not detected. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/pinned-verify",
+        "fail": "fail/ignore-expiration"
+      }
+    },
+    {
+      "id": "SA-LLM-001",
+      "check": "security-audit/agents/llm-client-in-browser",
+      "defaults": {},
+      "severity": "ask",
+      "source": {
+        "work": "Cloudflare security-audit skill (cloudflare/security-audit-skill, commit c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)",
+        "locator": "https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/ATTACK-CLASSES.md — Obvious things (API keys and secrets in source)",
+        "paraphrase": "Check whether API keys or other secrets end up in code that ships to clients."
+      },
+      "why": "Hardening invariant: an LLM SDK client running in the browser needs the provider key there, so every visitor can read it and spend against it. Local demos and user-supplied keys are legitimate exceptions, so this asks instead of denying.",
+      "fixHint": "Call the provider from a server route that holds the key and enforces the caller's limits, and point the browser at that route. Keep the flag only where each user enters their own key.",
+      "avoid": "Detects the options key dangerouslyAllowBrowser: true (quoted or not) on any object, which the OpenAI and Anthropic SDKs read, and the anthropic-dangerous-direct-browser-access: true header that the same opt-in sends. A value computed at run time, keys exposed through public environment variables without the flag and other SDKs are not detected. Vendored paths (vendor/, thirdparty/, third_party/) are skipped. A passing check is not a security proof.",
+      "examples": {
+        "pass": "pass/server-client",
+        "fail": "fail/openai-browser"
+      }
+    }
+  ]
+}

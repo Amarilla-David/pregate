@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/routing/no-page-server-import-in-client",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.page-server-import",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "server-import-in-universal",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "\\.server(\\.|$)",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "**/+page.ts",
+            "**/+layout.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports a .server module from a universal load file. Universal loads run on the client; keep server-only reads in +page.server.ts and return public data."
+  }
+}

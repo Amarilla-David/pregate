@@ -1,0 +1,5 @@
+const count = $State(0);
+
+export function value(): number {
+  return count;
+}

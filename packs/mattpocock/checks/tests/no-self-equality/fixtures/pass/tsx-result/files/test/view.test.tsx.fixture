@@ -1,0 +1,2 @@
+const view = <Total value={15} />;
+expect(view.props.value).toBe(15);

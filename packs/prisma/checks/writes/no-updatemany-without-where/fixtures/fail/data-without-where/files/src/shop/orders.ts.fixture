@@ -1,0 +1,5 @@
+import { prisma } from "~/server/db";
+
+export async function deactivate() {
+  return prisma.user.updateMany({ data: { active: false } });
+}

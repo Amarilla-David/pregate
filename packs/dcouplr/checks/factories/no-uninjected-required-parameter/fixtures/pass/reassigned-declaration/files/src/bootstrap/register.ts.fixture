@@ -1,0 +1,1 @@
+function creator(input, kernel, required) { return required; } creator = () => 1; stage.addFactoryMethod(creator);

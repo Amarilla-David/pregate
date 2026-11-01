@@ -1,0 +1,4 @@
+import type { Col } from "./db";
+export async function totals(col: Col): Promise<void> {
+  await col.aggregate([{ $group: { _id: "$x", avg: { $accumulator: { init: "s=0" } } } }]);
+}

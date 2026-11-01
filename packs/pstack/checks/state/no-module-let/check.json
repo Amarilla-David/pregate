@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/state/no-module-let",
+  "version": "1.0.0",
+  "area": "state",
+  "cardinality": "singleton",
+  "dimension": "state.module-let",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "module-let",
+          "rule": {
+            "kind": "lexical_declaration",
+            "regex": "^let\\b",
+            "not": {
+              "inside": {
+                "stopBy": "end",
+                "any": [
+                  {
+                    "kind": "function_declaration"
+                  },
+                  {
+                    "kind": "arrow_function"
+                  },
+                  {
+                    "kind": "method_definition"
+                  },
+                  {
+                    "kind": "function_expression"
+                  },
+                  {
+                    "kind": "class_declaration"
+                  },
+                  {
+                    "kind": "for_statement"
+                  },
+                  {
+                    "kind": "for_in_statement"
+                  },
+                  {
+                    "kind": "catch_clause"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} is a mutable module binding. Keep the let inside the operation that owns it."
+  }
+}

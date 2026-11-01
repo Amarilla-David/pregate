@@ -1,0 +1,8 @@
+export interface Order {
+  readonly id: string;
+  readonly createdAtMs: number;
+}
+
+export function createOrder(id: string, createdAtMs: number): Order {
+  return { id, createdAtMs };
+}

@@ -1,0 +1,3 @@
+class Pair {
+  constructor(a: string, b: number) {}
+}

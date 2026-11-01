@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "sveltekit/routing/no-api-route-without-json",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "sveltekit.api-redirect-status",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "redirect-bad-status",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^redirect$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "regex": "\\(\\s*(200|404|500)\\b"
+                }
+              }
+            ]
+          },
+          "files": [
+            "**/+page.server.ts",
+            "**/+layout.server.ts",
+            "**/+server.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls redirect() with a non-3xx status. redirect() needs a 3xx status and a location; failure paths throw error() with the real status."
+  }
+}

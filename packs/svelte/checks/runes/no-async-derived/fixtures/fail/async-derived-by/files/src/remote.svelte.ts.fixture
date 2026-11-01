@@ -1,0 +1,4 @@
+declare const $derived: { by<T>(fn: () => T): T };
+export function remoteCount(fetchCount: () => Promise<number>) {
+  return $derived.by(async () => await fetchCount());
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "trpc/middleware/no-next-without-ctx",
+  "version": "1.0.0",
+  "area": "middleware",
+  "cardinality": "singleton",
+  "dimension": "trpc.middleware-context",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "bare-next-in-use",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.use\\s*\\([\\s\\S]*?\\bnext\\s*\\(\\s*\\)"
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} calls bare next() in middleware. Forward the narrowed context with next({ ctx }) so downstream procedures see the authenticated user."
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "maintainability/naming/no-negated-boolean",
+  "version": "1.0.0",
+  "area": "naming",
+  "cardinality": "singleton",
+  "dimension": "naming.negated-boolean",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "negated-boolean",
+          "rule": {
+            "any": [
+              {
+                "kind": "variable_declarator",
+                "all": [
+                  {
+                    "has": {
+                      "field": "name",
+                      "regex": "^(isNot[A-Z]|hasNo[A-Z]|isInvalid$|noError$)"
+                    }
+                  },
+                  {
+                    "has": {
+                      "kind": "type_annotation",
+                      "regex": "boolean"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "property_signature",
+                "all": [
+                  {
+                    "has": {
+                      "field": "name",
+                      "regex": "^(isNot[A-Z]|hasNo[A-Z]|isInvalid$|noError$)"
+                    }
+                  },
+                  {
+                    "has": {
+                      "kind": "type_annotation",
+                      "regex": "boolean"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses a negated boolean name. Name the positive condition (e.g. isActive, hasAccess, isValid)."
+  }
+}

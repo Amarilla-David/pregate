@@ -1,0 +1,6 @@
+import type { Order } from "../../entities/order";
+import { pool } from "../../frameworks-and-drivers/database/pool";
+
+export async function saveOrder(order: Order): Promise<void> {
+  await pool.query("insert into orders (id) values ($1)", [order.id]);
+}

@@ -1,0 +1,23 @@
+import { fail, isRedirect, redirect } from "@sveltejs/kit";
+import { charge } from "$lib/server/payments";
+import type { Actions } from "./$types";
+
+export const actions: Actions = {
+  pay: async ({ request }) => {
+    const form = await request.formData();
+    try {
+      await charge(form);
+      redirect(303, "/checkout/done");
+    } catch (err) {
+      if (isRedirect(err)) throw err;
+      return fail(402, { message: "Payment failed" });
+    }
+  },
+  retry: async () => {
+    try {
+      redirect(303, "/checkout");
+    } catch (err) {
+      throw err;
+    }
+  },
+};

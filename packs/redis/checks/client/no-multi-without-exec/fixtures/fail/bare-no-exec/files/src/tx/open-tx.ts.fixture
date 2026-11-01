@@ -1,0 +1,4 @@
+import { redis } from "./client";
+
+redis.multi();
+redis.set("session:1", "data");

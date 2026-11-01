@@ -1,0 +1,2 @@
+import { t, publicProcedure } from "./trpc";
+export const userRouter = t.router({ create: publicProcedure.mutation(async () => db.user.create({ data: {} })) });

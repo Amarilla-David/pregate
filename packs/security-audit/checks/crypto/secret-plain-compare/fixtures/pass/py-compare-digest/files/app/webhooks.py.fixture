@@ -1,0 +1,6 @@
+import hmac
+
+
+def verify(body, header, key):
+    expected_signature = hmac.new(key, body, "sha256").hexdigest()
+    return hmac.compare_digest(expected_signature, header)

@@ -1,0 +1,4 @@
+export async function load({ fetch }) {
+	const res = await fetch("/api/orders");
+	return { orders: await res.json() };
+}

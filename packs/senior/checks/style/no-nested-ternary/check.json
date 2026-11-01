@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "senior/style/no-nested-ternary",
+  "version": "1.0.0",
+  "area": "style",
+  "cardinality": "singleton",
+  "dimension": "style.nested-ternary",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "nested-ternary",
+          "rule": {
+            "kind": "ternary_expression",
+            "any": [
+              {
+                "has": {
+                  "field": "consequence",
+                  "kind": "ternary_expression"
+                }
+              },
+              {
+                "has": {
+                  "field": "consequence",
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "stopBy": "neighbor",
+                    "kind": "ternary_expression"
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "alternative",
+                  "kind": "ternary_expression"
+                }
+              },
+              {
+                "has": {
+                  "field": "alternative",
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "stopBy": "neighbor",
+                    "kind": "ternary_expression"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} nests a conditional expression. Use if or a named helper."
+  }
+}

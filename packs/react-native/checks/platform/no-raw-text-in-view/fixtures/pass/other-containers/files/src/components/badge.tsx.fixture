@@ -1,0 +1,14 @@
+import { Button, Text as RNText } from "react-native";
+import { View } from "@/components/themed";
+import { Card } from "@/components/card";
+
+export function Badge({ label, onPress }: { label: string; onPress: () => void }) {
+  return (
+    <Card>
+      <View>Themed view renders its own Text</View>
+      <RNText>New</RNText>
+      <Button title="Open" onPress={onPress} />
+      {label}
+    </Card>
+  );
+}

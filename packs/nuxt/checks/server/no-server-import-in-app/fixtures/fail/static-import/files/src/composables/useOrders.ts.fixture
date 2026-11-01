@@ -1,0 +1,4 @@
+import { queryOrders } from "~/server/db";
+export function useOrders(): Promise<unknown> {
+  return queryOrders();
+}

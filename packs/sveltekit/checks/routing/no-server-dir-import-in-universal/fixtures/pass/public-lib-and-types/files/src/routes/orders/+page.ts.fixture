@@ -1,0 +1,11 @@
+import type { Order } from "$lib/server/orders";
+import { formatTotal } from "$lib/serverless/format";
+import { watch } from "$lib/observer/watch";
+import type { PageLoad } from "./$types";
+
+export const load: PageLoad = async ({ data, fetch }) => {
+  const res = await fetch("/api/orders");
+  const orders: Order[] = await res.json();
+  watch("orders");
+  return { ...data, orders, label: formatTotal(orders.length) };
+};

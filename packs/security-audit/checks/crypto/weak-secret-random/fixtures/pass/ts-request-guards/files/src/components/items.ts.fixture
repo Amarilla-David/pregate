@@ -1,0 +1,24 @@
+import { useCallback } from "react";
+
+export class ItemsSource {
+  _currentFetchToken = "";
+  update() {
+    const fetchToken = Math.random().toString(36).substr(2);
+    this._currentFetchToken = fetchToken;
+  }
+}
+
+export function useSchema(load: () => Promise<void>) {
+  return useCallback(() => {
+    const refreshToken = Math.random().toString(36).substr(2);
+    return load().then(() => refreshToken);
+  }, [load]);
+}
+
+function pickColor(): string {
+  return ["red", "blue"][Math.floor(Math.random() * 2)];
+}
+
+export function renderBadge(): string {
+  return pickColor();
+}

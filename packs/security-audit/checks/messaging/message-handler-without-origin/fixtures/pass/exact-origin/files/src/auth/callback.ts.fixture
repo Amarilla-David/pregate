@@ -1,0 +1,7 @@
+const TRUSTED = "https://login.example.com";
+export function listen(save: (token: string) => void): void {
+  window.addEventListener("message", (event: MessageEvent) => {
+    if (event.origin !== TRUSTED) return;
+    save(event.data.token);
+  });
+}

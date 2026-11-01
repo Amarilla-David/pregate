@@ -1,0 +1,2 @@
+exec(compile("def _reraise(*a): raise a[1]", "<compat>", "exec"))
+eval(compile("1 + 2", "<const>", "eval"))

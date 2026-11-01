@@ -1,0 +1,2 @@
+def price(sku):
+    return 100 if sku.startswith("A") else 90

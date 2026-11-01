@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/exports/require-default-export",
+  "version": "1.0.0",
+  "area": "exports",
+  "cardinality": "singleton",
+  "dimension": "modules.default-export",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "missing-default",
+          "rule": {
+            "kind": "program",
+            "not": {
+              "has": {
+                "stopBy": "end",
+                "any": [
+                  {
+                    "kind": "export_statement",
+                    "regex": "^\\s*export\\s+default\\b"
+                  },
+                  {
+                    "kind": "export_specifier",
+                    "regex": "^default$|\\bas\\s+default$"
+                  }
+                ]
+              }
+            }
+          },
+          "files": [
+            "**/pages/**",
+            "**/app/**/page.ts",
+            "**/app/**/page.tsx",
+            "**/app/**/layout.ts",
+            "**/app/**/layout.tsx"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "This entry module has no default export. The router loads the page or layout as a default."
+  }
+}

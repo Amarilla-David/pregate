@@ -1,0 +1,4 @@
+
+export function unpaid(status: string): boolean {
+  return status != "paid";
+}

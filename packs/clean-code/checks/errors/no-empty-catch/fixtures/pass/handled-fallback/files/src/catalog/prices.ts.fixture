@@ -1,0 +1,13 @@
+import type { PriceApi } from "./price-api";
+
+export function parsePrice(text: string): number | null {
+  try {
+    return Number.parseFloat(text);
+  } catch {
+    return null;
+  }
+}
+
+export function priceOrDefault(api: PriceApi, sku: string): Promise<number> {
+  return api.price(sku).catch((error) => api.fallbackPrice(sku, error));
+}

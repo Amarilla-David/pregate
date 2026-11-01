@@ -1,0 +1,2 @@
+import Image from "next/image";
+export function Hero() { return <Image src="/a.png" alt="a" width={800} height={600} />; }

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/middleware/assets.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "sync-fs-in-app-use-middleware",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Calling fs.statSync inside an app.use middleware blocks the event loop on every matching request just like a route handler."
+  }
+}

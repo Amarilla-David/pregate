@@ -1,0 +1,6 @@
+import subprocess
+
+
+def clean():
+    subprocess.run(args="rm -rf build", shell=True)
+    subprocess.run(args=["ls", "build"], shell=True)

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/auth.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      }
+    ]
+  },
+  "trap": {
+    "family": "quoted-config",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "Quoting the keys, using a backtick value and declaring session after providers still configure database sessions for a Credentials provider."
+  }
+}

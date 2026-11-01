@@ -1,0 +1,2 @@
+def process(err: Exception) -> None:
+    raise NotImplemented from err

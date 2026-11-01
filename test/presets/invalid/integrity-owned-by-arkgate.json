@@ -1,0 +1,30 @@
+{
+  "preset": {
+    "name": "case",
+    "version": "1.0.0",
+    "engine": "0.1.0",
+    "sources": [
+      {
+        "ns": "core",
+        "kind": "builtin",
+        "version": "0.1.0"
+      },
+      {
+        "ns": "example",
+        "kind": "library",
+        "version": "0.1.0"
+      }
+    ],
+    "methodologies": [],
+    "coexist": {
+      "arkgate": {
+        "ownedByArkgate": [
+          "EVA-DYN-001"
+        ]
+      }
+    }
+  },
+  "errors": [
+    "coexist.arkgate.ownedByArkgate: core/EVA-DYN-001 is an integrity invariant; PREGATE always enforces it"
+  ]
+}

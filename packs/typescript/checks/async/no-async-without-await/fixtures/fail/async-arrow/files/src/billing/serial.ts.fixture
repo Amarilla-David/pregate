@@ -1,0 +1,1 @@
+export const nextSerial = async (): Promise<number> => 42;

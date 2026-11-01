@@ -1,0 +1,2 @@
+startDcouplrInspector(app, {maxEvents: 1e400});
+startDcouplrInspector(app, {maxEvents: limit / divisor});

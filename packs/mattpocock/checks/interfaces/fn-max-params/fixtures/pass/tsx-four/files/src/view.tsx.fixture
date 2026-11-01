@@ -1,0 +1,1 @@
+function render(a, b, c, d) { return <Total value={a} />; }

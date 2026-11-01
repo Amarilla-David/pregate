@@ -1,0 +1,7 @@
+export function nextAttempt(retries?: number): number {
+  if (retries !== undefined) {
+    retries++;
+    return retries;
+  }
+  return 1;
+}

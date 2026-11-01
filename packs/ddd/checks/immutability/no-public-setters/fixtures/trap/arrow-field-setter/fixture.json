@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["**/domain/**"] },
+  "target": "src/domain/ticket.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 6 }, { "line": 10 }] },
+  "trap": {
+    "family": "callable-property",
+    "origin": "corpus",
+    "discovered": "2026-10-01",
+    "note": "The setter is written as a public arrow-function property instead of a method; it is the same public write access."
+  }
+}

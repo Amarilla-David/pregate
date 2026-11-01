@@ -1,0 +1,15 @@
+export class Email {
+  readonly #normalized: string;
+
+  constructor(readonly value: string, private readonly verified: boolean) {
+    this.#normalized = value.trim().toLowerCase();
+  }
+
+  equals(other: Email): boolean {
+    return this.#normalized === other.#normalized;
+  }
+
+  verify(): Email {
+    return this.verified ? this : new Email(this.value, true);
+  }
+}

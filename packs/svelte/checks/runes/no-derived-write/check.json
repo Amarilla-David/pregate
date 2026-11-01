@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "svelte/runes/no-derived-write",
+  "version": "1.1.0",
+  "area": "runes",
+  "cardinality": "singleton",
+  "dimension": "svelte.derived-async",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "derived-async",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^\\$derived(\\.by)?$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "arrow_function",
+                            "regex": "^async\\b"
+                          },
+                          {
+                            "kind": "function_expression",
+                            "regex": "^async\\b"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "has": {
+                      "stopBy": "end",
+                      "kind": "await_expression"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} derives state from an async computation. $derived must stay synchronous and pure."
+  }
+}

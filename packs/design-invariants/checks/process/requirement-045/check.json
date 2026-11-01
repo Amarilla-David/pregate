@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/process/requirement-045",
+  "version": "1.0.0",
+  "area": "process",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r045",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-045"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-045 requires current passing project verification: {symbol}."
+  }
+}

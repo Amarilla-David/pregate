@@ -1,0 +1,5 @@
+declare const test: any;
+
+test.skip("flaky feature", () => {
+  // skipped
+});

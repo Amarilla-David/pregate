@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "mongodb/queries/no-unvalidated-objectid",
+  "version": "1.0.0",
+  "area": "queries",
+  "cardinality": "singleton",
+  "dimension": "mongodb.queries.unvalidated-objectid",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unvalidated-objectid",
+          "rule": {
+            "kind": "new_expression",
+            "regex": "new\\s+ObjectId\\s*\\([^)]*req\\."
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} constructs ObjectId from request input without validation. Check ObjectId.isValid() on a local first and reject invalid ids."
+  }
+}

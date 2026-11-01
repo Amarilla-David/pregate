@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "drizzle/schema/no-timestamp-without-mode",
+  "version": "1.0.0",
+  "area": "schema",
+  "cardinality": "singleton",
+  "dimension": "drizzle.timestamp-mode",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "timestamp-mode",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "regex": "^pgTable\\s*\\("
+              },
+              {
+                "regex": "\\btimestamp\\s*\\("
+              }
+            ],
+            "not": {
+              "regex": "\\b(withTimezone|mode)\\b"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} declares a timestamp with no mode or withTimezone. Pass { mode } so the driver does not guess the timezone."
+  }
+}

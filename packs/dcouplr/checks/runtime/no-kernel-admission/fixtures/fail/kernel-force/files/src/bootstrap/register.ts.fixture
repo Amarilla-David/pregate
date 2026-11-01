@@ -1,0 +1,3 @@
+app.dependencyAdmission.declareIntent('DKERNEL')
+  .addMandatoryInputFields({}).addValidationPolicy().addVerificationPolicy()
+  .addFactoryMethod((input, kernel) => ({ input, kernel })).registerForce();

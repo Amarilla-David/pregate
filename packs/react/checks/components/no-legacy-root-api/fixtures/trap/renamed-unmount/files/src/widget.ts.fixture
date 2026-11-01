@@ -1,0 +1,5 @@
+import { unmountComponentAtNode as teardown } from "react-dom";
+
+export function closeWidget(container: HTMLElement) {
+  teardown(container);
+}

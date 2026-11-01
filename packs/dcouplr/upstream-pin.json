@@ -1,0 +1,13 @@
+{
+  "version": "0.1.3-beta",
+  "integrity": "lPvTKxbikMRLKmPPGUnam0X6aH10H8OY+ND2Zx53UpANuFxmnj4S12GxAmwr0kFN1eLN5ORx2mycJTg4T7Dlcw==",
+  "files": {
+    "dist/index.mjs": "f1a45c5e0b04ab8335c003e330b8d4ecdfc2035729744a0393f2179b708f631a",
+    "dist/index.d.mts": "285d982b999cae6aded93752eff31d8ac6b595f7b4ffa079436d771903e4b91f",
+    "dist/index-C3YI4Tf9.d.mts": "afa638dcd1115af9d8dcc74c80a86815ca4bd3d3bbcf1cfb7748c758dec76daa",
+    "dist/eslint/index.mjs": "18d396ffe3be1b8b9f9c05397605102026f3ec91c7e4fe88d381db65799d7aba",
+    "dist/inspector/index.mjs": "f99953ae91aba51c2ffe832c0a9cde3a8221a723184ec804f829434fdf972b49",
+    "dist/inspector/index.d.mts": "5a25404c0dc776b961e75b7f65de8daf0398c5e02600fdcf05651ffcc0840f17",
+    "dist/inspector/debug-console/index.html": "cfef8c9735ebc4cf68624231253ad5088af1819c70b9ead161f2da686e5a1b0c"
+  }
+}

@@ -1,0 +1,7 @@
+
+export function find(row: Row): Payment {
+  return row as Payment;
+}
+
+interface Row { id: string }
+interface Payment { id: string }

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/cache/draft-store.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "empty-options",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "An options object with no expiry field still leaves the key immortal. EX, PX, or setEx must be visible."
+  }
+}

@@ -1,0 +1,11 @@
+import { readFile } from "fs/promises";
+import type { Stats } from "node:fs";
+export { hostname } from "os";
+
+export async function loadLines(path: string): Promise<string[]> {
+  return (await readFile(path, "utf8")).split("\n");
+}
+
+export function isLarge(stats: Stats): boolean {
+  return stats.size > 1_000_000;
+}

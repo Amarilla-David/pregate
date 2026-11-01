@@ -1,0 +1,7 @@
+import { useCartStore } from "./store";
+
+const cart = useCartStore();
+
+export function total(): number {
+  return cart.count;
+}

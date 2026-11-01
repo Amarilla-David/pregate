@@ -1,0 +1,9 @@
+import { useEffect, useState } from "react";
+export function User(props: { id: string }) {
+  const [name, setName] = useState("");
+  useEffect(async () => {
+    const res = await fetch("/api/user?id=" + props.id);
+    setName(await res.text());
+  }, [props.id]);
+  return <div>{name}</div>;
+}

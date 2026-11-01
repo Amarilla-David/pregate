@@ -1,0 +1,8 @@
+
+export function pay(invoice: Invoice): PayResult {
+  if (invoice.total < 0) return { ok: false, error: "negative" };
+  return { ok: true, value: invoice.id };
+}
+
+interface Invoice { id: string; total: number }
+type PayResult = { ok: true; value: string } | { ok: false; error: string };

@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "solana/key-custody",
+  "version": "1.0.1",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "SOL-SEC-001",
+      "check": "solana/security/no-secretkey-from-literal",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "practices (SOLANA-RULES.md), keys",
+        "paraphrase": "Keys never live in source; they arrive from the wallet or the environment."
+      },
+      "why": "A secret in source ships into git, logs, and every worktree; rotation then means rewriting history. Static syntax cannot prove values or provenance across helpers and imports; see BACKLOG.md for this rule's uncaught flow and warning default.",
+      "fixHint": "Build keypairs from the wallet or the environment at runtime.",
+      "avoid": "Base64 of the same bytes in source, or a JSON file with the key committed next to the code.",
+      "examples": {
+        "pass": "pass/from-env",
+        "fail": "fail/inline-array"
+      }
+    },
+    {
+      "id": "SOL-SEC-002",
+      "check": "solana/security/no-key-logging",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "practices (SOLANA-RULES.md), keys",
+        "paraphrase": "Key material is never logged, asked for, or stored."
+      },
+      "why": "A leftover log prints key material to whatever stdout production captures. Static syntax cannot prove values or provenance across helpers and imports; see BACKLOG.md for this rule's uncaught flow and warning default.",
+      "fixHint": "Log ids and balances, never mnemonics, secret keys, or seed phrases. Never ask for them either.",
+      "avoid": "Debug-level logging of the same values: debug output ships too.",
+      "examples": {
+        "pass": "pass/log-balance",
+        "fail": "fail/log-secret"
+      }
+    },
+    {
+      "id": "SOL-SEC-003",
+      "check": "solana/security/no-browser-key-storage",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Superteam AR stack guide",
+        "locator": "practices (SOLANA-RULES.md), keys",
+        "paraphrase": "Browser storage holds preferences, never key material."
+      },
+      "why": "Browser storage is readable by any script on the page, including an injected one. Static syntax cannot prove values or provenance across helpers and imports; see BACKLOG.md for this rule's uncaught flow and warning default.",
+      "fixHint": "Keep keys in the wallet. Store only preferences and public state in browser storage.",
+      "avoid": "Encrypting the key with a password that sits next to it in the same storage.",
+      "examples": {
+        "pass": "pass/set-theme",
+        "fail": "fail/set-keypair"
+      }
+    }
+  ]
+}

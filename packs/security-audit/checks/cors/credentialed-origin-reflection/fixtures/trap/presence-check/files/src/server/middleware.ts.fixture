@@ -1,0 +1,7 @@
+export function cors(req: Request, res: Response, next: () => void): void {
+  if (req.headers.origin) {
+    res.header("access-control-allow-origin", req.headers["origin"]);
+    res.header("access-control-allow-credentials", "true");
+  }
+  next();
+}

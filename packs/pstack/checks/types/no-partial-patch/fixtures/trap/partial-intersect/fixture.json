@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/update-id.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "partial-intersection",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Requiring id beside Partial still leaves every other field optional. The operation is still an unnamed patch."
+  }
+}

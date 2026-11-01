@@ -1,0 +1,8 @@
+import { defineProps, defineEmits } from "vue";
+
+const props = defineProps<{ title: string }>();
+const emit = defineEmits<{ (e: "update:title", value: string): void }>();
+
+export function rename(value: string): void {
+  emit("update:title", value);
+}

@@ -1,0 +1,4 @@
+import type { Col } from "./db";
+export async function project(col: Col): Promise<void> {
+  await col.aggregate([{ $project: { v: { $function: { body: "f(x)", args: ["$x"], lang: "js" } } } }]);
+}

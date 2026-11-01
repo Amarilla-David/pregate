@@ -1,0 +1,484 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/crypto/weak-secret-random",
+  "version": "1.0.0",
+  "area": "crypto",
+  "cardinality": "singleton",
+  "dimension": "security-audit.crypto.secret-randomness",
+  "minSeverity": null,
+  "languages": [
+    "typescript",
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "math-random-for-secret",
+          "utils": {
+            "function-boundary": {
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "generator_function_declaration"
+                },
+                {
+                  "kind": "method_definition"
+                },
+                {
+                  "kind": "arrow_function",
+                  "not": {
+                    "inside": {
+                      "kind": "arguments"
+                    }
+                  }
+                },
+                {
+                  "kind": "function_expression",
+                  "not": {
+                    "inside": {
+                      "kind": "arguments"
+                    }
+                  }
+                }
+              ]
+            },
+            "secret-function": {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "kind": "function_declaration"
+                    },
+                    {
+                      "kind": "method_definition"
+                    }
+                  ],
+                  "has": {
+                    "field": "name",
+                    "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                  }
+                },
+                {
+                  "any": [
+                    {
+                      "kind": "arrow_function"
+                    },
+                    {
+                      "kind": "function_expression"
+                    }
+                  ],
+                  "inside": {
+                    "any": [
+                      {
+                        "kind": "variable_declarator",
+                        "has": {
+                          "field": "name",
+                          "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                        }
+                      },
+                      {
+                        "kind": "pair",
+                        "has": {
+                          "field": "key",
+                          "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "call_expression",
+            "regex": "^Math\\.random\\(\\s*\\)$",
+            "any": [
+              {
+                "inside": {
+                  "stopBy": {
+                    "matches": "function-boundary"
+                  },
+                  "any": [
+                    {
+                      "kind": "variable_declarator",
+                      "has": {
+                        "field": "name",
+                        "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                      }
+                    },
+                    {
+                      "kind": "assignment_expression",
+                      "has": {
+                        "field": "left",
+                        "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                      }
+                    },
+                    {
+                      "kind": "pair",
+                      "has": {
+                        "field": "key",
+                        "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                      }
+                    },
+                    {
+                      "kind": "augmented_assignment_expression",
+                      "has": {
+                        "field": "left",
+                        "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "inside": {
+                  "stopBy": {
+                    "matches": "function-boundary"
+                  },
+                  "matches": "secret-function"
+                }
+              },
+              {
+                "inside": {
+                  "stopBy": {
+                    "matches": "function-boundary"
+                  },
+                  "any": [
+                    {
+                      "kind": "function_declaration",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "name",
+                            "pattern": "$F"
+                          }
+                        },
+                        {
+                          "inside": {
+                            "stopBy": "end",
+                            "kind": "program",
+                            "has": {
+                              "stopBy": "end",
+                              "kind": "call_expression",
+                              "has": {
+                                "field": "function",
+                                "kind": "identifier",
+                                "pattern": "$F"
+                              },
+                              "inside": {
+                                "stopBy": {
+                                  "matches": "function-boundary"
+                                },
+                                "any": [
+                                  {
+                                    "kind": "function_declaration"
+                                  },
+                                  {
+                                    "kind": "method_definition"
+                                  }
+                                ],
+                                "all": [
+                                  {
+                                    "has": {
+                                      "field": "name",
+                                      "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                                    }
+                                  },
+                                  {
+                                    "has": {
+                                      "field": "name",
+                                      "regex": "^(?:generate|gen|create|make|new|random|issue)[A-Z_]"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "arrow_function",
+                      "inside": {
+                        "kind": "variable_declarator",
+                        "all": [
+                          {
+                            "has": {
+                              "field": "name",
+                              "pattern": "$F"
+                            }
+                          },
+                          {
+                            "inside": {
+                              "stopBy": "end",
+                              "kind": "program",
+                              "has": {
+                                "stopBy": "end",
+                                "kind": "call_expression",
+                                "has": {
+                                  "field": "function",
+                                  "kind": "identifier",
+                                  "pattern": "$F"
+                                },
+                                "inside": {
+                                  "stopBy": {
+                                    "matches": "function-boundary"
+                                  },
+                                  "any": [
+                                    {
+                                      "kind": "function_declaration"
+                                    },
+                                    {
+                                      "kind": "method_definition"
+                                    }
+                                  ],
+                                  "all": [
+                                    {
+                                      "has": {
+                                        "field": "name",
+                                        "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                                      }
+                                    },
+                                    {
+                                      "has": {
+                                        "field": "name",
+                                        "regex": "^(?:generate|gen|create|make|new|random|issue)[A-Z_]"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "not": {
+              "any": [
+                {
+                  "inside": {
+                    "stopBy": {
+                      "matches": "function-boundary"
+                    },
+                    "any": [
+                      {
+                        "kind": "variable_declarator",
+                        "has": {
+                          "field": "name",
+                          "regex": "(?:^|\\.)(?:fetch|request|render|load|cancel|page|next|cursor|continuation|cache)(?:Token|_token)$|[Bb]oundary|BOUNDARY"
+                        }
+                      },
+                      {
+                        "kind": "assignment_expression",
+                        "has": {
+                          "field": "left",
+                          "regex": "(?:^|\\.)(?:fetch|request|render|load|cancel|page|next|cursor|continuation|cache)(?:Token|_token)$|[Bb]oundary|BOUNDARY"
+                        }
+                      },
+                      {
+                        "kind": "pair",
+                        "has": {
+                          "field": "key",
+                          "regex": "(?:^|\\.)(?:fetch|request|render|load|cancel|page|next|cursor|continuation|cache)(?:Token|_token)$|[Bb]oundary|BOUNDARY"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "@fn",
+                    "has": {
+                      "field": "name",
+                      "regex": "[Bb]oundary|BOUNDARY"
+                    }
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": {
+                      "matches": "function-boundary"
+                    },
+                    "kind": "variable_declarator",
+                    "has": {
+                      "field": "name",
+                      "regex": "^refreshToken$"
+                    },
+                    "inside": {
+                      "stopBy": "end",
+                      "any": [
+                        {
+                          "kind": "function_declaration"
+                        },
+                        {
+                          "kind": "variable_declarator"
+                        }
+                      ],
+                      "has": {
+                        "field": "name",
+                        "regex": "^use[A-Z]"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/test/**",
+            "**/__tests__/**",
+            "**/test_*.py",
+            "**/*_test.py",
+            "**/conftest.py",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "**/*.spec.ts",
+            "**/*.spec.tsx",
+            "**/*.test.js",
+            "**/*.spec.js",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ],
+      "python": [
+        {
+          "id": "random-module-for-secret",
+          "rule": {
+            "kind": "call",
+            "has": {
+              "field": "function",
+              "kind": "attribute",
+              "regex": "^random\\.(?:random|randint|randrange|choice|choices|sample|getrandbits|randbytes|uniform|shuffle)$"
+            },
+            "any": [
+              {
+                "inside": {
+                  "stopBy": {
+                    "kind": "function_definition"
+                  },
+                  "kind": "assignment",
+                  "has": {
+                    "field": "left",
+                    "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "stopBy": {
+                    "kind": "function_definition"
+                  },
+                  "kind": "augmented_assignment",
+                  "has": {
+                    "field": "left",
+                    "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "stopBy": {
+                    "kind": "function_definition"
+                  },
+                  "kind": "keyword_argument",
+                  "has": {
+                    "field": "name",
+                    "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "stopBy": {
+                    "kind": "function_definition"
+                  },
+                  "kind": "function_definition",
+                  "has": {
+                    "field": "name",
+                    "regex": "[Tt]oken|TOKEN|[Ss]ecret|SECRET|[Nn]once|NONCE|[Ss]alt|SALT|[Pp]ass(?:word|wd|phrase)|PASS(?:WORD|WD)|(?:^|_)(?:otp|OTP)(?:$|_|s)|Otp|OTP"
+                  }
+                }
+              }
+            ],
+            "not": {
+              "any": [
+                {
+                  "inside": {
+                    "stopBy": {
+                      "kind": "function_definition"
+                    },
+                    "any": [
+                      {
+                        "kind": "assignment",
+                        "has": {
+                          "field": "left",
+                          "regex": "(?:^|\\.)(?:fetch|request|render|load|cancel|page|next|cursor|continuation|cache)_token$|[Bb]oundary|BOUNDARY"
+                        }
+                      },
+                      {
+                        "kind": "keyword_argument",
+                        "has": {
+                          "field": "name",
+                          "regex": "(?:^|\\.)(?:fetch|request|render|load|cancel|page|next|cursor|continuation|cache)_token$|[Bb]oundary|BOUNDARY"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "function_definition",
+                    "has": {
+                      "field": "name",
+                      "regex": "[Bb]oundary|BOUNDARY"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/test/**",
+            "**/__tests__/**",
+            "**/test_*.py",
+            "**/*_test.py",
+            "**/conftest.py",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "**/*.spec.ts",
+            "**/*.spec.tsx",
+            "**/*.test.js",
+            "**/*.spec.js",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} generates a secret-like value with a non-cryptographic random source. Use crypto.randomBytes, crypto.getRandomValues or Python's secrets module."
+  }
+}

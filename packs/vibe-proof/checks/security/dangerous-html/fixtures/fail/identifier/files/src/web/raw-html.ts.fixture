@@ -1,0 +1,4 @@
+
+export function render(html: string): { dangerouslySetInnerHTML: { __html: string } } {
+  return { dangerouslySetInnerHTML: { __html: html } };
+}

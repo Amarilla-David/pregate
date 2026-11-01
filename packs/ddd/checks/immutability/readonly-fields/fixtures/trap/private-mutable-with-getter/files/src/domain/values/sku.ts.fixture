@@ -1,0 +1,16 @@
+export class Sku {
+  private code: string;
+
+  constructor(code: string) {
+    this.code = code;
+  }
+
+  get value(): string {
+    return this.code;
+  }
+
+  normalize(): Sku {
+    this.code = this.code.trim().toUpperCase();
+    return this;
+  }
+}

@@ -1,0 +1,6 @@
+
+import { total } from "../entities/order";
+
+export function place(lines: { amount: number }[]): number {
+  return total.length + lines.length;
+}

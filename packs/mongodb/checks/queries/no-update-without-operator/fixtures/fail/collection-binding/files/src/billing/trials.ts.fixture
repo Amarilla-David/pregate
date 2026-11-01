@@ -1,0 +1,10 @@
+import { MongoClient } from "mongodb";
+
+const client = new MongoClient(process.env.MONGO_URL ?? "mongodb://localhost:27017");
+const users = client.db("app").collection<User>("users");
+
+export async function downgradeTrials() {
+  await users.updateMany({ plan: "trial" }, { plan: "free" });
+}
+
+interface User { plan: string }

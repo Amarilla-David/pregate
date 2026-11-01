@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "python",
+  "params": { "paths": ["**/test_*.py", "**/*_test.py", "**/*_test.go"] },
+  "target": "tests/test_sync.py",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 3 }, { "line": 7 }] },
+  "trap": {
+    "family": "module-mark",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "A skip mark hidden in a pytestmark list skips the whole module, and a bare pytest.skip() call is a skip decorator written inside the body."
+  }
+}

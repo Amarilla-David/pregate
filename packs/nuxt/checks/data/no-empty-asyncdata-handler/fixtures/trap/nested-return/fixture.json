@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "composables/usePrices.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-return",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The only return sits in the inner map callback. The handler itself still resolves to undefined, so the payload has nothing to replay."
+  }
+}

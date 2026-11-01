@@ -1,0 +1,6 @@
+
+import { http } from "../frameworks/web";
+
+export function id(): string {
+  return http.name;
+}

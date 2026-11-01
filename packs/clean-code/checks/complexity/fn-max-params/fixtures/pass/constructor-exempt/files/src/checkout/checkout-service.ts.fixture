@@ -1,0 +1,17 @@
+import type { CartStore, Mailer, PaymentGateway, PriceList } from "./ports";
+
+export class CheckoutService {
+  constructor(
+    private readonly carts: CartStore,
+    private readonly prices: PriceList,
+    private readonly payments: PaymentGateway,
+    private readonly mailer: Mailer,
+  ) {}
+
+  async checkout(cartId: string, paymentToken: string): Promise<void> {
+    const cart = await this.carts.load(cartId);
+    const total = this.prices.total(cart);
+    await this.payments.charge(paymentToken, total);
+    await this.mailer.sendReceipt(cart.customerEmail, total);
+  }
+}

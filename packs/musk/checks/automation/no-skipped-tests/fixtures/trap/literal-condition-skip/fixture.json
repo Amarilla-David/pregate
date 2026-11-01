@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "e2e/report.spec.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 5 }, { "line": 6 }, { "line": 7 }, { "line": 8 }, { "line": 9 }, { "line": 10 }, { "line": 11 }, { "line": 12 }, { "line": 13 }, { "line": 16 }] },
+  "trap": {
+    "family": "literal-condition",
+    "origin": "corpus",
+    "discovered": "2026-10-24",
+    "note": "test.skip(condition, reason) is a runtime skip only when the condition reads a runtime value. A literal or constant-folded condition (1, !0, !!1, (true), 1 === 1, true as boolean), a string title with a callback, and Mocha's it.skip still skip unconditionally."
+  }
+}

@@ -1,0 +1,12 @@
+package orders
+
+import "testing"
+
+func TestRefunds(t *testing.T) {
+	t.Run("partial", func(st *testing.T) {
+		st.SkipNow()
+		if got := Refund(5); got != 5 {
+			st.Fatalf("Refund(5) = %d", got)
+		}
+	})
+}

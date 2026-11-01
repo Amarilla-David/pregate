@@ -1,0 +1,4 @@
+import { orders$ } from "./orders";
+export function loadOrders(): Promise<unknown> {
+  return orders$.toPromise();
+}

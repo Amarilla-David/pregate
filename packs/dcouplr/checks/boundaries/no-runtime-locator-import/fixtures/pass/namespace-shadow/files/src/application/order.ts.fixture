@@ -1,0 +1,2 @@
+import * as d from 'dcouplr';
+export const current = (d: { getDcouplr(): number }) => d.getDcouplr();

@@ -1,0 +1,3 @@
+stage.addValidationPolicy(() => ({ valid: 0, ...rest }));
+stage.addValidationPolicy(() => ({ ['valid']: true }));
+stage.addValidationPolicy(() => class Result { static valid = true; });

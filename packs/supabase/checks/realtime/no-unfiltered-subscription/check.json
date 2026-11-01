@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "supabase/realtime/no-unfiltered-subscription",
+  "version": "1.0.0",
+  "area": "realtime",
+  "cardinality": "singleton",
+  "dimension": "supabase.unfiltered-subscription",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "unfiltered-channel",
+          "rule": {
+            "kind": "expression_statement",
+            "regex": "\\.channel\\s*\\(",
+            "not": {
+              "regex": "\\.on\\s*\\("
+            }
+          }
+        },
+        {
+          "id": "assigned-channel",
+          "rule": {
+            "kind": "variable_declarator",
+            "regex": "\\.channel\\s*\\(",
+            "not": {
+              "regex": "\\.on\\s*\\("
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} subscribes to a channel with no .on() filter in the same statement. Add an .on() handler with event and table scope so the client does not stream everything."
+  }
+}

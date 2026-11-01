@@ -1,0 +1,27 @@
+{
+  "id": "core/invariants/locked-build",
+  "version": "1.1.0",
+  "area": "invariants",
+  "cardinality": "singleton",
+  "dimension": "invariant.r050",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "CORE-INV-050"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "CORE-INV-050 requires current passing project verification: {symbol}."
+  }
+}

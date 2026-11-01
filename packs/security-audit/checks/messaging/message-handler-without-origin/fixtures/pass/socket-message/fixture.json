@@ -1,0 +1,9 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/live/feed.ts",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

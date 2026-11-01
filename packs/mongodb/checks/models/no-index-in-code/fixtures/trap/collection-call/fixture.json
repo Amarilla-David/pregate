@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mongo/index-collection.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "collection-call",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Reaching the collection through db.collection() does not move the build out of the request path. The index still builds inline."
+  }
+}

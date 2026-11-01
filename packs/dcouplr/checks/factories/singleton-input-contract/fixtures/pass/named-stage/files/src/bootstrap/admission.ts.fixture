@@ -1,0 +1,1 @@
+const stage = admission.addFactoryMethod(creator); stage.registerSingleton(null);

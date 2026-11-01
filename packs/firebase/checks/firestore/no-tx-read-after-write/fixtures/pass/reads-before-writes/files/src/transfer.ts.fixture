@@ -1,0 +1,10 @@
+interface Tx { get(ref: string): Promise<{ data(): { bal: number } }>; update(ref: string, d: Record<string, number>): void; }
+declare function runTransaction(db: unknown, fn: (tx: Tx) => Promise<void>): Promise<void>;
+export async function transfer(db: unknown, fromRef: string, toRef: string): Promise<void> {
+  await runTransaction(db, async (tx) => {
+    const fromSnap = await tx.get(fromRef);
+    const toSnap = await tx.get(toRef);
+    tx.update(fromRef, { bal: fromSnap.data().bal - 10 });
+    tx.update(toRef, { bal: toSnap.data().bal + 10 });
+  });
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "architecture/cqrs/query-mutates",
+  "version": "1.0.0",
+  "area": "cqrs",
+  "cardinality": "singleton",
+  "dimension": "cqrs.query-mutate",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "query-write",
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "property",
+                        "regex": "^(save|insert|update|delete|remove|upsert|create|createMany|updateMany|deleteMany)$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "stopBy": "end",
+                        "field": "object",
+                        "kind": "identifier",
+                        "regex": "^(db|tx|trx|repo|repository|store|client|prisma|em|conn)$"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "kind": "subscript_expression",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "index",
+                        "regex": "^[\"'](save|insert|update|delete|remove|upsert|create)[\"']$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "object",
+                        "regex": "^(db|tx|trx|repo|repository|store|client|prisma|em|conn)$"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "files": [
+            "**/queries/**",
+            "**/query/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} writes through a store from a query module. A query returns a read model and does not change state."
+  }
+}

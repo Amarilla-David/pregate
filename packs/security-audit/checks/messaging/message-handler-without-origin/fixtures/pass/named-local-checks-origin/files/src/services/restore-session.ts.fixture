@@ -1,0 +1,9 @@
+const TRUSTED = "https://app.example.com";
+
+export function restoreSession(onSuccess: () => void) {
+  const handlePostMessage = (event: MessageEvent) => {
+    if (event.origin !== TRUSTED) return;
+    if (event.data.type === "session-restored") onSuccess();
+  };
+  window.addEventListener("message", handlePostMessage, false);
+}

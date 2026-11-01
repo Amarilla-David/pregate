@@ -1,0 +1,3 @@
+class Item:
+    def __eq__(self, other: object) -> object:
+        return NotImplemented

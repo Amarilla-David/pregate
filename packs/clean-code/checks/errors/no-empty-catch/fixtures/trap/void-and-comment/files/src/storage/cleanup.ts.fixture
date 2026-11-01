@@ -1,0 +1,19 @@
+import type { Store } from "./store";
+
+export function removeTemp(store: Store, key: string): void {
+  try {
+    store.remove(key);
+  } catch (error) {
+    void error;
+  }
+}
+
+export function removeAll(store: Store, keys: string[]): void {
+  for (const key of keys) {
+    try {
+      store.remove(key);
+    } catch {
+      // best effort: the next run retries
+    }
+  }
+}

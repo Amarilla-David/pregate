@@ -1,0 +1,23 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/embed/bridge.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      },
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "type-assertion",
+    "note": "A TypeScript non-null assertion on top or contentWindow names the same receiver.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

@@ -1,0 +1,1 @@
+app.dependencyAdmission.declareIntent('DKERNEL').transform().register();

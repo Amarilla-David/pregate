@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/shared/http.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      },
+      {
+        "line": 3
+      },
+      {
+        "line": 8
+      }
+    ]
+  },
+  "trap": {
+    "family": "aliased-http-module",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "An import alias hides the module name at the use site and a re-export never names it in an imports array, but both still pull in the deprecated HttpClient NgModules."
+  }
+}

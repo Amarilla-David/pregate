@@ -1,0 +1,3 @@
+// A query that selects columns named origin and credentials is not a CORS policy.
+export const rows = db.lead.findMany({ select: { origin: true, credentials: true } });
+declare const db: { lead: { findMany(q: object): unknown } };

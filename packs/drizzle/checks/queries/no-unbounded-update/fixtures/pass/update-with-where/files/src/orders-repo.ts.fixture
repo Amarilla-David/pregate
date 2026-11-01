@@ -1,0 +1,6 @@
+declare const db: { update(t: unknown): { set(v: Record<string, unknown>): { where(c: unknown): Promise<unknown> } } };
+declare function eq(a: unknown, b: string): unknown;
+declare const orders: { id: unknown };
+export async function markPaid(id: string): Promise<void> {
+  await db.update(orders).set({ status: "paid" }).where(eq(orders.id, id));
+}

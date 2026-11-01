@@ -1,0 +1,21 @@
+import { TestBed } from "@angular/core/testing";
+import { provideHttpClient } from "@angular/common/http";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { HttpClientModuleOptions } from "../config/http-options";
+import { OrdersService } from "./orders.service";
+
+describe("OrdersService", () => {
+  const options: HttpClientModuleOptions = { retries: 0 };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: "httpOptions", useValue: options }],
+    });
+  });
+
+  it("loads orders", () => {
+    const http = TestBed.inject(HttpTestingController);
+    TestBed.inject(OrdersService).list().subscribe();
+    http.expectOne("/api/orders").flush([]);
+  });
+});

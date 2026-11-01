@@ -1,0 +1,1 @@
+test("total", () => { expect(total([10, 5])).toBe(15); });

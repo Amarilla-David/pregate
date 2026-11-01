@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-findmany-without-pagination",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.findfirst-orderby",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "findfirst-no-orderby",
+          "rule": {
+            "kind": "call_expression",
+            "regex": "\\.findFirst(OrThrow)?\\s*\\(",
+            "not": {
+              "regex": "orderBy"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} picks one row with findFirst and no orderBy, so the winner is nondeterministic. Add an orderBy so the same row wins every time."
+  }
+}

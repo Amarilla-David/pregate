@@ -1,0 +1,5 @@
+import { redis } from "./client";
+
+export async function listStale(): Promise<string[]> {
+  return redis.keys("cache:*");
+}

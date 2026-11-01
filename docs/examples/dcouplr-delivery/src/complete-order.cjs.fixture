@@ -1,0 +1,4 @@
+exports.completeOrder = async function completeOrder(kernel, id) {
+  await kernel.event.raiseLocalBlocking({ eventType: 'order.completed', payload: { id } });
+  return { status: 'completed', id };
+};

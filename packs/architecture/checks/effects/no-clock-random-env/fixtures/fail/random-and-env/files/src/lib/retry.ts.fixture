@@ -1,0 +1,6 @@
+const BASE_DELAY_MS = Number(process.env.RETRY_BASE_MS ?? 100);
+
+export function backoff(attempt: number): number {
+  const jitter = Math.random() * BASE_DELAY_MS;
+  return BASE_DELAY_MS * 2 ** attempt + jitter;
+}

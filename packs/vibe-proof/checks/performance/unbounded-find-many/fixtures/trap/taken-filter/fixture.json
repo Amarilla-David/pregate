@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/taken-invoices.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "taken-not-take",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A filter named taken is not a page size. The query still has no take, limit, or cursor."
+  }
+}

@@ -1,0 +1,8 @@
+export * from "@solana/spl-token";
+const { getMint } = require("@solana/spl-token");
+
+export async function loadLayout() {
+  return import("@solana/spl-token/lib/esm/state/mint.js");
+}
+
+export { getMint };

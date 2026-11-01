@@ -1,0 +1,8 @@
+export async function closeTeam(teamId: number) {
+  await db.transaction(async (tx) => {
+    const team = await db.query.teams.findFirst({ where: eq(teams.id, teamId) });
+    if (!team) return;
+    await tx.delete(members).where(eq(members.teamId, team.id));
+    await tx.update(teams).set({ closedAt: new Date() }).where(eq(teams.id, team.id));
+  });
+}

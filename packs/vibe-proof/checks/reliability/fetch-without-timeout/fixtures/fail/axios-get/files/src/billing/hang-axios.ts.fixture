@@ -1,0 +1,6 @@
+
+export async function load(url: string, axios: Axios): Promise<unknown> {
+  return axios.get(url);
+}
+
+interface Axios { get(url: string): Promise<unknown> }

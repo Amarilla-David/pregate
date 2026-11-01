@@ -1,0 +1,7 @@
+declare function loadProfile(id: string): Promise<string>;
+
+const profile = $derived(async () => loadProfile("ada"));
+
+export function text(): string {
+  return "profile";
+}

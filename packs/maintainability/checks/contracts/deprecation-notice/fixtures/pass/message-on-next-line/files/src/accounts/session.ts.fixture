@@ -1,0 +1,26 @@
+export function openSession(user: string): string {
+  return user;
+}
+
+/**
+ * Starts a session for the user.
+ *
+ * @deprecated
+ *   Use openSession. Removed when the legacy login page is deleted.
+ * @param user - the account name
+ */
+export function login(user: string): string {
+  return openSession(user);
+}
+
+/**
+ * @deprecated
+ * @see openSession
+ */
+export const signIn = login;
+
+// @deprecated
+export const startSession = openSession;
+
+/* Older helpers are tagged @deprecated */
+export const legacyLogin = login;

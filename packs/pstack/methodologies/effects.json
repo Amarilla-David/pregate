@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "pstack/effects",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PS-IDEM-001",
+      "check": "pstack/effects/payment-create-has-idempotency-key",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "pstack principles (boundary, domain, reader load, idempotency, legacy deletion, proof)",
+        "locator": "make operations idempotent",
+        "paraphrase": "A command that can run twice because of a crash or a retry must converge to the same end state. A payment create without a stable key does not."
+      },
+      "why": "Those calls move money. Without a key, a timeout and a retry post the operation twice.",
+      "fixHint": "Pass an idempotency key that is stable for the business operation, not a fresh random value per attempt.",
+      "avoid": "The word only has to appear in the call's text, so a comment above the call does not count and a decoy field name that contains idempotency does. Calls that are not on this object list are out of scope. Designing the key so a retry converges is still judgment.",
+      "examples": {
+        "pass": "pass/intent-with-key",
+        "fail": "fail/charge-without-key"
+      }
+    }
+  ]
+}

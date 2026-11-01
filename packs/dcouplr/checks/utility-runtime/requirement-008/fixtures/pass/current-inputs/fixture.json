@@ -1,0 +1,32 @@
+{
+  "language": "typescript",
+  "params": {
+    "verifier": "DCP-UTILITY-RUNTIME-008"
+  },
+  "context": {
+    "fitness": {
+      "contractHash": "reviewed-contract-v1",
+      "inputHash": "current-project-inputs",
+      "command": [
+        "fixture-verifier"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "contractHash": "reviewed-contract-v1",
+        "inputHash": "current-project-inputs",
+        "verifier": "DCP-UTILITY-RUNTIME-008",
+        "command": [
+          "fixture-verifier"
+        ],
+        "exitCode": 0,
+        "completed": true,
+        "recordedAt": "2026-10-05T00:00:00Z"
+      }
+    }
+  },
+  "target": ".pregate/preset.json",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

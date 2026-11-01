@@ -1,0 +1,10 @@
+import { fetchOrders, type View } from "./view";
+
+export async function refresh(view: View): Promise<void> {
+  view.setLoading(true);
+  try {
+    view.show(await fetchOrders());
+  } finally {
+    view.setLoading(false);
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "vibe-proof/errors/stack-in-response",
+  "version": "1.0.0",
+  "area": "errors",
+  "cardinality": "singleton",
+  "dimension": "errors.stack-response",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "stack-response",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "\\.(send|json|end|write|status)$"
+                }
+              },
+              {
+                "has": {
+                  "stopBy": "end",
+                  "any": [
+                    {
+                      "kind": "member_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "property",
+                            "regex": "^stack$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "regex": "^(err|error|exception)$"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "subscript_expression",
+                      "all": [
+                        {
+                          "has": {
+                            "field": "index",
+                            "regex": "^[\"']stack[\"']$"
+                          }
+                        },
+                        {
+                          "has": {
+                            "field": "object",
+                            "regex": "^(err|error|exception)$"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sends an error stack to the client."
+  }
+}

@@ -1,0 +1,1 @@
+export function Raw() { return <img src="/a.png" alt="a"></img>; }

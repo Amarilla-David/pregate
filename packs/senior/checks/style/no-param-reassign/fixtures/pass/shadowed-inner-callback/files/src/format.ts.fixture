@@ -1,0 +1,7 @@
+export function formatItems(item: string, values: readonly number[]): string[] {
+  return values.map((x) => {
+    let item = String(x);
+    item += "!";
+    return item;
+  });
+}

@@ -1,0 +1,10 @@
+export function Menu(props: { onOpen: () => void }) {
+  return (
+    <nav>
+      <button type="button" onClick={props.onOpen}>
+        Open
+      </button>
+      <a href="#details">Details</a>
+    </nav>
+  );
+}

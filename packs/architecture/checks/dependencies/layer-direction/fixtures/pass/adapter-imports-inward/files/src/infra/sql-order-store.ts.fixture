@@ -1,0 +1,11 @@
+import type { Pool } from "pg";
+import type { OrderStore } from "../application/order-store";
+import { Order } from "../domain/order";
+
+export class SqlOrderStore implements OrderStore {
+  constructor(private readonly pool: Pool) {}
+
+  async save(order: Order): Promise<void> {
+    await this.pool.query("insert into orders (id) values ($1)", [order.id]);
+  }
+}

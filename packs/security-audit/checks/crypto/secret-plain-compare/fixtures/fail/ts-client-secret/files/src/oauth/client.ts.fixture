@@ -1,0 +1,3 @@
+export function authenticate(req: { body: { client_secret: string } }, app: { clientSecret: string }) {
+  return req.body.client_secret == app.clientSecret;
+}

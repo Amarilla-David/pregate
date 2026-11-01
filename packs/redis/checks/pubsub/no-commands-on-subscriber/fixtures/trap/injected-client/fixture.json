@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/presence/presence.service.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 7
+      }
+    ]
+  },
+  "trap": {
+    "family": "injected-subscriber-client",
+    "origin": "forge",
+    "discovered": "2026-10-09",
+    "note": "The subscribe and the get sit in different methods of an injected client, so they look independent, but they share one connection that enters subscriber mode."
+  }
+}

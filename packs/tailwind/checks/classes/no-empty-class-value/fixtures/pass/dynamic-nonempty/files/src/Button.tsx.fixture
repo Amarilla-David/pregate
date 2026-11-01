@@ -1,0 +1,4 @@
+declare function clsx(...args: unknown[]): string;
+export function Button({ active }: { active: boolean }) {
+  return <button className={clsx("px-4", active && "bg-blue-600")}>Save</button>;
+}

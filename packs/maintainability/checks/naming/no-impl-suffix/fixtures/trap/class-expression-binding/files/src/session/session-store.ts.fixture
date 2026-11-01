@@ -1,0 +1,11 @@
+export interface SessionStore {
+  read(id: string): string | undefined;
+}
+
+export const SessionStoreImpl = class implements SessionStore {
+  private readonly sessions = new Map<string, string>();
+
+  read(id: string): string | undefined {
+    return this.sessions.get(id);
+  }
+};

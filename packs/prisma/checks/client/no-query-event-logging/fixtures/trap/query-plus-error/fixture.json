@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/shop/orders.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "multi-level-log",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Adding error next to query does not cancel the query stream. One query entry still logs every statement."
+  }
+}

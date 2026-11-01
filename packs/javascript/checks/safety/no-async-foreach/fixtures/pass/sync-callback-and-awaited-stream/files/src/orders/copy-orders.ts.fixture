@@ -1,0 +1,13 @@
+import type { Readable } from "node:stream";
+
+export async function copyOrders(
+  ids: readonly string[],
+  seen: Set<string>,
+  source: Readable,
+  sink: (chunk: unknown) => Promise<void>,
+): Promise<void> {
+  ids.forEach((id) => seen.add(id));
+  await source.forEach(async (chunk) => {
+    await sink(chunk);
+  });
+}

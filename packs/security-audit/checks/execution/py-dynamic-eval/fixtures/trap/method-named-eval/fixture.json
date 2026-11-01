@@ -1,0 +1,20 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "app/model.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "method-name",
+    "origin": "forge",
+    "discovered": "2026-10-24",
+    "note": "A method named eval or exec (PyTorch modules, database cursors) is not the builtin."
+  }
+}

@@ -1,0 +1,7 @@
+import { notify, type Order } from "./notify-client";
+
+export function notifyAll(orders: readonly Order[]): void {
+  orders.forEach(async (order) => {
+    await notify(order.customerId);
+  });
+}

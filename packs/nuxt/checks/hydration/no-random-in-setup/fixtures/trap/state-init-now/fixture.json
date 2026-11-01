@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/composables/useStamp.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "deferred-nondeterminism",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "A lazy useState initializer still runs during SSR setup, so server and client stamps differ. Only server birth or post-mount birth avoids the mismatch."
+  }
+}

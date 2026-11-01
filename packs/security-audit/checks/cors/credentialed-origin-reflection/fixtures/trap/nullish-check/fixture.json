@@ -1,0 +1,20 @@
+{
+  "language": "typescript",
+  "params": {},
+  "target": "src/server/middleware.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "partial-check",
+    "note": "Comparing the Origin with undefined or testing its type only proves the header is present.",
+    "origin": "forge",
+    "discovered": "2026-10-24"
+  }
+}

@@ -1,0 +1,4 @@
+import type { ClientSession } from "mongodb";
+export async function run(s: ClientSession): Promise<void> {
+  await s.startTransaction();
+}

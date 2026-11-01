@@ -1,0 +1,5 @@
+interface Order { id: string }
+export class InvoiceEditor {
+  step0(order: Order): string { return order.id; }
+  step1(order: Order): string { return order.id; }
+}

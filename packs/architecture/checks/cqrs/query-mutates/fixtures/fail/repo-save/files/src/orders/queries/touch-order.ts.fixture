@@ -1,0 +1,7 @@
+
+export async function touch(order: Order, repo: Repo): Promise<void> {
+  await repo.save(order);
+}
+
+interface Order { id: string }
+interface Repo { save(order: Order): Promise<void> }

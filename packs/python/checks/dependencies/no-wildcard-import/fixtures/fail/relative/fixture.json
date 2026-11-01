@@ -1,0 +1,14 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/shop/views.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  }
+}

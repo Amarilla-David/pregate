@@ -1,0 +1,6 @@
+
+export function poll(): void {
+  setInterval(() => tick(), 1000);
+}
+
+function tick(): void {}

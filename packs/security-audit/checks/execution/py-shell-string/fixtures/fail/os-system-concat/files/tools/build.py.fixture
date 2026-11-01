@@ -1,0 +1,7 @@
+import os
+
+
+def clean(path, mode):
+    os.system("rm -rf " + path)
+    os.popen("chmod %s %s" % (mode, path))
+    os.system("touch {}".format(path))

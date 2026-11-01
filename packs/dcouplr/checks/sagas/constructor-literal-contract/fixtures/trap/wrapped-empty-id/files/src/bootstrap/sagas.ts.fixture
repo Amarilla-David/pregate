@@ -1,0 +1,1 @@
+new (dcouplr.DStructuredSaga as Constructor)('orders', (' ' as string), injectedKernel);

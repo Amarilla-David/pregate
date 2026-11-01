@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "security-audit/execution/py-dynamic-eval",
+  "version": "1.0.0",
+  "area": "execution",
+  "cardinality": "singleton",
+  "dimension": "security-audit.execution.python-dynamic-eval",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "python": [
+        {
+          "id": "eval-exec-non-literal",
+          "utils": {
+            "plain-string": {
+              "kind": "string",
+              "not": {
+                "has": {
+                  "kind": "string_start",
+                  "regex": "[fFtT]"
+                }
+              }
+            },
+            "literal": {
+              "any": [
+                {
+                  "matches": "plain-string"
+                },
+                {
+                  "kind": "concatenated_string",
+                  "not": {
+                    "has": {
+                      "kind": "string",
+                      "not": {
+                        "matches": "plain-string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "call",
+                  "all": [
+                    {
+                      "has": {
+                        "field": "function",
+                        "kind": "identifier",
+                        "regex": "^compile$"
+                      }
+                    },
+                    {
+                      "has": {
+                        "field": "arguments",
+                        "has": {
+                          "nthChild": 1,
+                          "matches": "literal"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "call",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "identifier",
+                  "regex": "^(?:eval|exec)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": 1,
+                    "not": {
+                      "any": [
+                        {
+                          "matches": "literal"
+                        },
+                        {
+                          "kind": "keyword_argument"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "ignores": [
+            "**/tests/**",
+            "**/test/**",
+            "**/__tests__/**",
+            "**/test_*.py",
+            "**/*_test.py",
+            "**/conftest.py",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "**/*.spec.ts",
+            "**/*.spec.tsx",
+            "**/*.test.js",
+            "**/*.spec.js",
+            "**/vendor/**",
+            "**/thirdparty/**",
+            "**/third_party/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} evaluates code that is not a literal. Parse data with ast.literal_eval or json, or dispatch to a fixed set of functions."
+  }
+}

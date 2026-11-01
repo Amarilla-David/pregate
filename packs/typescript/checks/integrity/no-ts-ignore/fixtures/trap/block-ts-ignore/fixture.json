@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/block.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "block-comment-directive",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "A block comment /* @ts-ignore */ suppresses TypeScript compiler errors on the following line just like // @ts-ignore."
+  }
+}

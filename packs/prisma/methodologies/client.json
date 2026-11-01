@@ -1,0 +1,157 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "prisma/client",
+  "version": "1.1.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PRISMA-RAW-001",
+      "check": "prisma/client/no-raw-unsafe",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, Raw queries",
+        "locator": "section on $queryRawUnsafe and $executeRawUnsafe",
+        "paraphrase": "The Unsafe raw methods run the string as SQL. Values are safe only as extra arguments bound to $1 placeholders; text built into the string is not parameterized."
+      },
+      "why": "SQL built at runtime and passed to an Unsafe call puts caller input straight into the query, so one malicious value owns it.",
+      "fixHint": "Switch to the $queryRaw or $executeRaw template form and interpolate values with ${}, or keep a constant SQL string with $1 placeholders and pass the values as extra arguments.",
+      "avoid": "Wrapping the string in a helper or awaiting the call does not parameterize it. A bare variable or an interpolated template is still runtime SQL. A constant string literal with $n placeholders passes; values given as extra arguments are bound.",
+      "examples": {
+        "pass": "pass/template-queryraw",
+        "fail": "fail/unsafe-query-string"
+      }
+    },
+    {
+      "id": "PRISMA-SQL-001",
+      "check": "prisma/client/no-raw-interpolation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, Raw queries",
+        "locator": "section on template versus string arguments to $queryRaw",
+        "paraphrase": "Only the template form of $queryRaw and $executeRaw parameterizes values. A plain string argument is sent as-is, so concatenation reopens injection."
+      },
+      "why": "String concatenation inside a raw call builds SQL by hand, defeating the parameterization the template form would have applied.",
+      "fixHint": "Rewrite the call as a template literal and interpolate each value with ${} instead of concatenating.",
+      "avoid": "$executeRaw has the same hole as $queryRaw. A constant string with no concatenation is fine and stays green.",
+      "examples": {
+        "pass": "pass/template-query",
+        "fail": "fail/concat-query"
+      },
+      "relations": [
+        {
+          "with": "prisma/PRISMA-RAW-002",
+          "kind": "duplicates",
+          "why": "$queryRaw(Prisma.raw(\"...\" + value)) is reported by both rules: this one sees + in the raw call's arguments, PRISMA-RAW-002 sees the assembled Prisma.raw text.",
+          "settle": "Keep both. Moving the value into a $queryRaw tagged template or Prisma.sql satisfies both; PRISMA-RAW-002 also covers Prisma.raw fragments built outside the raw call."
+        }
+      ]
+    },
+    {
+      "id": "PRISMA-RAW-002",
+      "check": "prisma/client/no-prisma-raw-interpolation",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, Raw queries",
+        "locator": "SQL injection prevention, unsafe use of $queryRaw and $executeRaw (misuse of Prisma.raw); https://www.prisma.io/docs/orm/prisma-client/using-raw-sql/raw-queries#sql-injection-prevention",
+        "paraphrase": "Prisma.raw inserts its text into the query unescaped. The docs list Prisma.raw over an interpolated template as vulnerable to SQL injection, and use Prisma.sql or the tagged template for values."
+      },
+      "why": "Prisma.raw turns its text into SQL syntax. A value interpolated or concatenated into that text escapes parameterization, even inside an otherwise safe $queryRaw template.",
+      "fixHint": "Pass the value as ${value} in a $queryRaw tagged template or Prisma.sql, so it travels as a parameter. Keep Prisma.raw for constant fragments or identifiers chosen from a fixed allowlist.",
+      "avoid": "Nesting Prisma.raw inside a $queryRaw tagged template does not parameterize its text. The rule sees a template with ${} or + in the first Prisma.raw argument; Prisma.raw(variable) passes because an allowlisted identifier and raw input look the same here.",
+      "examples": {
+        "pass": "pass/constant-fragment",
+        "fail": "fail/template-interpolation"
+      },
+      "relations": [
+        {
+          "with": "vibe-proof/VP-SQL-001",
+          "kind": "duplicates",
+          "why": "Prisma.raw(`...${value}`) is a raw method with an interpolated first argument, so both rules report it.",
+          "settle": "Keep both. A $queryRaw tagged template or Prisma.sql satisfies both; PRISMA-RAW-002 also catches + concatenation."
+        },
+        {
+          "with": "prisma/PRISMA-SQL-001",
+          "kind": "duplicates",
+          "why": "$queryRaw(Prisma.raw(\"...\" + value)) is reported by both rules: PRISMA-SQL-001 sees + in the raw call's arguments, this one sees the assembled Prisma.raw text.",
+          "settle": "Keep both. Moving the value into a $queryRaw tagged template or Prisma.sql satisfies both."
+        }
+      ]
+    },
+    {
+      "id": "PRISMA-SELECT-001",
+      "check": "prisma/client/no-select-star-include",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Prisma docs, Select and include",
+        "locator": "section on include with nested select",
+        "paraphrase": "include with `: true` loads the whole related record. Nesting a select keeps the join but fetches only the named fields."
+      },
+      "why": "A full-relation include pulls every column of every related row, including fields the caller never reads and should never see.",
+      "fixHint": "Replace `: true` with a nested select naming the fields the caller needs, or add take to bound the relation.",
+      "avoid": "Pushing `: true` one level down under a nested include is the same over-fetch. select without include is already scoped. Prisma documents include with `: true` as a supported query, so this stays advisory: whether the extra columns matter depends on the caller.",
+      "examples": {
+        "pass": "pass/nested-select",
+        "fail": "fail/full-relation"
+      }
+    },
+    {
+      "id": "PRISMA-TAKE-001",
+      "check": "prisma/client/no-findmany-without-pagination",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, findFirst and sorting",
+        "locator": "section on orderBy with findFirst",
+        "paraphrase": "findFirst without an orderBy returns whichever row the database happens to visit first. An explicit order makes the pick deterministic."
+      },
+      "why": "Without an order the same query returns different rows across replicas, vacuums, and plan changes, so behavior drifts silently.",
+      "fixHint": "Add an orderBy that names the winner, such as createdAt descending. Keep it on both findFirst and findFirstOrThrow.",
+      "avoid": "OrThrow only changes the missing-row case. It does not order anything.",
+      "examples": {
+        "pass": "pass/with-orderby",
+        "fail": "fail/bare-where"
+      }
+    },
+    {
+      "id": "PRISMA-CONNECT-001",
+      "check": "prisma/client/no-multiple-clients",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, connection management",
+        "locator": "section on instantiating PrismaClient per request",
+        "paraphrase": "Each PrismaClient owns a connection pool. Constructing one per request exhausts the database, so handlers must share a singleton."
+      },
+      "why": "A fresh client per request opens a fresh pool per request, and the database runs out of connections under load.",
+      "fixHint": "Import the shared client from the server db module, which keeps one instance on globalThis across reloads.",
+      "avoid": "Exporting the new client from the route file still builds one pool per route module. The singleton module itself is the only place that may construct.",
+      "examples": {
+        "pass": "pass/shared-import",
+        "fail": "fail/route-new"
+      }
+    },
+    {
+      "id": "PRISMA-LOG-001",
+      "check": "prisma/client/no-query-event-logging",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Prisma docs, logging",
+        "locator": "section on the query log level",
+        "paraphrase": "The query log level emits every SQL statement with its bound parameters. Production clients should log errors, not queries."
+      },
+      "why": "Query logs carry raw SQL and bound values into log storage, leaking personal data and query structure to anyone with log access.",
+      "fixHint": "Set log to error only, or drop the log option. Keep query logging behind a local debug flag.",
+      "avoid": "Appending error next to query keeps the query stream. The object form with level query is the same leak.",
+      "examples": {
+        "pass": "pass/error-log",
+        "fail": "fail/query-array"
+      }
+    }
+  ]
+}

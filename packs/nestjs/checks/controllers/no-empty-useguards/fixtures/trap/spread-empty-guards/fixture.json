@@ -1,0 +1,1 @@
+{"$schema": "../../../../../../../schema/fixture.v1.json", "before": null, "expect": {"verdict": "fail", "violations": [{"line": 5}]}, "language": "typescript", "params": {}, "target": "src/orders/spread.ts", "trap": {"discovered": "2026-10-03", "family": "spread-empty", "note": "Spreading an empty array looks like guard composition but protects nothing.", "origin": "forge"}}

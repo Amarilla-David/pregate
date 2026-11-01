@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/UnsafeWidget.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "unsafe-lifecycle-prefix",
+    "origin": "forge",
+    "discovered": "2026-10-18",
+    "note": "Renaming the method to UNSAFE_componentWillUpdate keeps the same unsafe pre-commit lifecycle semantics."
+  }
+}

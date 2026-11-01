@@ -1,0 +1,11 @@
+import format from "pg-format";
+import { pool } from "./pool";
+
+const SORTABLE = new Set(["created_at", "total"]);
+
+export async function report(table: string, sort: string, since: Date) {
+  const column = SORTABLE.has(sort) ? sort : "created_at";
+  const text = format("SELECT id, total FROM %I WHERE created_at > $1 ORDER BY %I DESC", table, column);
+  const res = await pool.query(text, [since]);
+  return res.rows;
+}

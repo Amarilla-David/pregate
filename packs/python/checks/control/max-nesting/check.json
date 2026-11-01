@@ -1,0 +1,31 @@
+{
+  "id": "python/control/max-nesting",
+  "version": "1.0.0",
+  "area": "control",
+  "cardinality": "singleton",
+  "dimension": "python.control.nesting",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "max": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "metric",
+    "metric": "control.nesting"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Control-flow nesting exceeds the selected limit."
+  }
+}

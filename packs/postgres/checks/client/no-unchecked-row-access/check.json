@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "postgres/client/no-unchecked-row-access",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "postgres.unchecked-row-access",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "rows-index-chain",
+          "rule": {
+            "kind": "member_expression",
+            "regex": "\\.rows\\s*\\[\\s*0\\s*\\]\\s*\\."
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} reads a property off rows[0] unchecked. Guard the row or use optional chaining."
+  }
+}

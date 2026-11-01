@@ -1,0 +1,11 @@
+import NextAuth from "next-auth";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+
+const docs = "allowDangerousEmailAccountLinking: true is off by default";
+
+export const { handlers, auth } = NextAuth({
+  providers: [GitHub, Google({ authorization: { params: { prompt: "consent" } } })],
+});
+
+export { docs };

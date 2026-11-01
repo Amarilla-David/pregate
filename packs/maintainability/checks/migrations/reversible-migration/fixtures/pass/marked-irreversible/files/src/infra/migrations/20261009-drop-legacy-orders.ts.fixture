@@ -1,0 +1,13 @@
+interface QueryRunner {
+  query(sql: string): Promise<void>;
+}
+
+export class DropLegacyOrders20261009 {
+  async up(runner: QueryRunner): Promise<void> {
+    await runner.query("drop table legacy_orders");
+  }
+
+  async down(): Promise<void> {
+    throw new Error("Irreversible: legacy_orders is dropped. Restore it from the 2026-10-08 nightly snapshot.");
+  }
+}

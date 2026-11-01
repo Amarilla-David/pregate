@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "pstack/comments/no-commented-code",
+  "version": "1.0.0",
+  "area": "comments",
+  "cardinality": "singleton",
+  "dimension": "comments.dead-code",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "commented-code",
+          "rule": {
+            "kind": "comment",
+            "regex": "^\\s*(//|/\\*)\\s*(const|let|function|class|import|return|if)\\b",
+            "not": {
+              "regex": "(?i)\\b(TODO|FIXME)\\("
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} comments out a statement. Delete it."
+  }
+}

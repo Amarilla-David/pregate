@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "dcouplr/events",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "DCP-EVENT-SUB-001",
+      "check": "dcouplr/events/subscription-contract",
+      "defaults": {
+        "paths": [
+          "src/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published public declarations and runtime; explicit PREGATE empty-channel policy",
+        "locator": "dist/index-C3YI4Tf9.d.mts IEventSubscriber, lines 58–93; dist/index.mjs EventGate.subscribe, lines 1423–1464",
+        "paraphrase": "EventGate.subscribe takes listener first, a nonempty eventType second, and an optional string listenerId."
+      },
+      "why": "EventGate and the low-level event bus have different argument order. Reversing them can fail immediately or retain a noncallable listener until delivery. Empty string event types are accepted by the published types/runtime, but the built-in bus fails to remove their listeners; the explicit nonempty-channel policy prevents this leak.",
+      "fixHint": "Call kernel.event.subscribe(listener, eventType, listenerId). Store the returned subscription ID when teardown uses that ID.",
+      "avoid": "Reserved event/message member policy in selected paths, not receiver-type inference. Direct dot, unescaped literal bracket/template and optional calls, comments and transparent parentheses/as/satisfies/non-null values are covered. Known literal argument failures and missing required slots are checked. Low-level eventBus/messageBus and unrelated receivers remain valid. Named gate/function aliases, dynamic/computed/escaped members, spreads, unknown expression types, callback return types and cross-call ownership are unresolved. Review narrower paths for an unrelated API with the same member names.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    },
+    {
+      "id": "DCP-EVENT-TEARDOWN-001",
+      "check": "dcouplr/events/teardown-contract",
+      "defaults": {
+        "paths": [
+          "src/**"
+        ]
+      },
+      "severity": "deny",
+      "source": {
+        "work": "dcouplr 0.1.3-beta published public declarations and runtime",
+        "locator": "dist/index-C3YI4Tf9.d.mts IEventSubscriber, lines 58–93; dist/index.mjs EventGate.unsubscribe/unsubscribeBySubscriptionId, lines 1465–1489",
+        "paraphrase": "EventGate teardown needs the original listener reference or the returned subscription ID through its matching API."
+      },
+      "why": "The gate indexes listeners by function identity and subscription IDs separately. A string passed to unsubscribe or a new callback silently leaves the existing subscription active.",
+      "fixHint": "Use kernel.event.unsubscribe(originalListener), or kernel.event.unsubscribeBySubscriptionId(subscriptionId). Do not construct a new listener for removal.",
+      "avoid": "Reserved event/message member policy in selected paths, not receiver-type inference. Direct dot, unescaped literal bracket/template and optional calls, comments and transparent parentheses/as/satisfies/non-null values are covered. Known literal argument failures and missing required slots are checked. Low-level eventBus/messageBus and unrelated receivers remain valid. Named gate/function aliases, dynamic/computed/escaped members, spreads, unknown expression types, callback return types and cross-call ownership are unresolved. Review narrower paths for an unrelated API with the same member names.",
+      "examples": {
+        "pass": "pass/basic",
+        "fail": "fail/basic"
+      }
+    }
+  ]
+}

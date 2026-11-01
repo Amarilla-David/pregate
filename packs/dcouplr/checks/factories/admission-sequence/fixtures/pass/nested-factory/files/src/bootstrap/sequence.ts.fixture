@@ -1,0 +1,1 @@
+builder.addFactoryMethod(() => { const item = other.declareIntent('NESTED'); return item; }).register();

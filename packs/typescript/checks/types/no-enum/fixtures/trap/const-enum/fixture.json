@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/const-status.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "const-enum",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "const enum is still an enum declaration. The const modifier only changes emit."
+  }
+}

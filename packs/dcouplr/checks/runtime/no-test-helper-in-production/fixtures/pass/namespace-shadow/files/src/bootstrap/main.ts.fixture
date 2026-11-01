@@ -1,0 +1,2 @@
+import * as d from 'dcouplr';
+export const reset = (d: { resetDcouplrForTesting(): void }) => d.resetDcouplrForTesting();

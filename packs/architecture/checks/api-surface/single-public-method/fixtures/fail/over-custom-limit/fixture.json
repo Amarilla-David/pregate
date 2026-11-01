@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "paths": ["src/handlers/**"], "max": 2 },
+  "target": "src/handlers/invoice-handler.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 3, "measured": 3 }] }
+}

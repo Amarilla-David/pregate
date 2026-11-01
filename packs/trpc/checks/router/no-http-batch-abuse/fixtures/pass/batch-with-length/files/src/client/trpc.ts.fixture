@@ -1,0 +1,2 @@
+import { httpBatchLink } from "@trpc/client";
+export const link = httpBatchLink({ url: "/api/trpc", maxURLLength: 2083 });

@@ -1,0 +1,112 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "express/requests/no-send-file-user-path",
+  "version": "1.0.0",
+  "area": "requests",
+  "cardinality": "singleton",
+  "dimension": "express.send-file-user-path",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "send-file-user-path",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^(sendFile|download)$"
+                  }
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    },
+                    "regex": "\\b(req|request)\\s*\\.\\s*(params|query|body)\\b",
+                    "not": {
+                      "regex": "\\bbasename\\s*\\("
+                    }
+                  }
+                }
+              }
+            ],
+            "not": {
+              "has": {
+                "field": "arguments",
+                "has": {
+                  "not": {
+                    "nthChild": {
+                      "position": 1,
+                      "ofRule": {
+                        "not": {
+                          "kind": "comment"
+                        }
+                      }
+                    }
+                  },
+                  "any": [
+                    {
+                      "kind": "identifier"
+                    },
+                    {
+                      "kind": "member_expression"
+                    },
+                    {
+                      "kind": "subscript_expression"
+                    },
+                    {
+                      "kind": "call_expression"
+                    },
+                    {
+                      "kind": "object",
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "pair",
+                            "regex": "^[\"']?root[\"']?\\s*:"
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^root$"
+                          },
+                          {
+                            "kind": "spread_element"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} serves a file whose path comes from the request without a root option. Pass { root: dir } so Express keeps the resolved path inside that directory."
+  }
+}

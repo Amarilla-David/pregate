@@ -1,0 +1,4 @@
+
+export default function OrdersPage(): string {
+  return "orders";
+}

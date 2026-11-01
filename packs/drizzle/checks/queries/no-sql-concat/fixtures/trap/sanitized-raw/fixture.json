@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/queries/select-sanitized.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "raw-passthrough",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Sanitizing before sql.raw happens outside the tree, so the engine cannot verify it. Any sql.raw argument is still raw SQL."
+  }
+}

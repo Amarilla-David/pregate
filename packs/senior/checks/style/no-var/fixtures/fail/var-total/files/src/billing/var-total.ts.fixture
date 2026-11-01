@@ -1,0 +1,6 @@
+
+export function total(lines: number[]): number {
+  var sum = 0;
+  for (const line of lines) sum += line;
+  return sum;
+}

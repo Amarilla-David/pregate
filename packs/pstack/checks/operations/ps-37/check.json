@@ -1,0 +1,27 @@
+{
+  "id": "pstack/operations/ps-37",
+  "version": "1.0.0",
+  "area": "operations",
+  "cardinality": "singleton",
+  "dimension": "pstack.ps-37",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "PS-37"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "PS-37 requires current passing project verification: {symbol}."
+  }
+}

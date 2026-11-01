@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/bare-chain.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      },
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "else-if-chain",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "else if does not excuse a branch that is not a block. Each consequence still needs braces."
+  }
+}

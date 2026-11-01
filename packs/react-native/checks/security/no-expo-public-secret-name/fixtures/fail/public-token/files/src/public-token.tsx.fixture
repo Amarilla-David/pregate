@@ -1,0 +1,5 @@
+const token = EXPO_PUBLIC_API_TOKEN;
+
+export function auth(): string {
+  return token;
+}

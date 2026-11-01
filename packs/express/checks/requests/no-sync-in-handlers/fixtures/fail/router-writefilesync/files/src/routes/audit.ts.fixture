@@ -1,0 +1,8 @@
+import { writeFileSync } from "node:fs";
+declare const router: { post(path: string, fn: (req: unknown, res: { sendStatus(c: number): void }) => void): void };
+export function mountAudit(): void {
+  router.post("/audit", (_req, res) => {
+    writeFileSync("audit.log", "entry\n");
+    res.sendStatus(204);
+  });
+}

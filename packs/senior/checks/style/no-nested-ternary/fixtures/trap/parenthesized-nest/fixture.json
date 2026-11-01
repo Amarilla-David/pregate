@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/label-parens.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "parens",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "Parentheses do not make the inner conditional a separate statement."
+  }
+}

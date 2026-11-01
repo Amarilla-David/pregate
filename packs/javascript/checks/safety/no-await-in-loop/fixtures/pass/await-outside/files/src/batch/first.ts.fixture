@@ -1,0 +1,6 @@
+async function first(users) {
+  const u = await fetchUser(users[0]);
+  return u;
+}
+
+export const runner = first;

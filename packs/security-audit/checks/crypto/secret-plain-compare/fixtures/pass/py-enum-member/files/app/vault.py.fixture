@@ -1,0 +1,9 @@
+import enum
+
+
+class Kind(enum.Enum):
+    SECRET = "secret"
+
+
+def masked(field):
+    return field.kind == Kind.SECRET

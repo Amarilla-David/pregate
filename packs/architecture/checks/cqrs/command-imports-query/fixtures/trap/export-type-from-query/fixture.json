@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/commands/record-payment.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "type-reexport",
+    "origin": "forge",
+    "discovered": "2026-10-02",
+    "note": "A type re-export is still a compile-time edge from the command to the query module."
+  }
+}

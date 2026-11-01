@@ -1,0 +1,2 @@
+import { type getDcouplrForTesting } from 'dcouplr';
+export type Kernel = ReturnType<typeof getDcouplrForTesting>;

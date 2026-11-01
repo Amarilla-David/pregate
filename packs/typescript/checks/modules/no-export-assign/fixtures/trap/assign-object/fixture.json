@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/legacy/cjs-obj.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "object-export-assign",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "export = with an object literal is the same legacy CommonJS interop as export = with an identifier."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "design-invariants/architecture/requirement-016",
+  "version": "1.0.0",
+  "area": "architecture",
+  "cardinality": "singleton",
+  "dimension": "design-invariants.r016",
+  "minSeverity": "deny",
+  "params": {
+    "verifier": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "fitness",
+    "requirement": "DESIGN-016"
+  },
+  "phase": [
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "DESIGN-016 requires current passing project verification: {symbol}."
+  }
+}

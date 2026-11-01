@@ -1,0 +1,1 @@
+const api = { getOrder: jest.fn(() => order), getCustomer: jest.fn(() => customer) };

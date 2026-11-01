@@ -1,0 +1,11 @@
+package: web-tree-sitter@0.27.0
+url: https://registry.npmjs.org/web-tree-sitter/-/web-tree-sitter-0.27.0.tgz
+tarball-sha256: 266e839d9d7f89c84ba6ce089ffdec9599b0a668c010308f857baad0570a0d50
+source: https://github.com/tree-sitter/tree-sitter/tree/v0.27.0/lib/binding_web
+license: MIT
+modified: no (each file copied byte for byte from package/ in the tarball)
+files:
+7c49e3c1d87e24e0bb4c2def909d17154dfde281f5f8280225450090bb4b8110  web-tree-sitter.js
+c03bccdc3b448a32848f5ae327e209c982bbb0840d43eec8bc2d5759544a1ed3  web-tree-sitter.wasm
+7755148edc3bc39c53bd00d040f65d4939bdfa4859ad4ab045f5afbafadbf795  web-tree-sitter.d.ts
+c5cfb43042b6b72045f4ba997834d0a7786d2793d91680868b5815b39f14fc78  LICENSE

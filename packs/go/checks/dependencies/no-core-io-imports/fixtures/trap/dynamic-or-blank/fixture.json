@@ -1,0 +1,56 @@
+{
+  "language": "go",
+  "params": {
+    "paths": [
+      "@layers:core"
+    ],
+    "packages": [
+      "os",
+      "net",
+      "database/sql"
+    ]
+  },
+  "target": "internal/core/a.go",
+  "before": null,
+  "context": {
+    "layers": {
+      "core": {
+        "paths": [
+          "internal/core/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "core"
+      },
+      "ports": {
+        "paths": [
+          "internal/ports/**"
+        ],
+        "mayImport": [],
+        "kind": "port"
+      },
+      "infra": {
+        "paths": [
+          "internal/infra/**"
+        ],
+        "mayImport": [],
+        "kind": "adapter"
+      }
+    }
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "dynamic-or-blank",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "This alternate syntax or resolver context still violates the observable condition."
+  }
+}

@@ -1,0 +1,6 @@
+
+import { pay } from "../billing/pay";
+
+export function settle(id: string): string {
+  return pay(id);
+}

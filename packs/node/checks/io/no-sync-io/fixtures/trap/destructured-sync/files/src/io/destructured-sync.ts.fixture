@@ -1,0 +1,7 @@
+import fs from "node:fs";
+
+const { readFileSync } = fs;
+
+export function load(p: string): string {
+  return readFileSync(p, "utf8");
+}

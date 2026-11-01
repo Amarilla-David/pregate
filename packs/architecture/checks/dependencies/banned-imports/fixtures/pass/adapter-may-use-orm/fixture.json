@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {
+    "paths": ["@layers:core"],
+    "packages": ["@prisma/client", "prisma", "typeorm", "sequelize", "mongoose", "drizzle-orm", "knex", "kysely", "@mikro-orm/core", "pg", "mysql2", "mongodb", "express", "fastify", "koa", "hono", "@nestjs/common", "@nestjs/core", "next", "react", "vue", "@angular/core"]
+  },
+  "context": {
+    "layers": {
+      "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" },
+      "application": { "paths": ["src/application/**"], "mayImport": ["domain"], "kind": "core" },
+      "infra": { "paths": ["src/infra/**"], "mayImport": ["domain", "application"], "kind": "adapter" }
+    }
+  },
+  "target": "src/infra/prisma-order-store.ts",
+  "before": null,
+  "expect": { "verdict": "pass" }
+}

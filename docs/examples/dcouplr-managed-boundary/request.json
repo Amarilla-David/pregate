@@ -1,0 +1,17 @@
+{
+  "why": "Use dcouplr in the declared managed application modules. Keep concrete construction and I/O in reviewed adapters and the composition root; preserve value-only modules outside the managed scope.",
+  "patch": [
+    { "op": "add", "path": "/sources/-", "value": { "ns": "dcouplr", "kind": "library", "version": "1.27.1" } },
+    { "op": "add", "path": "/methodologies/-", "value": "dcouplr/managed-components" },
+    { "op": "add", "path": "/methodologies/-", "value": "dcouplr/factories" },
+    { "op": "add", "path": "/layers", "value": {
+      "managed": { "paths": ["app/features/**"], "kind": "core", "mayImport": ["ports"] },
+      "ports": { "paths": ["app/contracts/**"], "kind": "port", "mayImport": [] },
+      "adapters": { "paths": ["app/adapters/**"], "kind": "adapter", "mayImport": ["ports"] },
+      "bootstrap": { "paths": ["app/bootstrap/**"], "kind": "main", "mayImport": ["managed", "ports", "adapters"] }
+    } },
+    { "op": "add", "path": "/overrides/dcouplr~1DCP-AMBIENT-001", "value": { "params": { "paths": ["app/features/**"] } } },
+    { "op": "add", "path": "/overrides/dcouplr~1DCP-NEW-001", "value": { "params": { "paths": ["app/features/**"] } } },
+    { "op": "add", "path": "/overrides/dcouplr~1DCP-LOCATOR-001", "value": { "params": { "paths": ["app/features/**"] } } }
+  ]
+}

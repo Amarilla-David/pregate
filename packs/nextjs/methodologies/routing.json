@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "nextjs/routing",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "NEXT-LINK-001",
+      "check": "nextjs/routing/no-anchor-navigation",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Next.js App Router docs, linking and navigating",
+        "locator": "next/link client-side transitions",
+        "paraphrase": "Internal navigation uses the Link component so the router can prefetch and transition client-side instead of reloading the page."
+      },
+      "why": "A plain anchor to an internal route forces a full document reload and skips prefetching, losing the client-side navigation the router exists for.",
+      "fixHint": "Replace the anchor with Link from next/link. Keep anchors for external URLs only.",
+      "avoid": "This advisory policy checks actual anchor nodes with literal root-relative href attributes, including expression-wrapped strings, anywhere in JSX. It ignores CMS HTML strings, unrelated attributes, external and protocol-relative URLs. Full reloads and downloads can be intentional; do not promote this suggestion without the project's navigation contract.",
+      "examples": {
+        "pass": "pass/next-link",
+        "fail": "fail/internal-anchor"
+      }
+    },
+    {
+      "id": "NEXT-DOC-001",
+      "check": "nextjs/routing/no-next-document-in-app",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js App Router migration guide",
+        "locator": "pages _document versus app root layout",
+        "paraphrase": "The App Router owns the document through the root layout. next/document belongs to the Pages Router and has no effect under app."
+      },
+      "why": "A Document import inside app/ silently does nothing while suggesting the Pages Router still controls the shell, so document changes never apply.",
+      "fixHint": "Move document-level markup into the app root layout and declare head data with the metadata export.",
+      "avoid": "Re-exporting next/document from a shared module so app files keep importing it indirectly.",
+      "examples": {
+        "pass": "pass/app-metadata",
+        "fail": "fail/app-document-import"
+      }
+    },
+    {
+      "id": "NEXT-ROUTE-001",
+      "check": "nextjs/routing/no-router-push-concat",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Next.js App Router docs, programmatic navigation",
+        "locator": "typed route hrefs",
+        "paraphrase": "Next routers accept href strings. A template or route helper can make the destination easier to read; concatenation alone is not a correctness violation."
+      },
+      "why": "This optional readability policy observes concatenated destinations on recognized Next routers. Valid href strings remain valid; the syntax does not prove an unsafe destination or a typed-route failure.",
+      "fixHint": "Use a template or the project's tested route helper when this improves clarity. Validate untrusted destinations under the project's routing contract; interpolation alone is not a security fix.",
+      "avoid": "Checks cover imported Router and directly imported useRouter calls or same-block const receivers. Array.push, arbitrary injected push methods, indirect aliases, cross-scope bindings and dynamic receiver ownership are not inferred. Keep project routing safety in a reviewed assertion rather than enforcing a preferred spelling.",
+      "examples": {
+        "pass": "pass/push-template",
+        "fail": "fail/push-concat"
+      }
+    },
+    {
+      "id": "NEXT-REVAL-001",
+      "check": "nextjs/data/no-revalidate-false",
+      "defaults": {},
+      "severity": "off",
+      "source": {
+        "work": "Next.js data fetching docs, time-based revalidation",
+        "locator": "revalidate segment option",
+        "paraphrase": "A false revalidation value is an explicit supported choice for an indefinitely cached resource; it does not by itself prove an error."
+      },
+      "why": "The syntax does not reveal the intended cache lifetime, so an unconditional block is unjustified.",
+      "fixHint": "Set an explicit interval in seconds, or declare the segment dynamic on purpose instead of disabling revalidation.",
+      "avoid": "A comment next to false does not make the opt-out explicit. Name the caching intent in code.",
+      "examples": {
+        "pass": "pass/revalidate-seconds",
+        "fail": "fail/revalidate-false"
+      }
+    },
+    {
+      "id": "NEXT-NAV-001",
+      "check": "nextjs/routing/no-pages-router-in-app",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js App Router API reference, useRouter, https://nextjs.org/docs/app/api-reference/functions/use-router",
+        "locator": "useRouter; error page next-router-not-mounted",
+        "paraphrase": "In the App Router, useRouter must come from next/navigation, not next/router. Using the Pages Router hook under app throws 'NextRouter was not mounted'."
+      },
+      "why": "next/router needs the Pages Router context, which app/ does not provide, so the component throws when it renders.",
+      "fixHint": "Import useRouter from next/navigation. Read the path with usePathname and the query with useSearchParams. Shared components that must run under both routers can use next/compat/router.",
+      "avoid": "Only the exact next/router literal in a value import, re-export, require or import() inside app/ or src/app/ is flagged. Type-only imports, next/compat/router, next/navigation and files under pages/ are allowed. Components outside app/ that the App Router renders are not traced.",
+      "examples": {
+        "pass": "pass/next-navigation",
+        "fail": "fail/use-router"
+      }
+    },
+    {
+      "id": "NEXT-SERVER-EXPORT-001",
+      "check": "nextjs/routing/no-export-in-client-component",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js App Router documentation, Route Segment Config (https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config)",
+        "locator": "Route Segment Config options and Server Components",
+        "paraphrase": "Route segment configuration exports (dynamic, revalidate, runtime, preferredRegion, maxDuration) and generateStaticParams only apply in Server Components and cannot be exported from a Client Component."
+      },
+      "why": "Exporting server route segment options or generateStaticParams from a file marked 'use client' either fails the Next.js build or is silently ignored.",
+      "fixHint": "Keep the route segment config and generateStaticParams in the Server Component page or layout, and move interactive UI into a child Client Component.",
+      "avoid": "Direct variable exports, function exports, and export list specifiers for dynamic, revalidate, runtime, preferredRegion, maxDuration, and generateStaticParams in 'use client' files are matched. Local unexported variables pass.",
+      "examples": {
+        "pass": "pass/server-page",
+        "fail": "fail/client-dynamic"
+      }
+    }
+  ]
+}

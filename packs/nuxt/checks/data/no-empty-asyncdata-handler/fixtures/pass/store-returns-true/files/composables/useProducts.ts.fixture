@@ -1,0 +1,9 @@
+declare const store: { fetchProducts(): Promise<void>; products: string[] };
+
+export async function useProducts() {
+  await useAsyncData("products", async () => {
+    await store.fetchProducts();
+    return true;
+  });
+  return store.products;
+}

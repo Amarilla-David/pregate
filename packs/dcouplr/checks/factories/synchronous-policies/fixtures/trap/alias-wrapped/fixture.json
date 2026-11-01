@@ -1,0 +1,11 @@
+{
+  "language": "typescript",
+  "target": "src/bootstrap/policy.ts",
+  "before": null,
+  "params": { "paths": ["src/**"] },
+  "expect": { "verdict": "fail", "violations": [{ "line": 2 }] },
+  "trap": {
+    "family": "aliased-policy-reference", "origin": "forge", "discovered": "2026-10-05",
+    "note": "Transparent wrappers and a literal member must not hide an aliased generator policy."
+  }
+}

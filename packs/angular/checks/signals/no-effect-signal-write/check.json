@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "angular/signals/no-effect-signal-write",
+  "version": "1.0.0",
+  "area": "signals",
+  "cardinality": "singleton",
+  "dimension": "angular.effect-signal-write",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "effect-signal-write",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "regex": "\\.(set|update)$"
+            },
+            "not": {
+              "has": {
+                "field": "arguments",
+                "has": {
+                  "nthChild": 2
+                }
+              }
+            },
+            "inside": {
+              "stopBy": "end",
+              "kind": "call_expression",
+              "has": {
+                "field": "function",
+                "regex": "^effect$"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} writes a signal inside effect(). Derive state with computed() or linkedSignal() instead of synchronizing signals in an effect."
+  }
+}

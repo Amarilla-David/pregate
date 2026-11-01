@@ -1,0 +1,6 @@
+
+import { pay } from "./legacy-adapter";
+
+export function settle(id: string): string {
+  return pay(id);
+}

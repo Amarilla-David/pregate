@@ -1,0 +1,2 @@
+stage.addValidationPolicy(function* () { yield true; });
+stage.addVerificationPolicy(async function* () {});

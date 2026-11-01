@@ -1,0 +1,4 @@
+export function recordLatency() {
+  const startedAt = performance.now();
+  return startedAt;
+}

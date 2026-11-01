@@ -1,0 +1,11 @@
+// About page with an animated header.
+"use client";
+import { motion } from "framer-motion";
+
+const pageMeta = { title: "About us" };
+
+export default function About() {
+  return <motion.h1 animate={{ opacity: 1 }}>{pageMeta.title}</motion.h1>;
+}
+
+export { pageMeta as metadata };

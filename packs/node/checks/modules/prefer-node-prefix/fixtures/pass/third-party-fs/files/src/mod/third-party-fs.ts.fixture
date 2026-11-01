@@ -1,0 +1,5 @@
+import fse from "fs-extra";
+
+export function hasFse(): boolean {
+  return typeof fse.exists === "function";
+}

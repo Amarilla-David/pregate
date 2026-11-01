@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/runes/named.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "named-async-fn",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Naming the async function does not make it synchronous. The derivation still stores a promise instead of the value."
+  }
+}

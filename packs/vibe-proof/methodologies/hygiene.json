@@ -1,0 +1,143 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "vibe-proof/hygiene",
+  "version": "1.0.2",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "VP-CONSOLE-001",
+      "relations": [
+        {
+          "with": "mattpocock/MP-DEBUG-001",
+          "kind": "duplicates",
+          "why": "A console.log tagged [DEBUG-...] outside tests is reported by both rules.",
+          "settle": "Turn MP-DEBUG-001 off while VP-CONSOLE-001 already reports every console.log, or keep both for its debugging-session wording."
+        }
+      ],
+      "check": "vibe-proof/debug/console-leftover",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Maintainability, debug leftovers",
+        "paraphrase": "Debug prints do not ship. A log that was useful while writing the feature is noise and sometimes data in production."
+      },
+      "why": "A leftover log prints invoices, ids, and payloads to whatever stdout production captures.",
+      "fixHint": "Delete the call, or log through the application's logger at the level the operation actually needs. console.error and console.warn are left for real failures.",
+      "avoid": "console[\"log\"] is the same call. Moving the call into a test file is fine because tests are ignored. Renaming to console.info is not.",
+      "examples": {
+        "pass": "pass/console-error",
+        "fail": "fail/console-log"
+      }
+    },
+    {
+      "id": "VP-DEBUG-001",
+      "check": "vibe-proof/debug/debugger-statement",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "debug leftovers",
+        "paraphrase": "A debugger breakpoint is a development aid. It does not belong in the code that ships."
+      },
+      "why": "debugger stops a browser or inspector on the production path when devtools are attached, and it marks a session that was not finished.",
+      "fixHint": "Delete the statement.",
+      "avoid": "Putting it behind if (false) still leaves the statement in the file.",
+      "examples": {
+        "pass": "pass/no-debugger",
+        "fail": "fail/bare-debugger"
+      }
+    },
+    {
+      "id": "VP-TODO-001",
+      "check": "vibe-proof/maintainability/todo-without-owner",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Maintainability, critical TODO",
+        "paraphrase": "A critical TODO names the blocked behavior and who picks it up. \"Fix later\" leaves the broken path active."
+      },
+      "why": "An ownerless TODO is a broken path with no one named to finish it. Six months later it still says later.",
+      "fixHint": "Write TODO(name): the blocked behavior and the next action, or delete the marker and fix the path.",
+      "avoid": "TODO: ada will fix does not put the owner in parentheses. TODO(t) is too short to be a handle. A fake owner satisfies the syntax and is a social hole, not a structural one.",
+      "examples": {
+        "pass": "pass/owned-todo",
+        "fail": "fail/bare-todo"
+      }
+    },
+    {
+      "id": "VP-FIND-MANY-001",
+      "check": "vibe-proof/performance/unbounded-find-many",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Performance, list endpoints",
+        "paraphrase": "A list path enforces a server-side size limit. One request must not load the whole growing table."
+      },
+      "why": "An unbounded findMany loads every matching row. The list grows with the table and the request grows with it.",
+      "fixHint": "Pass take or cursor and a stable order. Page until the caller stops.",
+      "avoid": "A field named taken is not take. Mentioning take inside a comment in the argument list is a hole because the rule sees the word.",
+      "examples": {
+        "pass": "pass/take",
+        "fail": "fail/no-args"
+      }
+    },
+    {
+      "id": "VP-SELECT-001",
+      "check": "vibe-proof/performance/unbounded-select-star",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "Performance, bounded scans",
+        "paraphrase": "A list query is bounded. select * without a limit is not a bounded scan."
+      },
+      "why": "select * with no limit pulls every column of every matching row into the process.",
+      "fixHint": "Name the columns and add a limit, or page with a cursor.",
+      "avoid": "A comment that says the table is small does not add a limit. Writing LIMIT in the SQL does satisfy this rule; it does not prove the limit is sane.",
+      "examples": {
+        "pass": "pass/limited",
+        "fail": "fail/star-string"
+      }
+    },
+    {
+      "id": "VP-INTERVAL-001",
+      "check": "vibe-proof/reliability/setinterval-without-clear",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "resource-leak",
+        "paraphrase": "Whoever starts a timer clears it. A long-lived service that only acquires leaks the resource."
+      },
+      "why": "A timer that is never cleared keeps the callback and anything it closed over for the life of the process.",
+      "fixHint": "Keep the interval handle and read that same handle with clearInterval on its cleanup path. Cleanup can live in a sibling function for a module-local ref/object field or the same local named container type. Verify that the owner actually calls cleanup on every required lifecycle path.",
+      "avoid": "The checker recognizes local handle bindings and exact property chains, const aliases and property types declared in this module. Sibling parameters sharing the same named container type and remaining handle fields provide syntactic evidence; this does not prove they are the same runtime instance or that cleanup executes. Different roots, named types and fields remain distinct. Unstored handles, imported type contracts and complex alias/call flows remain unproved; comments or unrelated clearInterval calls do not count.",
+      "examples": {
+        "pass": "pass/clears",
+        "fail": "fail/no-clear"
+      }
+    },
+    {
+      "id": "VP-BUILD-001",
+      "check": "vibe-proof/process/ignore-build-errors",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "vibe-proof auditor checklist",
+        "locator": "ignore-build-errors",
+        "paraphrase": "ignoreBuildErrors and eslint.ignoreDuringBuilds are evidence the demo was shipped past a failing check."
+      },
+      "why": "The flag ships a build the type checker or the linter already rejected. The demo stays green while the errors stay.",
+      "fixHint": "Fix the diagnostic. Leave the flag false or delete it.",
+      "avoid": "Nesting the flag under eslint or typescript does not hide the pair. Setting it false is allowed.",
+      "examples": {
+        "pass": "pass/flag-false",
+        "fail": "fail/ignore-types"
+      }
+    }
+  ]
+}

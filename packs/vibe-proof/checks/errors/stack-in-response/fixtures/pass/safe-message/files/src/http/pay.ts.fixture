@@ -1,0 +1,6 @@
+
+export function fail(res: Res): void {
+  res.json({ message: "unavailable" });
+}
+
+interface Res { json(body: unknown): void }

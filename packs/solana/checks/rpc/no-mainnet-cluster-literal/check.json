@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "solana/rpc/no-mainnet-cluster-literal",
+  "version": "1.0.1",
+  "area": "rpc",
+  "cardinality": "singleton",
+  "dimension": "solana.rpc-mainnet-default",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "mainnet-literal",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^mainnet-beta$"
+          }
+        },
+        {
+          "id": "split-mainnet",
+          "rule": {
+            "pattern": "$PREFIX + $SUFFIX"
+          },
+          "constraints": {
+            "PREFIX": {
+              "regex": "^[\"']mainnet[\"']$"
+            },
+            "SUFFIX": {
+              "regex": "^[\"']-beta[\"']$"
+            }
+          }
+        },
+        {
+          "id": "interpolated-mainnet",
+          "rule": {
+            "kind": "template_string",
+            "regex": "^`mainnet\\$\\{\\s*[\"']-beta[\"']\\s*\\}`$"
+          }
+        },
+        {
+          "id": "joined-mainnet",
+          "rule": {
+            "pattern": "[$PREFIX, $SUFFIX].join($SEPARATOR)"
+          },
+          "constraints": {
+            "PREFIX": {
+              "regex": "^[\"']mainnet[\"']$"
+            },
+            "SUFFIX": {
+              "regex": "^[\"']beta[\"']$"
+            },
+            "SEPARATOR": {
+              "regex": "^[\"']-[\"']$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} defaults to \"mainnet-beta\". Hackathon code runs on devnet; mainnet only when explicitly asked."
+  }
+}

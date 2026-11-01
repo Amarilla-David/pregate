@@ -1,0 +1,469 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "dcouplr/boundaries/no-ambient-effects",
+  "version": "1.1.0",
+  "area": "boundaries",
+  "cardinality": "singleton",
+  "dimension": "dcouplr.no-ambient-effects",
+  "minSeverity": null,
+  "params": {
+    "allow": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\.[A-Za-z_$][A-Za-z0-9_$]*)+$"
+      }
+    }
+  },
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "nondeterministic-source",
+          "utils": {
+            "function-like": {
+              "any": [
+                {
+                  "kind": "function_declaration"
+                },
+                {
+                  "kind": "generator_function_declaration"
+                },
+                {
+                  "kind": "function_expression"
+                },
+                {
+                  "kind": "generator_function"
+                },
+                {
+                  "kind": "arrow_function"
+                },
+                {
+                  "kind": "method_definition"
+                }
+              ]
+            },
+            "scope": {
+              "any": [
+                {
+                  "kind": "program"
+                },
+                {
+                  "kind": "statement_block"
+                },
+                {
+                  "kind": "switch_body"
+                },
+                {
+                  "kind": "for_statement"
+                },
+                {
+                  "kind": "for_in_statement"
+                },
+                {
+                  "kind": "catch_clause"
+                },
+                {
+                  "matches": "function-like"
+                }
+              ]
+            },
+            "boundary": {
+              "any": [
+                {
+                  "matches": "scope"
+                },
+                {
+                  "kind": "ambient_declaration"
+                }
+              ]
+            },
+            "destructuring": {
+              "any": [
+                {
+                  "kind": "object_pattern"
+                },
+                {
+                  "kind": "array_pattern"
+                },
+                {
+                  "kind": "pair_pattern"
+                },
+                {
+                  "kind": "object_assignment_pattern"
+                },
+                {
+                  "kind": "assignment_pattern"
+                },
+                {
+                  "kind": "rest_pattern"
+                }
+              ]
+            },
+            "local-import": {
+              "not": {
+                "has": {
+                  "regex": "^type$"
+                }
+              },
+              "inside": {
+                "stopBy": "end",
+                "kind": "import_statement",
+                "has": {
+                  "field": "source",
+                  "regex": "^[\"']\\.\\.?/"
+                },
+                "not": {
+                  "has": {
+                    "regex": "^type$"
+                  }
+                }
+              }
+            },
+            "not-a-default": {
+              "not": {
+                "inside": {
+                  "field": "right",
+                  "any": [
+                    {
+                      "kind": "assignment_pattern"
+                    },
+                    {
+                      "kind": "object_assignment_pattern"
+                    }
+                  ]
+                }
+              }
+            },
+            "binding-slot": {
+              "all": [
+                {
+                  "matches": "not-a-default"
+                },
+                {
+                  "any": [
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "name",
+                        "any": [
+                          {
+                            "kind": "variable_declarator"
+                          },
+                          {
+                            "kind": "function_declaration"
+                          },
+                          {
+                            "kind": "generator_function_declaration"
+                          },
+                          {
+                            "kind": "function_expression"
+                          },
+                          {
+                            "kind": "generator_function"
+                          },
+                          {
+                            "kind": "class_declaration"
+                          },
+                          {
+                            "kind": "abstract_class_declaration"
+                          },
+                          {
+                            "kind": "enum_declaration",
+                            "not": {
+                              "has": {
+                                "regex": "^const$"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "pattern",
+                        "any": [
+                          {
+                            "kind": "required_parameter"
+                          },
+                          {
+                            "kind": "optional_parameter"
+                          }
+                        ],
+                        "inside": {
+                          "kind": "formal_parameters",
+                          "inside": {
+                            "field": "parameters",
+                            "matches": "function-like"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "parameter",
+                        "any": [
+                          {
+                            "kind": "arrow_function"
+                          },
+                          {
+                            "kind": "catch_clause"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "inside": {
+                        "stopBy": {
+                          "not": {
+                            "matches": "destructuring"
+                          }
+                        },
+                        "field": "left",
+                        "kind": "for_in_statement",
+                        "has": {
+                          "field": "kind",
+                          "regex": "^(const|let|var)$"
+                        }
+                      }
+                    },
+                    {
+                      "inside": {
+                        "field": "alias",
+                        "kind": "import_specifier",
+                        "matches": "local-import"
+                      }
+                    },
+                    {
+                      "inside": {
+                        "field": "name",
+                        "kind": "import_specifier",
+                        "not": {
+                          "has": {
+                            "field": "alias",
+                            "kind": "identifier"
+                          }
+                        },
+                        "matches": "local-import"
+                      }
+                    },
+                    {
+                      "inside": {
+                        "any": [
+                          {
+                            "kind": "import_clause"
+                          },
+                          {
+                            "kind": "namespace_import"
+                          }
+                        ],
+                        "matches": "local-import"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "declares": {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "function_declaration"
+                        },
+                        {
+                          "kind": "generator_function_declaration"
+                        }
+                      ]
+                    },
+                    {
+                      "has": {
+                        "field": "name",
+                        "pattern": "$G"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "identifier"
+                        },
+                        {
+                          "kind": "type_identifier"
+                        },
+                        {
+                          "kind": "shorthand_property_identifier_pattern"
+                        }
+                      ]
+                    },
+                    {
+                      "pattern": "$G"
+                    },
+                    {
+                      "matches": "binding-slot"
+                    }
+                  ]
+                }
+              ]
+            },
+            "not-the-global": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "inside": {
+                    "field": "name",
+                    "kind": "import_specifier",
+                    "has": {
+                      "field": "alias",
+                      "kind": "identifier"
+                    },
+                    "matches": "local-import"
+                  }
+                },
+                {
+                  "kind": "identifier",
+                  "matches": "not-a-default",
+                  "inside": {
+                    "stopBy": {
+                      "not": {
+                        "matches": "destructuring"
+                      }
+                    },
+                    "field": "pattern",
+                    "any": [
+                      {
+                        "kind": "required_parameter"
+                      },
+                      {
+                        "kind": "optional_parameter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "kind": "identifier"
+                        },
+                        {
+                          "kind": "shorthand_property_identifier"
+                        }
+                      ]
+                    },
+                    {
+                      "pattern": "$G"
+                    },
+                    {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "scope",
+                        "has": {
+                          "stopBy": {
+                            "matches": "boundary"
+                          },
+                          "matches": "declares"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "rule": {
+            "all": [
+              {
+                "any": [
+                  {
+                    "any": [
+                      {
+                        "kind": "identifier"
+                      },
+                      {
+                        "kind": "shorthand_property_identifier"
+                      }
+                    ],
+                    "regex": "^(Date|Temporal|process|Bun|Deno|performance|fetch|console|window|document|localStorage|sessionStorage|WebSocket|randomUUID|getRandomValues|randomBytes|randomInt|randomFill|randomFillSync)$",
+                    "not": {
+                      "inside": {
+                        "kind": "nested_type_identifier"
+                      }
+                    }
+                  },
+                  {
+                    "any": [
+                      {
+                        "kind": "identifier",
+                        "regex": "^(Math|crypto|globalThis|window|global|self)$"
+                      },
+                      {
+                        "kind": "meta_property"
+                      }
+                    ],
+                    "not": {
+                      "inside": {
+                        "field": "object",
+                        "kind": "member_expression",
+                        "has": {
+                          "field": "property",
+                          "not": {
+                            "regex": "^(random|randomUUID|getRandomValues|randomBytes|randomInt|randomFill|randomFillSync|Date|Temporal|process|Bun|Deno|performance|fetch|console|document|localStorage|sessionStorage|WebSocket|env|Math|crypto|globalThis|window|global|self)$"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "not": {
+                  "matches": "not-the-global"
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "kind": "type_query",
+                    "stopBy": "end"
+                  }
+                }
+              }
+            ]
+          },
+          "x-note": "Project policy over selected managed paths. Uses lexical scope predicates from PREGATE effect rules. Relative imports and local bindings are distinguished; aliases and global-object traversal are covered. Hoisted var bindings in nested blocks remain a conservative limitation. Qualified allow entries are explicit project exceptions."
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "Managed components must use injected ports or kernel gates for logging, time, randomness, process access and I/O."
+  }
+}

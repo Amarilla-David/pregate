@@ -1,0 +1,4 @@
+import type { Db } from "mongodb";
+export async function migrate(db: Db): Promise<void> {
+  await db.collection("users").ensureIndex({ name: 1 });
+}

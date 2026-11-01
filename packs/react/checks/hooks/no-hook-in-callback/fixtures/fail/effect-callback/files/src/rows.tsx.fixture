@@ -1,0 +1,3 @@
+function Rows() {
+  useEffect(() => { const state = useState(0); console.log(state); }, []);
+}

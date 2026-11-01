@@ -1,0 +1,469 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "pstack/playbooks",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "PS-48",
+      "check": "pstack/playbooks/ps-48",
+      "defaults": {
+        "verifier": "PS-48"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:73; PS-48",
+        "paraphrase": "Investigation is read-only. It answers how, why, or whether, and it does not edit."
+      },
+      "why": "Investigation is read-only. It answers how, why, or whether, and it does not edit.",
+      "fixHint": "Bind PS-48 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-48; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-49",
+      "check": "pstack/playbooks/ps-49",
+      "defaults": {
+        "verifier": "PS-49"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:74; PS-49",
+        "paraphrase": "Bug fix reproduces the defect, names the root cause, and fixes it against runtime evidence."
+      },
+      "why": "Bug fix reproduces the defect, names the root cause, and fixes it against runtime evidence.",
+      "fixHint": "Bind PS-49 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-49; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-50",
+      "check": "pstack/playbooks/ps-50",
+      "defaults": {
+        "verifier": "PS-50"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:75; PS-50",
+        "paraphrase": "Performance traces a measured slowness and reports the change against a baseline."
+      },
+      "why": "Performance traces a measured slowness and reports the change against a baseline.",
+      "fixHint": "Bind PS-50 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-50; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-51",
+      "check": "pstack/playbooks/ps-51",
+      "defaults": {
+        "verifier": "PS-51"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:76; PS-51",
+        "paraphrase": "Hill climb improves one metric against a target by hypotheses with before-and-after measurement."
+      },
+      "why": "Hill climb improves one metric against a target by hypotheses with before-and-after measurement.",
+      "fixHint": "Bind PS-51 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-51; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-52",
+      "check": "pstack/playbooks/ps-52",
+      "defaults": {
+        "verifier": "PS-52"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:77; PS-52",
+        "paraphrase": "Runtime forensics diagnoses a live symptom from instrumentation, not from a guessed patch."
+      },
+      "why": "Runtime forensics diagnoses a live symptom from instrumentation, not from a guessed patch.",
+      "fixHint": "Bind PS-52 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-52; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-53",
+      "check": "pstack/playbooks/ps-53",
+      "defaults": {
+        "verifier": "PS-53"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:78; PS-53",
+        "paraphrase": "Trace forensics diagnoses a captured profile, trace, spindump, or heap snapshot."
+      },
+      "why": "Trace forensics diagnoses a captured profile, trace, spindump, or heap snapshot.",
+      "fixHint": "Bind PS-53 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-53; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-54",
+      "check": "pstack/playbooks/ps-54",
+      "defaults": {
+        "verifier": "PS-54"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:79; PS-54",
+        "paraphrase": "Feature builds new or changed behavior from a named data shape."
+      },
+      "why": "Feature builds new or changed behavior from a named data shape.",
+      "fixHint": "Bind PS-54 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-54; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-55",
+      "check": "pstack/playbooks/ps-55",
+      "defaults": {
+        "verifier": "PS-55"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:80; PS-55",
+        "paraphrase": "Refactoring preserves observable behavior. A refactor that changes behavior is a feature or a bug fix."
+      },
+      "why": "Refactoring preserves observable behavior. A refactor that changes behavior is a feature or a bug fix.",
+      "fixHint": "Bind PS-55 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-55; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-56",
+      "check": "pstack/playbooks/ps-56",
+      "defaults": {
+        "verifier": "PS-56"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:81; PS-56",
+        "paraphrase": "Prototype is throwaway. Its product is a decision. It does not enter production without a rewrite."
+      },
+      "why": "Prototype is throwaway. Its product is a decision. It does not enter production without a rewrite.",
+      "fixHint": "Bind PS-56 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-56; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-57",
+      "check": "pstack/playbooks/ps-57",
+      "defaults": {
+        "verifier": "PS-57"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:82; PS-57",
+        "paraphrase": "Visual parity claims pixel-exact equivalence only after both implementations have been compared."
+      },
+      "why": "Visual parity claims pixel-exact equivalence only after both implementations have been compared.",
+      "fixHint": "Bind PS-57 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-57; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-58",
+      "check": "pstack/playbooks/ps-58",
+      "defaults": {
+        "verifier": "PS-58"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:83; PS-58",
+        "paraphrase": "Authoring a skill produces a `SKILL.md` whose trigger, steps, and exit criteria a later agent can follow."
+      },
+      "why": "Authoring a skill produces a `SKILL.md` whose trigger, steps, and exit criteria a later agent can follow.",
+      "fixHint": "Bind PS-58 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-58; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-59",
+      "check": "pstack/playbooks/ps-59",
+      "defaults": {
+        "verifier": "PS-59"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:84; PS-59",
+        "paraphrase": "Eval tests a skill or prompt change with a blinded comparison."
+      },
+      "why": "Eval tests a skill or prompt change with a blinded comparison.",
+      "fixHint": "Bind PS-59 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-59; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-60",
+      "check": "pstack/playbooks/ps-60",
+      "defaults": {
+        "verifier": "PS-60"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:85; PS-60",
+        "paraphrase": "Babysit drives a PR or a stack to merge-ready: conflicts, review threads, and CI are closed or deferred."
+      },
+      "why": "Babysit drives a PR or a stack to merge-ready: conflicts, review threads, and CI are closed or deferred.",
+      "fixHint": "Bind PS-60 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-60; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-61",
+      "check": "pstack/playbooks/ps-61",
+      "defaults": {
+        "verifier": "PS-61"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:86; PS-61",
+        "paraphrase": "Shipping independently verifies a green stack, then lands the contiguous verified run bottom-up."
+      },
+      "why": "Shipping independently verifies a green stack, then lands the contiguous verified run bottom-up.",
+      "fixHint": "Bind PS-61 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-61; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-62",
+      "check": "pstack/playbooks/ps-62",
+      "defaults": {
+        "verifier": "PS-62"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:87; PS-62",
+        "paraphrase": "Autonomous run drives a long task to completion without stopping for reversible choices."
+      },
+      "why": "Autonomous run drives a long task to completion without stopping for reversible choices.",
+      "fixHint": "Bind PS-62 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-62; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-63",
+      "check": "pstack/playbooks/ps-63",
+      "defaults": {
+        "verifier": "PS-63"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:88; PS-63",
+        "paraphrase": "Orchestrate assigns a multi-day project to one coordinator."
+      },
+      "why": "Orchestrate assigns a multi-day project to one coordinator.",
+      "fixHint": "Bind PS-63 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-63; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-64",
+      "check": "pstack/playbooks/ps-64",
+      "defaults": {
+        "verifier": "PS-64"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:89; PS-64",
+        "paraphrase": "Autopilot full runs independent PRs to merged with one owner per PR."
+      },
+      "why": "Autopilot full runs independent PRs to merged with one owner per PR.",
+      "fixHint": "Bind PS-64 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-64; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-65",
+      "check": "pstack/playbooks/ps-65",
+      "defaults": {
+        "verifier": "PS-65"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:90; PS-65",
+        "paraphrase": "Autopilot stack builds and verifies one linear stack for the operator to review and land."
+      },
+      "why": "Autopilot stack builds and verifies one linear stack for the operator to review and land.",
+      "fixHint": "Bind PS-65 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-65; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-66",
+      "check": "pstack/playbooks/ps-66",
+      "defaults": {
+        "verifier": "PS-66"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:91; PS-66",
+        "paraphrase": "Session pickup resumes in-flight work from the recorded state, not from a reconstructed guess."
+      },
+      "why": "Session pickup resumes in-flight work from the recorded state, not from a reconstructed guess.",
+      "fixHint": "Bind PS-66 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-66; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-67",
+      "check": "pstack/playbooks/ps-67",
+      "defaults": {
+        "verifier": "PS-67"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:92; PS-67",
+        "paraphrase": "Pause safely suspends in-flight work so a later session can resume it."
+      },
+      "why": "Pause safely suspends in-flight work so a later session can resume it.",
+      "fixHint": "Bind PS-67 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-67; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-68",
+      "check": "pstack/playbooks/ps-68",
+      "defaults": {
+        "verifier": "PS-68"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:93; PS-68",
+        "paraphrase": "Multi-phase plan names phases, the verifiable exit of each phase, and the order."
+      },
+      "why": "Multi-phase plan names phases, the verifiable exit of each phase, and the order.",
+      "fixHint": "Bind PS-68 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-68; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-69",
+      "check": "pstack/playbooks/ps-69",
+      "defaults": {
+        "verifier": "PS-69"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:94; PS-69",
+        "paraphrase": "Worktree cleanup leaves no orphan worktree whose branch is unrecorded."
+      },
+      "why": "Worktree cleanup leaves no orphan worktree whose branch is unrecorded.",
+      "fixHint": "Bind PS-69 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-69; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "PS-70",
+      "check": "pstack/playbooks/ps-70",
+      "defaults": {
+        "verifier": "PS-70"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-requested pstack and installed-workflow invariant catalog",
+        "locator": "packs/pstack/INVARIANTS.md:95; PS-70",
+        "paraphrase": "Opening a PR states the problem, the change, and the proof."
+      },
+      "why": "Opening a PR states the problem, the change, and the proof.",
+      "fixHint": "Bind PS-70 to a reviewed project assertion with applicability, scope, evidence source, owner and freshness in its rationale. Test a violating control. Run pregate fitness run PS-70; repair failed evidence or propose a bounded adaptation that preserves the requirement.",
+      "avoid": "This is a project evidence obligation, not a universal syntax detector or semantic certification. A receipt proves only the reviewed assertion ran on current inputs. Missing proof stays unverified; an adopted assertion with failed or stale proof blocks enforcing checks. Conditional workflow rules need explicit applicability and observed task evidence; selecting a rule does not run a skill or authorize an action. Existing syntax references are partial controls, not proof of this full statement. Fixtures test receipt admission, not the project's semantics. Packs provide no executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "context": {
+    "layers": {
+      "domain": { "paths": ["src/domain/**"], "mayImport": [], "kind": "core" },
+      "application": { "paths": ["src/application/**"], "mayImport": ["domain"], "kind": "core" },
+      "infra": { "paths": ["src/infra/**"], "mayImport": ["domain", "application"], "kind": "adapter" }
+    }
+  },
+  "target": "src/domain/invoice.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }, { "line": 3 }] },
+  "trap": {
+    "family": "import-form",
+    "origin": "corpus",
+    "discovered": "2026-10-01",
+    "note": "After a deny on a static import the edge comes back as `import type` and as a CommonJS require; both are still dependencies on infra."
+  }
+}

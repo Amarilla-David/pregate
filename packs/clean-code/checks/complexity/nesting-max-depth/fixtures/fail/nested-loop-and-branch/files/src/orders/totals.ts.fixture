@@ -1,0 +1,10 @@
+export function sumEligibleTags(orders: readonly { active: boolean; tags: readonly string[] }[]): number {
+  for (const order of orders) {
+    if (order.active) {
+      for (const tag of order.tags) {
+        return tag.length;
+      }
+    }
+  }
+  return 0;
+}

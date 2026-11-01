@@ -1,0 +1,1 @@
+export function place(clock: { now(): Date }) { return clock.now(); }

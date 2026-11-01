@@ -1,0 +1,6 @@
+export function formatAll(prefix: string, items: readonly string[]): string[] {
+  return items.map(item => {
+    item = prefix + item.trim();
+    return item;
+  });
+}

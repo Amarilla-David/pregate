@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/routing/no-next-document-in-app",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "nextjs.no-next-document-in-app",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "next-document-in-app",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "next/document",
+            "inside": {
+              "stopBy": "end",
+              "any": [
+                {
+                  "kind": "import_statement"
+                },
+                {
+                  "kind": "export_statement"
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "kind": "import"
+                  }
+                },
+                {
+                  "kind": "call_expression",
+                  "has": {
+                    "field": "function",
+                    "regex": "^require$"
+                  }
+                }
+              ]
+            }
+          },
+          "files": [
+            "app/**/*",
+            "src/app/**/*"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} imports from next/document in the App Router. Declare document metadata in the route segment instead."
+  }
+}

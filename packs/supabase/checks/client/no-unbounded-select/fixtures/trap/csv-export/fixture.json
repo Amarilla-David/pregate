@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/lib/export.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "csv-export",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "Exporting the selection does not bound it. A select with only csv still reads every row; add range or limit first."
+  }
+}

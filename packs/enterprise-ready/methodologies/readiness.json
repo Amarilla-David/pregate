@@ -1,0 +1,1149 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "enterprise-ready/readiness",
+  "version": "1.0.0",
+  "status": "preview",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "ENTERPRISE-001",
+      "check": "enterprise-ready/identity/requirement-001",
+      "defaults": {
+        "verifier": "ENTERPRISE-001"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 1",
+        "paraphrase": "The product supports single sign-on with SAML 2.0."
+      },
+      "why": "The product supports single sign-on with SAML 2.0.",
+      "fixHint": "Bind ENTERPRISE-001 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-001; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-002",
+      "check": "enterprise-ready/identity/requirement-002",
+      "defaults": {
+        "verifier": "ENTERPRISE-002"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 2",
+        "paraphrase": "The product supports single sign-on with OpenID Connect."
+      },
+      "why": "The product supports single sign-on with OpenID Connect.",
+      "fixHint": "Bind ENTERPRISE-002 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-002; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-003",
+      "check": "enterprise-ready/identity/requirement-003",
+      "defaults": {
+        "verifier": "ENTERPRISE-003"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 3",
+        "paraphrase": "Each customer organization has its own identity-provider configuration."
+      },
+      "why": "Each customer organization has its own identity-provider configuration.",
+      "fixHint": "Bind ENTERPRISE-003 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-003; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-004",
+      "check": "enterprise-ready/identity/requirement-004",
+      "defaults": {
+        "verifier": "ENTERPRISE-004"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 4",
+        "paraphrase": "The product supports SCIM for user create, update, and disable."
+      },
+      "why": "The product supports SCIM for user create, update, and disable.",
+      "fixHint": "Bind ENTERPRISE-004 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-004; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-005",
+      "check": "enterprise-ready/identity/requirement-005",
+      "defaults": {
+        "verifier": "ENTERPRISE-005"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 5",
+        "paraphrase": "The product removes access when the identity provider disables the user."
+      },
+      "why": "The product removes access when the identity provider disables the user.",
+      "fixHint": "Bind ENTERPRISE-005 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-005; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-006",
+      "check": "enterprise-ready/identity/requirement-006",
+      "defaults": {
+        "verifier": "ENTERPRISE-006"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 6",
+        "paraphrase": "The product enforces multi-factor authentication for administrator accounts."
+      },
+      "why": "The product enforces multi-factor authentication for administrator accounts.",
+      "fixHint": "Bind ENTERPRISE-006 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-006; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-007",
+      "check": "enterprise-ready/identity/requirement-007",
+      "defaults": {
+        "verifier": "ENTERPRISE-007"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 7",
+        "paraphrase": "The product supports just-in-time user creation at first sign-on."
+      },
+      "why": "The product supports just-in-time user creation at first sign-on.",
+      "fixHint": "Bind ENTERPRISE-007 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-007; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-008",
+      "check": "enterprise-ready/access-control/requirement-008",
+      "defaults": {
+        "verifier": "ENTERPRISE-008"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 8",
+        "paraphrase": "The product uses role-based access control."
+      },
+      "why": "The product uses role-based access control.",
+      "fixHint": "Bind ENTERPRISE-008 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-008; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-009",
+      "check": "enterprise-ready/access-control/requirement-009",
+      "defaults": {
+        "verifier": "ENTERPRISE-009"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 9",
+        "paraphrase": "The product applies the least-privilege rule by default."
+      },
+      "why": "The product applies the least-privilege rule by default.",
+      "fixHint": "Bind ENTERPRISE-009 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-009; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-010",
+      "check": "enterprise-ready/access-control/requirement-010",
+      "defaults": {
+        "verifier": "ENTERPRISE-010"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 10",
+        "paraphrase": "A user receives only the permissions of the active organization."
+      },
+      "why": "A user receives only the permissions of the active organization.",
+      "fixHint": "Bind ENTERPRISE-010 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-010; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-011",
+      "check": "enterprise-ready/access-control/requirement-011",
+      "defaults": {
+        "verifier": "ENTERPRISE-011"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 11",
+        "paraphrase": "The same person cannot request and approve a controlled action when policy forbids it."
+      },
+      "why": "The same person cannot request and approve a controlled action when policy forbids it.",
+      "fixHint": "Bind ENTERPRISE-011 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-011; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-012",
+      "check": "enterprise-ready/access-control/requirement-012",
+      "defaults": {
+        "verifier": "ENTERPRISE-012"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 12",
+        "paraphrase": "Customer administrators manage users and roles in their organization."
+      },
+      "why": "Customer administrators manage users and roles in their organization.",
+      "fixHint": "Bind ENTERPRISE-012 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-012; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-013",
+      "check": "enterprise-ready/access-control/requirement-013",
+      "defaults": {
+        "verifier": "ENTERPRISE-013"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 13",
+        "paraphrase": "The product records every permission change."
+      },
+      "why": "The product records every permission change.",
+      "fixHint": "Bind ENTERPRISE-013 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-013; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-014",
+      "check": "enterprise-ready/tenant-isolation/requirement-014",
+      "defaults": {
+        "verifier": "ENTERPRISE-014"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 14",
+        "paraphrase": "One customer cannot read or change the data of another customer."
+      },
+      "why": "One customer cannot read or change the data of another customer.",
+      "fixHint": "Bind ENTERPRISE-014 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-014; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-015",
+      "check": "enterprise-ready/tenant-isolation/requirement-015",
+      "defaults": {
+        "verifier": "ENTERPRISE-015"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 15",
+        "paraphrase": "Sessions, roles, audit logs, and billing belong to one organization."
+      },
+      "why": "Sessions, roles, audit logs, and billing belong to one organization.",
+      "fixHint": "Bind ENTERPRISE-015 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-015; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-016",
+      "check": "enterprise-ready/tenant-isolation/requirement-016",
+      "defaults": {
+        "verifier": "ENTERPRISE-016"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 16",
+        "paraphrase": "A user can belong to more than one organization and must switch organization to change scope."
+      },
+      "why": "A user can belong to more than one organization and must switch organization to change scope.",
+      "fixHint": "Bind ENTERPRISE-016 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-016; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-017",
+      "check": "enterprise-ready/tenant-isolation/requirement-017",
+      "defaults": {
+        "verifier": "ENTERPRISE-017"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 17",
+        "paraphrase": "Configuration for one organization does not apply to another organization."
+      },
+      "why": "Configuration for one organization does not apply to another organization.",
+      "fixHint": "Bind ENTERPRISE-017 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-017; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-018",
+      "check": "enterprise-ready/audit/requirement-018",
+      "defaults": {
+        "verifier": "ENTERPRISE-018"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 18",
+        "paraphrase": "The product writes an audit record for each security-relevant action."
+      },
+      "why": "The product writes an audit record for each security-relevant action.",
+      "fixHint": "Bind ENTERPRISE-018 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-018; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-019",
+      "check": "enterprise-ready/audit/requirement-019",
+      "defaults": {
+        "verifier": "ENTERPRISE-019"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 19",
+        "paraphrase": "Each audit record contains the actor, the action, the target, and the time."
+      },
+      "why": "Each audit record contains the actor, the action, the target, and the time.",
+      "fixHint": "Bind ENTERPRISE-019 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-019; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-020",
+      "check": "enterprise-ready/audit/requirement-020",
+      "defaults": {
+        "verifier": "ENTERPRISE-020"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 20",
+        "paraphrase": "The customer can read and export only the audit records of that customer."
+      },
+      "why": "The customer can read and export only the audit records of that customer.",
+      "fixHint": "Bind ENTERPRISE-020 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-020; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-021",
+      "check": "enterprise-ready/audit/requirement-021",
+      "defaults": {
+        "verifier": "ENTERPRISE-021"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 21",
+        "paraphrase": "The product does not change or delete an audit record."
+      },
+      "why": "The product does not change or delete an audit record.",
+      "fixHint": "Bind ENTERPRISE-021 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-021; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-022",
+      "check": "enterprise-ready/audit/requirement-022",
+      "defaults": {
+        "verifier": "ENTERPRISE-022"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 22",
+        "paraphrase": "The product keeps audit records for a stated retention period."
+      },
+      "why": "The product keeps audit records for a stated retention period.",
+      "fixHint": "Bind ENTERPRISE-022 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-022; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-023",
+      "check": "enterprise-ready/audit/requirement-023",
+      "defaults": {
+        "verifier": "ENTERPRISE-023"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 23",
+        "paraphrase": "The product can send audit records to the customer security system."
+      },
+      "why": "The product can send audit records to the customer security system.",
+      "fixHint": "Bind ENTERPRISE-023 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-023; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-024",
+      "check": "enterprise-ready/data-protection/requirement-024",
+      "defaults": {
+        "verifier": "ENTERPRISE-024"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 24",
+        "paraphrase": "The product encrypts data in transit with TLS 1.2 or a later version."
+      },
+      "why": "The product encrypts data in transit with TLS 1.2 or a later version.",
+      "fixHint": "Bind ENTERPRISE-024 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-024; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-025",
+      "check": "enterprise-ready/data-protection/requirement-025",
+      "defaults": {
+        "verifier": "ENTERPRISE-025"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 25",
+        "paraphrase": "The product encrypts data at rest."
+      },
+      "why": "The product encrypts data at rest.",
+      "fixHint": "Bind ENTERPRISE-025 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-025; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-026",
+      "check": "enterprise-ready/data-protection/requirement-026",
+      "defaults": {
+        "verifier": "ENTERPRISE-026"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 26",
+        "paraphrase": "The product stores secrets in a secrets store, not in source code."
+      },
+      "why": "The product stores secrets in a secrets store, not in source code.",
+      "fixHint": "Bind ENTERPRISE-026 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-026; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-027",
+      "check": "enterprise-ready/data-protection/requirement-027",
+      "defaults": {
+        "verifier": "ENTERPRISE-027"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 27",
+        "paraphrase": "The product supports a documented data-export request."
+      },
+      "why": "The product supports a documented data-export request.",
+      "fixHint": "Bind ENTERPRISE-027 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-027; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-028",
+      "check": "enterprise-ready/data-protection/requirement-028",
+      "defaults": {
+        "verifier": "ENTERPRISE-028"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 28",
+        "paraphrase": "The product supports a documented data-deletion request."
+      },
+      "why": "The product supports a documented data-deletion request.",
+      "fixHint": "Bind ENTERPRISE-028 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-028; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-029",
+      "check": "enterprise-ready/data-protection/requirement-029",
+      "defaults": {
+        "verifier": "ENTERPRISE-029"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 29",
+        "paraphrase": "The product states the regions where it stores customer data."
+      },
+      "why": "The product states the regions where it stores customer data.",
+      "fixHint": "Bind ENTERPRISE-029 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-029; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-030",
+      "check": "enterprise-ready/data-protection/requirement-030",
+      "defaults": {
+        "verifier": "ENTERPRISE-030"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 30",
+        "paraphrase": "The product lists subprocessors and the data that each subprocessor receives."
+      },
+      "why": "The product lists subprocessors and the data that each subprocessor receives.",
+      "fixHint": "Bind ENTERPRISE-030 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-030; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-031",
+      "check": "enterprise-ready/reliability/requirement-031",
+      "defaults": {
+        "verifier": "ENTERPRISE-031"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 31",
+        "paraphrase": "The product has a written availability target and a service-level agreement."
+      },
+      "why": "The product has a written availability target and a service-level agreement.",
+      "fixHint": "Bind ENTERPRISE-031 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-031; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-032",
+      "check": "enterprise-ready/reliability/requirement-032",
+      "defaults": {
+        "verifier": "ENTERPRISE-032"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 32",
+        "paraphrase": "The product defines a recovery-point objective and a recovery-time objective."
+      },
+      "why": "The product defines a recovery-point objective and a recovery-time objective.",
+      "fixHint": "Bind ENTERPRISE-032 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-032; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-033",
+      "check": "enterprise-ready/reliability/requirement-033",
+      "defaults": {
+        "verifier": "ENTERPRISE-033"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 33",
+        "paraphrase": "The product takes backups and tests restore."
+      },
+      "why": "The product takes backups and tests restore.",
+      "fixHint": "Bind ENTERPRISE-033 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-033; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-034",
+      "check": "enterprise-ready/reliability/requirement-034",
+      "defaults": {
+        "verifier": "ENTERPRISE-034"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 34",
+        "paraphrase": "The product has a disaster-recovery plan for production workloads."
+      },
+      "why": "The product has a disaster-recovery plan for production workloads.",
+      "fixHint": "Bind ENTERPRISE-034 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-034; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-035",
+      "check": "enterprise-ready/reliability/requirement-035",
+      "defaults": {
+        "verifier": "ENTERPRISE-035"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 35",
+        "paraphrase": "The product removes single points of failure from the core path."
+      },
+      "why": "The product removes single points of failure from the core path.",
+      "fixHint": "Bind ENTERPRISE-035 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-035; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-036",
+      "check": "enterprise-ready/reliability/requirement-036",
+      "defaults": {
+        "verifier": "ENTERPRISE-036"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 36",
+        "paraphrase": "The product publishes service status and incident history."
+      },
+      "why": "The product publishes service status and incident history.",
+      "fixHint": "Bind ENTERPRISE-036 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-036; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-037",
+      "check": "enterprise-ready/reliability/requirement-037",
+      "defaults": {
+        "verifier": "ENTERPRISE-037"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 37",
+        "paraphrase": "The product tells customers about planned maintenance before the window starts."
+      },
+      "why": "The product tells customers about planned maintenance before the window starts.",
+      "fixHint": "Bind ENTERPRISE-037 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-037; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-038",
+      "check": "enterprise-ready/secure-development/requirement-038",
+      "defaults": {
+        "verifier": "ENTERPRISE-038"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 38",
+        "paraphrase": "The product follows a secure development lifecycle."
+      },
+      "why": "The product follows a secure development lifecycle.",
+      "fixHint": "Bind ENTERPRISE-038 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-038; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-039",
+      "check": "enterprise-ready/secure-development/requirement-039",
+      "defaults": {
+        "verifier": "ENTERPRISE-039"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 39",
+        "paraphrase": "The vendor scans dependencies and fixes known high-risk defects on a stated schedule."
+      },
+      "why": "The vendor scans dependencies and fixes known high-risk defects on a stated schedule.",
+      "fixHint": "Bind ENTERPRISE-039 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-039; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-040",
+      "check": "enterprise-ready/secure-development/requirement-040",
+      "defaults": {
+        "verifier": "ENTERPRISE-040"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 40",
+        "paraphrase": "The vendor runs a penetration test at least once each year."
+      },
+      "why": "The vendor runs a penetration test at least once each year.",
+      "fixHint": "Bind ENTERPRISE-040 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-040; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-041",
+      "check": "enterprise-ready/secure-development/requirement-041",
+      "defaults": {
+        "verifier": "ENTERPRISE-041"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 41",
+        "paraphrase": "The vendor can show a current SOC 2 Type II report, or an equal attestation."
+      },
+      "why": "The vendor can show a current SOC 2 Type II report, or an equal attestation.",
+      "fixHint": "Bind ENTERPRISE-041 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-041; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-042",
+      "check": "enterprise-ready/secure-development/requirement-042",
+      "defaults": {
+        "verifier": "ENTERPRISE-042"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 42",
+        "paraphrase": "The vendor can show ISO 27001 certification when the customer requires it."
+      },
+      "why": "The vendor can show ISO 27001 certification when the customer requires it.",
+      "fixHint": "Bind ENTERPRISE-042 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-042; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-043",
+      "check": "enterprise-ready/secure-development/requirement-043",
+      "defaults": {
+        "verifier": "ENTERPRISE-043"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 43",
+        "paraphrase": "The product has a vulnerability-disclosure process."
+      },
+      "why": "The product has a vulnerability-disclosure process.",
+      "fixHint": "Bind ENTERPRISE-043 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-043; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-044",
+      "check": "enterprise-ready/operations-and-change/requirement-044",
+      "defaults": {
+        "verifier": "ENTERPRISE-044"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 44",
+        "paraphrase": "The product separates development, test, and production environments."
+      },
+      "why": "The product separates development, test, and production environments.",
+      "fixHint": "Bind ENTERPRISE-044 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-044; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-045",
+      "check": "enterprise-ready/operations-and-change/requirement-045",
+      "defaults": {
+        "verifier": "ENTERPRISE-045"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 45",
+        "paraphrase": "The product supports a controlled release and a rollback."
+      },
+      "why": "The product supports a controlled release and a rollback.",
+      "fixHint": "Bind ENTERPRISE-045 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-045; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-046",
+      "check": "enterprise-ready/operations-and-change/requirement-046",
+      "defaults": {
+        "verifier": "ENTERPRISE-046"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 46",
+        "paraphrase": "The product supports feature flags for a safe release."
+      },
+      "why": "The product supports feature flags for a safe release.",
+      "fixHint": "Bind ENTERPRISE-046 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-046; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-047",
+      "check": "enterprise-ready/operations-and-change/requirement-047",
+      "defaults": {
+        "verifier": "ENTERPRISE-047"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 47",
+        "paraphrase": "The product exposes health checks, metrics, and structured logs."
+      },
+      "why": "The product exposes health checks, metrics, and structured logs.",
+      "fixHint": "Bind ENTERPRISE-047 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-047; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-048",
+      "check": "enterprise-ready/operations-and-change/requirement-048",
+      "defaults": {
+        "verifier": "ENTERPRISE-048"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 48",
+        "paraphrase": "An upgrade procedure and a rollback procedure exist in writing."
+      },
+      "why": "An upgrade procedure and a rollback procedure exist in writing.",
+      "fixHint": "Bind ENTERPRISE-048 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-048; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-049",
+      "check": "enterprise-ready/operations-and-change/requirement-049",
+      "defaults": {
+        "verifier": "ENTERPRISE-049"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 49",
+        "paraphrase": "The customer can configure the product without a code change for standard options."
+      },
+      "why": "The customer can configure the product without a code change for standard options.",
+      "fixHint": "Bind ENTERPRISE-049 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-049; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-050",
+      "check": "enterprise-ready/integration/requirement-050",
+      "defaults": {
+        "verifier": "ENTERPRISE-050"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 50",
+        "paraphrase": "The product provides a versioned API and a written deprecation policy."
+      },
+      "why": "The product provides a versioned API and a written deprecation policy.",
+      "fixHint": "Bind ENTERPRISE-050 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-050; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-051",
+      "check": "enterprise-ready/integration/requirement-051",
+      "defaults": {
+        "verifier": "ENTERPRISE-051"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 51",
+        "paraphrase": "The product supports webhooks with retry and idempotency."
+      },
+      "why": "The product supports webhooks with retry and idempotency.",
+      "fixHint": "Bind ENTERPRISE-051 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-051; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-052",
+      "check": "enterprise-ready/integration/requirement-052",
+      "defaults": {
+        "verifier": "ENTERPRISE-052"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 52",
+        "paraphrase": "The product supports bulk import and bulk export in an open format."
+      },
+      "why": "The product supports bulk import and bulk export in an open format.",
+      "fixHint": "Bind ENTERPRISE-052 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-052; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-053",
+      "check": "enterprise-ready/integration/requirement-053",
+      "defaults": {
+        "verifier": "ENTERPRISE-053"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 53",
+        "paraphrase": "The product provides a sandbox for tests before production use."
+      },
+      "why": "The product provides a sandbox for tests before production use.",
+      "fixHint": "Bind ENTERPRISE-053 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-053; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-054",
+      "check": "enterprise-ready/commercial-and-support/requirement-054",
+      "defaults": {
+        "verifier": "ENTERPRISE-054"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 54",
+        "paraphrase": "The contract includes a data-processing agreement."
+      },
+      "why": "The contract includes a data-processing agreement.",
+      "fixHint": "Bind ENTERPRISE-054 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-054; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-055",
+      "check": "enterprise-ready/commercial-and-support/requirement-055",
+      "defaults": {
+        "verifier": "ENTERPRISE-055"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 55",
+        "paraphrase": "Billing is at organization level, not only at user level."
+      },
+      "why": "Billing is at organization level, not only at user level.",
+      "fixHint": "Bind ENTERPRISE-055 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-055; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-056",
+      "check": "enterprise-ready/commercial-and-support/requirement-056",
+      "defaults": {
+        "verifier": "ENTERPRISE-056"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 56",
+        "paraphrase": "The product states support hours, severity levels, and response times."
+      },
+      "why": "The product states support hours, severity levels, and response times.",
+      "fixHint": "Bind ENTERPRISE-056 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-056; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    },
+    {
+      "id": "ENTERPRISE-057",
+      "check": "enterprise-ready/commercial-and-support/requirement-057",
+      "defaults": {
+        "verifier": "ENTERPRISE-057"
+      },
+      "severity": "deny",
+      "source": {
+        "work": "User-supplied product invariants",
+        "locator": "docs/features/enterprise-ready-pack.md, rule 57",
+        "paraphrase": "The customer can obtain security answers from a trust page."
+      },
+      "why": "The customer can obtain security answers from a trust page.",
+      "fixHint": "Bind ENTERPRISE-057 to a human-reviewed product assertion with scope, applicability, owner, evidence source and freshness controls in its rationale. Include a failing control. Run pregate fitness run ENTERPRISE-057; repair failed assertions. Review conditional applicability instead of returning an unexplained pass.",
+      "avoid": "This is a project evidence gate, not a syntax detector or readiness certification. A receipt proves only the reviewed assertion ran on the current inputs. External legal, certification, deployment and performance evidence needs its own authenticity, scope and freshness checks inside that assertion. Missing evidence remains unverified. Pack fixtures test receipt admission, not the product requirement. Packs never supply executable commands.",
+      "examples": {
+        "pass": "pass/current-inputs",
+        "fail": "fail/no-evidence"
+      }
+    }
+  ]
+}

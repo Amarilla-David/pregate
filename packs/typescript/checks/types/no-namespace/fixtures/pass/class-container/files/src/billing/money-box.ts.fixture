@@ -1,0 +1,4 @@
+
+export class MoneyBox {
+  constructor(readonly total: number) {}
+}

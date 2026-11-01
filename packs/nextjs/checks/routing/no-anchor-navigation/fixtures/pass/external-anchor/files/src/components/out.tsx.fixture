@@ -1,0 +1,1 @@
+export function Out() { return <a href="https://x.com">X</a>; }

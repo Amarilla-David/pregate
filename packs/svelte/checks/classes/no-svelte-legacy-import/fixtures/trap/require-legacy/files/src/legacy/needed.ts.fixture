@@ -1,0 +1,5 @@
+const legacy = require("svelte/legacy");
+
+export function kind(): string {
+  return "legacy";
+}

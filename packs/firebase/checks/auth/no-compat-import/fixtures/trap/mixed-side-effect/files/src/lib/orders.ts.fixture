@@ -1,0 +1,8 @@
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import "firebase/compat/firestore";
+import { app } from "./firebase";
+
+export async function order(id: string) {
+  const snapshot = await getDoc(doc(getFirestore(app), "orders", id));
+  return snapshot.exists() ? snapshot.data() : null;
+}

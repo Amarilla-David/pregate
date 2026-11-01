@@ -1,0 +1,11 @@
+
+export function poll(window: Window): () => void {
+  const timer = window.setInterval(() => tick(), 1000);
+  return () => window.clearInterval(timer);
+}
+
+function tick(): void {}
+interface Window {
+  setInterval(fn: () => void, ms: number): number;
+  clearInterval(handle: number): void;
+}

@@ -1,0 +1,3 @@
+import { t, publicProcedure } from "./trpc";
+import { z } from "zod";
+export const postRouter = t.router({ list: publicProcedure.input(z.object({ limit: z.number() })).query(() => db.post.findMany()) });

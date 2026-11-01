@@ -1,0 +1,14 @@
+import { describe, expect, it, test } from "bun:test";
+import { Cart } from "../src/cart";
+
+describe("Cart", () => {
+  it("starts empty", () => {
+    expect(new Cart().size()).toBe(0);
+  });
+
+  test.each([1, 2, 3])("adds %i items", (count) => {
+    const cart = new Cart();
+    for (let i = 0; i < count; i++) cart.add(`sku-${i}`);
+    expect(cart.size()).toBe(count);
+  });
+});

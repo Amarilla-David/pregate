@@ -1,0 +1,10 @@
+declare abstract class Migration {
+  addSql(sql: string): void;
+}
+
+export class Migration20261009 extends Migration {
+  async up(): Promise<void> {
+    const downtime = "none";
+    this.addSql(`alter table "invoice" drop column "notes"; -- downtime: ${downtime}`);
+  }
+}

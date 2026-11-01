@@ -1,0 +1,7 @@
+import { createCipheriv, randomBytes } from "node:crypto";
+
+export function seal(key: Buffer, data: Buffer) {
+  const iv = randomBytes(12);
+  const cipher = createCipheriv("aes-256-gcm", key, iv);
+  return { iv, data: Buffer.concat([cipher.update(data), cipher.final()]), tag: cipher.getAuthTag() };
+}

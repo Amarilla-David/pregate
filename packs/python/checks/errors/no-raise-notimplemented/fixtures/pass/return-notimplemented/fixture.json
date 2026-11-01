@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "params": {},
+  "target": "src/dunder_eq.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

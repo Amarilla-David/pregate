@@ -1,0 +1,4 @@
+interface Observer { disconnect(): void; }
+export function stopObserver(observer: Observer): void {
+  observer.disconnect();
+}

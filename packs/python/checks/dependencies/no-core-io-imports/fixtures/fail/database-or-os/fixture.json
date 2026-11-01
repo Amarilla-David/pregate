@@ -1,0 +1,51 @@
+{
+  "language": "python",
+  "params": {
+    "paths": [
+      "@layers:core"
+    ],
+    "packages": [
+      "sqlite3",
+      "subprocess",
+      "socket",
+      "requests"
+    ]
+  },
+  "target": "pkg/core/a.py",
+  "before": null,
+  "context": {
+    "layers": {
+      "core": {
+        "paths": [
+          "pkg/core/**"
+        ],
+        "mayImport": [
+          "ports"
+        ],
+        "kind": "core"
+      },
+      "ports": {
+        "paths": [
+          "pkg/ports/**"
+        ],
+        "mayImport": [],
+        "kind": "port"
+      },
+      "infra": {
+        "paths": [
+          "pkg/infra/**"
+        ],
+        "mayImport": [],
+        "kind": "adapter"
+      }
+    }
+  },
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  }
+}

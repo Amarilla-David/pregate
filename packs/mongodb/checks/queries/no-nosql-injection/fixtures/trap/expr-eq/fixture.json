@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/mongo/filter-expr-eq.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "expr-eq",
+    "origin": "forge",
+    "discovered": "2026-10-03",
+    "note": "$expr with $eq looks declarative but evaluates an expression tree over request input. Allowlist the compared field instead."
+  }
+}

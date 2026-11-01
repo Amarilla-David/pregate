@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "javascript/safety/no-new-wrappers",
+  "version": "1.0.0",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "javascript.new-wrappers",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "new-wrapper",
+          "rule": {
+            "kind": "new_expression",
+            "has": {
+              "field": "constructor",
+              "regex": "^(String|Number|Boolean)$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} wraps a primitive with new. Call the converter as a function."
+  }
+}

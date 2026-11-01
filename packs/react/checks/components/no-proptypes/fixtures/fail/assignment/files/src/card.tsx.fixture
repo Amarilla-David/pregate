@@ -1,0 +1,6 @@
+export function Card(props: { label: string }) {
+  return <div>{props.label}</div>;
+}
+Card.propTypes = {
+  label: "string",
+};

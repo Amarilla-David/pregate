@@ -1,0 +1,8 @@
+import { error } from "@sveltejs/kit";
+
+export async function load({ params }) {
+	if (!params.id) {
+		throw error(404, "Order not found");
+	}
+	return { id: params.id };
+}

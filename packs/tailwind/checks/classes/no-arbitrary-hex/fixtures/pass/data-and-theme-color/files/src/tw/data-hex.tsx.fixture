@@ -1,0 +1,10 @@
+const labels = ["#22c55e", "#ef4444"];
+
+export function head() {
+  return { name: "theme-color", content: "#0f172a" };
+}
+
+export function Swatch() {
+  const fallback = "#22c55e";
+  return <span className="inline-flex">{labels[0]}{fallback}</span>;
+}

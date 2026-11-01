@@ -1,0 +1,2 @@
+const retries = "1";
+await getTransaction(sig, { maxSupportedTransactionVersion: 1 });

@@ -1,0 +1,189 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "react/components",
+  "version": "1.2.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "REACT-KEY-001",
+      "check": "react/components/no-array-index-key",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, lists and keys",
+        "locator": "Keys must be stable and unique",
+        "paraphrase": "Keys reconcile list items across renders. An array index describes position, not identity, so inserts and deletes reuse the wrong state."
+      },
+      "why": "An index key makes React match the wrong item after a reorder, so inputs keep stale values and animations jump.",
+      "fixHint": "Use a stable item id for data-bearing or mutable lists. A direct Array.from({ length: N }, (_, index) => literal JSX) placeholder list may retain its index when N is a nonnegative integer literal and the element is unused.",
+      "avoid": "Direct index keys and call-wrapped forms still report for dynamic, data-bearing, reordered or transformed lists. The static exception requires unshadowed Array.from, one literal length property, an unused element parameter and literal intrinsic JSX containing only constants or the direct positional index. Nested data expressions, items[index], custom renderers, dynamic lengths and wrapped index keys remain unproved. This does not infer runtime identity across components or arbitrary generators.",
+      "examples": {
+        "pass": "pass/stable-id",
+        "fail": "fail/bare-index"
+      }
+    },
+    {
+      "id": "REACT-NEST-001",
+      "check": "react/components/no-nested-component",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, component composition",
+        "locator": "Define components at the top level",
+        "paraphrase": "A component defined inside another component is a new type on every render, so React unmounts and remounts its whole subtree and loses state."
+      },
+      "why": "Each render creates a fresh component type, so the nested tree remounts: inputs lose focus and effects re-run.",
+      "fixHint": "Move the inner component next to its parent and pass the data it needs as props.",
+      "avoid": "The checker requires uppercase local function/component names and actual JSX in both the nested definition and its enclosing function declaration, without crossing another function. Ordinary helpers, markup strings and lowercase render callbacks are allowed. React.createElement, anonymous factories, outer arrow components and cross-file/runtime component identity need stronger evidence.",
+      "examples": {
+        "pass": "pass/siblings",
+        "fail": "fail/nested-function"
+      }
+    },
+    {
+      "id": "REACT-REF-001",
+      "check": "react/components/no-string-ref",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React legacy documentation, refs",
+        "locator": "String refs are legacy",
+        "paraphrase": "String refs resolve through the owner at runtime and cannot be typed or composed. An object or callback ref points at the node directly."
+      },
+      "why": "String refs break under composition and minification, and the checker cannot type what they point at.",
+      "fixHint": "Create the ref with useRef and pass the object, or pass a callback that receives the node.",
+      "avoid": "Only literal string refs are flagged, double-quoted or single-quoted in an expression. A variable or callback in braces is the replacement.",
+      "examples": {
+        "pass": "pass/callback-ref",
+        "fail": "fail/double-quoted"
+      }
+    },
+    {
+      "id": "REACT-BLANK-001",
+      "check": "react/components/no-unsafe-blank-target",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Web security guidance for external links",
+        "locator": "Links that open a new tab",
+        "paraphrase": "A new tab keeps a reference to its opener. Without rel noreferrer the opened page can navigate the tab the user came from."
+      },
+      "why": "The opened page gains opener access and can redirect the original tab to a lookalike.",
+      "fixHint": "Add rel=\"noreferrer\" to the anchor. Keep target=\"_blank\" only for destinations outside the app.",
+      "avoid": "Same-tab links need no rel. Any rel value silences the rule; noreferrer is the one that cuts opener access.",
+      "examples": {
+        "pass": "pass/with-rel",
+        "fail": "fail/bare-blank"
+      }
+    },
+    {
+      "id": "REACT-PROP-001",
+      "check": "react/components/no-proptypes",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, TypeScript",
+        "locator": "Static typing replaces PropTypes",
+        "paraphrase": "PropTypes check props at runtime in development only. A TypeScript interface checks the same contract at compile time on every build."
+      },
+      "why": "Runtime checks ship to development bundles and miss every caller the compiler could have stopped.",
+      "fixHint": "Declare an interface for the props and annotate the component. Delete the import and the assignment.",
+      "avoid": "Type-only imports from react are fine. Any import of the prop-types package and any .propTypes assignment are flagged.",
+      "examples": {
+        "pass": "pass/typed-props",
+        "fail": "fail/import-proptypes"
+      }
+    },
+    {
+      "id": "REACT-ROOT-001",
+      "check": "react/components/no-legacy-root-api",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React 19 upgrade guide, https://react.dev/blog/2024/04/25/react-19-upgrade-guide",
+        "locator": "Removed deprecated React DOM APIs: ReactDOM.render, ReactDOM.hydrate, unmountComponentAtNode, ReactDOM.findDOMNode",
+        "paraphrase": "React 18 deprecated render, hydrate and unmountComponentAtNode, and React 19 removed them with findDOMNode. Apps mount with createRoot or hydrateRoot and reach DOM nodes through refs."
+      },
+      "why": "React 19 no longer exports these functions, so the app fails at startup; on React 18 the legacy root also opts out of concurrent features and logs an error.",
+      "fixHint": "Import createRoot or hydrateRoot from react-dom/client and call root.render or root.unmount. Replace findDOMNode with a ref on the element.",
+      "avoid": "Only these four names are flagged: as named imports from react-dom, or as members of a default or namespace react-dom import. render from @testing-library/react, root.render, react-dom/client, react-dom/server, createPortal and flushSync are allowed. require(\"react-dom\") and re-exports are not traced.",
+      "examples": {
+        "pass": "pass/create-root",
+        "fail": "fail/named-render"
+      }
+    },
+    {
+      "id": "REACT-JSURL-001",
+      "check": "react/components/no-javascript-url",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React 19 upgrade guide, https://react.dev/blog/2024/04/25/react-19-upgrade-guide",
+        "locator": "Changelog, other breaking changes: react-dom errors for javascript URLs in src and href",
+        "paraphrase": "React DOM blocks javascript: URLs in src and href. Earlier versions warned; React 19 replaces them with a URL that throws."
+      },
+      "why": "A javascript: link runs script from markup. React blocks it, so the link does nothing except throw, and the pattern is an injection path when the URL is built from data.",
+      "fixHint": "Use a button with an onClick handler for actions, or a real URL or #fragment for links.",
+      "avoid": "Only literal href and src values that start with javascript: are flagged, in any letter case, after leading spaces, in quotes, braces or a template whose first text is the scheme. URLs from variables or props are not resolved. Text that mentions javascript elsewhere is allowed.",
+      "examples": {
+        "pass": "pass/button-handler",
+        "fail": "fail/void-href"
+      }
+    },
+    {
+      "id": "REACT-FIELD-001",
+      "check": "react/components/no-readonly-controlled-field",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React DOM documentation, <input>, https://react.dev/reference/react-dom/components/input",
+        "locator": "Troubleshooting: my text input doesn't update when I type into it; my checkbox doesn't update when I click on it",
+        "paraphrase": "An input, textarea or select given value (or a checkbox given checked) without onChange is read-only: React logs an error and reverts every edit. Add onChange, mark it readOnly, or use defaultValue."
+      },
+      "why": "The user types or clicks and nothing changes, because React forces the field back to the passed value on every render.",
+      "fixHint": "Pass an onChange handler that updates the state behind value or checked. For display-only fields add readOnly; for an initial value use defaultValue or defaultChecked.",
+      "avoid": "onChange, onInput, readOnly or disabled on the element satisfies the rule, as does any spread of props. For value, an input whose type is an expression or a non-text type such as hidden, submit, checkbox, radio or file is skipped; checked is checked on any input. Custom components such as <Input> and React Native TextInput are not matched.",
+      "examples": {
+        "pass": "pass/with-handlers",
+        "fail": "fail/text-value"
+      }
+    },
+    {
+      "id": "REACT-CONSUMER-001",
+      "check": "react/components/no-context-consumer",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, useContext and use (https://react.dev/reference/react/useContext)",
+        "locator": "Legacy way: Context.Consumer",
+        "paraphrase": "Before useContext existed, Context.Consumer was the render-props way to read context. Modern React recommends useContext(Context) or use(Context)."
+      },
+      "why": "Context.Consumer wraps children in a render-prop callback for every context read, deeply nesting the JSX tree when multiple contexts are consumed.",
+      "fixHint": "Call useContext(Context) or use(Context) at the top of the component and render the JSX directly.",
+      "avoid": "Only JSX elements whose tag is a member expression ending in .Consumer are matched. Bare <Consumer /> components are allowed.",
+      "examples": {
+        "pass": "pass/use-context",
+        "fail": "fail/jsx-consumer"
+      }
+    },
+    {
+      "id": "REACT-LIFECYCLE-001",
+      "check": "react/components/no-legacy-lifecycle",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "React documentation, Component legacy lifecycle methods (https://react.dev/reference/react/Component)",
+        "locator": "Deprecated lifecycle methods: componentWillMount, componentWillReceiveProps, componentWillUpdate",
+        "paraphrase": "componentWillMount, componentWillReceiveProps, and componentWillUpdate (including UNSAFE_ aliases) are legacy lifecycles that run more than once under concurrent rendering."
+      },
+      "why": "Legacy pre-commit lifecycle methods fire repeatedly when rendering is interrupted, causing duplicate requests, state tearing, and runtime warnings.",
+      "fixHint": "Move side effects to componentDidMount or componentDidUpdate, derive state in static getDerivedStateFromProps, or migrate the class to a function component.",
+      "avoid": "The UNSAFE_ prefix only silences one deprecation notice while keeping the unsafe execution model. Plain object methods outside classes are not matched.",
+      "examples": {
+        "pass": "pass/component-did-mount",
+        "fail": "fail/component-will-mount"
+      }
+    }
+  ]
+}
