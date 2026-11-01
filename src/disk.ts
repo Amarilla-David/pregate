@@ -167,6 +167,17 @@ export function findRoot(abs: string, accepted: (root: string) => boolean): stri
   }
 }
 
+// The accepted root the spelled path sits in, when its canonical target sits in no accepted root:
+// a symlink, or a path through one, would write where no lock can see it. Null when the target
+// lands in an accepted root, the same or another one (a nested root, a sibling): the root that
+// holds the target judges it, as any canonical path. Callers judge an escape by the spelled path,
+// so a target out of the root's scope stays out of scope and a judged path cannot slip out.
+export function escapedRoot(spelled: string, landed: string, accepted: (root: string) => boolean): string | null {
+  const home = findRoot(dirname(resolve(spelled)), accepted);
+  if (home === null || findRoot(dirname(landed), accepted) !== null) return null;
+  return home;
+}
+
 // Readers see the old file or the new one, never a partial write.
 export function writeAtomic(path: string, text: string): void {
   const tmp = `${path}.${process.pid}.${Math.random().toString(36).slice(2)}.tmp`;
