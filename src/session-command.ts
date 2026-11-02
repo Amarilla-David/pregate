@@ -19,6 +19,7 @@ import { review } from "./recorded.ts";
 import * as state from "./state.ts";
 import { beforeTexts, H, sessionDir, sha256, snapshot } from "./state.ts";
 import { lockPrune } from "./state-lease.ts";
+import { approvedLocally, loosening } from "./loosening.ts";
 import { contractState } from "./status.ts";
 import { accepted, arrivedWithHead, owned, reader, snapshotReader, stopFiles, workspacePaths } from "./workspace.ts";
 import type { CallEvent, Decision, DecideInput, Form, HookEvent, Lock, Session, Snapshot, Violation } from "./types.ts";
@@ -180,8 +181,10 @@ export async function onStop(e: Extract<HookEvent, { kind: "stop" }>, budgetMs =
   const agentH = e.session.agentId === null ? "-" : state.H(e.session.agentId);
   const scope = stopScope(sid, e.session);
   // A removed worktree leaves nothing to judge; its consent record may outlive it.
-  const roots = state.roots(sid).filter((r) => existsSync(r) && enabled(r) && scope.roots(r));
-  if (roots.length === 0) return told(null);
+  const live = state.roots(sid).filter((r) => existsSync(r) && scope.roots(r));
+  const roots = live.filter((r) => enabled(r));
+  const lost = consentLost(live.filter((r) => !enabled(r)));
+  if (roots.length === 0) return told(lost);
   // Cursor's Stop followups each get a new generation_id; they still belong to the blocked turn.
   const turn = turnOf(e.session.harness === "cursor" ? { ...e.session, turnId: null } : e.session);
   await grammars();
@@ -211,7 +214,16 @@ export async function onStop(e: Extract<HookEvent, { kind: "stop" }>, budgetMs =
     root: chosen?.root ?? null, enforcement: ruleEnforcements(chosen?.lock ?? null),
     afterSha: null, astHash: null,
   }, null);
-  return failed === undefined ? d : decide({ ...input, form: form(failed) });
+  const decided = failed === undefined ? d : decide({ ...input, form: form(failed) });
+  return lost === null ? decided : { ...decided, notice: [decided.notice, lost].filter(Boolean).join("\n\n") };
+}
+
+// A root this session reached while it was enabled, whose consent is now disabled or gone. A human
+// can do that on purpose; so can a script the agent ran. Either way nothing is judged there now.
+function consentLost(roots: string[]): string | null {
+  if (roots.length === 0) return null;
+  return `PREGATE WARNING: consent for ${roots.join(", ")} was disabled or removed during this session, so PREGATE no longer judges ${roots.length === 1 ? "it" : "them"}. `
+    + "If you did not run pregate disable, a command or script did: inspect pregate status, re-enable with pregate enable in a terminal, and review the changes made since.";
 }
 
 function stopDecision(call: Call, results: RootResult[], chosen: RootResult | undefined, priorStops: CallEvent[], stop: StopControl): {
@@ -319,6 +331,8 @@ function stopRoot(sid: string, root: string, scope: StopScope): RootResult {
   // Project fitness belongs to the turn, not to one subagent's files.
   const fitness = scope.agent ? null : projectFitness(root, loaded.lock, "stop");
   const known = { ...none, lock: loaded.lock, lockHash: loaded.hash };
+  const loosened = sessionLoosening(sid, root, snap, loaded);
+  if (loosened !== null) return { ...known, form: loosened };
   if (fitness !== null) known.introduced.push(...fitnessViolations(loaded.lock, fitness));
   checkpoint("stop-inventory");
   const all = stopFiles(sid, snap);
@@ -348,6 +362,17 @@ function stopRoot(sid: string, root: string, scope: StopScope): RootResult {
     for (const v of r.violations) (v.severity === "ask" && asked.includes(v.rule) ? known.approved : known.introduced).push(v);
   }
   return rootBlocks(known) ? known : { ...known, ...muted };
+}
+
+// The contract the session started with, loosened since without a human approval recorded on
+// this machine: a script can rewrite the preset and recompile the lock without any hook seeing it.
+function sessionLoosening(sid: string, root: string, snap: Snapshot, loaded: { lock: Lock; hash: string }): Form | null {
+  const lockText = state.beforeText(sid, snap, LOCK), presetText = state.beforeText(sid, snap, PRESET);
+  if (isCause(lockText)) return form(lockText);
+  if (isCause(presetText)) return form(presetText);
+  const found = loosening({ lockText, presetText }, { ...loaded, presetText: readText(join(root, PRESET)) });
+  if (found === null || approvedLocally(root, loaded.hash)) return null;
+  return { cause: "contract-loosened", line: null, detail: found.lines.join("\n") };
 }
 
 // §4.3 step 3: the rules the human approved through an ask whose result is exactly the file on disk.

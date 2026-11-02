@@ -44,7 +44,7 @@ function project(name: string, files: Record<string, string> = {}, git = false) 
   if (git) expect(Bun.spawnSync(["git", "init", "-q", root], { stdout: "pipe", stderr: "pipe" }).exitCode).toBe(0);
   const machine = join(area, name + "-machine");
   const env = { ...process.env, HOME: join(machine, "home"), CODEX_HOME: join(machine, "codex"), GROK_HOME: join(machine, "grok"),
-    CLAUDE_CONFIG_DIR: join(machine, "claude"), XDG_DATA_HOME: join(machine, "data"), XDG_STATE_HOME: join(machine, "state"), CI: "1",
+    CLAUDE_CONFIG_DIR: join(machine, "claude"), XDG_DATA_HOME: join(machine, "data"), XDG_STATE_HOME: join(machine, "state"), CI: "1", PREGATE_UNATTENDED_APPROVAL: "1",
     ...(process.platform === "win32" ? {} : { PATH: "/usr/bin:/bin:/usr/sbin:/sbin" }) };
   const cli = (args: string[], cwd = root) => {
     const out = Bun.spawnSync([binary, ...args], { cwd, env, stdout: "pipe", stderr: "pipe", timeout: 30_000 });
@@ -263,7 +263,7 @@ test("existing-project adoption expands missing real roots in one review while p
   const preset = JSON.parse(p.bytes()[0]!) as Preset;
   preset.scope = { include: ["lib/**"], exclude: ["components/generated/**"] };
   writeFileSync(join(p.root, ".pregate/preset.json"), JSON.stringify(preset, null, 2) + "\n");
-  expect(p.cli(["preset", "compile"]).code).toBe(0);
+  expect(p.cli(["preset", "compile", "--yes"]).code).toBe(0);
   expect(p.cli(["disable", "--yes"]).code).toBe(0);
   const before = p.bytes();
   const out = p.cli(["guide", "--preview", "--packs", "typescript,react", "--enforcement", "shadow"]);
@@ -452,7 +452,7 @@ else:
     os.kill(pid, signal.SIGKILL); _, status = os.waitpid(pid, 0)
 print(json.dumps({"code": os.waitstatus_to_exitcode(status), "responses": index, "text": text}))
 `;
-  const env: Record<string, string | undefined> = { ...p.env }; delete env.CI; delete env.PREGATE_TESTING; delete env.PREGATE_TEST_ANSWER;
+  const env: Record<string, string | undefined> = { ...p.env }; delete env.CI; delete env.PREGATE_UNATTENDED_APPROVAL; delete env.PREGATE_TESTING; delete env.PREGATE_TEST_ANSWER;
   const out = Bun.spawnSync([python!, "-c", script, JSON.stringify([binary, ...args]), JSON.stringify(responses), JSON.stringify(mutations)], { cwd: p.root, env, stdout: "pipe", stderr: "pipe", timeout: 40_000 });
   expect(out.exitCode, out.stderr.toString() + out.stdout.toString()).toBe(0);
   return JSON.parse(out.stdout.toString()) as { code: number; responses: number; text: string };
@@ -586,7 +586,7 @@ test.skipIf(process.platform === "win32" || python === null)("multi-project upda
   bPreset.methodologies = bPreset.methodologies.filter(method => method !== "typescript/anti-evasion");
   bPreset.overrides = { ...bPreset.overrides, "core/CORE-INV-003": "off" };
   writeFileSync(join(b.root, ".pregate/preset.json"), JSON.stringify(bPreset, null, 2) + "\n");
-  expect(b.cli(["preset", "compile"]).code).toBe(0);
+  expect(b.cli(["preset", "compile", "--yes"]).code).toBe(0);
   const missing = JSON.parse(b.cli(["guide", "--json"]).text).discovery.suggestedAdditions.find((item: { ns: string }) => item.ns === "typescript");
   expect(missing.methodologies).toEqual(["typescript/anti-evasion"]);
   const aPreset = JSON.parse(a.bytes()[0]!) as Preset; aPreset.engine = "0.0.0";

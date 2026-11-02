@@ -10,7 +10,9 @@ import { dispute } from "./dispute-command.ts";
 import { importReviewCost, pack, projectUpdate } from "./pack-command.ts";
 import { projectUpdates, registryHint, worktreeHint } from "./project-updates.ts";
 import { guide } from "./guided.ts";
-import { validateContract } from "./contract.ts";
+import { bundledBetween, reviewDiff, validateContract } from "./contract.ts";
+import { git } from "./git.ts";
+import { recordApproval } from "./loosening.ts";
 import { dirname, join, resolve } from "node:path";
 import { relativePath as relative } from "./paths.ts";
 import { writeAll } from "./write-all.ts";
@@ -56,7 +58,7 @@ const USAGE = `usage:
   pregate check --staged [--ratchet]
   pregate check --ratchet --base <sha>
   pregate explain <rule> | --path <file>
-  pregate preset show [--json] | request-schema | compile | apply <request.json> [--preview|--yes]
+  pregate preset show [--json] | request-schema | compile [--yes] | apply <request.json> [--preview|--yes]
   pregate preset diagnose [--json] | schema
   pregate rules test [<dir> | --library <ns> | --fixture <dir|repro.json>]
   pregate rules add "<sentence>" [--fail <code>]... [--pass <code>]... [--files <glob>] [--rule <ns/ID>] [--draft]
@@ -258,7 +260,7 @@ function preset(args: string[]): Promise<Result> | Result {
     return typeof loaded === "string" ? { code: 1, text: formText({ cause: loaded, line: null }, null).full }
       : { code: 0, text: contract(loaded.lock, launcher()) };
   }
-  if (sub === "compile" && rest.length === 0) return compileTo(root, readFileSync(join(root, PRESET), "utf8"));
+  if (sub === "compile" && (rest.length === 0 || (rest.length === 1 && rest[0] === "--yes"))) return compileTo(root, readFileSync(join(root, PRESET), "utf8"), rest.length === 1);
   if (sub === "apply") {
     const o = options(rest, [], ["--yes", "--preview"]);
     if (o !== null && rest.length <= 2 && o.operands.length === 1) return applyTo(root, o.operands[0]!, o.opts.has("--yes"), o.opts.has("--preview"));
@@ -267,7 +269,7 @@ function preset(args: string[]): Promise<Result> | Result {
 }
 
 // U2: the `path` sources pass `rules test` before anything compiles from them.
-function compileTo(root: string, presetText: string): Result {
+async function compileTo(root: string, presetText: string, yes = false): Promise<Result> {
   const tested = sourceDirs(presetText).map((dir) => testDir(resolve(root, dir)));
   if (tested.some((t) => !t.ok)) {
     return { code: 1, text: [...tested.flatMap((t) => t.lines), "rules test failed; lock not written."].join("\n") };
@@ -276,7 +278,22 @@ function compileTo(root: string, presetText: string): Result {
   if ("errors" in r) return { code: 1, text: [...new Set([...r.errors, ...contractDiagnosis(root).errors]), "Preset compilation failed; lock not written.",
     "Source and rule validation continue only after schema and pin errors are resolved; more errors can remain in those later checks.",
     "Compilation is not migration. Inspect pregate preset diagnose --json; prepare pregate update --project --preview to review engine, core, packs and supported override corrections together."].join("\n") };
-  writeAtomic(join(root, LOCK), r.text);
+  // A lock that enforces less than both the one on disk and the committed one is written only after
+  // a human approves it on the terminal, which then records that approval. Either one alone may be
+  // a stale or hand-edited lock that this compile repairs.
+  const references = [
+    { lock: readText(join(root, LOCK)), preset: readText(join(root, PRESET)) },
+    { lock: git(root, ["show", `HEAD:./${LOCK}`]), preset: git(root, ["show", `HEAD:./${PRESET}`]) },
+  ].filter((ref) => ref.lock !== null);
+  const diffs = references.map((ref) => ref.lock!.replaceAll("\r\n", "\n") === r.text ? null : reviewDiff(ref.lock, r.lock, bundledBetween(ref.preset, presetText)));
+  const diff = diffs.length > 0 && diffs.every((d) => d?.warning === true) ? diffs[0]! : null;
+  if (diff !== null) {
+    if (!await approve(`Compile a looser lock for ${root}.\n${diff.lines.join("\n")}`, true, yes)) {
+      return { code: 1, text: ["This preset loosens the contract:", ...diff.lines.map((line) => `  ${line}`), approvalRefusal(), "Lock not written."].join("\n") };
+    }
+    writeAtomic(join(root, LOCK), r.text);
+    recordApproval(root, r.text);
+  } else writeAtomic(join(root, LOCK), r.text);
   return { code: 0, text: [`${LOCK} written (${r.lock.rules.length} rules); commit it.`, ...importReviewCost(root, r.lock)].join("\n") };
 }
 

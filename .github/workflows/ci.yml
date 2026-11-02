@@ -146,6 +146,8 @@ jobs:
           bun scripts/docs-reference.ts --check
       - name: Verify native runtime and onboarding
         run: bun test test/runtime.test.ts test/onboard.test.ts
+      - name: UTF-16 PowerShell scripts are scanned
+        run: bun test test/windows-powershell-script.e2e.test.ts
       - name: Native Windows bootstrap
         run: bun test test/windows-distribution.e2e.test.ts
       # These four suites execute POSIX shell fixtures. Native Windows equivalents are in
@@ -223,6 +225,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Engine update failed' }
           & $cli update --version $version
           if ($LASTEXITCODE -ne 0) { throw 'Update failed' }
+          $env:PREGATE_UNATTENDED_APPROVAL = '1'
           & $cli uninstall --purge --yes
           if ($LASTEXITCODE -ne 0) { throw 'Uninstall failed' }
           for ($n = 0; $n -lt 100 -and (Test-Path "$env:XDG_DATA_HOME/pregate"); $n++) { Start-Sleep -Milliseconds 50 }

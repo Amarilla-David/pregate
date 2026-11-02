@@ -19,10 +19,10 @@ afterAll(() => rmSync(area, { recursive: true, force: true }));
 function project() {
   const root = canonical(join(area, randomUUID()));
   mkdirSync(root);
-  const env = { ...process.env, CI: "1", HOME: join(root, "home"), XDG_DATA_HOME: join(root, "data"), XDG_STATE_HOME: join(root, "state"),
+  const env = { ...process.env, CI: "1", PREGATE_UNATTENDED_APPROVAL: "1", HOME: join(root, "home"), XDG_DATA_HOME: join(root, "data"), XDG_STATE_HOME: join(root, "state"),
     CODEX_HOME: join(root, "codex"), GROK_HOME: join(root, "grok") };
   const run = (args: string[], input?: object, ci = "1") => {
-    const out = Bun.spawnSync([binary, ...args], { cwd: root, env: { ...env, CI: ci },
+    const out = Bun.spawnSync([binary, ...args], { cwd: root, env: { ...env, CI: ci, PREGATE_UNATTENDED_APPROVAL: ci },
       stdin: input === undefined ? "ignore" : new Blob([JSON.stringify(input)]), stdout: "pipe", stderr: "pipe" });
     return { code: out.exitCode, text: out.stdout.toString(), error: out.stderr.toString() };
   };
@@ -119,15 +119,15 @@ test("recomputed digests cannot disguise metadata, invalid notes or a future tim
   }
 });
 
-test("native feedback approval asks the interactive parent; children, headless calls and wrappers cannot self-label", () => {
+test("feedback approval is denied to the parent, children, headless calls and wrappers; the denial names the human route", () => {
   const p = project(), digest = p.draft();
   const payload = { cwd: p.root, session_id: "approval", hook_event_name: "PreToolUse", permission_mode: "acceptEdits", prompt_id: "t",
     tool_name: "Bash", tool_use_id: "feedback", tool_input: { command: "pregate feedback apply " + digest + " --yes" } };
   const hook = (input: object, ci = "") => p.run(["hook", "pre", "--harness", "claude-code"], input, ci);
+  expect(p.run(["feedback", "show", digest]).text).toContain("Label: correct");
   const parent = hook(payload);
-  expect(parent.code).toBe(0);
-  expect(JSON.parse(parent.text).hookSpecificOutput.permissionDecision).toBe("ask");
-  expect(parent.text).toContain("Label: correct");
+  expect(parent.code).toBe(2);
+  expect(parent.text + parent.error).toContain(`type ! pregate feedback apply ${digest} --yes inside the harness`);
   expect(hook({ ...payload, agent_id: "child" }).code).toBe(2);
   expect(hook(payload, "1").code).toBe(2);
   expect(hook({ ...payload, tool_input: { command: "env " + payload.tool_input.command } }).code).toBe(2);
