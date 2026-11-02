@@ -89,10 +89,10 @@ See the source verification and performance limits.
 
 Unknown syntax is not automatically denied. Encoded paths, arbitrary interpreter
 programs, package scripts, already-running processes and writes performed at
-runtime can escape Pre. For Codex, relative command targets remain uncertain
-until a literal directory change because its payload does not establish the
-shell's actual working directory. Passing shell inspection is not a sandbox or
-a guarantee that a command cannot modify source or protected state.
+runtime can escape Pre. Codex 0.166 reports the command working directory, so a
+relative path resolves there; a non-literal `cd` still makes the next directory
+unknown. Passing shell inspection is not a sandbox or a guarantee that a command
+cannot modify source or protected state.
 
 Stop checks the resulting tree against the retained session baseline, including
 changes committed during the session. `report --json` exposes that snapshot's

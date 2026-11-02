@@ -52,6 +52,22 @@ Notes:
 - `permission_mode` is `"bypassPermissions"` in every `codex exec` capture, even with `-s read-only -c approval_policy="on-request"`. Do not infer anything from it.
 - `tool_use_id` is `exec-<uuid>` when the tool was called from code mode (the model's `exec` JS tool calling `tools.apply_patch(...)`, the default in 0.159.2 because `code_mode_host` is stable/on), and `call_<24 chars>` for direct tool calls.
 
+## Codex 0.166.0
+
+Captured 2026-11-02 from Codex CLI **0.166.0** (`codex-cli 0.166.0`, `codex-x86_64-unknown-linux-musl`, release `rust-v0.166.0` published 2026-10-29) on Linux x64. The model was a local Responses API stand-in addressed as `gpt-5.5` (a catalog slug whose `apply_patch` tool is freeform and whose shell tool is `exec_command`). `code_mode_host` was disabled so the tools were called directly. Hooks were user-level `$CODEX_HOME/hooks.json` with `--dangerously-bypass-hook-trust` and `--dangerously-bypass-approvals-and-sandbox`. No account credentials were used.
+
+openai/codex#57198 (and #57203 for permission and post-tool hooks) puts the command's resolved workdir in `cwd`. The hook process itself still starts in the session directory. There is still no `workdir` key on `tool_input`, and no version field, so a 0.159.2 payload has the same shape. **0.166.0 is the minimum supported release** for this adapter: an older CLI reports the session directory in `cwd` and cannot be detected.
+
+| File | Event | What the real process did |
+|---|---|---|
+| `session-start-166.json` | SessionStart | `cwd` is the session directory (`/tmp/.../repo`). The hook process cwd was the same directory |
+| `pre-bash-workdir-nested.json` | PreToolUse `Bash` | `exec_command` with relative `workdir` `nested` and `printf 'n\\n' > notes.txt`. Payload `cwd` is the resolved directory `.../repo/nested`. The file was created there. The hook process cwd stayed the session directory |
+| `pre-bash-workdir-outside.json` | PreToolUse `Bash` | `workdir` was an absolute path outside the repo. Payload `cwd` is that path. `out.txt` was created there. The hook process cwd stayed the session directory |
+| `pre-apply-patch-166.json` | PreToolUse `apply_patch` | Freeform `apply_patch` adding `nested/added.txt` and updating `marker.txt`. Payload `cwd` stayed the session directory (apply_patch sets no tool cwd). Both files changed |
+| `stop-166.json` | Stop | `cwd` is the session directory, `stop_hook_active: false` |
+
+Sanitized the same way as the 0.159.2 captures: repo → `/home/user/project`, the outside directory → `/home/user/outside`, `CODEX_HOME` → `/home/user/.codex`, rollout timestamp → `2026-11-02T00-00-00`, `session_id` / `turn_id` → stable ULID-shaped ids (0.166 session ids are not UUIDs). The direct `call_*` tool ids are the ones this capture sent; they are not secrets. Compact JSON, no trailing newline.
+
 Not captured: `PermissionRequest` (`codex exec` never asks: "Escalation is unavailable in this session"),
 `PreCompact`/`PostCompact`, `Interrupt`, MCP tools, `write_stdin`, a relative path inside `apply_patch`
 (the model always wrote absolute paths), `*** End of File`, multi-hunk `@@ <context>` headers.

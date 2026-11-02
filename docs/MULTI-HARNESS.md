@@ -345,7 +345,7 @@ The shared registration is written if any of the three that read it is present, 
 - `ADMIN_WORD` adds `--ignore-user-config`, `--setting-sources`, and `features.hooks`. `HOOK_SWITCH` adds `CODEX_HOME`, `GROK_HOME`, and `CLAUDE_CONFIG_DIR`. These and the ones in MH-17 form the new `hook-switch` cause, which always runs. The rest of `shell-admin` runs only with a root.
 - `apply_patch` and `applypatch` as a shell command ⇒ `shell-write` ("use the apply_patch tool"). [E2E] whether Codex 0.159.2 turns them into the tool.
 - **Interactive shell with stdin and no hook.** An `argv[0]` that is a shell, an interpreter, a REPL, or an editor, with no script and no `-c`/`-e`, or with `-i`/`-s`/`-` (`bash`, `sh -s`, `python3`, `node`, `ed`, `vim`, `script`, `tmux`; measured: they yield `null` today) ⇒ `shell-write` ("interactive session: its input cannot be checked"). It closes Codex `write_stdin`, which does not fire PreToolUse [D]; agy `send_command_input` is already denied (MH-11).
-- **Codex, relative destination.** Codex `Bash` does not carry `exec_command`'s `workdir` [V]. A relative write destination in a session with a root ⇒ `shell-write` ("use absolute paths"). [E2E] whether the payload `cwd` reflects the `workdir`: if it does, the rule is withdrawn.
+- **Codex, relative destination.** Codex 0.159.2 `Bash` did not carry `exec_command`'s `workdir` [V], so a relative write destination in a session with a root was `shell-write`. Re-verified on Codex 0.166.0 (openai/codex#57198, stable 2026-10-29): `PreToolUse` `cwd` is the command's resolved workdir, and the absolute-destination rule is withdrawn. A relative path resolves against that directory. `apply_patch` still has no tool cwd, so its `cwd` stays the session directory. The payload has no version field; 0.166.0 is the minimum supported release.
 
 **MH-30. New protected paths with a root** (step 5; the machine ones are in MH-17):
 - `**/.codex/hooks.json` and `**/.codex/config.toml`;
@@ -492,7 +492,7 @@ Defects found and fixed:
 | Codex `hooks/list` after a repeated setup (MH-24) | PASS: three of ours trusted, foreign trusted, bytes and mtimes unchanged. |
 | `agy plugin uninstall` (MH-25) | PASS: it exists in help; real uninstall removed `pregate-global` and preserved foreign registrations. |
 | Codex shell `apply_patch`/`applypatch` turns into the tool (MH-29) | Pending; `shell-write` is kept for both commands. |
-| Codex `cwd` reflects `exec_command.workdir` (MH-29) | No: `ls` asked for `src/core`, the Bash payload kept the root. The absolute-destination requirement is kept. |
+| Codex `cwd` reflects `exec_command.workdir` (MH-29) | No on 0.159.2: `ls` asked for `src/core`, the Bash payload kept the root. Yes on 0.166.0 (openai/codex#57198): `cwd` is the resolved workdir, and the absolute-destination requirement is withdrawn. `apply_patch`, SessionStart and Stop still carry the session directory. |
 | Codex code mode writes from JS | File not created; the model reported V8 without Node/fs. An observation of this configuration, not a universal proof of impossibility. |
 | Codex `exec-<uuid>` shared across inputs | 0 repetitions across 7 observed inputs; reuse not exercised. callId + input hash is kept. |
 | Cursor imported Claude deny | PASS, in headless and pty. |
