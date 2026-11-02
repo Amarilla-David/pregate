@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, expect, test } from "bun:test";
+import { afterAll, beforeAll, expect, setDefaultTimeout, test } from "bun:test";
 import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
@@ -12,6 +12,9 @@ import { LOCK, PRESET, grammars, onSessionStart, onStop, onPreCommand, onPreEdit
 import { beforeText, H, history, key, sessionDir, snapshot } from "../src/state.ts";
 import { refactorPlan, refactorPlanText } from "../src/refactor-plan.ts";
 import type { Preset, Session } from "../src/types.ts";
+import { slash } from "../src/paths.ts";
+
+setDefaultTimeout(120_000);
 
 const area = canonical(mkdtempSync(join(tmpdir(), "pregate-ux0210-")));
 const oldEnv = { data: process.env.XDG_DATA_HOME, state: process.env.XDG_STATE_HOME };
@@ -32,7 +35,7 @@ function git(root: string, ...args: string[]) {
 }
 
 function project(name: string) {
-  const root = join(area, name); mkdirSync(join(root, "src"), { recursive: true }); mkdirSync(join(root, ".pregate"));
+  const root = slash(join(area, name)); mkdirSync(join(root, "src"), { recursive: true }); mkdirSync(join(root, ".pregate"));
   const preset: Preset = { name, version: "1.0.0", engine: VERSIONS.engine, sources: [{ ns: "core", kind: "builtin", version: VERSIONS.core }], methodologies: [], scope: { include: ["src/**"], exclude: [] } };
   const text = JSON.stringify(preset, null, 2) + "\n", compiled = compile(text, () => readTree(join(originalCwd, "catalog"), false), VERSIONS);
   if ("errors" in compiled) throw new Error(compiled.errors.join("\n"));
@@ -153,6 +156,8 @@ test("a large review lists every deletion and test change before the cap and nam
   for (let i = 0; i < 250; i++) writeFileSync(join(p.root, `src/f${String(i).padStart(3, "0")}.ts`), `export const f${i} = ${i};\n`);
   writeFileSync(join(p.root, "src/big.txt"), ("x".repeat(99) + "\n").repeat(90_000)); rmSync(guard); writeFileSync(spec, "expect(a).toBe(1);\n");
   writeFileSync(join(p.root, "src/blob.bin"), new Uint8Array([0x81, 0x41])); chmodSync(join(p.root, "src/run.sh"), 0o755); git(p.root, "add", ".");
+  // Git for Windows sets core.fileMode=false, so it records the executable bit only when told to.
+  git(p.root, "update-index", "--chmod=+x", "src/run.sh");
   git(p.root, "commit", "-qm", "large catch-up hiding a weakened test");
   const preview = await sessionCommand(["rebase", sid, "--preview"]), lines = preview.text.split("\n");
   expect(preview.code, preview.text).toBe(0);

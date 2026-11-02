@@ -1,8 +1,9 @@
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { DEMO_LANGUAGES, demoSample, type DemoLanguage } from "./demo-samples.ts";
 import { demoCase, type DemoContext, type DemoReceipt } from "./demo-run.ts";
+import { removeReleased } from "./disk.ts";
 import { sha256 } from "./state.ts";
 import { VERSIONS } from "./versions.ts";
 
@@ -48,7 +49,7 @@ function demoRun(run: DemoRun): { code: number; report: DemoReport } {
   } catch (e) {
     return { code: 1, report: { schemaVersion: 1, mode: "isolated-owned-sample-automation", engine: VERSIONS,
       cleanup: true, attempts: run.attempts, error: String((e as Error).message).replaceAll(run.area, "<owned-demo>") } };
-  } finally { rmSync(run.area, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); }
+  } finally { removeReleased(run.area); }
 }
 
 function demoOptions(args: string[]): { languages: DemoLanguage[]; json: boolean } | null {
@@ -70,7 +71,10 @@ function demoEnvironment(machine: string, git: string): Record<string, string> {
   return { ...system, PATH: [dirname(git), ...(process.platform === "win32" ? [join(system.SystemRoot!, "System32"), join(system.SystemRoot!, "System32/WindowsPowerShell/v1.0")] : ["/usr/bin", "/bin", "/usr/sbin", "/sbin"])].join(process.platform === "win32" ? ";" : ":"),
     HOME: home, USERPROFILE: home, LOCALAPPDATA: join(machine, "local"), XDG_DATA_HOME: join(machine, "data"), XDG_STATE_HOME: join(machine, "state"),
     CODEX_HOME: join(machine, "codex"), GROK_HOME: join(machine, "grok"), CLAUDE_CONFIG_DIR: join(machine, "claude"),
-    TMPDIR: machine, TMP: machine, TEMP: machine, CI: "1", LANG: "C.UTF-8", GIT_CONFIG_NOSYSTEM: "1", GIT_CONFIG_GLOBAL: join(machine, "gitconfig"),
+    TMPDIR: machine, TMP: machine, TEMP: machine, CGO_ENABLED: "0",
+    // Owned samples only. This lets the throwaway directory print its digest and apply
+    // `approve --yes`. It is not a switch a script may set to consent a consumer project.
+    CI: "1", LANG: "C.UTF-8", GIT_CONFIG_NOSYSTEM: "1", GIT_CONFIG_GLOBAL: join(machine, "gitconfig"),
     GIT_CONFIG_SYSTEM: process.platform === "win32" ? "NUL" : "/dev/null", GIT_TERMINAL_PROMPT: "0", GIT_TEMPLATE_DIR: join(machine, "template"), PYTHONDONTWRITEBYTECODE: "1", PYTHONPATH: "src",
     GOPROXY: "off", GOSUMDB: "off", GOTOOLCHAIN: "local", GOCACHE: join(machine, "go-cache"), GOPATH: join(machine, "go"),
     CARGO_HOME: join(machine, "cargo"), RUSTUP_HOME: join(machine, "rustup") };
@@ -80,12 +84,16 @@ function nativeTool(name: string): string | null {
   const path = Bun.which(name);
   if (path === null) return null;
   const binary = realpathSync(path);
-  if (name !== "rustc" || basename(binary).replace(/\.exe$/, "") !== "rustup") return binary;
-  // Use an already installed compiler directly; the isolated demo never invokes rustup or installs a toolchain.
-  const installed = join(process.env.RUSTUP_HOME ?? join(process.env.HOME ?? process.env.USERPROFILE ?? "", ".rustup"), "toolchains");
+  if (name !== "rustc") return binary;
+  // A rustup proxy named rustc.exe still needs RUSTUP_HOME. The isolated demo points that
+  // variable at an empty directory, so use an already installed compiler and never install one.
+  const proxy = basename(binary).replace(/\.exe$/, "") === "rustup"
+    || (process.platform === "win32" && existsSync(join(dirname(binary), "rustup.exe")));
+  if (!proxy) return binary;
+  const installed = join(process.env.RUSTUP_HOME ?? join(process.env.USERPROFILE ?? process.env.HOME ?? "", ".rustup"), "toolchains");
   if (!existsSync(installed)) return null;
   return readdirSync(installed).sort((a, b) => Number(b.startsWith("stable")) - Number(a.startsWith("stable")) || a.localeCompare(b))
-    .map(name => join(installed, name, "bin", process.platform === "win32" ? "rustc.exe" : "rustc")).find(existsSync) ?? null;
+    .map(toolchain => join(installed, toolchain, "bin", process.platform === "win32" ? "rustc.exe" : "rustc")).find(existsSync) ?? null;
 }
 
 function demoText(report: DemoReport): string {

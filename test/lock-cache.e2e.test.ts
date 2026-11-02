@@ -1,11 +1,12 @@
 import { afterAll, expect, setDefaultTimeout, test } from "bun:test";
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { cpus, tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { delimiter, dirname, join } from "node:path";
 import pkg from "../package.json" with { type: "json" };
 import { compileBinary, hostTarget } from "../scripts/build.ts";
 import { enable } from "../src/consent.ts";
 import { sha256 } from "../src/state.ts";
+import { slash } from "../src/paths.ts";
 
 // The compiled engine's Pre hook, cold (cache deleted) against warm (compiled lock reused).
 // Decisions must match. Changing the lock or a path rule must miss. A corrupt cache recompiles.
@@ -29,7 +30,7 @@ process.env.XDG_STATE_HOME = xdgState;
 const env: Record<string, string> = {
   ...process.env,
   HOME: home, XDG_DATA_HOME: xdgData, XDG_STATE_HOME: xdgState, TMPDIR: join(work, "tmp"),
-  PATH: "/usr/bin:/bin", GIT_CONFIG_NOSYSTEM: "1",
+  PATH: ["/usr/bin", "/bin", process.env.PATH, process.env.Path].filter(Boolean).join(delimiter), GIT_CONFIG_NOSYSTEM: "1",
   GIT_AUTHOR_NAME: "e2e", GIT_AUTHOR_EMAIL: "e2e@example.com",
   GIT_COMMITTER_NAME: "e2e", GIT_COMMITTER_EMAIL: "e2e@example.com",
 } as Record<string, string>;
@@ -41,8 +42,8 @@ afterAll(() => rmSync(work, { recursive: true, force: true }));
 
 test("Pre hook reuses the compiled lock and reports cold versus warm latency", () => {
   install();
-  const coldAllow = measure("allow", true);
-  const warmAllow = measure("allow", false);
+  // Cold and warm samples alternate so a busy runner cannot make only the later series slower.
+  const { cold: coldAllow, warm: warmAllow } = measurePair("allow");
   const coldDeny = hook("syntax-cold", { kind: "syntax" }, true);
   const warmDeny = hook("syntax-warm", { kind: "syntax" }, false);
   expect(decision(coldDeny)).toEqual(decision(warmDeny));
@@ -99,11 +100,14 @@ function install(): void {
   enable(repo);
 }
 
-function measure(kind: Edit["kind"], cold: boolean): Out[] {
-  if (!cold) hook("prime", { kind }, true);
-  const samples: Out[] = [];
-  for (let i = 0; i < RUNS; i++) samples.push(hook(`${kind}-${cold ? "cold" : "warm"}-${i}`, { kind }, cold));
-  return samples;
+function measurePair(kind: Edit["kind"]): { cold: Out[]; warm: Out[] } {
+  const cold: Out[] = [];
+  const warm: Out[] = [];
+  for (let i = 0; i < RUNS; i++) {
+    cold.push(hook(`${kind}-cold-${i}`, { kind }, true));
+    warm.push(hook(`${kind}-warm-${i}`, { kind }, false));
+  }
+  return { cold, warm };
 }
 
 function hook(session: string, edit: Edit, dropCache: boolean): Out {
@@ -128,7 +132,7 @@ function decision(sample: Out): { code: number; stdout: string; stderr: string }
 }
 
 function cachePath(): string {
-  return join(xdgState, "pregate", "locks", `${sha256(repo)}.json`);
+  return join(xdgState, "pregate", "locks", `${sha256(slash(repo))}.json`);
 }
 
 function latencyReport(cold: Out[], warm: Out[]): string {

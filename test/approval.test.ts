@@ -1,11 +1,12 @@
 import { expect, test } from "bun:test";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { compileBinary, hostTarget } from "../scripts/build.ts";
 import { approvalText } from "../src/contract.ts";
 import { ENGINE_FILE, WINDOWS } from "../src/platform.ts";
 import { canonical } from "../src/disk.ts";
+import { removeTree } from "./remove-tree.ts";
 
 test("approval text preserves complete multiline Unicode, quotes and percent signs without terminal escapes", () => {
   const summary = 'Tightens core/example.\nQuoted "name", percent %s, apostrophe \' and →.\n' + "abcdefghij".repeat(2000);
@@ -59,5 +60,5 @@ test("compiled approval defaults No, refuses piped stdin and preserves the exact
 }, 30_000);
 
 function removedAfter(area: string, use: (area: string) => void): void {
-  try { use(area); } finally { rmSync(area, { recursive: true, force: true }); }
+  try { use(area); } finally { removeTree(area); }
 }

@@ -1,11 +1,17 @@
 import { afterAll, beforeAll, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, truncateSync, writeFileSync } from "node:fs";
+import { closeSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync, realpathSync, rmSync, truncateSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import { compileBinary, hostTarget } from "../scripts/build.ts";
 import { ENGINE_FILE } from "../src/platform.ts";
 import { packTemplate } from "../src/pack-template.ts";
 import { VERSIONS } from "../src/versions.ts";
+import { slash } from "../src/paths.ts";
+
+function commandPath(dir: string): string {
+  const path = slash(realpathSync(dir));
+  return /^[\w./-]+$/.test(path) ? path : JSON.stringify(path);
+}
 import { librarySource } from "../src/library.ts";
 import type { Preset } from "../src/types.ts";
 
@@ -22,11 +28,21 @@ function project(name: string) {
   const root = join(area, name);
   mkdirSync(root);
   const machine = join(area, name + "-machine");
+  mkdirSync(machine, { recursive: true });
   const env = { ...process.env, HOME: join(machine, "home"), CODEX_HOME: join(machine, "codex"), GROK_HOME: join(machine, "grok"),
     XDG_DATA_HOME: join(machine, "data"), XDG_STATE_HOME: join(machine, "state"), CI: "1" };
   const cli = (args: string[], extra = {}) => {
-    const result = Bun.spawnSync([binary, ...args], { cwd: root, env: { ...env, ...extra }, stdout: "pipe", stderr: "pipe", timeout: 20_000 });
-    return { code: result.exitCode, text: result.stdout.toString() + result.stderr.toString() };
+    // A pipe can deliver a short read of a large audit report. Capture the bytes in files.
+    const out = join(machine, "stdout"), err = join(machine, "stderr");
+    const outFd = openSync(out, "w"), errFd = openSync(err, "w");
+    let result: ReturnType<typeof Bun.spawnSync>;
+    try {
+      result = Bun.spawnSync([binary, ...args], { cwd: root, env: { ...env, ...extra }, stdout: outFd, stderr: errFd, timeout: 20_000 });
+    } finally {
+      closeSync(outFd); closeSync(errFd);
+    }
+    const stdout = readFileSync(out, "utf8"), stderr = readFileSync(err, "utf8");
+    return { code: result.exitCode, text: stdout + stderr, stdout, stderr };
   };
   expect(cli(["init", "--yes", "--preset", "integrity-only"]).code).toBe(0);
   const contract = () => ["preset.json", "pregate.lock.json"].map((file) => readFileSync(join(root, ".pregate", file), "utf8"));
@@ -190,7 +206,7 @@ test("a newer engine or core pin is held, never downgraded, and a held project i
     expect(result.text).not.toContain("Digest:");
     expect(p.contract()).toEqual(before);
   }
-  const held = `1 projects pin a newer engine, core or pack than this engine and are not current: ${realpathSync(p.root)}.`;
+  const held = `1 projects pin a newer engine, core or pack than this engine and are not current: ${slash(realpathSync(p.root))}.`;
   const preview = p.cli(["update", "--projects", p.root, current.root, "--preview"]);
   expect(preview.code).toBe(0);
   expect(preview.text).toContain(held);
@@ -200,7 +216,7 @@ test("a newer engine or core pin is held, never downgraded, and a held project i
   const applied = p.cli(["update", "--projects", p.root, current.root, "--yes"]);
   expect(applied.code).toBe(1);
   expect(applied.text).toContain(held);
-  expect(applied.text).not.toContain(`Current ${realpathSync(p.root)}: already current`);
+  expect(applied.text).not.toContain(`Current ${slash(realpathSync(p.root))}: already current`);
   expect(p.contract()).toEqual(before);
   const diagnosis = JSON.parse(p.cli(["preset", "diagnose", "--json"]).text).errors.join("\n");
   for (const line of lines) expect(diagnosis).toContain(line);
@@ -265,8 +281,8 @@ test("one batch code from the multi-project preview approves every project from 
   const code = /^Approve all 2 project updates: ! pregate approve ([0-9a-f]{12})$/m.exec(preview.text)?.[1];
   expect(code, preview.text).toBeDefined();
   // Only the batch code is offered, with the Cursor terminal line the per-project codes carried.
-  expect(preview.text.match(/pregate approve [0-9a-f]{12}/g), preview.text).toEqual([`pregate approve ${code}`, `pregate approve ${code}`]);
-  expect(preview.text).toContain(`Cursor requires a separate human terminal: pregate approve ${code}`);
+  expect(preview.text.match(/pregate approve [0-9a-f]{12}/g), preview.text).toEqual([`pregate approve ${code}`]);
+  expect(preview.text).toContain("Cursor needs a separate terminal");
   const third = join(area, "batch third");
   mkdirSync(third);
   const approve = () => {
@@ -296,8 +312,8 @@ test("project update names sibling worktrees that pin another engine, with the e
   const lock = JSON.parse(readFileSync(join(sibling, ".pregate/pregate.lock.json"), "utf8"));
   writeFileSync(join(sibling, ".pregate/pregate.lock.json"), JSON.stringify({ ...lock, engine: "0.0.0" }));
   const preview = p.cli(["update", "--project", "--preview"]);
-  expect(preview.text).toContain(`Other worktrees of this repository pin another engine: ${realpathSync(sibling)}.`);
-  expect(preview.text).toContain(`Review them together: pregate update --projects ${realpathSync(sibling)} --preview`);
+  expect(preview.text).toContain(`Other worktrees of this repository pin another engine: ${slash(realpathSync(sibling))}.`);
+  expect(preview.text).toContain(`Review them together: pregate update --projects ${commandPath(sibling)} --preview`);
 });
 
 test("multi-project --yes applies and commits each prepared project; --no-commit leaves the files uncommitted", () => {
@@ -325,7 +341,7 @@ test("multi-project --yes applies and commits each prepared project; --no-commit
   const applied = a.cli(["update", "--projects", a.root, b.root, "--yes"]);
   expect(applied.code, applied.text).toBe(0);
   for (const p of repos) {
-    expect(applied.text).toContain(`Updated ${realpathSync(p.root)}: Committed 1 file (.pregate/) as `);
+    expect(applied.text).toContain(`Updated ${slash(realpathSync(p.root))}: Committed 1 file (.pregate/) as `);
     expect(git(p.root, "status", "--porcelain")).toBe("");
     expect(git(p.root, "log", "-1", "--format=%s")).toStartWith("chore: apply reviewed PREGATE contract ");
   }
@@ -334,7 +350,7 @@ test("multi-project --yes applies and commits each prepared project; --no-commit
   const kept = a.cli(["update", "--projects", a.root, b.root, "--yes", "--no-commit"]);
   expect(kept.code, kept.text).toBe(0);
   for (const p of repos) {
-    expect(kept.text).toContain(`Updated ${realpathSync(p.root)}: Approved contract applied and lock compiled.`);
+    expect(kept.text).toContain(`Updated ${slash(realpathSync(p.root))}: Approved contract applied and lock compiled.`);
     expect(git(p.root, "status", "--porcelain")).toContain(".pregate/preset.json");
   }
   const current = a.cli(["update", "--projects", a.root, b.root, "--preview"]);
@@ -351,8 +367,8 @@ test("a single-project update preview names other registered projects that pin o
     expect(p.cli(["enable", "--yes"], main.env).code).toBe(0);
   }
   const preview = main.cli(["update", "--project", "--preview"]);
-  expect(preview.text).toContain(`1 other registered projects pin older engines: ${realpathSync(other.root)}.`);
-  expect(preview.text).toContain(`Review them together: pregate update --projects ${JSON.stringify(realpathSync(other.root))} --preview`);
+  expect(preview.text).toContain(`1 other registered projects pin older engines: ${slash(realpathSync(other.root))}.`);
+  expect(preview.text).toContain(`Review them together: pregate update --projects ${JSON.stringify(slash(realpathSync(other.root)))} --preview`);
   expect(preview.text).not.toContain("registry newer");
 });
 
@@ -372,7 +388,7 @@ test("multi-project update validates every path and candidate before applying an
   // A preview reports each project: one broken project does not hide the review of another.
   const preview = a.cli(["update", "--projects", a.root, b.root, "--preview"]);
   expect(preview.code).toBe(1);
-  expect(preview.text).toContain(`1 project reviews failed: ${realpathSync(b.root)}.`);
+  expect(preview.text).toContain(`1 project reviews failed: ${slash(realpathSync(b.root))}.`);
   expect(preview.text).toContain("1 project reviews prepared; 0 already current. No project contracts changed.");
   expect([a.contract(), b.contract()]).toEqual(before);
 });
@@ -800,7 +816,7 @@ test("original source invariants can be adopted together and enforce real domain
   expect(p.cli(["pack", "apply", p.plan({ sources: namespaces.map(ns => ({ kind: "library", ns })), methodologies }), "--yes"]).code).toBe(0);
   const initial = p.cli(["audit", "--json", "--strict"]);
   expect(initial.code).toBe(2);
-  const requirements = JSON.parse(initial.text).fitness;
+  const requirements = JSON.parse(initial.stdout).fitness;
   expect(requirements).toHaveLength(350); // 64 core + 286 authored optional clauses; grouped source numbers share one obligation.
   expect(requirements.filter((r: { requirement: string }) => r.requirement === "PS-71-74")).toHaveLength(1);
   expect(requirements.some((r: { requirement: string }) => r.requirement === "PS-72")).toBe(false);

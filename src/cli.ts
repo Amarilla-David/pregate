@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { approvalRefusal, approve, withholdApprovalCode } from "./approval.ts";
 import { approveBatch, approvePending, applyPreset, pendingReview } from "./approval-command.ts";
 import { enforcementOf } from "./enforcement.ts";
@@ -13,6 +13,7 @@ import { guide } from "./guided.ts";
 import { validateContract } from "./contract.ts";
 import { dirname, join, resolve } from "node:path";
 import { relativePath as relative } from "./paths.ts";
+import { writeAll } from "./write-all.ts";
 import { applyRequest, listChecks } from "./compile.ts";
 import { canonical, findRoot, readStdin, readTree, STDIN_TIMEOUT, writeAtomic } from "./disk.ts";
 import { disable, enable } from "./consent.ts";
@@ -94,7 +95,7 @@ const BAD: Result = { code: 1, text: USAGE };
 export async function run(argv: string[]): Promise<number> {
   const r = await command(argv);
   const text = withholdApprovalCode(r.text);
-  if (text !== "") writeSync(1, Buffer.from(`${text}\n`, "utf8"));
+  if (text !== "") writeAll(1, Buffer.from(`${text}\n`, "utf8"));
   return r.code;
 }
 
