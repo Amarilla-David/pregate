@@ -1,4 +1,5 @@
 // Run after building: exercises production-binary feedback on a real recorded shadow finding.
+import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
@@ -18,8 +19,15 @@ function run(args: string[], input?: object) {
   return runNative({ binary, args, cwd: root, env, stdin: input === undefined ? undefined : JSON.stringify(input) });
 }
 function assert(value: boolean, message: string) { if (!value) throw new Error(message); }
+function git(args: string[]): void {
+  const result = spawnSync("git", ["-c", "user.name=Pregate Smoke", "-c", "user.email=smoke@example.com", "-c", "commit.gpgsign=false", ...args], {
+    cwd: root, env, stdio: ["ignore", "pipe", "pipe"],
+  });
+  assert(result.status === 0, `git ${args.join(" ")} failed: ${result.stderr?.toString() ?? ""}`);
+}
 try {
   mkdirSync(join(root, "src"), { recursive: true });
+  git(["init", "-q", "-b", "main"]);
   const init = run(["init", "--yes", "--preset", "legacy-safe"]);
   assert(init.exitCode === 0, init.stdout.toString() + init.stderr.toString());
   const lock = readFileSync(join(root, ".pregate/pregate.lock.json"), "utf8");
