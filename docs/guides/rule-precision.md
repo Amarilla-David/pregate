@@ -161,7 +161,7 @@ CI runs this on `ubuntu-latest` (2 vCPU), `macos-latest`, and `windows-latest`. 
 
 Windows has no POSIX pseudo-terminal, so the bench enables the fixture once with `PREGATE_UNATTENDED_APPROVAL=1` and `--yes`. The timed hook does not inherit that variable.
 
-A runner whose architecture does not match the baseline fails closed. The baseline is the median p95 from the run that introduced the gate, not a padded ceiling.
+A runner whose architecture does not match the baseline fails closed. The baseline is the slower median p95 already measured on that runner, not a padded ceiling and not the faster of the two runs.
 
 ### Results
 
@@ -171,16 +171,16 @@ A runner whose architecture does not match the baseline fails closed. The baseli
 | linux | ubuntu-latest | x64 | 200 lines, second touch | 106.3 | 117.7 |
 | linux | ubuntu-latest | x64 | 2,000 lines, first touch | 228.4 | 243.7 |
 | linux | ubuntu-latest | x64 | 2,000 lines, second touch | 226.1 | 240.1 |
-| darwin | macos-latest | arm64 | 200 lines, first touch | 88.1 | 106.1 |
-| darwin | macos-latest | arm64 | 200 lines, second touch | 88.0 | 106.2 |
-| darwin | macos-latest | arm64 | 2,000 lines, first touch | 186.8 | 239.8 |
-| darwin | macos-latest | arm64 | 2,000 lines, second touch | 164.8 | 208.4 |
-| windows | windows-latest | x64 | 200 lines, first touch | 766.4 | 801.0 |
-| windows | windows-latest | x64 | 200 lines, second touch | 766.8 | 788.0 |
-| windows | windows-latest | x64 | 2,000 lines, first touch | 892.3 | 932.4 |
-| windows | windows-latest | x64 | 2,000 lines, second touch | 879.2 | 907.2 |
+| darwin | macos-latest | arm64 | 200 lines, first touch | 107.8 | 140.4 |
+| darwin | macos-latest | arm64 | 200 lines, second touch | 111.8 | 145.4 |
+| darwin | macos-latest | arm64 | 2,000 lines, first touch | 219.0 | 286.3 |
+| darwin | macos-latest | arm64 | 2,000 lines, second touch | 224.7 | 271.9 |
+| windows | windows-latest | x64 | 200 lines, first touch | 785.3 | 853.5 |
+| windows | windows-latest | x64 | 200 lines, second touch | 784.2 | 963.2 |
+| windows | windows-latest | x64 | 2,000 lines, first touch | 911.2 | 1033.8 |
+| windows | windows-latest | x64 | 2,000 lines, second touch | 899.1 | 975.6 |
 
-These medians are from GitHub Actions run 41575641391 on `a6ad0c49`, 25 samples repeated three times. `bench/latency-baseline.json` stores that median p95. The gate fails when a later median p95 is more than 25% higher. One slow sample does not fail the job: the compared figure is the median of the three p95s.
+Each p95 is the slower of the two medians measured on that runner (GitHub Actions runs 41575641391 and 41576919634), and the p50 is from the same run. `bench/latency-baseline.json` stores that slower median. The gate fails when a later median p95 is more than 25% higher, so the spread already seen between those runs does not fail CI. One slow sample inside a job does not fail it either: the compared figure is the median of three p95s.
 
 ## Rule behavior and proof limits
 
