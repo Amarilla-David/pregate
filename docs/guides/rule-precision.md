@@ -167,20 +167,20 @@ A runner whose architecture does not match the baseline fails closed. The baseli
 
 | OS | Runner | Architecture | Route | Median p50 ms | Median p95 ms |
 | --- | --- | --- | --- | ---: | ---: |
-| linux | ubuntu-latest | x64 | 200 lines, first touch | pending | pending |
-| linux | ubuntu-latest | x64 | 200 lines, second touch | pending | pending |
-| linux | ubuntu-latest | x64 | 2,000 lines, first touch | pending | pending |
-| linux | ubuntu-latest | x64 | 2,000 lines, second touch | pending | pending |
-| darwin | macos-latest | arm64 | 200 lines, first touch | pending | pending |
-| darwin | macos-latest | arm64 | 200 lines, second touch | pending | pending |
-| darwin | macos-latest | arm64 | 2,000 lines, first touch | pending | pending |
-| darwin | macos-latest | arm64 | 2,000 lines, second touch | pending | pending |
-| windows | windows-latest | x64 | 200 lines, first touch | pending | pending |
-| windows | windows-latest | x64 | 200 lines, second touch | pending | pending |
-| windows | windows-latest | x64 | 2,000 lines, first touch | pending | pending |
-| windows | windows-latest | x64 | 2,000 lines, second touch | pending | pending |
+| linux | ubuntu-latest | x64 | 200 lines, first touch | 111.9 | 123.1 |
+| linux | ubuntu-latest | x64 | 200 lines, second touch | 106.3 | 117.7 |
+| linux | ubuntu-latest | x64 | 2,000 lines, first touch | 228.4 | 243.7 |
+| linux | ubuntu-latest | x64 | 2,000 lines, second touch | 226.1 | 240.1 |
+| darwin | macos-latest | arm64 | 200 lines, first touch | 88.1 | 106.1 |
+| darwin | macos-latest | arm64 | 200 lines, second touch | 88.0 | 106.2 |
+| darwin | macos-latest | arm64 | 2,000 lines, first touch | 186.8 | 239.8 |
+| darwin | macos-latest | arm64 | 2,000 lines, second touch | 164.8 | 208.4 |
+| windows | windows-latest | x64 | 200 lines, first touch | 766.4 | 801.0 |
+| windows | windows-latest | x64 | 200 lines, second touch | 766.8 | 788.0 |
+| windows | windows-latest | x64 | 2,000 lines, first touch | 892.3 | 932.4 |
+| windows | windows-latest | x64 | 2,000 lines, second touch | 879.2 | 907.2 |
 
-The pending cells are replaced with the medians from the CI run that writes `bench/latency-baseline.json`. Until that file exists, the latency job fails and prints the measured medians.
+These medians are from GitHub Actions run 41575641391 on `a6ad0c49`, 25 samples repeated three times. `bench/latency-baseline.json` stores that median p95. The gate fails when a later median p95 is more than 25% higher. One slow sample does not fail the job: the compared figure is the median of the three p95s.
 
 ## Rule behavior and proof limits
 

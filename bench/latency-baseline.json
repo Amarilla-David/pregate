@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "os": {
+    "linux": {
+      "arch": "x64",
+      "runner": "ubuntu-latest",
+      "p95Ms": {
+        "200 lines, first touch": 123.1,
+        "200 lines, second touch": 117.7,
+        "2,000 lines, first touch": 243.7,
+        "2,000 lines, second touch": 240.1
+      }
+    },
+    "darwin": {
+      "arch": "arm64",
+      "runner": "macos-latest",
+      "p95Ms": {
+        "200 lines, first touch": 106.1,
+        "200 lines, second touch": 106.2,
+        "2,000 lines, first touch": 239.8,
+        "2,000 lines, second touch": 208.4
+      }
+    },
+    "win32": {
+      "arch": "x64",
+      "runner": "windows-latest",
+      "p95Ms": {
+        "200 lines, first touch": 801.0,
+        "200 lines, second touch": 788.0,
+        "2,000 lines, first touch": 932.4,
+        "2,000 lines, second touch": 907.2
+      }
+    }
+  }
+}
