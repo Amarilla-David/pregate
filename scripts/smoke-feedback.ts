@@ -30,12 +30,13 @@ try {
   git(["init", "-q", "-b", "main"]);
   const init = run(["init", "--yes", "--preset", "legacy-safe"]);
   assert(init.exitCode === 0, init.stdout.toString() + init.stderr.toString());
-  // Commit the preset. First contact also admits an untracked preset by timestamp, and a Windows
-  // file clock can put that timestamp ahead of the hook, which used to skip the edit.
-  git(["add", "-A"]);
-  git(["commit", "-qm", "smoke baseline"]);
   const lock = readFileSync(join(root, ".pregate/pregate.lock.json"), "utf8");
-  const observed = run(["hook", "pre", "--harness", "claude-code"], {
+  // Open the session before the edit. A first Pre on its own did not record the shadow finding on Windows.
+  const start = run(["hook", "session-start"], {
+    hook_event_name: "SessionStart", session_id: "native-feedback", cwd: root, source: "startup",
+  });
+  assert(start.exitCode === 0, start.stdout.toString() + start.stderr.toString());
+  const observed = run(["hook", "pre"], {
     cwd: root, session_id: "native-feedback", hook_event_name: "PreToolUse", permission_mode: "default",
     tool_name: "Write", tool_use_id: "empty-catch",
     // A swallowed error is a deny rule, so legacy-safe records a shadowed finding.
@@ -45,7 +46,8 @@ try {
   const listed = run(["feedback", "list", "--json"]);
   assert(listed.exitCode === 0, listed.stdout.toString() + listed.stderr.toString());
   const findings = JSON.parse(listed.stdout.toString()).findings;
-  assert(findings.length === 1 && findings[0].rule === "clean-code/CC-ER-002", listed.stdout.toString());
+  assert(findings.length === 1 && findings[0].rule === "clean-code/CC-ER-002",
+    listed.stdout.toString() + observed.stdout.toString() + observed.stderr.toString());
   const snapshotFile = join(area, "state/pregate/sessions", WINDOWS ? "claude-code~native-feedback" : "claude-code:native-feedback", H(root), "snapshot.json");
   const snapshot = readFileSync(snapshotFile, "utf8");
   const draft = run(["feedback", "draft", findings[0].id, "--as", "correct", "--note", "The empty catch drops the read failure."]);
