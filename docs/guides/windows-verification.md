@@ -1,7 +1,7 @@
-# Verify 0.0.2 on Windows
+# Verify 0.0.3 on Windows
 
 This is the manual check for David, or for anyone else confirming the published
-[v0.0.2](https://github.com/pedroknigge/pregate/releases/tag/v0.0.2) release on a
+[v0.0.3](https://github.com/pedroknigge/pregate/releases/tag/v0.0.3) release on a
 Windows machine. The repository is public. The procedure uses that tag, the
 Windows archive from that release, and the committed verifier
 `scripts/verify-windows.ts`. A passing report is evidence for that commit and
@@ -27,18 +27,20 @@ long paths stops with "Filename too long".
 git clone -c core.longpaths=true https://github.com/pedroknigge/pregate.git
 if ($LASTEXITCODE -ne 0) { throw 'Clone failed' }
 Set-Location pregate
-git checkout --detach v0.0.2
+git checkout --detach v0.0.3
 if ($LASTEXITCODE -ne 0) { throw 'Checkout failed' }
 $head = (git rev-parse HEAD).Trim()
-if ($head -ne '92f60f0aa88cfc645d3aaea3181691065624fcbc') { throw "HEAD is $head, not the v0.0.2 commit" }
+$tag = (git rev-parse 'v0.0.3^{commit}').Trim()
+if ($head -ne $tag) { throw "HEAD is $head, not the v0.0.3 tag" }
 git status --porcelain
 bun --version
 ```
 
-`v0.0.2` is an annotated tag. `git rev-parse HEAD` must print
-`92f60f0aa88cfc645d3aaea3181691065624fcbc`. `git rev-parse v0.0.2` prints the tag
-object, not that commit, so do not compare HEAD to that other hash. `git status
---porcelain` must print nothing. `bun --version` must print `1.4.4`.
+`v0.0.3` is an annotated tag. The commit to verify is the v0.0.3 tag.
+`git rev-parse HEAD` must equal `git rev-parse 'v0.0.3^{commit}'`.
+`git rev-parse v0.0.3` prints the tag object, not that commit, so do not compare
+HEAD to that other hash. `git status --porcelain` must print nothing.
+`bun --version` must print `1.4.4`.
 
 Stay in this checkout for the verifier. Later manual install checks use a
 separate throwaway directory so this tree stays clean. The verifier refuses a
@@ -46,42 +48,36 @@ dirty checkout.
 
 ## Download the release files
 
-Create an empty directory and download three assets from the v0.0.2 release:
-`install.ps1`, `SHA256SUMS`, and `pregate-0.0.2-windows-x64.zip`. Use these
+Create an empty directory and download three assets from the v0.0.3 release:
+`install.ps1`, `SHA256SUMS`, and `pregate-0.0.3-windows-x64.zip`. Use these
 downloaded files. Do not substitute `install.ps1` from a later commit, and do
 not rebuild the zip.
 
 ```powershell
-$candidate = 'C:\pregate-0.0.2'
+$candidate = 'C:\pregate-0.0.3'
 New-Item -ItemType Directory -Path $candidate | Out-Null
-gh release download v0.0.2 --repo pedroknigge/pregate --pattern install.ps1 --pattern SHA256SUMS --pattern pregate-0.0.2-windows-x64.zip --dir $candidate
+gh release download v0.0.3 --repo pedroknigge/pregate --pattern install.ps1 --pattern SHA256SUMS --pattern pregate-0.0.3-windows-x64.zip --dir $candidate
 if ($LASTEXITCODE -ne 0) { throw 'Download failed' }
 ```
 
 ## Check the hashes
 
 `SHA256SUMS` lists each file as 64 lowercase hex digits, two spaces, then the
-file name. The published v0.0.2 entries are:
-
-| File | SHA-256 |
-| --- | --- |
-| `pregate-0.0.2-windows-x64.zip` | `63b5b0d6dd7d591e17a115f10cfff0c2dd831a4562909dcf0eccf9efc3ca4803` |
-| `install.ps1` | `94848899598939cf0b9c75472c95189a90eb3a2d69b4ad28e52bcc4885311944` |
-
-The script below fails if a file's hash disagrees with `SHA256SUMS`, or if
-`SHA256SUMS` disagrees with the table.
+file name. The hashes to trust are the ones published with the v0.0.3 tag.
+This guide does not copy them from an older release: `SHA256SUMS` downloaded
+with that tag is the list. The script below fails if a file's hash disagrees
+with that list, or if the list has no unique entry for the file.
 
 ```powershell
-$expected = @{
-  'pregate-0.0.2-windows-x64.zip' = '63b5b0d6dd7d591e17a115f10cfff0c2dd831a4562909dcf0eccf9efc3ca4803'
-  'install.ps1' = '94848899598939cf0b9c75472c95189a90eb3a2d69b4ad28e52bcc4885311944'
-}
+$expected = @(
+  'pregate-0.0.3-windows-x64.zip',
+  'install.ps1'
+)
 $sums = Get-Content -LiteralPath (Join-Path $candidate 'SHA256SUMS')
-foreach ($name in $expected.Keys) {
+foreach ($name in $expected) {
   $line = @($sums | Where-Object { $_ -cmatch ('^[0-9a-f]{64}  ' + [regex]::Escape($name) + '$') })
-  if ($line.Count -ne 1) { throw "SHA256SUMS has no unique entry for $name" }
+  if ($line.Count -ne 1) { throw "SHA256SUMS has no unique entry for $name on the v0.0.3 tag" }
   $listed = $line[0].Substring(0, 64)
-  if ($listed -ne $expected[$name]) { throw "SHA256SUMS entry for $name is not the published v0.0.2 hash" }
   $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $candidate $name)).Hash.ToLowerInvariant()
   if ($actual -ne $listed) { throw "Incorrect hash: $name" }
 }
@@ -89,12 +85,12 @@ foreach ($name in $expected.Keys) {
 
 ## Install dependencies and run the verifier
 
-From the repository root, still on the detached v0.0.2 commit:
+From the repository root, still on the v0.0.3 tag:
 
 ```powershell
 bun install --frozen-lockfile
 if ($LASTEXITCODE -ne 0) { throw 'Dependency install failed' }
-$report = 'C:\pregate-0.0.2-report'
+$report = 'C:\pregate-0.0.3-report'
 bun scripts/verify-windows.ts --artifacts $candidate --report $report
 ```
 
@@ -113,7 +109,7 @@ Requires native Windows x64, Git and the Bun version in .bun-version. Reports st
 
 The run refuses anything other than native Windows x64. It checks that HEAD is
 a clean commit and that `bun --version` matches `.bun-version`. It then hashes
-`pregate-0.0.2-windows-x64.zip`, `install.ps1`, and `SHA256SUMS`, and runs, in
+`pregate-0.0.3-windows-x64.zip`, `install.ps1`, and `SHA256SUMS`, and runs, in
 order: `bun install --frozen-lockfile`, `bun run typecheck`, the core,
 readiness, and documentation reference checks, the runtime and onboarding
 tests, the Windows distribution test, the Windows suite (`bun test --isolate`,
@@ -139,7 +135,7 @@ Administrator. They use your real profile. The automated run does not.
 ### Install as the current user
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\pregate-0.0.2\install.ps1 -Version 0.0.2
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\pregate-0.0.3\install.ps1 -Version 0.0.3
 ```
 
 The script checks the zip against `SHA256SUMS`, runs `pregate setup`, and adds
@@ -154,7 +150,7 @@ pregate doctor
 pregate demo
 ```
 
-`--version` prints `pregate 0.0.2 (core 0.0.1)`. `doctor` takes no arguments.
+`--version` prints `pregate 0.0.3 (core 0.0.1)`. `doctor` takes no arguments.
 A harness whose program is not on `PATH` is reported as INFO. `demo` needs
 Git. It creates and deletes its own temporary projects and does not accept a
 project path. The default language is `all` (`python`, `go`, and `rust`). A

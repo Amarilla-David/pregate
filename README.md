@@ -9,7 +9,7 @@ Supports **Claude Code**, **Cursor**, **Codex**, **Grok**, and **Antigravity (`a
 Hook-based pre-execution protection is best-effort. The shell guard in [`src/shell.ts`](src/shell.ts) is a heuristic: it can deny a write, an admin command, or a protected path when the command text establishes that, and it does not deny syntax it does not understand. A harness only reports the tools it chooses to expose, so some capabilities never arrive as a hook call. What escapes is caught by the Stop audit, the Git pre-commit check, and CI, which run the same contract on the tree that landed. Pregate is not a filesystem security boundary.
 
 <p>
-  <a href="https://github.com/pedroknigge/pregate/releases/tag/v0.0.2"><img alt="Release: v0.0.2" src="https://img.shields.io/badge/release-v0.0.2-0a0a0a.svg?style=for-the-badge&amp;labelColor=000000" height="28"></a>
+  <a href="https://github.com/pedroknigge/pregate/releases/tag/v0.0.3"><img alt="Release: v0.0.3" src="https://img.shields.io/badge/release-v0.0.3-0a0a0a.svg?style=for-the-badge&amp;labelColor=000000" height="28"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-0a0a0a.svg?style=for-the-badge&amp;labelColor=000000" height="28"></a>
 </p>
 
@@ -43,6 +43,8 @@ Cursor rules and a Claude Code hook are useful, and Pregate does not delete them
 | Windows x64 | Experimental |
 
 macOS arm64 is the platform this release is published for. Linux and Windows archives are experimental test builds. They are not a promise of production support until native release validation passes. A focused source check does not admit a platform. Bun is only needed to develop or build Pregate. The standalone binary does not need it. Intel Mac archives (`darwin-x64`) are produced; this table does not call them stable.
+
+Windows users of 0.0.2 should upgrade to 0.0.3. Two bugs in 0.0.2 could let an edit through on Windows without a finding. The [0.0.3 release notes](docs/releases/0.0.3.md) say what they were.
 
 ## Install, preview, approve, feedback
 
