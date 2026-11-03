@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-11-03
+
+What changed for people installing or gating a repository. **Windows users of 0.0.2 should upgrade.** Two bugs on that release could let an edit through on Windows without a finding. Notes: [0.0.3](docs/releases/0.0.3.md). The previous public tag is [v0.0.2](https://github.com/pedroknigge/pregate/releases/tag/v0.0.2).
+
 ### Added
 - Pack precision on a pinned set of public repositories, one or more for each parsed language. `scripts/bench-audit-repos.ts --precision` counts findings per pack. Sample precision is published only for the maintainer-labeled packs in `bench/labels/`. Packs with no labels stay unmeasured. The method and the limits are in `docs/guides/rule-precision.md`.
 - CI measures the compiled Pre hook on 200-line and 2,000-line files on Linux, macOS, and Windows. The required check stays `bench` on `ubuntu-latest`; macOS and Windows run the same gate. Each route's baseline is the median of eight hosted median p95s. The gate fails when a new median is more than 55% above that. The widest run in that sample was 44.7% above its median, and the extra 10 points keep a repeat of that slow run inside the limit.
@@ -18,9 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Each release archive carries the GNU Library General Public License, version 2, for the JavaScriptCore that the Bun 1.4.4 runtime links statically, and the full GNU Lesser General Public License, version 2.1, for tinycc. The notice gives permanent links to the Bun tag `bun-v1.4.4`, WebKit commit `d6375c72affe0f70222cdcb45012b10f0bf3a9d5`, and tinycc commit `05f0fafaa3be31e31d7b4b5c17dc60f62c991171`, plus the steps to rebuild. Setup copies that notice next to the installed engine.
 
 ### Fixed
+- **Windows: an unaccepted preset made the hook skip the edit.** On Windows, `git add` rewrites the preset's timestamp, and the file clock can sit ahead of the hook. Pregate then treated the project as if it had no contract. The pre-edit hook exited successfully and recorded nothing, so the edit was allowed. 0.0.3 denies that call (`lock-stale`) and says to commit the preset and open a new session. The edit does not land silently.
+- **Windows: an 8.3 short path and its long path looked like different projects.** Windows sometimes reports a short name such as `C:\Users\ME~1\...` and sometimes the long name. Consent stored under one spelling did not match the other, so a project you had agreed to protect looked unconsented and the hook exited without a finding. 0.0.3 treats those spellings as the same directory, by the file's identity rather than the letters in the path.
 - Inside an enabled root, a shell, interpreter, or `make` command whose script is not a literal path is denied (`bash "$SCRIPT"`, `sh "$X"`, `bash < "$S"`, `python3 "$P"`, `node "$P"`, `make -f "$F"`, `powershell -File $P`). A bare command name is resolved on `PATH` and scanned when that file is a script. The denial says why and how to name the script literally. Concatenation and encodings the decoder does not recognize stay residual limits.
 - Catches on the trust path no longer hide an unexpected error. A read or parse failure that is not the expected kind propagates, so the hook denies it. A catch that still handles every error says why that fallback is fail-closed, and CI rejects a new unannotated catch-all in `src/`.
-- Living docs, the skill, and installer messages describe the published 0.0.2 release. They no longer send readers to pre-rename versions, private-repository downloads, or release files that this repository does not publish.
+- Living docs, the skill, and installer messages name 0.0.3. They do not send readers to pre-rename versions, private-repository downloads, or release files this repository does not publish.
 
 ## [0.0.2] - 2026-11-02
 
