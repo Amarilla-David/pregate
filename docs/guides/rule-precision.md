@@ -157,30 +157,32 @@ bun scripts/bench-audit-repos.ts --precision \
 
 `scripts/bench.ts` times the compiled binary behind the registered Pre hook. Linux and macOS run that command with `sh -c`. Windows runs the PowerShell command `setup` wrote, through `cmd.exe /d /c`. Each sample is a new session. The timed edit is an allowed change of a 200-line file and of a 2,000-line file, on the first touch and again on the second touch.
 
-CI runs this on `ubuntu-latest` (2 vCPU), `macos-latest`, and `windows-latest`. Each job takes 25 samples, repeats that three times, and keeps the median of the three p95 values. The job fails when that median is more than 50% above the committed baseline in `bench/latency-baseline.json` for the same OS and architecture. The 150 ms budget in the architecture notes still belongs to the reference development machine. `--inform` keeps a miss of that budget from failing these runners.
+CI runs this on `ubuntu-latest` (2 vCPU), `macos-latest`, and `windows-latest`. The `ubuntu-latest` job is the required check named `bench`. macOS and Windows run the same command under `latency (macos-latest)` and `latency (windows-latest)`. Each job takes 25 samples, repeats that three times, and keeps the median of the three p95 values. The job fails when that median is more than 55% above the committed baseline in `bench/latency-baseline.json` for the same OS and architecture. The 150 ms budget in the architecture notes still belongs to the reference development machine. `--inform` keeps a miss of that budget from failing these runners.
 
 Windows has no POSIX pseudo-terminal, so the bench enables the fixture once with `PREGATE_UNATTENDED_APPROVAL=1` and `--yes`. The timed hook does not inherit that variable.
 
-A runner whose architecture does not match the baseline fails closed. The baseline for each route is the slowest median p95 measured on that runner before the allowance was widened. It is not a number invented above those runs.
+A runner whose architecture does not match the baseline fails closed.
+
+Run 41575641391 on `a6ad0c49` is not a hook regression. Each of the three jobs printed its median p95 and then exited 1 with `ENOENT` because `bench/latency-baseline.json` was not in that commit. Those medians are part of the sample below.
 
 ### Results
 
-| OS | Runner | Architecture | Route | Median p50 ms | Median p95 ms |
+| OS | Runner | Architecture | Route | Nearby p50 ms | Baseline p95 ms |
 | --- | --- | --- | --- | ---: | ---: |
-| linux | ubuntu-latest | x64 | 200 lines, first touch | 115.2 | 132.4 |
-| linux | ubuntu-latest | x64 | 200 lines, second touch | 107.5 | 124.9 |
-| linux | ubuntu-latest | x64 | 2,000 lines, first touch | 243.0 | 262.2 |
-| linux | ubuntu-latest | x64 | 2,000 lines, second touch | 236.0 | 246.5 |
-| darwin | macos-latest | arm64 | 200 lines, first touch | 123.5 | 188.7 |
-| darwin | macos-latest | arm64 | 200 lines, second touch | 140.6 | 180.4 |
-| darwin | macos-latest | arm64 | 2,000 lines, first touch | 277.1 | 337.5 |
-| darwin | macos-latest | arm64 | 2,000 lines, second touch | 272.9 | 382.6 |
-| windows | windows-latest | x64 | 200 lines, first touch | 776.9 | 871.4 |
-| windows | windows-latest | x64 | 200 lines, second touch | 784.2 | 963.2 |
-| windows | windows-latest | x64 | 2,000 lines, first touch | 911.2 | 1033.8 |
-| windows | windows-latest | x64 | 2,000 lines, second touch | 896.8 | 980.4 |
+| linux | ubuntu-latest | x64 | 200 lines, first touch | 111.9 | 127.8 |
+| linux | ubuntu-latest | x64 | 200 lines, second touch | 106.3 | 118.4 |
+| linux | ubuntu-latest | x64 | 2,000 lines, first touch | 228.4 | 252.9 |
+| linux | ubuntu-latest | x64 | 2,000 lines, second touch | 226.1 | 241.5 |
+| darwin | macos-latest | arm64 | 200 lines, first touch | 107.8 | 145.5 |
+| darwin | macos-latest | arm64 | 200 lines, second touch | 102.4 | 137.3 |
+| darwin | macos-latest | arm64 | 2,000 lines, first touch | 186.8 | 263.0 |
+| darwin | macos-latest | arm64 | 2,000 lines, second touch | 206.1 | 264.4 |
+| windows | windows-latest | x64 | 200 lines, first touch | 766.4 | 811.8 |
+| windows | windows-latest | x64 | 200 lines, second touch | 766.8 | 801.6 |
+| windows | windows-latest | x64 | 2,000 lines, first touch | 892.3 | 948.8 |
+| windows | windows-latest | x64 | 2,000 lines, second touch | 874.3 | 928.4 |
 
-Each p95 is the slowest median recorded for that route on GitHub Actions runs 41575641391, 41576919634, 41583491327, 41584924713, and 41588185762. The p50 is from the same run as that p95. `bench/latency-baseline.json` stores it. The gate fails when a later median p95 is more than 50% higher. A 25% band was tighter than the runner spread: macOS 200-line first touch was 86.7 ms, 106.1 ms, 140.4 ms, and 188.7 ms. One slow sample inside a job does not fail it: the compared figure is the median of three p95s.
+Each baseline p95 is the median of eight hosted median p95s, including run 41575641391. The p50 is from the run whose p95 was nearest that median. The slowest of those medians was 44.7% above its baseline (macOS, 2,000 lines, second touch, 382.6 ms against 264.4 ms). The gate allows 55%: that excess plus 10 percentage points, so a repeat of the slowest recorded run stays under the limit (264.4 × 1.55 = 409.8 ms) and a larger jump still fails. One slow sample inside a job does not fail it: the compared figure is the median of three p95s.
 
 ## Rule behavior and proof limits
 

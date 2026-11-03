@@ -4,7 +4,7 @@
 // Usage: bun run bench [--runs N] [--repeat K] [--inform] [--gate <baseline>] [--only <route>]
 // (N ≥ 25, default 30; K ≥ 1, default 1). The 150 ms budget holds on the reference machine (O31);
 // --inform reports that miss without failing. --gate fails when the median p95 of K repeats
-// regresses more than 50% against the committed per-OS baseline. With GITHUB_STEP_SUMMARY set,
+// regresses more than 55% against the committed per-OS baseline. With GITHUB_STEP_SUMMARY set,
 // the table goes there too.
 import { appendFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { cpus, tmpdir } from "node:os";

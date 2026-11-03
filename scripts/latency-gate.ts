@@ -1,8 +1,8 @@
-// Compare a median p95 with a committed per-OS baseline. A miss of more than 50% fails.
-// Hosted runners moved by more than 25% between runs, so 25% was not a stable gate.
+// Compare a median p95 with the median of hosted-run medians. The allowance is the
+// largest excess in that sample (44.7%) plus 10 percentage points, rounded up to 55%.
 // The absolute 150 ms budget stays the reference machine's; this gate is the CI regression check.
 
-export const REGRESSION = 1.5;
+export const REGRESSION = 1.55;
 export const BENCH_USAGE = "usage: bench.ts [--runs N≥25] [--repeat K≥1] [--inform] [--gate <file>] [--only <route>]...";
 
 export interface BenchOptions {
