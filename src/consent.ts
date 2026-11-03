@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { canonical, writeAtomic } from "./disk.ts";
+import { canonical, samePlace, writeAtomic } from "./disk.ts";
 import { git } from "./git.ts";
 import { storageDir } from "./platform.ts";
 
@@ -61,7 +61,7 @@ export function enabled(root: string, data = dataHome()): boolean {
   const common = commonDir(root);
   if (existsSync(path)) {
     const record = JSON.parse(readFileSync(path, "utf8")) as { root: string; common: string; disabled?: boolean };
-    if (record.root === canonical(root) && record.common === common) return record.disabled !== true;
+    if (samePlace(record.root, canonical(root)) && samePlace(record.common, common)) return record.disabled !== true;
     // Removing .git changes the common dir, which used to make an enabled project look
     // unconsented. Stay enabled so the edit is denied instead of skipped. `pregate disable` still wins.
     if (record.root === canonical(root) && record.disabled !== true && !existsSync(join(root, ".git"))) return true;

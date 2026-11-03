@@ -555,7 +555,7 @@ The launcher watchdog is 45 s and the hook `timeout` is 60 s.
 - **Invalid, old, or other-version lock:** notice; Pre calls will apply step 6.
 - **Checks and snapshot:** the complete `sourcesHash` is verified (hash of the evaluable JSON of the `path` sources) and `<rootHash>/sources.json` is written. The snapshot (`start: true`) is built with `git rev-parse HEAD` + `git status -z --untracked-files=all`, copies dirty in-scope files to `blobs/`, and is created by renaming the temporary directory.
 - **Context for the agent:** Claude `additionalContext` includes the lock summary and `<DATA>/bin/pregate check --stdin --path <file> --format agent`. Other adapters have no verified SessionStart channel; agy registers none.
-- **Without SessionStart:** first Pre snapshots HEAD; root acceptance also permits an uncommitted preset that predates first contact (MH-33). That first contact allows two seconds of file-clock skew. Later contacts do not.
+- **Without SessionStart:** first Pre snapshots HEAD; root acceptance also permits an uncommitted preset that predates first contact (MH-33). That first contact allows two seconds of file-clock skew. Later contacts do not. An enabled preset the session has not accepted is `lock-stale`, not a silent allow.
 
 ### 4.5 `pregate check` (pre-check, pre-commit, and CI)
 

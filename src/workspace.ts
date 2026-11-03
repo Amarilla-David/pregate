@@ -319,7 +319,10 @@ export function accepted(sid: string): (dir: string) => boolean {
 }
 
 export function tracked(dir: string): boolean {
-  return git(dir, ["cat-file", "-e", `HEAD:./${PRESET}`]) !== null;
+  // `HEAD:./.pregate/...` is a revision, but Git for Windows can treat the colon as a drive
+  // separator and then miss a preset that is actually at HEAD. `HEAD:<path>` is the same object.
+  return git(dir, ["cat-file", "-e", `HEAD:${PRESET}`]) !== null
+    || git(dir, ["cat-file", "-e", `HEAD:./${PRESET}`]) !== null;
 }
 
 export function changed(root: string, args: string[]): string[] | null {

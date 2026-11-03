@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 import { canonical, findRoot } from "./disk.ts";
 import { git } from "./git.ts";
 import { reportText, summarize, type SessionBaseline } from "./report.ts";
-import { records } from "./recorded.ts";
+import { records, unifyRoot } from "./recorded.ts";
 import { feedbackLabels } from "./feedback-command.ts";
 import { snapshot } from "./state.ts";
 import { contractState } from "./status.ts";
@@ -23,7 +23,7 @@ export function report(args: string[]): { code: number; text: string } {
   const cwd = canonical(resolve(repo ?? process.cwd()));
   const root = canonical(findRoot(cwd, () => true) ?? git(cwd, ["rev-parse", "--show-toplevel"])?.trim() ?? cwd);
   const since = Date.now() - days * 86_400_000;
-  const selected = records(since).filter(({ event }) => event.root === root && event.at >= since);
+  const selected = unifyRoot(records(since), root).filter(({ event }) => event.root === root && event.at >= since);
   const result = summarize(selected, root, since, feedbackLabels(root));
   result.enforceCandidates = applicable(root, result.enforceCandidates);
   const currentHead = git(root, ["rev-parse", "--verify", "HEAD"])?.trim() ?? null;

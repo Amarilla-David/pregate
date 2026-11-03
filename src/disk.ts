@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readdirSync, readFileSync, readlinkSync, read, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import type { Files } from "./types.ts";
-import { slash } from "./paths.ts";
+import { pathKey, slash } from "./paths.ts";
 
 // One reader for every rule source: the builtin catalog (at bundle time, as a macro) and `path`
 // sources. Without fixtures it keeps only the evaluable JSON; fixture folders also hold code files.
@@ -161,6 +161,18 @@ export function canonical(abs: string): string {
     path = resolve(dirname(existing), readlinkSync(existing), rest);
   }
   throw new Error(`${abs}: too many symbolic links`);
+}
+
+// One directory can show up as an 8.3 short name and as its long name. Recorded findings and
+// consent compare those spellings as the same place.
+export function samePlace(a: string, b: string): boolean {
+  if (pathKey(a) === pathKey(b)) return true;
+  try {
+    const final = (path: string) => pathKey(slash(realpathSync.native(path)));
+    return final(a) === final(b);
+  } catch {
+    return false;
+  }
 }
 
 // Null when `existing` does not exist or is a dangling symlink.

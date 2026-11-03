@@ -1395,6 +1395,18 @@ describe("MH-33: preset ctime against the first root contact", () => {
       clock.mockRestore();
     }
   });
+  test("an enabled preset the session has not accepted is denied, not skipped", async () => {
+    const root = repo("unaccepted", false);
+    const ctime = statSync(join(root, PRESET)).ctimeMs;
+    const clock = spyOn(Date, "now").mockReturnValue(ctime - 10_000);
+    try {
+      const d = await onPreEdit([change(root, "src/domain/bad.ts", { form: "full", content: "export const bad = ;" })]);
+      expect(d.verdict).toBe("deny");
+      expect(d.cause).toBe("lock-stale");
+    } finally {
+      clock.mockRestore();
+    }
+  });
   test("a later nested preset cannot weaken the parent's rules, even with backdated mtime", async () => {
     const root = repo();
     onSessionStart({ kind: "session-start", session: session(), cwd: root });

@@ -239,10 +239,13 @@ export function locate(sid: string, dir: string): string | Cause | null {
     return accepts(candidate);
   });
   if (root !== null) return root;
-  // The preset of a root this session already registered is gone, or a consenting root below it
-  // was not accepted (MH-33). Another checkout nested below it without a consenting contract of its
-  // own (an agent's disabled worktree, a vendored clone) is not that root's territory.
-  return state.roots(sid).some((r) => enabled(r) && within(r, dir) && (nearest !== null || checkout(r) === checkout(dir))) ? "lock-stale" : null;
+  // An enabled preset this session has not accepted must not disappear. findRoot stops at .git
+  // when the callback rejects it, and a Pre with no root then exits 0 and records nothing.
+  if (nearest !== null) return "lock-stale";
+  // The preset of a root this session already registered is gone. Another checkout nested below it
+  // without a consenting contract of its own (an agent's disabled worktree, a vendored clone) is
+  // not that root's territory.
+  return state.roots(sid).some((r) => enabled(r) && within(r, dir) && checkout(r) === checkout(dir)) ? "lock-stale" : null;
 }
 
 function checkout(dir: string): string | null {

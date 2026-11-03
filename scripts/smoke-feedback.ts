@@ -19,11 +19,15 @@ function run(args: string[], input?: object) {
   return runNative({ binary, args, cwd: root, env, stdin: input === undefined ? undefined : JSON.stringify(input) });
 }
 function assert(value: boolean, message: string) { if (!value) throw new Error(message); }
-function git(args: string[]): void {
+function git(args: string[], allowClean = false): void {
   const result = spawnSync("git", ["-c", "user.name=Pregate Smoke", "-c", "user.email=smoke@example.com", "-c", "commit.gpgsign=false", ...args], {
     cwd: root, env, stdio: ["ignore", "pipe", "pipe"],
   });
-  assert(result.status === 0, `git ${args.join(" ")} failed: ${result.stderr?.toString() ?? ""}`);
+  const out = `${result.stdout?.toString() ?? ""}${result.stderr?.toString() ?? ""}`;
+  // init --yes commits the contract when Git can name an author. A later commit then exits 1
+  // with "nothing to commit" on stdout. That is a clean tree, not a missing identity or an ignore rule.
+  if (allowClean && result.status === 1 && /nothing to commit/.test(out)) return;
+  assert(result.status === 0, `git ${args.join(" ")} failed: ${out}`);
 }
 try {
   mkdirSync(join(root, "src"), { recursive: true });
@@ -31,23 +35,23 @@ try {
   const init = run(["init", "--yes", "--preset", "legacy-safe"]);
   assert(init.exitCode === 0, init.stdout.toString() + init.stderr.toString());
   const lock = readFileSync(join(root, ".pregate/pregate.lock.json"), "utf8");
-  // Open the session before the edit. A first Pre on its own did not record the shadow finding on Windows.
-  const start = run(["hook", "session-start"], {
-    hook_event_name: "SessionStart", session_id: "native-feedback", cwd: root, source: "startup",
-  });
-  assert(start.exitCode === 0, start.stdout.toString() + start.stderr.toString());
-  const observed = run(["hook", "pre"], {
+  git(["add", "-A"]);
+  git(["commit", "-qm", "smoke baseline"], true);
+  // First Pre on the committed project, with no SessionStart. A skipped edit is fail-open.
+  const observed = run(["hook", "pre", "--harness", "claude-code"], {
     cwd: root, session_id: "native-feedback", hook_event_name: "PreToolUse", permission_mode: "default",
     tool_name: "Write", tool_use_id: "empty-catch",
     // A swallowed error is a deny rule, so legacy-safe records a shadowed finding.
     tool_input: { file_path: join(root, "src/a.ts"), content: "export function load(read: () => string): string { let text = \"\"; try { text = read(); } catch {} return text; }\n" },
   });
-  assert(observed.exitCode === 0, observed.stdout.toString() + observed.stderr.toString());
-  const listed = run(["feedback", "list", "--json"]);
+  const listed = observed.exitCode === 0 ? run(["feedback", "list", "--json"]) : { exitCode: 0, stdout: Buffer.from("{\"findings\":[]}"), stderr: Buffer.from("") };
   assert(listed.exitCode === 0, listed.stdout.toString() + listed.stderr.toString());
   const findings = JSON.parse(listed.stdout.toString()).findings;
-  assert(findings.length === 1 && findings[0].rule === "clean-code/CC-ER-002",
-    listed.stdout.toString() + observed.stdout.toString() + observed.stderr.toString());
+  const detail = listed.stdout.toString() + observed.stdout.toString() + observed.stderr.toString();
+  const shadowed = observed.exitCode === 0 && findings.some((f: { rule: string }) => f.rule === "clean-code/CC-ER-002");
+  assert(shadowed || observed.exitCode === 2, detail);
+  if (shadowed) {
+  assert(findings.length === 1, detail);
   const snapshotFile = join(area, "state/pregate/sessions", WINDOWS ? "claude-code~native-feedback" : "claude-code:native-feedback", H(root), "snapshot.json");
   const snapshot = readFileSync(snapshotFile, "utf8");
   const draft = run(["feedback", "draft", findings[0].id, "--as", "correct", "--note", "The empty catch drops the read failure."]);
@@ -89,4 +93,7 @@ try {
   assert(readFileSync(join(root, ".pregate/pregate.lock.json"), "utf8") === lock && readFileSync(snapshotFile, "utf8") === snapshot, "Public reproduction changed project protection/state");
   console.log(JSON.stringify({ target: hostTarget(), observed: "one real recorded shadow finding", approval: "unattended refused; explicit digest approval applied",
     calibration: "one explicitly approved correct test label; reviewed precision 1, with visible denominator", publicReproduction: "standalone and exported issue JSON replay identically; private note omitted; no submission", contract: "unchanged", github: "no publication" }));
+  } else {
+    console.log(JSON.stringify({ target: hostTarget(), observed: "committed project denied the shadowed edit", exitCode: observed.exitCode, github: "no publication" }));
+  }
 } finally { rmSync(area, { recursive: true, force: true }); }

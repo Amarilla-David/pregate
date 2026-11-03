@@ -9,7 +9,7 @@ import { dependencyReviews, dependencyRules, type ImportMemo, memoizedImports, n
 import { openDependencyCache } from "./dependency-cache.ts";
 import { scriptControlCause } from "./control.ts";
 import { acceptedByEnvironment, approvedLocally, loosening, looseningText } from "./loosening.ts";
-import { canonical, escapedRoot, findRoot, readTree } from "./disk.ts";
+import { canonical, escapedRoot, findRoot, readTree, samePlace } from "./disk.ts";
 import { analyze, placement } from "./evaluate.ts";
 import { ruleEnforcements } from "./enforcement.ts";
 import { fitnessViolations, projectFitness } from "./fitness-command.ts";
@@ -33,6 +33,16 @@ import type { Analysis, BaselineRead, CallEvent, Cause, Decision, Form, Lock, Ph
 import { accepted, changed, changes, type FileState, overlaid, type Overlay, owned, reader, revisionReader, snapshotReader, stdinFile, textOf, tracked, workspacePaths } from "./workspace.ts";
 
 export interface Finding { id: string; session: string; folder: string; event: CallEvent }
+
+// An 8.3 short name and the long name are one project. Callers that filter on `event.root`
+// would otherwise drop a finding recorded under the other spelling.
+export function unifyRoot(records: Recorded[], root: string): Recorded[] {
+  return records.map(record => {
+    const found = record.event.root;
+    if (!found || found === root || !samePlace(found, root)) return record;
+    return { ...record, event: { ...record.event, root } };
+  });
+}
 export type CheckMode = { kind: "stdin"; path: string; text: string } | { kind: "staged" } | { kind: "base"; sha: string } | { kind: "tree" };
 export interface JudgeContext { beforeRead?: BaselineRead; importsOf?: ImportMemo }
 export type JudgedFile = Omit<FileState, "before"> & { before: string | null | BaselineRead };
