@@ -16,9 +16,9 @@
       "runner": "macos-latest",
       "p95Ms": {
         "200 lines, first touch": 188.7,
-        "200 lines, second touch": 169.5,
-        "2,000 lines, first touch": 319.8,
-        "2,000 lines, second touch": 306.6
+        "200 lines, second touch": 180.4,
+        "2,000 lines, first touch": 337.5,
+        "2,000 lines, second touch": 382.6
       }
     },
     "win32": {

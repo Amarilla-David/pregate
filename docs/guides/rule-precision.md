@@ -172,15 +172,15 @@ A runner whose architecture does not match the baseline fails closed. The baseli
 | linux | ubuntu-latest | x64 | 2,000 lines, first touch | 243.0 | 262.2 |
 | linux | ubuntu-latest | x64 | 2,000 lines, second touch | 236.0 | 246.5 |
 | darwin | macos-latest | arm64 | 200 lines, first touch | 123.5 | 188.7 |
-| darwin | macos-latest | arm64 | 200 lines, second touch | 121.5 | 169.5 |
-| darwin | macos-latest | arm64 | 2,000 lines, first touch | 236.8 | 319.8 |
-| darwin | macos-latest | arm64 | 2,000 lines, second touch | 237.5 | 306.6 |
+| darwin | macos-latest | arm64 | 200 lines, second touch | 140.6 | 180.4 |
+| darwin | macos-latest | arm64 | 2,000 lines, first touch | 277.1 | 337.5 |
+| darwin | macos-latest | arm64 | 2,000 lines, second touch | 272.9 | 382.6 |
 | windows | windows-latest | x64 | 200 lines, first touch | 776.9 | 871.4 |
 | windows | windows-latest | x64 | 200 lines, second touch | 784.2 | 963.2 |
 | windows | windows-latest | x64 | 2,000 lines, first touch | 911.2 | 1033.8 |
 | windows | windows-latest | x64 | 2,000 lines, second touch | 896.8 | 980.4 |
 
-Each p95 is the slowest median recorded for that route on GitHub Actions runs 41575641391, 41576919634, 41583491327, and 41584924713. The p50 is from the same run as that p95. `bench/latency-baseline.json` stores it. The gate fails when a later median p95 is more than 50% higher. A 25% band was tighter than the runner spread: macOS 200-line first touch was 86.7 ms, 106.1 ms, 140.4 ms, and 188.7 ms. One slow sample inside a job does not fail it: the compared figure is the median of three p95s.
+Each p95 is the slowest median recorded for that route on GitHub Actions runs 41575641391, 41576919634, 41583491327, 41584924713, and 41588185762. The p50 is from the same run as that p95. `bench/latency-baseline.json` stores it. The gate fails when a later median p95 is more than 50% higher. A 25% band was tighter than the runner spread: macOS 200-line first touch was 86.7 ms, 106.1 ms, 140.4 ms, and 188.7 ms. One slow sample inside a job does not fail it: the compared figure is the median of three p95s.
 
 ## Rule behavior and proof limits
 
