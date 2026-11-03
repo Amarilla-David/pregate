@@ -79,27 +79,24 @@ npx skills add pedroknigge/pregate
 
 ## What install touches and how to remove it
 
-Start with advisor mode or the GitHub Action if you want to see findings before anything on your laptop changes.
+Start with advisor mode, or with the GitHub Action further down, if you want findings before anything on your laptop changes. The notes here are the short version. Checksums, signatures, Homebrew, Scoop, and updates live in the [installation guide](docs/guides/installation.md).
 
 A full install runs `pregate setup`. That write is global. It does not edit the repository. Hooks stay inert for project rules until a human approves a contract and consents in that worktree. A committed preset is not consent.
 
 What setup registers, for harnesses it finds:
 
-- The engine under the data home (`~/.local/share/pregate/<version>` on macOS and Linux, `%LOCALAPPDATA%\pregate` on Windows) and the launcher on `PATH` (`~/.local/bin/pregate`, or `%LOCALAPPDATA%\pregate\bin` on Windows)
+- The engine under the data home (`~/.local/share/pregate/<version>` on macOS and Linux, `%LOCALAPPDATA%\pregate` on Windows) and the launcher on `PATH` (`~/.local/bin/pregate`, or `%LOCALAPPDATA%\pregate\bin` on Windows). The engine directory also keeps `LICENSE` and `THIRD_PARTY_NOTICES` from the release archive.
 - `~/.claude/settings.json`, and `$CLAUDE_CONFIG_DIR/settings.json` when that is a different file. Claude Code, Cursor, and Grok share this registration
 - `~/.cursor/hooks.json` when Cursor is installed
 - `${CODEX_HOME:-~/.codex}/hooks.json` for Codex
 - The `pregate-global` plugin for Antigravity (`agy`)
 - The `/pregate` companion skill
 
-`pregate install --git-hook --ci github` is a separate command. It adds a repository pre-commit hook and a GitHub Actions workflow. Setup does not do that.
+`pregate install --git-hook --ci github` is a separate command. It adds a repository pre-commit hook and a GitHub Actions workflow. Setup does not do that. The shell guard is the shell half of the same global Pre hook, not a separate switch.
 
-The shell guard is not a separate switch. It is the shell half of the same global Pre hook.
+To stop it:
 
-# 2. Human approves in a terminal with the short 12-character digest code printed by the preview
-pregate approve <code>
-```
-- `pregate disable` revokes consent for the current worktree and withdraws repository-wide consent. The human types `y` on the terminal. `--yes` skips that question only when `PREGATE_UNATTENDED_APPROVAL=1` is already set. Project rules stop applying here. The global hook is still installed. While a consent record exists, the shell guard can still deny a command that rewrites Pregate's install paths or tries to turn hooks off.
+- `pregate disable` revokes consent for the current worktree and withdraws repository-wide consent. The human types `y` on the terminal. `--yes` skips that question only when `PREGATE_UNATTENDED_APPROVAL=1` is already set. Project rules stop applying here. The global hook stays installed. While a consent record exists, the shell guard can still deny a command that rewrites Pregate's install paths or tries to turn hooks off.
 - `pregate uninstall` removes the hook registrations Pregate owns, the launcher, the installed engines, and the companion skill. Harnesses stop calling Pregate, so the shell guard stops running. Repository `.pregate/` directories and the `.pregate.bak` copies of harness files from before the first setup stay.
 - `pregate uninstall --purge` does that and also deletes local state (sessions and consent under the state home). It still does not delete repository contracts.
 

@@ -58,6 +58,10 @@ test("CLI stdin checks persist cold resolver reads and retain warm unchanged-imp
   writeFileSync(join(root, "src/infra/value.ts"), "export const value = 2;\n");
   writeFileSync(join(root, "src/domain/barrel.ts"), 'export { value } from "./value";\n');
   writeFileSync(join(root, "src/domain/use.ts"), 'import { value } from "./barrel";\nexport const used = value;\n');
+  for (const args of [["init", "-q"], ["add", "."], ["commit", "-qm", "base"]]) {
+    const git = Bun.spawnSync(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], { cwd: root, stderr: "pipe" });
+    if (git.exitCode !== 0) throw new Error(git.stderr.toString());
+  }
   const path = join(root, "src/domain/barrel.ts"), source = 'export { value } from "../infra/value";\n';
   const invoke = () => Bun.spawnSync([process.execPath, join(import.meta.dir, "../src/main.ts"), "check", "--stdin", "--path", path], {
     cwd: join(import.meta.dir, ".."), env: { ...process.env }, stdin: Buffer.from(source), stdout: "pipe", stderr: "pipe",

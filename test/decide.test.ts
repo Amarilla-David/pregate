@@ -186,10 +186,10 @@ const CASES: [string, DecideInput, Expect][] = [
     event: "stop", path: FILE, form: { cause: "syntax", line: 9 }, stop: { blocks: 0, reentry: false, approved: [] },
   }), { verdict: "deny", cause: "syntax" }],
   ["stop blocks a human cause once", input({
-    event: "stop", path: null, lock: null, form: { cause: "git-failed", line: null }, stop: { blocks: 0, reentry: false, approved: [] },
-  }), { verdict: "deny", halt: false, cause: "git-failed", notice: /git/ }],
+    event: "stop", path: null, lock: null, form: { cause: "git-not-repository", line: null }, stop: { blocks: 0, reentry: false, approved: [] },
+  }), { verdict: "deny", halt: false, cause: "git-not-repository", notice: /git init/ }],
   ["stop does not block a human cause on reentry", input({
-    event: "stop", path: null, lock: null, form: { cause: "git-failed", line: null }, stop: { blocks: 1, reentry: true, approved: [] },
+    event: "stop", path: null, lock: null, form: { cause: "git-not-repository", line: null }, stop: { blocks: 1, reentry: true, approved: [] },
   }), { verdict: "none", cause: null, notice: /cannot evaluate/ }],
   ["stop reports approved asks to the human", input({
     event: "stop", path: null, stop: { blocks: 0, reentry: false, approved: [v("core/TDD-DEL-001", 12)] },

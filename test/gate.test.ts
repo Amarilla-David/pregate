@@ -490,17 +490,23 @@ test("initial review discovery stops at a nested repository and expires without 
   });
 });
 
-test("standalone: stdin and Stop enforce changes against the filesystem snapshot", async () => {
+test("a directory without git denies the hook, Stop and check", async () => {
   const root = canonical(join(area, "standalone"));
   put(join(root, "src/domain/a.ts"), "export const a = 1;\n");
   preset(root); enable(root);
   const s = session();
-  onSessionStart({ kind: "session-start", session: s, cwd: root });
-  expect((await check(root, { kind: "stdin", path: "src/domain/a.ts", text: "export const a = 2;\n" })).code).toBe(0);
-  expect((await check(root, { kind: "stdin", path: "src/domain/a.ts", text: "export const a = ;\n" })).code).toBe(1);
-  expect((await onStop({ kind: "stop", session: s, cwd: root, reentry: false })).verdict).toBe("none");
-  put(join(root, "src/domain/a.ts"), "export const a = ;\n");
-  expect((await onStop({ kind: "stop", session: s, cwd: root, reentry: false })).verdict).toBe("deny");
+  const start = onSessionStart({ kind: "session-start", session: s, cwd: root });
+  expect(start.notice ?? "").toContain("git init");
+  const checked = await check(root, { kind: "stdin", path: "src/domain/a.ts", text: "export const a = 2;\n" });
+  expect(checked.code).toBe(1);
+  expect(checked.text).toContain("git init");
+  const pre = await onPreEdit([change(root, "src/domain/a.ts", { form: "full", content: "export const a = 2;\n" }, s)]);
+  expect(pre.verdict).toBe("deny");
+  expect(pre.cause).toBe("git-not-repository");
+  expect(inert({ kind: "stop", session: s, cwd: root, reentry: false })).toBe(false);
+  const stop = await onStop({ kind: "stop", session: s, cwd: root, reentry: false });
+  expect(stop.verdict).toBe("deny");
+  expect(stop.cause).toBe("git-not-repository");
 });
 
 test.each([{ exclude: [] }, { exclude: [".pregate/**"] }])("Stop does not treat an admitted untracked contract as source code (excludes %j)", async ({ exclude }) => {
@@ -554,6 +560,9 @@ test.each([{ exclude: [] }, { exclude: [".pregate/**"] }])("Stop does not treat 
 test("a default-core session reports unbound requirements without blocking a valid edit or Stop", async () => {
   const root = canonical(join(area, "progressive"));
   put(join(root, "src/a.ts"), "export const a = 1;\n");
+  git(root, "init", "-q");
+  git(root, "add", ".");
+  git(root, "commit", "-qm", "base");
   const text = JSON.stringify({ name: "progressive", version: "1.0.0", engine: VERSIONS.engine,
     sources: [{ ns: "core", kind: "builtin", version: VERSIONS.core }], methodologies: [] });
   const compiled = compile(text, sourcesOf(root), VERSIONS);
@@ -1243,16 +1252,21 @@ describe("MH-17: no preset", () => {
     put(raw.tool_input.file_path, "old text need not be read");
     const e = claude("pre", JSON.stringify(raw), { grokEvent: null, projectDir: null, remote: false });
     if (e === null || "cause" in e || e.kind !== "pre-edit") throw new Error("native Write did not decode");
+    const path = process.env.PATH;
     process.env.PATH = "/no-git";
-    expect((await onPreEdit(e.changes)).verdict).toBe("none");
-    const s = e.changes[0]!.session;
-    const shell = onPreCommand({ session: s, callId: "shell", tool: "Bash", cwd: root, command: "codex exec 'task' && echo x > a.ts && git commit --no-verify" });
-    expect(shell.verdict).toBe("none");
-    const start = onSessionStart({ kind: "session-start", session: s, cwd: root });
-    expect(start.full).toBe("");
-    expect(start.notice).toBeNull();
-    expect((await onStop({ kind: "stop", session: s, cwd: root, reentry: false })).verdict).toBe("none");
-    expect(existsSync(state.stateDir())).toBe(false);
+    try {
+      expect((await onPreEdit(e.changes)).verdict).toBe("none");
+      const s = e.changes[0]!.session;
+      const shell = onPreCommand({ session: s, callId: "shell", tool: "Bash", cwd: root, command: "codex exec 'task' && echo x > a.ts && git commit --no-verify" });
+      expect(shell.verdict).toBe("none");
+      const start = onSessionStart({ kind: "session-start", session: s, cwd: root });
+      expect(start.full).toBe("");
+      expect(start.notice).toBeNull();
+      expect((await onStop({ kind: "stop", session: s, cwd: root, reentry: false })).verdict).toBe("none");
+      expect(existsSync(state.stateDir())).toBe(false);
+    } finally {
+      process.env.PATH = path;
+    }
   });
 
   test("project .git and .claude settings are editable without a preset", async () => {
@@ -1369,6 +1383,29 @@ describe("MH-33: preset ctime against the first root contact", () => {
     const d = await onPreEdit([change(root, "src/domain/bad.ts", { form: "full", content: "export const bad = ;" })]);
     expect(d.cause).toBe("syntax");
     expect(state.roots(state.key(session()))).toEqual([root]);
+  });
+  test("first contact still enforces a preset whose timestamp is slightly ahead of the clock", async () => {
+    const root = repo("ahead", false);
+    const ctime = statSync(join(root, PRESET)).ctimeMs;
+    const clock = spyOn(Date, "now").mockReturnValue(ctime - 500);
+    try {
+      const d = await onPreEdit([change(root, "src/domain/bad.ts", { form: "full", content: "export const bad = ;" })]);
+      expect(d.cause).toBe("syntax");
+    } finally {
+      clock.mockRestore();
+    }
+  });
+  test("an enabled preset the session has not accepted is denied, not skipped", async () => {
+    const root = repo("unaccepted", false);
+    const ctime = statSync(join(root, PRESET)).ctimeMs;
+    const clock = spyOn(Date, "now").mockReturnValue(ctime - 10_000);
+    try {
+      const d = await onPreEdit([change(root, "src/domain/bad.ts", { form: "full", content: "export const bad = ;" })]);
+      expect(d.verdict).toBe("deny");
+      expect(d.cause).toBe("lock-stale");
+    } finally {
+      clock.mockRestore();
+    }
   });
   test("a later nested preset cannot weaken the parent's rules, even with backdated mtime", async () => {
     const root = repo();

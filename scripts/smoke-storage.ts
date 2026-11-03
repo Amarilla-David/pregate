@@ -1,4 +1,5 @@
 // Run after building: production-binary retention of a real recorded shadow observation.
+import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
@@ -18,6 +19,12 @@ function run(args: string[], input?: object, ci = "1") {
   return runNative({ binary, args, cwd: root, env: { ...env, CI: ci, PREGATE_UNATTENDED_APPROVAL: ci }, stdin: input === undefined ? undefined : JSON.stringify(input) });
 }
 function assert(value: boolean, message: string) { if (!value) throw new Error(message); }
+function git(args: string[]): void {
+  const result = spawnSync("git", ["-c", "user.name=Pregate Smoke", "-c", "user.email=smoke@example.com", "-c", "commit.gpgsign=false", ...args], {
+    cwd: root, env, stdio: ["ignore", "pipe", "pipe"],
+  });
+  assert(result.status === 0, `git ${args.join(" ")} failed: ${result.stderr?.toString() ?? ""}`);
+}
 function checked(args: string[], input?: object) {
   const out = run(args, input);
   assert(out.exitCode === 0, out.stdout.toString() + out.stderr.toString());
@@ -46,6 +53,9 @@ try {
   mkdirSync(join(root, "src"), { recursive: true });
   const baseline = "export const baseline = 1;\n";
   writeFileSync(join(root, "src/base.ts"), baseline);
+  // Consent records Git's common dir, so the repository exists before init. Leave the baseline
+  // untracked: SessionStart stores that live copy, and cleanup must not remove it.
+  git(["init", "-q", "-b", "main"]);
   checked(["init", "--yes", "--preset", "legacy-safe"]);
   checked(["pack", "disable", "core/software-invariants", "--yes"]); // Isolate session storage from project fitness evidence.
   const lock = readFileSync(join(root, ".pregate/pregate.lock.json"), "utf8");

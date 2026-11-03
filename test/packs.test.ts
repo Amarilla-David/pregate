@@ -135,7 +135,8 @@ async function restoredAfter(area: string, saved: string | undefined, work: () =
     if (saved === undefined) delete process.env.XDG_DATA_HOME; else process.env.XDG_DATA_HOME = saved;
     // All synchronous children have exited. Retry transient Windows EBUSY/EPERM,
     // but retain the cleanup failure if the directory remains busy.
-    rmSync(area, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    // Windows can keep the freshly compiled engine mapped for a short scan after the process exits.
+    rmSync(area, { recursive: true, force: true, maxRetries: 30, retryDelay: 200 });
   }
 }
 

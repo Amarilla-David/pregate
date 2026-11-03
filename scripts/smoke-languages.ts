@@ -1,4 +1,5 @@
 // Run after bun run scripts/build.ts: validates a temporary mixed-language pack against the native distribution.
+import { spawnSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
@@ -25,6 +26,12 @@ function run(args: string[], stdin?: string, cwd = root) {
     env: { ...process.env, CI: "1", PREGATE_UNATTENDED_APPROVAL: "1", HOME: join(area, "home"), XDG_DATA_HOME: join(area, "data"), XDG_STATE_HOME: join(area, "state") } });
 }
 function assert(condition: boolean, message: string) { if (!condition) throw new Error(message); }
+function git(args: string[]): void {
+  const result = spawnSync("git", ["-c", "user.name=Pregate Smoke", "-c", "user.email=smoke@example.com", "-c", "commit.gpgsign=false", ...args], {
+    cwd: root, env: process.env, stdio: ["ignore", "pipe", "pipe"],
+  });
+  assert(result.status === 0, `git ${args.join(" ")} failed: ${result.stderr?.toString() ?? ""}`);
+}
 
 // init --preview runs with CI set so its digest is printed. Applying that review does not.
 // POSIX types y on a pty with CI removed. Windows has no /dev/tty, so the starter
@@ -101,6 +108,10 @@ try {
   assert(data.fitness.every((r: { status: string }) => r.status === "unverified"), "Missing core verification must remain incomplete");
   assert(data.uncovered.length === 0 && data.errors.length === 0, "Coverage incomplete");
   assert(data.findings.every((v: { path: string }) => !v.path.endsWith(".ts")), "Foreign policy leaked into TS");
+  // stdin compares with HEAD. Commit the two-parameter sources first so growth is a real diff.
+  git(["init", "-q", "-b", "main"]);
+  git(["add", "-A"]);
+  git(["commit", "-qm", "smoke baseline"]);
   for (const [path, source] of [["src/a.py", "def f(a, b, c): pass\n"], ["src/a.go", "package app\nfunc f(a, b, c int) {}\n"]]) {
     const growth = run(["check", "--stdin", "--path", path!], source);
     assert(growth.exitCode === 1 && growth.stdout.toString().includes("LANG-PARAM-001"), growth.stdout.toString() + growth.stderr.toString());

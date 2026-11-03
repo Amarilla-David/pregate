@@ -100,6 +100,10 @@ test("production audit and stdin checks accept inline import arrays and reject c
   const presetText = JSON.stringify(preset), contract = compile(presetText, source => source.kind === "builtin" ? BUILTIN : null, VERSIONS);
   if ("errors" in contract) throw new Error(contract.errors.join("\n"));
   writeFileSync(join(root, PRESET), presetText); writeFileSync(join(root, LOCK), contract.text);
+  for (const args of [["init", "-q"], ["add", "."], ["commit", "-qm", "base"]]) {
+    const git = Bun.spawnSync(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], { cwd: root, stderr: "pipe" });
+    if (git.exitCode !== 0) throw new Error(git.stderr.toString());
+  }
   compileBinary(hostTarget(), binary);
   const invoke = (args: string[], stdin?: string) => Bun.spawnSync([binary, ...args], { cwd: root, env, stdin: stdin === undefined ? "ignore" : Buffer.from(stdin), stdout: "pipe", stderr: "pipe", timeout: 10_000 });
   for (const ext of ["ts", "tsx"]) {

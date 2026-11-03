@@ -7,7 +7,7 @@ import { enabled } from "./consent.ts";
 import { decide } from "./decide.ts";
 import { canonical, findRoot, readTree } from "./disk.ts";
 import { ruleEnforcements } from "./enforcement.ts";
-import { catFileBatch, indexFiles, unmerged } from "./git.ts";
+import { catFileBatch, gitFailure, indexFiles, unmerged } from "./git.ts";
 import { type Call, clock, ENGINE_VERSION, engineHome, FLOOR, isCause, json, launcher, LOCK, type Outcome, PRESET, readText, told, updateReady, VERSIONS, within } from "./inertia.ts";
 import { librarySource } from "./library.ts";
 import { cachedSourcesMatch, loadCompiledLock, storeCompiledLock } from "./lock-cache.ts";
@@ -239,10 +239,13 @@ export function locate(sid: string, dir: string): string | Cause | null {
     return accepts(candidate);
   });
   if (root !== null) return root;
-  // The preset of a root this session already registered is gone, or a consenting root below it
-  // was not accepted (MH-33). Another checkout nested below it without a consenting contract of its
-  // own (an agent's disabled worktree, a vendored clone) is not that root's territory.
-  return state.roots(sid).some((r) => enabled(r) && within(r, dir) && (nearest !== null || checkout(r) === checkout(dir))) ? "lock-stale" : null;
+  // An enabled preset this session has not accepted must not disappear. findRoot stops at .git
+  // when the callback rejects it, and a Pre with no root then exits 0 and records nothing.
+  if (nearest !== null) return "lock-stale";
+  // The preset of a root this session already registered is gone. Another checkout nested below it
+  // without a consenting contract of its own (an agent's disabled worktree, a vendored clone) is
+  // not that root's territory.
+  return state.roots(sid).some((r) => enabled(r) && within(r, dir) && checkout(r) === checkout(dir)) ? "lock-stale" : null;
 }
 
 function checkout(dir: string): string | null {
@@ -320,7 +323,7 @@ export function fromDisk(root: string): Loaded | { errors: string[] } {
 // A10: pre-commit and CI rebuild the lock (from the index, or from the tree) and compare bytes.
 export function recompiled(root: string, staged: boolean): Loaded | { errors: string[] } {
   const texts = staged ? catFileBatch(root, [`:./${PRESET}`, `:./${LOCK}`]) : [readText(join(root, PRESET)), readText(join(root, LOCK))];
-  if (texts === null) return { errors: [formText(form("git-failed"), null).full] };
+  if (texts === null) return { errors: [formText(form(gitFailure()), null).full] };
   const [presetText, lockText] = texts;
   if (presetText === null || presetText === undefined) return { errors: [`PREGATE: ${PRESET} is missing${staged ? " from the index" : ""}.`] };
   const filesOf = staged ? (s: Preset["sources"][number]) => (s.kind === "builtin" ? BUILTIN : s.kind === "git" ? cachedPack(s) : s.kind === "library" ? librarySource(s.ns) : indexFiles(root, s.path)) : sourcesOf(root);

@@ -2,7 +2,7 @@ import { existsSync, linkSync, mkdirSync, readdirSync, readFileSync, renameSync,
 import { basename, dirname, join } from "node:path";
 import { markReached } from "./consent.ts";
 import { writeAtomic } from "./disk.ts";
-import { catFileBatch, git } from "./git.ts";
+import { catFileBatch, git, gitFailure } from "./git.ts";
 import type { CallEvent, Cause, Session, Snapshot } from "./types.ts";
 import { storageDir, WINDOWS } from "./platform.ts";
 import { pathKey } from "./paths.ts";
@@ -257,14 +257,17 @@ function refTips(root: string): string[] | undefined {
   return listed === null || tips.length > 2000 ? undefined : tips;
 }
 
-function revision(root: string): { head: string | null; prefix: string } {
+function revision(root: string): { head: string | null; prefix: string } | Cause {
   const both = git(root, ["rev-parse", "--show-prefix", "--verify", "-q", "HEAD"]);
   if (both !== null) {
     const [prefix, head] = both.split("\n");
     return { prefix: prefix!, head: head! };
   }
+  // A repository with no commits still answers --show-prefix. Not a repository, a missing
+  // git binary, or any other failure does not: that is a deny, not an empty baseline.
   const prefix = git(root, ["rev-parse", "--show-prefix"]);
-  return { prefix: prefix?.replace(/\n$/, "") ?? "", head: null };
+  if (prefix === null) return gitFailure();
+  return { prefix: prefix.replace(/\n$/, ""), head: null };
 }
 
 // rel → current text (null: absent) of every file under root that differs from HEAD or is
@@ -317,6 +320,7 @@ export function ensureSnapshot(sid: string, root: string, start: ((rel: string) 
   if (found === "missing") return "snapshot-missing";
   if (found !== null) return found;
   const rev = revision(root);
+  if (typeof rev === "string") return rev;
   // SessionStart has time for the ref listing; a Pre's first contact keeps its latency budget and
   // records no tips, so its Stop treats no moved-HEAD file as arrived.
   const tips = rev.head === null || start === null ? undefined : refTips(root);
@@ -382,7 +386,7 @@ export function beforeTexts(sid: string, snap: Snapshot, rels: string[]): Record
   }
   if (pending.length === 0) return result;
   const texts = catFileBatch(snap.root, pending.map((rel) => `${snap.head}:./${rel}`));
-  if (texts === null) return "git-failed";
+  if (texts === null) return gitFailure();
   const saved = io(() => {
     mkdirSync(headDir, { recursive: true });
     for (const [i, rel] of pending.entries()) {

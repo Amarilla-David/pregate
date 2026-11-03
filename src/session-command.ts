@@ -3,14 +3,14 @@ import { join } from "node:path";
 import { approve, humanApprovalInstructions, PENDING_MS } from "./approval.ts";
 import { dataHome, enabled } from "./consent.ts";
 import { pathLabel, sourceDiff, visible } from "./contract.ts";
-import { diagnosticNotice, evaluationProgress, form, grammars, inputOf, lockOf, recordedChecks, turnOf, verify } from "./contract-diagnostic.ts";
+import { diagnosticNotice, evaluationProgress, form, grammars, inputOf, locate, lockOf, recordedChecks, settle, turnOf, verify } from "./contract-diagnostic.ts";
 import { blocking, decide } from "./decide.ts";
 import { dependencyReviews, dependencyRules, needsDependencyReview } from "./dependencies.ts";
 import { openDependencyCache } from "./dependency-cache.ts";
 import { canonical, findRoot, writeAtomic } from "./disk.ts";
 import { ruleEnforcements } from "./enforcement.ts";
 import { fitnessViolations, projectFitness } from "./fitness-command.ts";
-import { catFileBatch, git, gitInput } from "./git.ts";
+import { catFileBatch, git, gitInput, repositoryFailure } from "./git.ts";
 import { type Call, clock, isCause, LOCK, NOTHING, PRESET, readText, told, VERSIONS, within } from "./inertia.ts";
 import { violationMessage } from "./message.ts";
 import { pathKey, relativePath as relative } from "./paths.ts";
@@ -173,8 +173,8 @@ function applyBaseline(release: () => void, plan: RebaseReview, text: string, di
 
 // §4.3: every root the session touched, against its snapshot, one at a time within the budget.
 // One Stop output, so the first root with something blocking decides and ends the walk; the
-// others are seen by the next Stop, pre-commit and CI. A session that reached no root has nothing
-// to judge, and Stop writes nothing (MH-17).
+// others are seen by the next Stop, pre-commit and CI. A session that reached no root writes
+// nothing, unless cwd is an enabled project Git cannot read: that still denies (MH-17, A27).
 export async function onStop(e: Extract<HookEvent, { kind: "stop" }>, budgetMs = STOP_BUDGET_MS): Promise<Decision> {
   const startedAt = clock();
   const sid = state.key(e.session);
@@ -184,7 +184,7 @@ export async function onStop(e: Extract<HookEvent, { kind: "stop" }>, budgetMs =
   const live = state.roots(sid).filter((r) => existsSync(r) && scope.roots(r));
   const roots = live.filter((r) => enabled(r));
   const lost = consentLost(live.filter((r) => !enabled(r)));
-  if (roots.length === 0) return told(lost);
+  if (roots.length === 0) return missingRepository(e, sid, startedAt) ?? told(lost);
   // Cursor's Stop followups each get a new generation_id; they still belong to the blocked turn.
   const turn = turnOf(e.session.harness === "cursor" ? { ...e.session, turnId: null } : e.session);
   await grammars();
@@ -216,6 +216,19 @@ export async function onStop(e: Extract<HookEvent, { kind: "stop" }>, budgetMs =
   }, null);
   const decided = failed === undefined ? d : decide({ ...input, form: form(failed) });
   return lost === null ? decided : { ...decided, notice: [decided.notice, lost].filter(Boolean).join("\n\n") };
+}
+
+// No snapshot yet. A consented project that Git cannot read still denies; a readable
+// repository that this session never reached stays quiet, as before.
+function missingRepository(e: Extract<HookEvent, { kind: "stop" }>, sid: string, startedAt: number): Decision | null {
+  const here = locate(sid, canonical(e.cwd));
+  if (typeof here !== "string") return null;
+  const failure = repositoryFailure(here);
+  if (failure === null) return null;
+  return settle(
+    { session: e.session, kind: "stop", callId: "stop", abs: null, root: here, rel: null, startedAt },
+    { ...NOTHING, form: form(failure) },
+  );
 }
 
 // A root this session reached while it was enabled, whose consent is now disabled or gone. A human

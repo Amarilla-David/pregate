@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readdirSync, readFileSync, readlinkSync, read, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import type { Files } from "./types.ts";
-import { slash } from "./paths.ts";
+import { pathKey, slash } from "./paths.ts";
 
 // One reader for every rule source: the builtin catalog (at bundle time, as a macro) and `path`
 // sources. Without fixtures it keeps only the evaluable JSON; fixture folders also hold code files.
@@ -161,6 +161,28 @@ export function canonical(abs: string): string {
     path = resolve(dirname(existing), readlinkSync(existing), rest);
   }
   throw new Error(`${abs}: too many symbolic links`);
+}
+
+// One directory can show up as an 8.3 short name and as its long name. Recorded findings and
+// consent compare those spellings as the same place.
+export function samePlace(a: string, b: string): boolean {
+  if (pathKey(a) === pathKey(b)) return true;
+  // realpath keeps an 8.3 short name when that is the path it was given, so the short
+  // name and the long name never compare equal as strings. The file index does.
+  try {
+    const id = (path: string) => {
+      const stat = statSync(path);
+      return stat.ino ? `${stat.dev}:${stat.ino}` : "";
+    };
+    const left = id(a), right = id(b);
+    return left !== "" && left === right;
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    // A path that is not there is a different place. A permission or loop error is not
+    // "different": the caller denies instead of treating an unreadable directory as unmatched.
+    if (code === "ENOENT" || code === "ENOTDIR") return false;
+    throw error;
+  }
 }
 
 // Null when `existing` does not exist or is a dangling symlink.

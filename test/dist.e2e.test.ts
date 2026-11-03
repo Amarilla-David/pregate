@@ -357,6 +357,24 @@ describe("the built release", () => {
     expect(readFileSync(join(DIST, "install.sh"), "utf8")).toBe(readFileSync(INSTALL, "utf8"));
     const listed = Bun.spawnSync(["tar", "-tzf", join(DIST, tar)]).stdout.toString().split("\n").filter(Boolean);
     expect(listed).toEqual(["pregate", "LICENSE", "THIRD_PARTY_NOTICES", "skills/pregate/SKILL.md"]);
+    const notice = Bun.spawnSync(["tar", "-xOzf", join(DIST, tar), "THIRD_PARTY_NOTICES"], { stdout: "pipe", stderr: "pipe" });
+    expect(notice.exitCode, notice.stderr.toString()).toBe(0);
+    const text = notice.stdout.toString();
+    for (const phrase of [
+      "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991",
+      "numbered 2 because it goes with version 2 of the ordinary GPL",
+      "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
+      "successor of the GNU Library Public License, version 2",
+      "d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+      "https://github.com/oven-sh/bun/archive/refs/tags/bun-v1.4.4.tar.gz",
+      "https://github.com/oven-sh/WebKit/archive/d6375c72affe0f70222cdcb45012b10f0bf3a9d5.tar.gz",
+      "https://github.com/oven-sh/tinycc/archive/05f0fafaa3be31e31d7b4b5c17dc60f62c991171.tar.gz",
+      "bun sync-webkit-source",
+    ]) expect(text).toContain(phrase);
+    expect(text.match(/END OF TERMS AND CONDITIONS/g)).toHaveLength(2);
+    expect(text.match(/written offer/gi)).toHaveLength(2);
+    expect(text).not.toContain("will give any recipient");
+    expect(text).not.toContain("section 6(b)");
   });
 
   test("the bootstrap verifies install.sh and the tar and hands over to the binary", () => {

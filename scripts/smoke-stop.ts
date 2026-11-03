@@ -1,4 +1,5 @@
 // Run after building: production-binary incomplete Stop and subsequent repair, in isolated state.
+import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
@@ -16,6 +17,12 @@ function run(args: string[], input?: object) {
   return runNative({ binary, args, cwd: root, env, stdin: input === undefined ? undefined : JSON.stringify(input) });
 }
 function assert(value: boolean, message: string) { if (!value) throw new Error(message); }
+function git(args: string[]): void {
+  const result = spawnSync("git", ["-c", "user.name=Pregate Smoke", "-c", "user.email=smoke@example.com", "-c", "commit.gpgsign=false", ...args], {
+    cwd: root, env, stdio: ["ignore", "pipe", "pipe"],
+  });
+  assert(result.status === 0, `git ${args.join(" ")} failed: ${result.stderr?.toString() ?? ""}`);
+}
 function stop(active: boolean) {
   return run(["hook", "stop", "--harness", "claude-code"], {
     cwd: root, session_id: "native-stop", hook_event_name: "Stop", stop_hook_active: active,
@@ -25,6 +32,9 @@ try {
   mkdirSync(join(root, "src/core"), { recursive: true });
   const path = join(root, "src/core/a.ts");
   writeFileSync(path, "export const a = 1;\n");
+  // Consent records Git's common dir. Initialize the repository before init, then commit the
+  // settled contract so Stop compares the edited function with HEAD instead of failing closed.
+  git(["init", "-q", "-b", "main"]);
   const init = run(["init", "--yes", "--preset", "functional-ts"]);
   assert(init.exitCode === 0, init.stdout.toString() + init.stderr.toString());
   const defaults = JSON.parse(run(["audit", "--json"]).stdout.toString());
@@ -45,6 +55,8 @@ try {
   assert(approved.exitCode === 0, approved.stdout.toString() + approved.stderr.toString());
   const lock = readFileSync(join(root, ".pregate/pregate.lock.json"), "utf8");
   assert(JSON.parse(lock).enforcement === "enforce", "Smoke must exercise an active enforcing contract");
+  git(["add", "-A"]);
+  git(["commit", "-qm", "smoke baseline"]);
   const start = run(["hook", "session-start", "--harness", "claude-code"], {
     cwd: root, session_id: "native-stop", hook_event_name: "SessionStart",
   });

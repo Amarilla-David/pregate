@@ -1,8 +1,41 @@
-import { resolve } from "node:path";
+import { existsSync } from "node:fs";
+import { delimiter, join, resolve } from "node:path";
 import { relativePath as relative } from "./paths.ts";
-import type { Files } from "./types.ts";
+import type { Cause, Files } from "./types.ts";
 
 const GIT_TIMEOUT_MS = 5000;
+
+// The three ways a Git read can fail closed. A later successful command does not clear this:
+// `listed === null || fresh === null` must still name the command that failed.
+export type GitFailure = Extract<Cause, "git-missing" | "git-not-repository" | "git-error">;
+let lastFailure: GitFailure = "git-error";
+
+export function gitFailure(): GitFailure {
+  return lastFailure;
+}
+
+// null when this directory is a Git worktree. Otherwise the failure that should deny the edit.
+export function repositoryFailure(root: string): GitFailure | null {
+  const inside = git(root, ["rev-parse", "--is-inside-work-tree"]);
+  return inside?.trim() === "true" ? null : gitFailure();
+}
+
+// Bun.which can keep the PATH from process start. The hook's PATH is the one that matters.
+function gitOnPath(): boolean {
+  const path = process.env.PATH ?? process.env.Path ?? "";
+  const names = process.platform === "win32" ? ["git.exe", "git.cmd", "git.bat", "git.com", "git"] : ["git"];
+  for (const dir of path.split(delimiter)) {
+    if (dir === "") continue;
+    for (const name of names) if (existsSync(join(dir, name))) return true;
+  }
+  return false;
+}
+
+function classify(stderr: Uint8Array, missing: boolean): GitFailure {
+  if (missing) return gitOnPath() ? "git-error" : "git-missing";
+  const text = new TextDecoder().decode(stderr);
+  return /not a git repository/i.test(text) ? "git-not-repository" : "git-error";
+}
 
 // The environment is inherited on purpose: inside a pre-commit hook git sets GIT_INDEX_FILE to the
 // index being committed. Git must never wait for a credential prompt or take optional locks that
@@ -10,16 +43,21 @@ const GIT_TIMEOUT_MS = 5000;
 function spawn(root: string, args: string[], stdin: Uint8Array | "ignore"): Uint8Array | null {
   try {
     const r = Bun.spawnSync(["git", ...args], {
-      cwd: root, stdin, stdout: "pipe", stderr: "ignore",
+      cwd: root, stdin, stdout: "pipe", stderr: "pipe",
       env: { ...process.env, GIT_TERMINAL_PROMPT: "0", GIT_OPTIONAL_LOCKS: "0" },
       timeout: GIT_TIMEOUT_MS, killSignal: "SIGKILL",
     });
     // A deadline is not evidence of a missing repository or object. Do not let callers fall
     // back to a different inventory, base revision or consent identity after a timed-out read.
     if (r.exitedDueToTimeout) throw new Error(`Git exceeded its ${GIT_TIMEOUT_MS} ms command deadline.`);
-    return r.exitCode === 0 ? r.stdout : null;
+    if (r.exitCode === 0) return r.stdout;
+    lastFailure = classify(r.stderr, false);
+    return null;
   } catch (e) {
-    if ((e as NodeJS.ErrnoException).code === "ENOENT") return null;   // no git binary, or no root
+    if ((e as NodeJS.ErrnoException).code === "ENOENT") {
+      lastFailure = classify(new Uint8Array(), true);   // no git binary, or no root
+      return null;
+    }
     throw e;
   }
 }

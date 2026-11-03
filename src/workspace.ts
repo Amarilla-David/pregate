@@ -2,7 +2,7 @@ import { existsSync, lstatSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { enabled } from "./consent.ts";
 import { canonical, findRoot } from "./disk.ts";
-import { catFileBatch, git, gitInput } from "./git.ts";
+import { catFileBatch, git, gitFailure, gitInput, repositoryFailure } from "./git.ts";
 import { isCause, PRESET, readText } from "./inertia.ts";
 import { grammarOf } from "./languages.ts";
 import { pathKey } from "./paths.ts";
@@ -109,12 +109,12 @@ export function stopFiles(sid: string, snap: Snapshot): FileState[] | Cause {
   const trackedPaths = snap.head === null ? ["ls-files", "-z", "--", "."] : ["diff", "--name-only", "--relative", "--no-renames", "-z", snap.head, "--", "."];
   const listed = changed(root, trackedPaths);
   const fresh = changed(root, ["ls-files", "--others", "--exclude-standard", "-z", "--", "."]);
-  if (listed === null || fresh === null) return "git-failed";
+  if (listed === null || fresh === null) return gitFailure();
   const arrived = arrivedWithHead(sid, snap);
   const rels = owned(root, [...new Set([...listed, ...fresh, ...Object.keys(snap.dirty)])].sort(), accepted(sid)).filter((rel) => !arrived.has(rel));
   const fromHead = rels.filter((rel) => !Object.hasOwn(snap.dirty, rel));
   const heads = snap.head === null ? fromHead.map(() => null) : catFileBatch(root, fromHead.map((rel) => `${snap.head}:./${rel}`));
-  if (heads === null) return "git-failed";
+  if (heads === null) return gitFailure();
   // A rename's absent source is not a deleted file (issue #61). The destination
   // keeps that baseline, so assertion counts compare the moved test with itself.
   // A source that still exists is a new file at the old path and stays in review.
@@ -258,12 +258,9 @@ function mergeHead(root: string): string | null {
 
 // The pre-check: stdin against HEAD (§7.2 #6), its edit window against the file on disk.
 export function stdinFile(root: string, rel: string, text: string): FileState[] | Cause {
-  if (!hasRepository(root)) {
-    const before = readText(join(root, rel));
-    return [{ rel, base: before, before, after: normalize(text) }];
-  }
+  if (!hasRepository(root)) return repositoryFailure(root) ?? "git-not-repository";
   const head = catFileBatch(root, [`HEAD:./${rel}`]);
-  if (head === null) return "git-failed";
+  if (head === null) return gitFailure();
   return [{ rel, base: readText(join(root, rel)), before: head[0] ?? null, after: normalize(text) }];
 }
 
@@ -271,15 +268,15 @@ export function stdinFile(root: string, rel: string, text: string): FileState[] 
 export function changes(root: string, m: StagedOrBaseMode): FileState[] | Cause {
   const head = git(root, ["rev-parse", "--verify", "-q", "HEAD"])?.trim() ?? null;
   const base = m.kind === "staged" ? head : git(root, ["merge-base", m.sha, "HEAD"])?.trim() ?? null;
-  if (m.kind === "base" && base === null) return "git-failed";
+  if (m.kind === "base" && base === null) return gitFailure();
   const diff = ["diff", "--name-only", "--relative", "--no-renames", "-z", ...(m.kind === "staged" ? ["--cached"] : [])];
   const listed = changed(root, base === null ? ["ls-files", "-z", "--", "."] : [...diff, base, "--", "."]);
   const fresh = m.kind === "staged" ? [] : changed(root, ["ls-files", "--others", "--exclude-standard", "-z", "--", "."]);
-  if (listed === null || fresh === null) return "git-failed";
+  if (listed === null || fresh === null) return gitFailure();
   const rels = owned(root, [...new Set([...listed, ...fresh])].sort(), tracked);
   const befores = base === null ? [] : rels.map((rel) => `${base}:./${rel}`);
   const texts = catFileBatch(root, [...befores, ...(m.kind === "staged" ? rels.map((rel) => `:./${rel}`) : [])]);
-  if (texts === null) return "git-failed";
+  if (texts === null) return gitFailure();
   return rels.map((rel, k) => {
     const before = base === null ? null : texts[k] ?? null;
     const after = m.kind === "staged" ? texts[befores.length + k] ?? null : readText(join(root, rel));
@@ -297,22 +294,35 @@ export function owned(root: string, rels: string[], isAccepted: (dir: string) =>
   return rels.filter((rel) => findRoot(dirname(join(root, rel)), ok) === root);
 }
 
+// Windows file times can sit a little ahead of Date.now(). Only the first contact, which has no
+// earlier session timestamp, allows that skew: a preset already on disk is the initialized project.
+const FIRST_CONTACT_SKEW_MS = 2000;
+
 // MH-33: a root is accepted when this session already took its snapshot, when its preset predates
 // the session's first contact with any root (this very call, on a first contact), or when it is
 // tracked in HEAD. A preset created later, through a channel the guard does not see, cannot loosen
 // a root.
 export function accepted(sid: string): (dir: string) => boolean {
   let since: number | undefined;
+  let first = false;
   return (d) => {
     if (!enabled(d)) return false;
-    since ??= state.firstContact(sid) ?? Date.now();
+    if (since === undefined) {
+      const saved = state.firstContact(sid);
+      first = saved === null;
+      since = saved ?? Date.now();
+    }
     const preset = statSync(join(d, PRESET), { throwIfNoEntry: false });
-    return state.snapshot(sid, d) !== null || (preset !== undefined && preset.ctimeMs < since) || tracked(d);
+    const present = preset !== undefined && preset.ctimeMs < since + (first ? FIRST_CONTACT_SKEW_MS : 0);
+    return state.snapshot(sid, d) !== null || present || tracked(d);
   };
 }
 
 export function tracked(dir: string): boolean {
-  return git(dir, ["cat-file", "-e", `HEAD:./${PRESET}`]) !== null;
+  // `HEAD:./.pregate/...` is a revision, but Git for Windows can treat the colon as a drive
+  // separator and then miss a preset that is actually at HEAD. `HEAD:<path>` is the same object.
+  return git(dir, ["cat-file", "-e", `HEAD:${PRESET}`]) !== null
+    || git(dir, ["cat-file", "-e", `HEAD:./${PRESET}`]) !== null;
 }
 
 export function changed(root: string, args: string[]): string[] | null {

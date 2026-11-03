@@ -5,7 +5,7 @@ import { dataHome } from "./consent.ts";
 import { visible } from "./contract.ts";
 import { canonical, findRoot, writeAtomic } from "./disk.ts";
 import { feedbackItems, type FeedbackLabel, type FeedbackVerdict } from "./feedback.ts";
-import { records } from "./recorded.ts";
+import { records, unifyRoot } from "./recorded.ts";
 import { equal } from "./schema.ts";
 import { H, sha256 } from "./state.ts";
 
@@ -43,7 +43,7 @@ export function feedbackReview(root: string, id: string): Draft {
   const age = Date.now() - draft.at;
   if (draft.label?.item.root !== root || !VERDICTS.includes(draft.label.verdict) || typeof draft.label.note !== "string"
     || !Number.isFinite(draft.at) || age < 0 || age > PENDING_MS) throw new Error("Feedback draft expired, is invalid or belongs to another project.");
-  const item = feedbackItems(records(draft.label.item.at), root).find((item) => item.id === draft.label.item.id);
+  const item = feedbackItems(unifyRoot(records(draft.label.item.at), root), root).find((item) => item.id === draft.label.item.id);
   if (!item || !equal(item, draft.label.item)) throw new Error("Recorded observation changed or is unavailable.");
   const previous = read(labelFile(draft.label));
   if ((previous === null ? null : sha256(previous)) !== draft.previousHash) throw new Error("Feedback changed since review; prepare a new draft.");
@@ -97,7 +97,7 @@ function list(root: string, args: string[]): Result {
   }
   if (!Number.isFinite(days) || days <= 0 || days > 36500) return { code: 1, text: USAGE };
   const since = Date.now() - days * 86400000;
-  const items = feedbackItems(records(since), root, since);
+  const items = feedbackItems(unifyRoot(records(since), root), root, since);
   const labels = new Map(feedbackLabels(root).map((label) => [label.item.id, label]));
   const findings = items.map((item) => ({ ...item, label: equal(labels.get(item.id)?.item, item) ? labels.get(item.id)!.verdict : null }));
   return { code: 0, text: json ? JSON.stringify({ root, since, findings }, null, 2) : visible([
@@ -120,7 +120,7 @@ function draftFeedback(root: string, args: string[]): Result {
   }
   if (!verdict || !VERDICTS.includes(verdict) || !Number.isFinite(days) || days <= 0 || days > 36500) return { code: 1, text: USAGE };
   const since = Date.now() - days * 86400000;
-  const item = feedbackItems(records(since), root, since).find((item) => item.id === id);
+  const item = feedbackItems(unifyRoot(records(since), root), root, since).find((item) => item.id === id);
   if (!item) return { code: 1, text: "No matching rule observation. Use pregate feedback list." };
   const label: FeedbackLabel = { item, verdict: verdict as FeedbackVerdict, note, confirmedAt: 0 };
   const previous = read(labelFile(label));

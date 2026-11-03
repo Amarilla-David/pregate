@@ -7,6 +7,41 @@ import { hostTarget } from "./build.ts";
 import { ENGINE_FILE, WINDOWS } from "../src/platform.ts";
 import { VERSIONS } from "../src/versions.ts";
 
+const NOTICE_PHRASES = [
+  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991",
+  "numbered 2 because it goes with version 2 of the ordinary GPL",
+  "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
+  "successor of the GNU Library Public License, version 2",
+  "d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+  "https://github.com/oven-sh/bun/tree/bun-v1.4.4",
+  "https://github.com/oven-sh/bun/archive/refs/tags/bun-v1.4.4.tar.gz",
+  "https://github.com/oven-sh/WebKit/tree/d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+  "https://github.com/oven-sh/WebKit/archive/d6375c72affe0f70222cdcb45012b10f0bf3a9d5.tar.gz",
+  "05f0fafaa3be31e31d7b4b5c17dc60f62c991171",
+  "https://github.com/oven-sh/tinycc/tree/05f0fafaa3be31e31d7b4b5c17dc60f62c991171",
+  "https://github.com/oven-sh/tinycc/archive/05f0fafaa3be31e31d7b4b5c17dc60f62c991171.tar.gz",
+  "https://github.com/oven-sh/bun/blob/bun-v1.4.4/patches/tinycc/tcc.h.patch",
+  "bun sync-webkit-source",
+];
+
+function assertNotices(text: string, where: string): void {
+  for (const phrase of NOTICE_PHRASES) if (!text.includes(phrase)) throw new Error(`${where} is missing ${JSON.stringify(phrase)}`);
+  const ends = text.match(/END OF TERMS AND CONDITIONS/g)?.length ?? 0;
+  if (ends !== 2) throw new Error(`${where} has ${ends} license endings; JavaScriptCore and tinycc each need one`);
+  const offers = text.match(/written offer/gi)?.length ?? 0;
+  if (offers !== 2) throw new Error(`${where} has ${offers} occurrences of "written offer"; only the two license texts may contain that phrase`);
+  for (const gone of ["will give any recipient", "section 6(b)"]) {
+    if (text.includes(gone)) throw new Error(`${where} still contains ${JSON.stringify(gone)}`);
+  }
+}
+
+function noticeText(archive: string): string {
+  const args = archive.endsWith(".zip") ? ["tar", "-xOf", archive, "THIRD_PARTY_NOTICES"] : ["tar", "-xOzf", archive, "THIRD_PARTY_NOTICES"];
+  const read = Bun.spawnSync(args, { stdout: "pipe", stderr: "pipe" });
+  if (read.exitCode !== 0) throw new Error(`archive is missing THIRD_PARTY_NOTICES:\n${read.stderr.toString()}`);
+  return read.stdout.toString();
+}
+
 const args = process.argv.slice(2), target = hostTarget();
 if (args.length > 2 || (args[1] !== undefined && args[1] !== target)) throw new Error("usage: smoke-native.ts [artifact directory] [expected native target]; current target: " + target);
 const dist = resolve(args[0] ?? join(import.meta.dir, "../dist"));
@@ -44,6 +79,8 @@ try {
   const binary = join(area, "data/pregate", VERSIONS.engine, ENGINE_FILE);
   const expected = `pregate ${VERSIONS.engine} (core ${VERSIONS.core})`;
   if ((await run([binary, "--version"])).trim() !== expected) throw new Error("Installed candidate version differs from source version");
+  assertNotices(noticeText(archive), archive);
+  assertNotices(readFileSync(join(area, "data/pregate", VERSIONS.engine, "THIRD_PARTY_NOTICES"), "utf8"), "installed engine");
   for (const feature of ["stop", "storage", "feedback", "languages", "fitness"]) {
     console.log("Verify candidate " + target + ": " + feature);
     console.log((await run([process.execPath, join(import.meta.dir, `smoke-${feature}.ts`), binary])).trim());

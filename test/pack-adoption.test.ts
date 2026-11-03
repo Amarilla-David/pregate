@@ -27,6 +27,10 @@ afterAll(() => rmSync(area, { recursive: true, force: true, maxRetries: 5, retry
 function project(name: string) {
   const root = join(area, name);
   mkdirSync(root);
+  for (const args of [["init", "-q"], ["commit", "--allow-empty", "-qm", "init"]]) {
+    const git = Bun.spawnSync(["git", "-c", "user.name=W", "-c", "user.email=w@example.com", "-c", "commit.gpgsign=false", ...args], { cwd: root, stderr: "pipe" });
+    if (git.exitCode !== 0) throw new Error(git.stderr.toString());
+  }
   const machine = join(area, name + "-machine");
   mkdirSync(machine, { recursive: true });
   const env = { ...process.env, HOME: join(machine, "home"), CODEX_HOME: join(machine, "codex"), GROK_HOME: join(machine, "grok"),

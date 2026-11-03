@@ -71,14 +71,14 @@ automatic session expiration.
 | A17 | **Pure adapters in `src/harness/`**, constants per module; `HARNESSES` and `profile` in `harness/profile.ts` | `profile.json` + interpreter | MH-01/03: Grok needs `GROK_HOOK_EVENT` plus top-level `hookEventName`; Cursor needs top-level `cursor_version`; otherwise use the registration flag. `main` and `doctor` share the map |
 | A18 | **D23: English first** for all product text, code and catalog metadata | Optional future localization | Humans and agents receive English with standard technical terms. Historical inputs and long design docs are translated separately before publication. |
 | A19 | **Error window against the "before" of each face** and ERROR nodes that *intersect* the window ⇒ form deny | Denying any syntax error in the file | The SPEC asks for "in the changed range" (§4.4). What lies outside the window is byte for byte equal to a state already evaluated or to the base, so it cannot hide anything introduced (§4.1, note) |
-| A20 | **Accept a root tracked in HEAD, registered by SessionStart, or whose preset ctime predates the session's first snapshot** | Requiring SessionStart for every uncommitted preset | MH-33: agy and new subagent sessions have no SessionStart. A nested preset created after first contact stays unaccepted |
+| A20 | **Accept a root tracked in HEAD, registered by SessionStart, or whose preset ctime predates the session's first snapshot** | Requiring SessionStart for every uncommitted preset | MH-33: agy and new subagent sessions have no SessionStart. A nested preset created after first contact stays unaccepted. The first contact allows two seconds of file-clock skew, so a preset just written is not skipped when the file clock is slightly ahead |
 | A21 | **Macro `@layers[:kind]` in `params.paths`** **[Δ, added to the format]**. `@layers` with no declared layers ⇒ `[]` (the rule applies to nothing); `@layers:<kind>` with no layers of that kind ⇒ compilation error | Duplicating layer globs in every preset | EVA-DYN-001 ("in a layer") is an integrity rule and is always active. Without the macro, its default `paths` would be empty and there would be an integrity hole. If an empty `@layers` were an error, no preset without layers (`legacy-safe`) would compile |
 | A22 | **No `enforcement: "advise"` and no `loop.escalate: "ask"`** | Implementing them | §18.1 requires explicit `shadow` and `stop` escalation (D15.5). `ask` exists only as a severity (TDD-DEL-001) |
 | A23 | **`Bun.Transpiler.scanImports` is not used** | Using it for imports | It silently omits `import(m)`, non-literal `require(m)`, and `import type` (verified), which would be a false allow. It would also be two parsers that can disagree |
 | A24 | **A single `git cat-file --batch`** for every blob in pre-commit, Stop, and CI | One `git show` per file | A spawn of 17–24 ms per file does not scale |
 | A25 | **vendor/ = artifacts taken unmodified (except `grammar.patch`, O18), with LICENSE, ORIGIN (package@version, URL, sha256), and THIRD_PARTY_NOTICES**; `vendor.test.ts` verifies all of it | An npm dependency in `dependencies` | D17: it does not couple to the package and attribution is preserved. It is the closest thing to a cherry-pick that a WASM runtime allows |
 | A26 | **Case-insensitive path comparison everywhere**: protected paths, scope, layers, and rule `paths`/`exclude`, in the hook, pre-commit, and CI, with a single function (`paths.matches`) | Case-fold only for protected paths and only on volumes that do not distinguish case (volume probe) | It is a superset of "where it applies" (SPEC §6.7), removes the probe and the `caseFold` parameter, and gives the same verdict on macOS and on Linux CI. `Bun.Glob` is case-sensitive (verified), so the glob and the path are passed in lowercase |
-| A27 | **Git is required**: without a git repo, deny + halt `git-failed` "PREGATE requires git" **[Δ §9]** | "First contact" without git, with a notice | Pre-commit and CI require git anyway; a second path without git would be code for a case the guarantee (U10) does not cover |
+| A27 | **Git is required**: without git on PATH, without a repository, or when git itself errors, deny + halt `git-missing`, `git-not-repository` or `git-error` **[Δ §9]** | "First contact" without git, with a notice | Pre-commit and CI require git anyway; a second path without git would be code for a case the guarantee (U10) does not cover |
 
 A7 (fuel per rule) and A8 (one child process per check in `rules test`) were removed: they repeated what the watchdog already does (A5), added false denies, and their "determinism" did not exist (the hook deadline still depends on the machine). The numbers are not reused.
 
@@ -117,8 +117,8 @@ pregate/
 ├─ tsconfig.json                strict, noUncheckedIndexedAccess, noEmit
 ├─ bunfig.toml                  [test] root = "test": `bun test` does not enter the pilot's `*.test.ts` fixtures
 ├─ LICENSE                    **[Δ wave 3] pending (user decision, SPEC P19)**: without it `build.ts` warns and the tar is emitted without it (O28)
-├─ THIRD_PARTY_NOTICES          web-tree-sitter, tree-sitter-typescript, Bun runtime (MIT) + LGPL note for
-│                               JavaScriptCore (pending owner review; see THIRD_PARTY_NOTICES); included in each release tar
+├─ THIRD_PARTY_NOTICES          web-tree-sitter, tree-sitter-typescript, Bun runtime (MIT) + the LGPL-2.0
+│                               text for JavaScriptCore and tinycc, and the pinned Bun, WebKit, and tinycc source links; included in each release archive
 ├─ README.md                    installation, contract, and honest limits (hook + pre-commit + CI)
 ├─ .github/workflows/ci.yml     typecheck · bun test · build 2 targets · e2e · dogfooding;
 │                               separate job: bench (does not break the suite on noise)
@@ -206,13 +206,15 @@ export type Cause =
   | "syntax" | "unresolvable-import" | "shell-write" | "shell-admin" | "hook-switch"   // hook-switch: MH-17
   // only a human can fix it ⇒ deny + halt + notice
   | "payload-unrecognized" | "lock-stale" | "version-mismatch"
-  | "snapshot-missing" | "state-io" | "git-failed" | "regex-limit" | "contract-loosened";
+  | "snapshot-missing" | "state-io" | "git-missing" | "git-not-repository" | "git-error"
+  | "regex-limit" | "contract-loosened";
 export const FIXABLE_BY = {
   "protected-path": "agent", "request-invalid": "agent", "tool-will-fail": "agent",
   "cannot-reconstruct": "agent", "syntax": "agent", "unresolvable-import": "agent",
   "shell-write": "agent", "shell-admin": "agent", "hook-switch": "agent",
   "payload-unrecognized": "human", "lock-stale": "human", "version-mismatch": "human",
-  "snapshot-missing": "human", "state-io": "human", "git-failed": "human", "regex-limit": "human",
+  "snapshot-missing": "human", "state-io": "human", "git-missing": "human", "git-not-repository": "human",
+  "git-error": "human", "regex-limit": "human",
   "contract-loosened": "human",
 } as const satisfies Record<Cause, "agent" | "human">;
 // "lock-stale" covers a missing, invalid, or old lock, sources that do not verify, and a disappeared preset: same remedy.
@@ -461,7 +463,7 @@ Every known cause goes through `decide → encode`. The unforeseen exits with ex
 | 6 | Parse lock and check engine/core. Recompile the current preset with current builtin/path/library/cached Git sources and compare the complete compiler output with normalized disk lock bytes. No fixture execution or replacement write. Within a Pre edit call, each root's admitted lock is reused for its overlay and dependency reviews; the next hook admits it again. `state.sourcesOk` additionally checks source identity per lock/session. | Compilation and source reads are measured as part of the total hook budget; the earlier 1–2 ms hash-only estimate does not describe this implementation. | `lock-stale` or `version-mismatch` ⇒ deny + halt and request explicit `pregate preset compile` (A9). |
 | 7 | `evaluate.placement(lock, phase, …)` without parsing (only rules with that phase): EVA-SCOPE-001 (new file in `exclude`; language without a pack inside a layer) and EVA-GEN-002 (editing an existing file with a substring marker or in `exclude`). Out of scope and with no placement ⇒ `none` | < 0.5 ms | Violation ⇒ deny by rule |
 | 8 | `reconstruct.apply(current, edit)` | < 1 ms | `tool-will-fail` (form deny "re-read and resend"); `unknown` ⇒ `cannot-reconstruct` |
-| 9 | Snapshot (session, root): existing, or created on first contact (`start: false`, `dirty: {}` ⇒ every "before" = HEAD). `before_session` = blob from `dirty`, or `head/<H(rel)>.json` (the first time, `git cat-file` of `snapshot.head`, stored with `link`), or `null` if the file is new in the session | 0 after the first touch; ~20 ms on the first | `<rootHash>/` without `snapshot.json` ⇒ `snapshot-missing` (deny + halt). Git fails ⇒ `git-failed` |
+| 9 | Snapshot (session, root): existing, or created on first contact (`start: false`, `dirty: {}` ⇒ every "before" = HEAD). `before_session` = blob from `dirty`, or `head/<H(rel)>.json` (the first time, `git cat-file` of `snapshot.head`, stored with `link`), or `null` if the file is new in the session | 0 after the first touch; ~20 ms on the first | `<rootHash>/` without `snapshot.json` ⇒ `snapshot-missing` (deny + halt). Git missing, not a repository, or a git error ⇒ `git-missing`, `git-not-repository` or `git-error` |
 | 10 | Lazy WASM init (only the file's grammar) + `ts.parse(after)` + `ts.errorIn(parsed, window)`. **[Δ wave 3]** That `Parsed` is what `analyze(after)` receives: a single parse of the "after". The window is computed from the common prefix and suffix with `current`. An ERROR or MISSING node that **intersects** the window ⇒ error | 7 ms + ~11 µs/line | `syntax` with its line (form deny) |
 | 11 | `analyze(after)`: rules with `phase ∋ pre`, filtered by `paths`/`exclude`/language and without `ownedByArkgate`. Patterns, metrics, imports + re-exports (≤ 3 hops, ≤ 32 files read) | 1–10 ms | In a layer with `mayImport ≠ ["*"]`: `unresolved` import, `too-deep` re-exports, or invalid tsconfig ⇒ `unresolvable-import` (form deny) **[Δ §4.4]** |
 | 12 | `analyze(before_session)`, recomputed (A12), **[Δ wave 3]** under `comparedLock(lock, after)`: diff rules, those the "after" violates, and import rules; the rest cannot change `introduced()` (`ratchet.test.ts` proves it on the catalog fixtures) | ~4 ms (300 lines) / ~25 ms (2,000); less with `comparedLock` | **[Δ wave 2]** A form cause in the "before" counts as an absent `before`: all of `after` is new (strict), which the agent can correct; a deny on text that cannot change does not |
@@ -538,7 +540,7 @@ Deletions (`rm`, …) are not denied: the truth is the tree (SPEC §10.2.4) and 
 
 The launcher watchdog is 45 s and the hook `timeout` is 60 s.
 
-1. For each session root (`state.roots(sid)`: `snapshot.root` of each `<rootHash>/`), the candidates are `git diff --name-only <snapshot.head>`, plus the untracked, plus `snapshot.dirty`. Roots are judged one at a time: first those touched by this turn's events, then the `cwd`'s, then the rest. The first one that blocks decides and stops. With a 30 s budget (`STOP_BUDGET_MS`, under the watchdog), unjudged roots are named in an incomplete Stop (`stopIncomplete.reason = "budget"`, `stopSkipped`); pre-commit and CI keep judging them, and the next Stop judges them before the rest, so no root goes unjudged forever. `stopFingerprint` also stays within the budget: if it runs out, that Stop follows the per-turn rule. Each root emits `PREGATE-STOP-ROOT i/n <root>`, so a timeout names the root in progress.
+1. For each session root (`state.roots(sid)`: `snapshot.root` of each `<rootHash>/`), the candidates are `git diff --name-only <snapshot.head>`, plus the untracked, plus `snapshot.dirty`. A Stop with no snapshot still denies when `cwd` is an enabled project Git cannot read (`git-missing`, `git-not-repository`, or `git-error`). A readable repository the session never reached stays silent. Roots are judged one at a time: first those touched by this turn's events, then the `cwd`'s, then the rest. The first one that blocks decides and stops. With a 30 s budget (`STOP_BUDGET_MS`, under the watchdog), unjudged roots are named in an incomplete Stop (`stopIncomplete.reason = "budget"`, `stopSkipped`); pre-commit and CI keep judging them, and the next Stop judges them before the rest, so no root goes unjudged forever. `stopFingerprint` also stays within the budget: if it runs out, that Stop follows the per-turn rule. Each root emits `PREGATE-STOP-ROOT i/n <root>`, so a timeout names the root in progress.
 2. The "befores" are read with **a single** `git cat-file --batch` (or the snapshot blobs). Then `analyze` (phase `stop`) and `introduced` run, with the error window against `before_session`.
 3. **`ask` already approved.** If the on-disk file sha equals the `afterSha` of a `CallEvent` with verdict `ask`, those `ask` violations move to `stop.approved`: they are reported to the human via `systemMessage` and do not block. Otherwise Stop would push the agent to revert what the human accepted.
 4. If introduced denies or asks remain and `state.stopBlocks(sid, turnH)` is less than `maxStopBlocks`: exit 2 + `{"decision":"block","reason":…}`. The reason includes "Do not remove functionality or tests to comply; if the fix exceeds the task, stop and report it to the user".
@@ -548,12 +550,12 @@ The launcher watchdog is 45 s and the hook `timeout` is 60 s.
 
 ### 4.4 SessionStart
 
-- **Outside git:** notice "PREGATE requires git"; Pre calls will apply `git-failed` (A27).
+- **Outside git:** Pre calls deny with `git-not-repository` (or `git-missing` / `git-error` when that is the failure) (A27).
 - **No preset:** silent, with no session state (MH-17).
 - **Invalid, old, or other-version lock:** notice; Pre calls will apply step 6.
 - **Checks and snapshot:** the complete `sourcesHash` is verified (hash of the evaluable JSON of the `path` sources) and `<rootHash>/sources.json` is written. The snapshot (`start: true`) is built with `git rev-parse HEAD` + `git status -z --untracked-files=all`, copies dirty in-scope files to `blobs/`, and is created by renaming the temporary directory.
 - **Context for the agent:** Claude `additionalContext` includes the lock summary and `<DATA>/bin/pregate check --stdin --path <file> --format agent`. Other adapters have no verified SessionStart channel; agy registers none.
-- **Without SessionStart:** first Pre snapshots HEAD; root acceptance also permits an uncommitted preset that predates first contact (MH-33).
+- **Without SessionStart:** first Pre snapshots HEAD; root acceptance also permits an uncommitted preset that predates first contact (MH-33). That first contact allows two seconds of file-clock skew. Later contacts do not. An enabled preset the session has not accepted is `lock-stale`, not a silent allow.
 
 ### 4.5 `pregate check` (pre-check, pre-commit, and CI)
 
@@ -577,7 +579,7 @@ The launcher watchdog is 45 s and the hook `timeout` is 60 s.
 |---|---|---|---|
 | `web-tree-sitter` 0.27.0: `web-tree-sitter.js` (156 KB) + `.wasm` (210 KB) | `vendor/`, unmodified, embedded. **It does not appear in `package.json`** | It is the parser runtime. It cannot be extracted by function: the emscripten glue and the API are one unit | MIT. LICENSE + ORIGIN (package@version, URL, sha256) in the folder and in THIRD_PARTY_NOTICES |
 | `tree-sitter-typescript` 0.23.2: `tree-sitter-typescript.wasm` (1.42 MB) + `tree-sitter-tsx.wasm` (1.45 MB) | `vendor/`, embedded, **with `grammar.patch`** (O18) | TS and TSX/JS grammars. They share *kinds* and *fields* with ast-grep, so the pilot pack's pattern rules (~650 `kind`, 698 `has`, 422 `field`) run as data. Both grammars are required: `<T>x` is not valid in TSX | MIT. Same |
-| Bun runtime | Embedded by `--compile` | — | MIT. Bun links JavaScriptCore (LGPL-2.x). The LGPL note is pending owner review (see THIRD_PARTY_NOTICES) |
+| Bun runtime | Embedded by `--compile` | — | MIT. Bun links JavaScriptCore (GNU Library General Public License, version 2) and tinycc (GNU Lesser General Public License, version 2.1). Both license texts, the pinned Bun, WebKit, and tinycc source links, and the rebuild note are in THIRD_PARTY_NOTICES |
 
 **Runtime dependencies for whoever installs: zero.** The system tools are `git` (required, A27) and `/bin/sh` (the launcher).
 
