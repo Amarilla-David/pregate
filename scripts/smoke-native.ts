@@ -7,6 +7,27 @@ import { hostTarget } from "./build.ts";
 import { ENGINE_FILE, WINDOWS } from "../src/platform.ts";
 import { VERSIONS } from "../src/versions.ts";
 
+const NOTICE_PHRASES = [
+  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991",
+  "numbered 2 because it goes with version 2 of the ordinary GPL",
+  "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
+  "successor of the GNU Library Public License, version 2",
+  "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
+];
+
+function assertNotices(text: string, where: string): void {
+  for (const phrase of NOTICE_PHRASES) if (!text.includes(phrase)) throw new Error(`${where} is missing ${JSON.stringify(phrase)}`);
+  const ends = text.match(/END OF TERMS AND CONDITIONS/g)?.length ?? 0;
+  if (ends !== 2) throw new Error(`${where} has ${ends} license endings; JavaScriptCore and tinycc each need one`);
+}
+
+function noticeText(archive: string): string {
+  const args = archive.endsWith(".zip") ? ["tar", "-xOf", archive, "THIRD_PARTY_NOTICES"] : ["tar", "-xOzf", archive, "THIRD_PARTY_NOTICES"];
+  const read = Bun.spawnSync(args, { stdout: "pipe", stderr: "pipe" });
+  if (read.exitCode !== 0) throw new Error(`archive is missing THIRD_PARTY_NOTICES:\n${read.stderr.toString()}`);
+  return read.stdout.toString();
+}
+
 const args = process.argv.slice(2), target = hostTarget();
 if (args.length > 2 || (args[1] !== undefined && args[1] !== target)) throw new Error("usage: smoke-native.ts [artifact directory] [expected native target]; current target: " + target);
 const dist = resolve(args[0] ?? join(import.meta.dir, "../dist"));
@@ -53,24 +74,3 @@ try {
   console.log((await run([binary, "rules", "test", "docs/examples/docs-to-pack"])).trim());
   console.log(JSON.stringify({ target, archiveSha256: digest, bootstrap: "verified candidate archive and installer", checks: "Stop/repair, storage/recovery, feedback, languages, bounded project fitness and documentation pack", interaction: "native production protocol; actual harness UI not certified", publication: "none" }));
 } finally { rmSync(area, { recursive: true, force: true }); }
-
-const NOTICE_PHRASES = [
-  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991",
-  "numbered 2 because it goes with version 2 of the ordinary GPL",
-  "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
-  "successor of the GNU Library Public License, version 2",
-  "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
-];
-
-function assertNotices(text: string, where: string): void {
-  for (const phrase of NOTICE_PHRASES) if (!text.includes(phrase)) throw new Error(`${where} is missing ${JSON.stringify(phrase)}`);
-  const ends = text.match(/END OF TERMS AND CONDITIONS/g)?.length ?? 0;
-  if (ends !== 2) throw new Error(`${where} has ${ends} license endings; JavaScriptCore and tinycc each need one`);
-}
-
-function noticeText(archive: string): string {
-  const args = archive.endsWith(".zip") ? ["tar", "-xOf", archive, "THIRD_PARTY_NOTICES"] : ["tar", "-xOzf", archive, "THIRD_PARTY_NOTICES"];
-  const read = Bun.spawnSync(args, { stdout: "pipe", stderr: "pipe" });
-  if (read.exitCode !== 0) throw new Error(`archive is missing THIRD_PARTY_NOTICES:\n${read.stderr.toString()}`);
-  return read.stdout.toString();
-}
