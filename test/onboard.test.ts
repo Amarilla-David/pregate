@@ -400,6 +400,12 @@ function previewProject() {
   const root = join(dir, "repo");
   mkdirSync(join(root, "src"), { recursive: true });
   writeFileSync(join(root, "src/a.ts"), "export const a = 1;\n");
+  // Hooks and check deny a directory that is not a Git repository. This fixture is a repository
+  // so those tests still reach the behavior they name. The plain-directory case stays separate.
+  for (const args of [["init", "-q"], ["add", "."], ["commit", "-qm", "init"]]) {
+    const git = Bun.spawnSync(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], { cwd: root, stderr: "pipe" });
+    if (git.exitCode !== 0) throw new Error(git.stderr.toString());
+  }
   const env = { ...process.env, HOME: join(dir, "home"), XDG_DATA_HOME: join(dir, "data"), XDG_STATE_HOME: join(dir, "state"),
     TMPDIR: dir, CODEX_HOME: join(dir, "codex"), GROK_HOME: join(dir, "grok"), CI: "1", PREGATE_UNATTENDED_APPROVAL: "1",
     PATH: process.platform === "win32" ? process.env.PATH : "/usr/bin:/bin", CLAUDE_CONFIG_DIR: "" };

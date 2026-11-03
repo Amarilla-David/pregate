@@ -97,6 +97,10 @@ test.each(["claude-code", "codex", "cursor", "grok", "agy"] as const)("compiled 
   const root = join(area, `admission-${h}`);
   mkdirSync(join(root, ".pregate"), { recursive: true });
   mkdirSync(join(root, "src"));
+  for (const args of [["init", "-q"], ["commit", "--allow-empty", "-qm", "init"]]) {
+    const git = run(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], "", root);
+    expect(git.code, git.stderr).toBe(0);
+  }
   const preset = readFileSync(join(import.meta.dir, "../.pregate/preset.json"), "utf8");
   writeFileSync(join(root, ".pregate/preset.json"), preset);
   const execute = (...args: string[]) => run([engine, ...args], "", root);
@@ -212,6 +216,10 @@ test.each(["claude-code", "codex", "cursor", "grok", "agy"] as const)("stdin bou
 test("stdin boundary check rejects malformed encoding and oversized source before evaluation", () => {
   const root = join(area, "stdin-project");
   mkdirSync(join(root, "src"), { recursive: true }); mkdirSync(join(root, ".pregate"));
+  for (const args of [["init", "-q"], ["commit", "--allow-empty", "-qm", "init"]]) {
+    const git = run(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], "", root);
+    expect(git.code, git.stderr).toBe(0);
+  }
   writeFileSync(join(root, ".pregate/preset.json"), policyFixture(readFileSync("catalog/presets/legacy-safe.json", "utf8")));
   expect(run([binary, "preset", "compile"], "", root).code).toBe(0);
   const argv = [binary, "check", "--stdin", "--path", "src/a.ts"];
@@ -291,6 +299,10 @@ test("stdin boundary never redirects malformed input to a differently pinned eng
 test("stdin boundary check rejects a producer that never sends EOF", async () => {
   const root = join(area, "stdin-timeout-project");
   mkdirSync(join(root, "src"), { recursive: true }); mkdirSync(join(root, ".pregate"));
+  for (const args of [["init", "-q"], ["commit", "--allow-empty", "-qm", "init"]]) {
+    const git = run(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], "", root);
+    expect(git.code, git.stderr).toBe(0);
+  }
   writeFileSync(join(root, ".pregate/preset.json"), policyFixture(readFileSync("catalog/presets/legacy-safe.json", "utf8")));
   expect(run([binary, "preset", "compile"], "", root).code).toBe(0);
   const out = await heldInput([binary, "check", "--stdin", "--path", "src/a.ts"], "export {};", root);
