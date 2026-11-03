@@ -79,42 +79,45 @@ The pregate binary contains JavaScriptCore because the Bun runtime it embeds lin
 JavaScriptCore and parts of WebKit statically. JavaScriptCore is used in this binary,
 and that use is covered by the GNU Library General Public License, version 2, below.
 
-Corresponding source for this exact build:
+Corresponding source for this exact build ships with the binary as these permanent
+links. Each URL is the tag or commit the binary was built from.
 
 - Bun 1.4.4, the runtime `bun build --compile` embeds. The pin is the tag named in
-  .bun-version: https://github.com/oven-sh/bun/tree/bun-v1.4.4
-- The patched WebKit (JavaScriptCore) Bun 1.4.4 builds against. WEBKIT_VERSION in
-  scripts/build/deps/webkit.ts at that tag is
+  .bun-version:
+  https://github.com/oven-sh/bun/tree/bun-v1.4.4
+  https://github.com/oven-sh/bun/archive/refs/tags/bun-v1.4.4.tar.gz
+- The patched WebKit (JavaScriptCore) that tag builds against. WEBKIT_VERSION in
+  scripts/build/deps/webkit.ts at bun-v1.4.4 is
   d6375c72affe0f70222cdcb45012b10f0bf3a9d5
   https://github.com/oven-sh/WebKit/tree/d6375c72affe0f70222cdcb45012b10f0bf3a9d5
-- Pregate itself, in source form: https://github.com/pedroknigge/pregate
+  https://github.com/oven-sh/WebKit/archive/d6375c72affe0f70222cdcb45012b10f0bf3a9d5.tar.gz
+- tinycc, which Bun 1.4.4 also links statically. TINYCC_COMMIT in
+  scripts/build/deps/tinycc.ts at that tag is
+  05f0fafaa3be31e31d7b4b5c17dc60f62c991171
+  on https://github.com/oven-sh/tinycc (the upstream project is
+  https://github.com/tinycc/tinycc):
+  https://github.com/oven-sh/tinycc/tree/05f0fafaa3be31e31d7b4b5c17dc60f62c991171
+  https://github.com/oven-sh/tinycc/archive/05f0fafaa3be31e31d7b4b5c17dc60f62c991171.tar.gz
+  That Bun tag also applies patches/tinycc/tcc.h.patch:
+  https://github.com/oven-sh/bun/blob/bun-v1.4.4/patches/tinycc/tcc.h.patch
+- Pregate itself: https://github.com/pedroknigge/pregate
   The release tag that published a given binary is the revision of that source.
-
-Written offer (GNU Library General Public License, version 2, section 6(b)). For three
-years after the GitHub release that contains a given pregate binary is published, the
-maintainer of https://github.com/pedroknigge/pregate will give any recipient who asks
-the materials in section 6(a): the corresponding source of the JavaScriptCore/WebKit
-version named above, including the changes in that WebKit tree, and the Pregate source
-for that release so the binary can be rebuilt against a modified JavaScriptCore. The
-charge will not exceed the cost of performing that distribution. The same materials are
-available now, at no charge, at the URLs above. Ask with a GitHub issue on
-https://github.com/pedroknigge/pregate/issues
 
 Relinking and replacement. Bun's LICENSE.md for bun-v1.4.4 says how to relink Bun
 against a modified JavaScriptCore: clone https://github.com/oven-sh/WebKit, run
 `bun sync-webkit-source` (it checks out the pinned WEBKIT_VERSION), then
 `bun run build:local`. That produces a Bun binary linked to your JavaScriptCore.
-Rebuild pregate with that Bun by running `bun run scripts/build.ts` from the Pregate
-source of the same release. `bun build --compile` does not emit separate object files
-for the pregate executable, so this archive is not a link-editor kit for swapping
-JavaScriptCore without rebuilding Bun. The rebuild above is the replacement route.
+The same rebuild replaces the tinycc linked into that runtime; check out
+TINYCC_COMMIT above before building if you are changing tinycc. Rebuild pregate
+with that Bun by running `bun run scripts/build.ts` from the Pregate source of the
+same release. `bun build --compile` does not emit separate object files for the
+pregate executable, so this archive is not a link-editor kit for swapping
+JavaScriptCore or tinycc without rebuilding Bun. The rebuild above is the
+replacement route.
 
-Bun 1.4.4 also statically links tinycc (https://github.com/tinycc/tinycc).
-Bun's LICENSE.md at that tag identifies tinycc as LGPL-2.1. The GNU Lesser
+Bun's LICENSE.md at bun-v1.4.4 identifies tinycc as LGPL-2.1. The GNU Lesser
 General Public License, version 2.1, is copied in full below, after the
-JavaScriptCore license. Rebuilding Bun as above replaces that runtime too.
-tinycc's corresponding source is the upstream named from Bun's LICENSE.md
-at the tag above.
+JavaScriptCore license.
 
 The GNU Library General Public License, version 2, follows.
 

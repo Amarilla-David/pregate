@@ -365,9 +365,16 @@ describe("the built release", () => {
       "numbered 2 because it goes with version 2 of the ordinary GPL",
       "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
       "successor of the GNU Library Public License, version 2",
-      "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
+      "d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+      "https://github.com/oven-sh/bun/archive/refs/tags/bun-v1.4.4.tar.gz",
+      "https://github.com/oven-sh/WebKit/archive/d6375c72affe0f70222cdcb45012b10f0bf3a9d5.tar.gz",
+      "https://github.com/oven-sh/tinycc/archive/05f0fafaa3be31e31d7b4b5c17dc60f62c991171.tar.gz",
+      "bun sync-webkit-source",
     ]) expect(text).toContain(phrase);
     expect(text.match(/END OF TERMS AND CONDITIONS/g)).toHaveLength(2);
+    expect(text.match(/written offer/gi)).toHaveLength(2);
+    expect(text).not.toContain("will give any recipient");
+    expect(text).not.toContain("section 6(b)");
   });
 
   test("the bootstrap verifies install.sh and the tar and hands over to the binary", () => {

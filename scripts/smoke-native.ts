@@ -12,13 +12,27 @@ const NOTICE_PHRASES = [
   "numbered 2 because it goes with version 2 of the ordinary GPL",
   "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
   "successor of the GNU Library Public License, version 2",
-  "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
+  "d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+  "https://github.com/oven-sh/bun/tree/bun-v1.4.4",
+  "https://github.com/oven-sh/bun/archive/refs/tags/bun-v1.4.4.tar.gz",
+  "https://github.com/oven-sh/WebKit/tree/d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+  "https://github.com/oven-sh/WebKit/archive/d6375c72affe0f70222cdcb45012b10f0bf3a9d5.tar.gz",
+  "05f0fafaa3be31e31d7b4b5c17dc60f62c991171",
+  "https://github.com/oven-sh/tinycc/tree/05f0fafaa3be31e31d7b4b5c17dc60f62c991171",
+  "https://github.com/oven-sh/tinycc/archive/05f0fafaa3be31e31d7b4b5c17dc60f62c991171.tar.gz",
+  "https://github.com/oven-sh/bun/blob/bun-v1.4.4/patches/tinycc/tcc.h.patch",
+  "bun sync-webkit-source",
 ];
 
 function assertNotices(text: string, where: string): void {
   for (const phrase of NOTICE_PHRASES) if (!text.includes(phrase)) throw new Error(`${where} is missing ${JSON.stringify(phrase)}`);
   const ends = text.match(/END OF TERMS AND CONDITIONS/g)?.length ?? 0;
   if (ends !== 2) throw new Error(`${where} has ${ends} license endings; JavaScriptCore and tinycc each need one`);
+  const offers = text.match(/written offer/gi)?.length ?? 0;
+  if (offers !== 2) throw new Error(`${where} has ${offers} occurrences of "written offer"; only the two license texts may contain that phrase`);
+  for (const gone of ["will give any recipient", "section 6(b)"]) {
+    if (text.includes(gone)) throw new Error(`${where} still contains ${JSON.stringify(gone)}`);
+  }
 }
 
 function noticeText(archive: string): string {

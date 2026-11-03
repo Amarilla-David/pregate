@@ -118,7 +118,7 @@ pregate/
 ├─ bunfig.toml                  [test] root = "test": `bun test` does not enter the pilot's `*.test.ts` fixtures
 ├─ LICENSE                    **[Δ wave 3] pending (user decision, SPEC P19)**: without it `build.ts` warns and the tar is emitted without it (O28)
 ├─ THIRD_PARTY_NOTICES          web-tree-sitter, tree-sitter-typescript, Bun runtime (MIT) + the LGPL-2.0
-│                               text for JavaScriptCore, the exact Bun/WebKit pin, and a written offer; included in each release archive
+│                               text for JavaScriptCore and tinycc, and the pinned Bun, WebKit, and tinycc source links; included in each release archive
 ├─ README.md                    installation, contract, and honest limits (hook + pre-commit + CI)
 ├─ .github/workflows/ci.yml     typecheck · bun test · build 2 targets · e2e · dogfooding;
 │                               separate job: bench (does not break the suite on noise)
@@ -579,7 +579,7 @@ The launcher watchdog is 45 s and the hook `timeout` is 60 s.
 |---|---|---|---|
 | `web-tree-sitter` 0.27.0: `web-tree-sitter.js` (156 KB) + `.wasm` (210 KB) | `vendor/`, unmodified, embedded. **It does not appear in `package.json`** | It is the parser runtime. It cannot be extracted by function: the emscripten glue and the API are one unit | MIT. LICENSE + ORIGIN (package@version, URL, sha256) in the folder and in THIRD_PARTY_NOTICES |
 | `tree-sitter-typescript` 0.23.2: `tree-sitter-typescript.wasm` (1.42 MB) + `tree-sitter-tsx.wasm` (1.45 MB) | `vendor/`, embedded, **with `grammar.patch`** (O18) | TS and TSX/JS grammars. They share *kinds* and *fields* with ast-grep, so the pilot pack's pattern rules (~650 `kind`, 698 `has`, 422 `field`) run as data. Both grammars are required: `<T>x` is not valid in TSX | MIT. Same |
-| Bun runtime | Embedded by `--compile` | — | MIT. Bun links JavaScriptCore (GNU Library General Public License, version 2). The license text, the Bun 1.4.4 / WebKit pin, the written offer and the rebuild note are in THIRD_PARTY_NOTICES |
+| Bun runtime | Embedded by `--compile` | — | MIT. Bun links JavaScriptCore (GNU Library General Public License, version 2) and tinycc (GNU Lesser General Public License, version 2.1). Both license texts, the pinned Bun, WebKit, and tinycc source links, and the rebuild note are in THIRD_PARTY_NOTICES |
 
 **Runtime dependencies for whoever installs: zero.** The system tools are `git` (required, A27) and `/bin/sh` (the launcher).
 
