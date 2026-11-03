@@ -27,7 +27,7 @@ async function awaitAnswer(reader: Interface, prompt: string, abort: AbortContro
   try {
     const answer = (await reader.question(visible(prompt) + " ", { signal: abort.signal })).trim();
     return /^(q|quit|cancel)$/i.test(answer) ? null : answer;
-  } catch { return null; }
+  } catch { return null; /* fail-closed: an unanswered prompt cancels the review and applies nothing */ }
   finally {
     clearTimeout(deadline);
     reader.removeListener("close", closed);

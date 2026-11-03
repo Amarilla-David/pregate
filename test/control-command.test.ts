@@ -1,14 +1,14 @@
 import { expect, test } from "bun:test";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { controlInFile } from "../src/control-file.ts";
+import { delimiter, join } from "node:path";
+import { commandOnPath, controlInFile } from "../src/control-file.ts";
 import { pregateControlCause, scriptControlCause } from "../src/control.ts";
 import { guard } from "../src/shell.ts";
 
 const ctx = {
   machineOnly: false, harness: "claude-code" as const, touched: () => true, launcher: "/repo/.pregate/bin/pregate",
-  isProtected: () => false, inScope: () => false, under: () => false, readControlFile: controlInFile,
+  isProtected: () => false, inScope: () => false, under: () => false, readControlFile: controlInFile, commandPath: commandOnPath,
 };
 
 test("inline interpreters name pregate control commands and leave benign code alone", () => {
@@ -120,8 +120,31 @@ test("make and bash read a literal script and still allow a benign one", () => {
   expect(guard("./run.sh", dir, ctx)).toBe("shell-admin");
   expect(guard("bash ./ok.sh", dir, ctx)).toBeNull();
   expect(guard("python3 attack.py", dir, ctx)).toBeNull();
+  for (const command of ['bash "$SCRIPT"', 'sh "$X"', 'bash < "$S"', 'python3 "$P"', 'node "$P"', 'make -f "$F"', 'powershell -File $P']) {
+    expect(guard(command, dir, ctx), command).toBe("shell-write");
+  }
   writeFileSync(join(dir, "attack.py"), "import subprocess\nsubprocess.run(['pregate','approve','x'])\n");
   expect(guard("python3 attack.py", dir, ctx)).toBe("shell-admin");
   expect(guard("python3 -c \"print(1 + 1)\"", dir, ctx)).toBeNull();
   expect(guard("node -e \"console.log(1)\"", dir, ctx)).toBeNull();
+});
+
+test("a bare command name is resolved on PATH and scanned when the file is a script", () => {
+  const dir = mkdtempSync(join(tmpdir(), "pregate-path-"));
+  const bin = join(dir, "bin");
+  mkdirSync(bin);
+  const file = join(bin, process.platform === "win32" ? "deploy.cmd" : "deploy");
+  writeFileSync(file, process.platform === "win32" ? "@echo pregate uninstall\r\n" : "#!/bin/sh\npregate uninstall\n");
+  if (process.platform !== "win32") chmodSync(file, 0o755);
+  const saved = process.env.PATH;
+  process.env.PATH = `${bin}${delimiter}${saved ?? ""}`;
+  try {
+    expect(guard("deploy", dir, ctx)).toBe("hook-switch");
+    writeFileSync(file, process.platform === "win32" ? "@echo hello\r\n" : "#!/bin/sh\necho hello\n");
+    expect(guard("deploy", dir, ctx)).toBeNull();
+    expect(guard("ls", dir, ctx)).toBeNull();
+  } finally {
+    if (saved === undefined) delete process.env.PATH;
+    else process.env.PATH = saved;
+  }
 });

@@ -94,7 +94,11 @@ function packInferenceError(e: unknown): string {
 
 function savedPreset(root: string): Preset | null {
   try { return JSON.parse(readFileSync(join(root, PRESET), "utf8")); }
-  catch { return null; /* Diagnosis names malformed JSON; no scope coverage is inferred. */ }
+  catch (error) {
+    // Diagnosis names malformed JSON; an unreadable preset contributes no scope coverage.
+    if (error instanceof SyntaxError || typeof (error as NodeJS.ErrnoException).code === "string") return null;
+    throw error;
+  }
 }
 
 // Inspect repository metadata and recorded evidence; no proposal, consent or code writes.
@@ -319,7 +323,8 @@ async function configure(info: Awaited<ReturnType<typeof inspectProject>>): Prom
 
 // Undefined, which JSON never parses to, marks an unreadable report.
 function auditReport(text: string) {
-  try { return JSON.parse(text); } catch { return undefined; }
+  try { return JSON.parse(text); }
+  catch (error) { if (error instanceof SyntaxError) return undefined; throw error; }
 }
 
 async function fitnessPlanIn(root: string, cwd: string): Promise<Result> {

@@ -446,9 +446,7 @@ const allowed: string[] = [
   'case "$f" in *.ts) echo ts;; *) echo other;; esac',
   "find src -name '*.ts' | xargs -I% grep -l x %",
   "find src -name '*.ts' | xargs -i grep -l x {}",
-  // a variable as a script operand, without arguments it could carry
-  'for f in scripts/*.sh; do sh "$f"; done',
-  'bash "$SCRIPT"',
+  // a literal script file, including one fed on stdin
   "true & (echo hi)",
   "bash < /tmp/script.sh",
   "git log | cat",
@@ -851,8 +849,8 @@ const denied: [string, Cause][] = [
   [". pregate approve abc123", "shell-admin"],
   ["source $(echo pregate) approve abc123", "shell-admin"],
   ["source <(echo pregate approve abc123)", "shell-admin"],
-  ['bash "$(command -v pregate)" approve abc123', "shell-admin"],
-  ["bash <(echo pregate approve abc123)", "shell-admin"],
+  ['bash "$(command -v pregate)" approve abc123', "shell-write"],
+  ["bash <(echo pregate approve abc123)", "shell-write"],
   ["& $cmd approve abc123", "shell-admin"],
   ["Get-ChildItem | ForEach-Object { & $_ approve abc123 }", "shell-admin"],
   // a glob names a command in the cwd or on PATH; a locale string is a plain string
@@ -881,7 +879,7 @@ const denied: [string, Cause][] = [
   ['for x in "pregate approve abc123"; do $x; done', "shell-admin"],
   ['export x="pregate approve abc123"; sh -c \'$x\'', "shell-admin"],
   ["$CMD approve abc123", "shell-admin"],
-  ['bash "$S" approve abc123', "shell-admin"],
+  ['bash "$S" approve abc123', "shell-write"],
   ["npx pregate preset compile", "shell-admin"],
   ["git commit --no-verify -m x", "shell-admin"],
   ["git commit -n -m x", "shell-admin"],
@@ -1009,6 +1007,15 @@ const denied: [string, Cause][] = [
   ["node -e 'Bun.write(\"src/a.ts\",\"x\")'", "shell-write"],
   ["node -e 'console.log(require(\"./a.json\"))' > src/a.ts", "shell-write"],
   ["node -e 'console.log(require(\"./a.json\"))\nrequire(\"fs\").writeFileSync(\"src/a.ts\",\"x\")'", "shell-write"],
+  // a script argument that is not literal cannot be read
+  ['bash "$SCRIPT"', "shell-write"],
+  ['sh "$X"', "shell-write"],
+  ['bash < "$S"', "shell-write"],
+  ['for f in scripts/*.sh; do sh "$f"; done', "shell-write"],
+  ['python3 "$P"', "shell-write"],
+  ['node "$P"', "shell-write"],
+  ['make -f "$F"', "shell-write"],
+  ['powershell -File $P', "shell-write"],
 ];
 
 describe("allowed", () => {
@@ -1177,6 +1184,9 @@ describe("without a root only the machine is protected", () => {
     ["git commit --no-verify -m x", null],
     ["HUSKY=0 git commit -m x", null],
     ["bash", null],
+    ['bash "$SCRIPT"', null],
+    ['python3 "$P"', null],
+    ['make -f "$F"', null],
     ["pregate preset compile", null],
     // the machine's own files, in every spelling a command has for them
     ["cat ~/.claude/settings.json", "protected-path"],

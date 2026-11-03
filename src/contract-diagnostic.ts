@@ -155,7 +155,11 @@ export function conflictDiagnostic(paths: string[]): string {
 // The contract files of `root` that git still holds unmerged; [] when git cannot tell (diagnostic only).
 export function conflictedContract(root: string): string[] {
   try { return unmerged(root, [PRESET, LOCK]); }
-  catch { return []; }
+  catch (error) {
+    // This list only decorates a denial. Git failing is not proof that no conflict exists.
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
+  }
 }
 
 function pin(value: unknown): string { return typeof value === "string" && value.trim() === value && value.length <= 80 && ENGINE_VERSION.test(value) ? value : "missing/invalid"; }
@@ -163,7 +167,7 @@ function validPreset(value: unknown): value is Preset { return validate("preset"
 function record(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === "object" && !Array.isArray(value); }
 function object(text: string | null): Record<string, unknown> | null {
   try { const value: unknown = JSON.parse(text ?? ""); return record(value) ? value : null; }
-  catch { return null; }
+  catch (error) { if (error instanceof SyntaxError) return null; throw error; }
 }
 
 // §4.4: SessionStart only informs, and below no root it says nothing (MH-17). The snapshot it takes

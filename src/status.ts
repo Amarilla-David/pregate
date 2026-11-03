@@ -122,7 +122,11 @@ function pinnedServedLock(root: string, data: string): Lock | null {
 
 function writtenLock(root: string): Lock | null {
   try { return JSON.parse(text(join(root, LOCK)) ?? "null") as Lock | null; }
-  catch { return null; }   // the pinned engine read it a moment ago; a concurrent rewrite is not served
+  catch (error) {
+    // A lock this process cannot read or parse is not served. Admission still denies it.
+    if (error instanceof SyntaxError || typeof (error as NodeJS.ErrnoException).code === "string") return null;
+    throw error;
+  }
 }
 
 function pinnedAdmits(engine: string, root: string): boolean {
@@ -136,7 +140,10 @@ function pinnedAdmits(engine: string, root: string): boolean {
 
 function validContract(status: string): boolean {
   try { return (JSON.parse(status) as { contract?: { valid?: unknown } }).contract?.valid === true; }
-  catch { return false; }   // no status from that engine: it cannot be shown to admit the lock
+  catch (error) {
+    if (error instanceof SyntaxError) return false;   // no status JSON: that engine cannot be shown to admit the lock
+    throw error;
+  }
 }
 
 // The code of a review waiting for the human: the batch that binds this project's current review

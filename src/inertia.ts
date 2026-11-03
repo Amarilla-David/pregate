@@ -72,7 +72,11 @@ export function inert(event: HookEvent | Rejected): boolean {
     const invoked = [process.cwd(), process.env.CLAUDE_PROJECT_DIR, process.env.CURSOR_PROJECT_DIR, process.env.GROK_WORKSPACE_ROOT];
     return !invoked.some((dir) => {
       if (typeof dir !== "string" || !absolutePath(dir)) return false;
-      try { return active(dir); } catch { return false; }
+      try { return active(dir); }
+      catch (error) {
+        if (error instanceof Error && error.message.endsWith(": no existing ancestor")) return false;
+        throw error;
+      }
     });
   }
   // A session that reached a root is judged at Stop even when its consent is gone: Stop warns.

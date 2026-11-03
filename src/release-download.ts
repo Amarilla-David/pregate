@@ -63,7 +63,7 @@ function releaseVersion(file: string): Answer {
 // JSON.parse never yields undefined, so undefined means the metadata is not JSON.
 function releaseMetadata(file: string): { tag_name?: unknown; draft?: unknown; prerelease?: unknown } | undefined {
   try { return JSON.parse(readFileSync(file, "utf8")); }
-  catch { return undefined; }
+  catch (error) { if (error instanceof SyntaxError) return undefined; throw error; }
 }
 
 // Acquire the manifest and archive through ONE channel. The caller verifies before extraction.

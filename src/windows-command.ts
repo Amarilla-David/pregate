@@ -35,6 +35,7 @@ export function windowsHook(data: string, kind: HookKind, harness: HarnessId): s
   // Let the supervisor decide whether protection is active. A directory listing with suppressed
   // errors cannot prove that consent is absent, and hidden records are still valid records.
   const dirs = `$c=${psQuote(`${slash(data)}/consent`)}; $proposals=${psQuote(`${slash(data)}/proposals`)}; `;
+  // fail-closed: the PowerShell catch does not allow. It falls through to the consent fallback, which denies a consenting worktree.
   const script = `$ProgressPreference='SilentlyContinue'; $ErrorActionPreference='Stop'; $OutputEncoding=[Console]::InputEncoding=[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false); $raw=[Console]::In.ReadToEnd(); ${dirs}try { if (!(Test-Path -LiteralPath ${path} -PathType Leaf)) { throw 'Missing launcher' }; $raw | & ${path} hook ${kind} --harness ${harness}; $rc=$LASTEXITCODE; if ($rc -eq 0 -or $rc -eq 2) { exit $rc } } catch {}; ${fallback(data, kind, harness)}`;
   const plain = powershellCommand(script);
   const command = plain.length <= CMD_LINE ? plain : packedPowershellCommand(script);
@@ -69,5 +70,10 @@ export function commandScript(command: string): string {
 // Registrations can belong to another tool. Invalid or oversized compressed data stays opaque.
 function inflatedScript(packed: string, command: string): string {
   try { return zlib().inflateRawSync(Buffer.from(packed, "base64"), { maxOutputLength: 1024 * 1024 }).toString("utf8"); }
-  catch { return command; }
+  catch (error) {
+    const code = (error as { code?: string }).code;
+    // Invalid or oversized data stays opaque: it is not decoded into a script.
+    if (code === "Z_DATA_ERROR" || code === "Z_BUF_ERROR" || code === "ERR_BUFFER_TOO_LARGE") return command;
+    throw error;
+  }
 }
