@@ -173,8 +173,8 @@ function applyBaseline(release: () => void, plan: RebaseReview, text: string, di
 
 // §4.3: every root the session touched, against its snapshot, one at a time within the budget.
 // One Stop output, so the first root with something blocking decides and ends the walk; the
-// others are seen by the next Stop, pre-commit and CI. A session that reached no root has nothing
-// to judge, and Stop writes nothing (MH-17).
+// others are seen by the next Stop, pre-commit and CI. A session that reached no root writes
+// nothing, unless cwd is an enabled project Git cannot read: that still denies (MH-17, A27).
 export async function onStop(e: Extract<HookEvent, { kind: "stop" }>, budgetMs = STOP_BUDGET_MS): Promise<Decision> {
   const startedAt = clock();
   const sid = state.key(e.session);

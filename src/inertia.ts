@@ -2,6 +2,7 @@ import { readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { enabled } from "./consent.ts";
 import { canonical, findRoot } from "./disk.ts";
+import { repositoryFailure } from "./git.ts";
 import { absolutePath, pathKey } from "./paths.ts";
 import { WINDOWS } from "./platform.ts";
 import { compareVersions, ENGINE_VERSION } from "./product.ts";
@@ -80,7 +81,13 @@ export function inert(event: HookEvent | Rejected): boolean {
     });
   }
   // A session that reached a root is judged at Stop even when its consent is gone: Stop warns.
-  if (event.kind === "stop") return roots(key(event.session)).length === 0;
+  // No snapshot yet: an enabled project Git cannot read still denies. A readable repository
+  // this session never reached stays quiet, without loading the gate.
+  if (event.kind === "stop") {
+    if (roots(key(event.session)).length > 0) return false;
+    const here = findRoot(canonical(event.cwd), enabled);
+    return here === null || repositoryFailure(here) === null;
+  }
   if (event.kind === "pre-command") return !accepted(event.command.session) && !active(event.command.cwd) && !projectUpdateMention(event.command.command) && !guideMention(event.command.command);
   return !accepted(event.session) && !active(event.cwd);
 }

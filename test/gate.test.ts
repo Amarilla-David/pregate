@@ -503,6 +503,7 @@ test("a directory without git denies the hook, Stop and check", async () => {
   const pre = await onPreEdit([change(root, "src/domain/a.ts", { form: "full", content: "export const a = 2;\n" }, s)]);
   expect(pre.verdict).toBe("deny");
   expect(pre.cause).toBe("git-not-repository");
+  expect(inert({ kind: "stop", session: s, cwd: root, reentry: false })).toBe(false);
   const stop = await onStop({ kind: "stop", session: s, cwd: root, reentry: false });
   expect(stop.verdict).toBe("deny");
   expect(stop.cause).toBe("git-not-repository");
