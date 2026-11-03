@@ -5,11 +5,14 @@ import { join } from "node:path";
 import { accompanyEngine } from "../src/machine.ts";
 
 const PHRASES = [
-  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991", "END OF TERMS AND CONDITIONS",
+  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991",
+  "numbered 2 because it goes with version 2 of the ordinary GPL",
+  "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
+  "successor of the GNU Library Public License, version 2",
   "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
 ];
 
-test("a release archive contains the JavaScriptCore license, source pin, offer and relink note", () => {
+test("a release archive contains the JavaScriptCore and tinycc license texts", () => {
   const dir = mkdtempSync(join(tmpdir(), "pregate-notices-"));
   try {
     const src = join(dir, "src");
@@ -24,11 +27,13 @@ test("a release archive contains the JavaScriptCore license, source pin, offer a
     expect(notice.exitCode, notice.stderr.toString()).toBe(0);
     const text = notice.stdout.toString();
     for (const phrase of PHRASES) expect(text).toContain(phrase);
+    expect(text.match(/END OF TERMS AND CONDITIONS/g)).toHaveLength(2);
     const engine = join(dir, "engine");
     mkdirSync(engine);
     accompanyEngine(join(src, "pregate"), engine);
     const installed = readFileSync(join(engine, "THIRD_PARTY_NOTICES"), "utf8");
     for (const phrase of PHRASES) expect(installed).toContain(phrase);
+    expect(installed.match(/END OF TERMS AND CONDITIONS/g)).toHaveLength(2);
     expect(readFileSync(join(engine, "LICENSE"), "utf8").length).toBeGreaterThan(0);
   } finally {
     rmSync(dir, { recursive: true, force: true });

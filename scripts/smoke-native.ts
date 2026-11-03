@@ -55,12 +55,17 @@ try {
 } finally { rmSync(area, { recursive: true, force: true }); }
 
 const NOTICE_PHRASES = [
-  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991", "END OF TERMS AND CONDITIONS",
+  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991",
+  "numbered 2 because it goes with version 2 of the ordinary GPL",
+  "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
+  "successor of the GNU Library Public License, version 2",
   "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
 ];
 
 function assertNotices(text: string, where: string): void {
   for (const phrase of NOTICE_PHRASES) if (!text.includes(phrase)) throw new Error(`${where} is missing ${JSON.stringify(phrase)}`);
+  const ends = text.match(/END OF TERMS AND CONDITIONS/g)?.length ?? 0;
+  if (ends !== 2) throw new Error(`${where} has ${ends} license endings; JavaScriptCore and tinycc each need one`);
 }
 
 function noticeText(archive: string): string {

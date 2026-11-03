@@ -361,9 +361,13 @@ describe("the built release", () => {
     expect(notice.exitCode, notice.stderr.toString()).toBe(0);
     const text = notice.stdout.toString();
     for (const phrase of [
-      "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991", "END OF TERMS AND CONDITIONS",
+      "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991",
+      "numbered 2 because it goes with version 2 of the ordinary GPL",
+      "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
+      "successor of the GNU Library Public License, version 2",
       "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
     ]) expect(text).toContain(phrase);
+    expect(text.match(/END OF TERMS AND CONDITIONS/g)).toHaveLength(2);
   });
 
   test("the bootstrap verifies install.sh and the tar and hands over to the binary", () => {

@@ -27,7 +27,11 @@ test("THIRD_PARTY_NOTICES carries the pinned Bun runtime and the JavaScriptCore 
   expect(notices).toContain(`https://github.com/oven-sh/bun/tree/bun-v${version}`);
   expect(notices).toContain("GNU LIBRARY GENERAL PUBLIC LICENSE");
   expect(notices).toContain("Version 2, June 1991");
-  expect(notices).toContain("END OF TERMS AND CONDITIONS");
+  expect(notices).toContain("numbered 2 because it goes with version 2 of the ordinary GPL");
+  expect(notices).toContain("GNU LESSER GENERAL PUBLIC LICENSE");
+  expect(notices).toContain("Version 2.1, February 1999");
+  expect(notices).toContain("successor of the GNU Library Public License, version 2");
+  expect(notices.match(/END OF TERMS AND CONDITIONS/g)).toHaveLength(2);
   expect(notices).toContain("d6375c72affe0f70222cdcb45012b10f0bf3a9d5");
   expect(notices).toContain("https://github.com/oven-sh/WebKit/tree/d6375c72affe0f70222cdcb45012b10f0bf3a9d5");
   expect(notices).toContain("Written offer");
