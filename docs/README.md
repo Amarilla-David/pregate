@@ -12,7 +12,7 @@ its recorded candidate, not proof that a later candidate passes.
 - [Use the pregate skill in your coding harness](guides/pregate-skill.md)
 - [Update one or several projects](features/project-update.md)
 - [Daily use: onboarding, calibration, repairs and reporting](guides/daily-use.md)
-- [Rule precision: valid cases and proof limits](guides/rule-precision.md)
+- [Rule precision and hook latency](guides/rule-precision.md)
 - [Share a reviewed contract and custom packs with a team](guides/team-contracts.md)
 - [Product readiness packs and evidence adoption](guides/readiness-packs.md)
 - [Run the candidate verification on a colleague's Windows machine](guides/windows-verification.md)

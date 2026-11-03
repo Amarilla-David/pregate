@@ -1,0 +1,66 @@
+{
+  "labeler": "maintainer",
+  "pack": "pstack",
+  "items": [
+    {
+      "corpus": "classnames",
+      "pack": "pstack",
+      "rule": "pstack/PS-COMMENT-001",
+      "path": "dedupe.js",
+      "line": 1,
+      "symbol": "<module>",
+      "verdict": "false-positive",
+      "note": "The comment explains why StorageObject must not inherit from Object. The next line is only the constructor, so the comment does not restate it."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "pstack",
+      "rule": "pstack/PS-COMMENT-001",
+      "path": "dedupe.js",
+      "line": 65,
+      "symbol": "appendObject",
+      "verdict": "false-positive",
+      "note": "The comment records why the code assigns false instead of deleting a key. The assignment on the following line does not say that."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "pstack",
+      "rule": "pstack/PS-COMMENT-001",
+      "path": "dedupe.js",
+      "line": 66,
+      "symbol": "appendObject",
+      "verdict": "false-positive",
+      "note": "The line is a URL citation. It does not restate classSet[k] = !!object[k]."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "pstack",
+      "rule": "pstack/PS-COMMENT-001",
+      "path": "index.d.ts",
+      "line": 1,
+      "symbol": "<module>",
+      "verdict": "false-positive",
+      "note": "LICENSE is MIT is a license banner. It does not restate the types below, and it is not the Copyright line that the allowlist already names."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "pstack",
+      "rule": "pstack/PS-COMMENT-001",
+      "path": "index.d.ts",
+      "line": 15,
+      "symbol": "<module>",
+      "verdict": "false-positive",
+      "note": "The JSDoc sentence describes the package. It does not restate the classNames signature on the next line."
+    },
+    {
+      "corpus": "express",
+      "pack": "pstack",
+      "rule": "pstack/PS-COMMENT-001",
+      "path": "examples/auth/index.js",
+      "line": 109,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "Regenerate session when signing in restates the req.session.regenerate call it sits on."
+    }
+  ]
+}

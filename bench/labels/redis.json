@@ -1,0 +1,66 @@
+{
+  "labeler": "maintainer",
+  "pack": "redis",
+  "items": [
+    {
+      "corpus": "express",
+      "pack": "redis",
+      "rule": "redis/REDIS-KEY-001",
+      "path": "examples/auth/index.js",
+      "line": 100,
+      "symbol": "<module>",
+      "verdict": "false-positive",
+      "note": "app.get registers an HTTP route. The call is not a Redis GET of a key."
+    },
+    {
+      "corpus": "express",
+      "pack": "redis",
+      "rule": "redis/REDIS-KEY-001",
+      "path": "examples/auth/index.js",
+      "line": 16,
+      "symbol": "<module>",
+      "verdict": "false-positive",
+      "note": "app.set stores the Express view engine. It is not a Redis SET of a key."
+    },
+    {
+      "corpus": "express",
+      "pack": "redis",
+      "rule": "redis/REDIS-KEY-001",
+      "path": "examples/auth/index.js",
+      "line": 119,
+      "symbol": "<module>",
+      "verdict": "false-positive",
+      "note": "req.get reads the Referrer header. It is not a Redis GET."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "redis",
+      "rule": "redis/REDIS-SCAN-001",
+      "path": "benchmarks/benchmarks.js",
+      "line": 72,
+      "symbol": "printTable.headers",
+      "verdict": "false-positive",
+      "note": "Object.keys lists the columns of a benchmark row. It is not the Redis KEYS command."
+    },
+    {
+      "corpus": "express",
+      "pack": "redis",
+      "rule": "redis/REDIS-SCAN-001",
+      "path": "lib/response.js",
+      "line": 578,
+      "symbol": "keys",
+      "verdict": "false-positive",
+      "note": "Object.keys copies header names. It is not a Redis KEYS scan."
+    },
+    {
+      "corpus": "express",
+      "pack": "redis",
+      "rule": "redis/REDIS-SCAN-001",
+      "path": "test/app.router.js",
+      "line": 308,
+      "symbol": "keys",
+      "verdict": "false-positive",
+      "note": "Object.keys(req.params) reads route parameters in a test. It is not Redis KEYS."
+    }
+  ]
+}

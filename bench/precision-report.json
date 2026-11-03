@@ -1,0 +1,741 @@
+{
+  "core": "0.0.1",
+  "corpus": [
+    {
+      "commit": "abd6314010de053a09df5acc53e474ff65cea470",
+      "id": "classnames",
+      "kind": "git",
+      "language": "javascript",
+      "parsed": 15,
+      "sourceFiles": 15,
+      "url": "https://github.com/JedWatson/classnames.git"
+    },
+    {
+      "commit": "87f8819acf6dc28bf5d3c14b334268236d686f48",
+      "id": "errors",
+      "kind": "git",
+      "language": "go",
+      "parsed": 10,
+      "sourceFiles": 10,
+      "url": "https://github.com/pkg/errors.git"
+    },
+    {
+      "commit": "1c6f1b0fe4000977b9a7b4f34097e4d527dd9824",
+      "id": "express",
+      "kind": "git",
+      "language": "javascript",
+      "parsed": 142,
+      "sourceFiles": 142,
+      "url": "https://github.com/expressjs/express.git"
+    },
+    {
+      "commit": "4e111271b1494995708a9e878a10829b5e10c7ba",
+      "id": "markupsafe",
+      "kind": "git",
+      "language": "python",
+      "parsed": 12,
+      "sourceFiles": 12,
+      "url": "https://github.com/pallets/markupsafe.git"
+    },
+    {
+      "commit": "4ff48cec099f0514c3e9bbca18706c9c21122bfb",
+      "id": "ms",
+      "kind": "git",
+      "language": "javascript",
+      "parsed": 8,
+      "sourceFiles": 8,
+      "url": "https://github.com/vercel/ms.git"
+    },
+    {
+      "commit": "f9ca66ec73d218127bff56b41a583bba1fb96125",
+      "id": "react-markdown",
+      "kind": "git",
+      "language": "javascript",
+      "parsed": 5,
+      "sourceFiles": 5,
+      "url": "https://github.com/remarkjs/react-markdown.git"
+    },
+    {
+      "commit": "d733fc535e4a9f3c454e421a87b90ade5d49bf31",
+      "id": "toml",
+      "kind": "git",
+      "language": "rust",
+      "parsed": 30,
+      "sourceFiles": 30,
+      "url": "https://github.com/BurntSushi/toml.git"
+    },
+    {
+      "commit": "1fd51ada1a20ce315805cdf63d0555a8b5fb33bb",
+      "id": "tslib",
+      "kind": "git",
+      "language": "typescript",
+      "parsed": 16,
+      "sourceFiles": 16,
+      "url": "https://github.com/microsoft/tslib.git"
+    }
+  ],
+  "engine": "0.0.2",
+  "labeler": "maintainer",
+  "limits": [
+    "Sample precision is true positives divided by the maintainer-labeled findings of that pack. Unlabeled findings are not in the denominator and have no precision.",
+    "A pack with no matching maintainer label is unmeasured. This report does not give it a precision.",
+    "A label says whether the finding matches the rule's stated condition. It is not a judgment that a project should adopt the rule.",
+    "The corpus is the pinned commits in the manifest. It is not a random sample of public code.",
+    "The audit records static matches in the checked-out tree. It is not the no-new ratchet used on an edit, and it does not run fitness, diff, or placement checks.",
+    "Vue and Svelte single-file components use the TypeScript grammar. This corpus has no .vue or .svelte file, so a zero there is not evidence about those rules.",
+    "Tracked files under node_modules, vendor, dist, build, coverage, .next, or target are not scanned. Symlinks are not followed."
+  ],
+  "packs": [
+    {
+      "falsePositives": 0,
+      "findings": 3420,
+      "labeled": 6,
+      "pack": "senior",
+      "precision": 1,
+      "truePositives": 6
+    },
+    {
+      "falsePositives": 6,
+      "findings": 3039,
+      "labeled": 6,
+      "pack": "redis",
+      "precision": 0,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 5,
+      "findings": 827,
+      "labeled": 6,
+      "pack": "pstack",
+      "precision": 0.16666666666666666,
+      "truePositives": 1
+    },
+    {
+      "falsePositives": 0,
+      "findings": 565,
+      "labeled": 5,
+      "pack": "clean-code",
+      "precision": 1,
+      "truePositives": 5
+    },
+    {
+      "falsePositives": 0,
+      "findings": 512,
+      "labeled": 5,
+      "pack": "javascript",
+      "precision": 1,
+      "truePositives": 5
+    },
+    {
+      "falsePositives": 0,
+      "findings": 105,
+      "labeled": 0,
+      "pack": "maintainability",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 101,
+      "labeled": 0,
+      "pack": "go",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 91,
+      "labeled": 0,
+      "pack": "typescript",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 77,
+      "labeled": 0,
+      "pack": "express",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 55,
+      "labeled": 0,
+      "pack": "vibe-proof",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 51,
+      "labeled": 0,
+      "pack": "trpc",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 40,
+      "labeled": 0,
+      "pack": "musk",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 31,
+      "labeled": 0,
+      "pack": "node",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 12,
+      "labeled": 0,
+      "pack": "mattpocock",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 8,
+      "labeled": 0,
+      "pack": "vue",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 6,
+      "labeled": 0,
+      "pack": "tailwind",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 5,
+      "labeled": 0,
+      "pack": "authjs",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 3,
+      "labeled": 0,
+      "pack": "python",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 2,
+      "labeled": 0,
+      "pack": "mongodb",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 1,
+      "labeled": 0,
+      "pack": "react-native",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "agent-practices",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "angular",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "architecture",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "consumer-saas",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "core",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "dcouplr",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "ddd",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "design-invariants",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "drizzle",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "enterprise-ready",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "firebase",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "nestjs",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "next-website",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "nextjs",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "nuxt",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "postgres",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "prisma",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "react",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "rust",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "security-audit",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "solana",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "supabase",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "svelte",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "sveltekit",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "testing",
+      "precision": null,
+      "truePositives": 0
+    },
+    {
+      "falsePositives": 0,
+      "findings": 0,
+      "labeled": 0,
+      "pack": "vercel",
+      "precision": null,
+      "truePositives": 0
+    }
+  ],
+  "sample": [
+    {
+      "corpus": "classnames",
+      "line": 16,
+      "note": "parseValue runs from line 16 through the return on line 42, past the limit of 20.",
+      "pack": "clean-code",
+      "path": "bind.js",
+      "rule": "clean-code/CC-FN-001",
+      "symbol": "parseValue",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 16,
+      "note": "The describe callback starts at line 16 and still contains further tests past line 35, so it is over the 20-line limit.",
+      "pack": "clean-code",
+      "path": "tests/bind.js",
+      "rule": "clean-code/CC-FN-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 1,
+      "note": "The comment explains why StorageObject must not inherit from Object. The next line is only the constructor, so the comment does not restate it.",
+      "pack": "pstack",
+      "path": "dedupe.js",
+      "rule": "pstack/PS-COMMENT-001",
+      "symbol": "<module>",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 65,
+      "note": "The comment records why the code assigns false instead of deleting a key. The assignment on the following line does not say that.",
+      "pack": "pstack",
+      "path": "dedupe.js",
+      "rule": "pstack/PS-COMMENT-001",
+      "symbol": "appendObject",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 66,
+      "note": "The line is a URL citation. It does not restate classSet[k] = !!object[k].",
+      "pack": "pstack",
+      "path": "dedupe.js",
+      "rule": "pstack/PS-COMMENT-001",
+      "symbol": "appendObject",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 1,
+      "note": "LICENSE is MIT is a license banner. It does not restate the types below, and it is not the Copyright line that the allowlist already names.",
+      "pack": "pstack",
+      "path": "index.d.ts",
+      "rule": "pstack/PS-COMMENT-001",
+      "symbol": "<module>",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 15,
+      "note": "The JSDoc sentence describes the package. It does not restate the classNames signature on the next line.",
+      "pack": "pstack",
+      "path": "index.d.ts",
+      "rule": "pstack/PS-COMMENT-001",
+      "symbol": "<module>",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 72,
+      "note": "Object.keys lists the columns of a benchmark row. It is not the Redis KEYS command.",
+      "pack": "redis",
+      "path": "benchmarks/benchmarks.js",
+      "rule": "redis/REDIS-SCAN-001",
+      "symbol": "printTable.headers",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 21,
+      "note": "if (!arg) return has no braces. The rule requires braces on an if.",
+      "pack": "senior",
+      "path": "dedupe.js",
+      "rule": "senior/SR-BRACE-001",
+      "symbol": "appendValue",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "classnames",
+      "line": 29,
+      "note": "arg.toString.toString().includes walks three member or call hops, which is the chain this rule rejects.",
+      "pack": "senior",
+      "path": "bind.js",
+      "rule": "senior/SR-CHAIN-001",
+      "symbol": "parseValue",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 11,
+      "note": "The exported boot function starts at line 11 and is still loading controllers past line 40, over the 20-line limit.",
+      "pack": "clean-code",
+      "path": "examples/mvc/lib/boot.js",
+      "rule": "clean-code/CC-FN-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 20,
+      "note": "error takes err, req, res, and next. Express uses that arity for error middleware, and the function is still four parameters over the limit of three.",
+      "pack": "clean-code",
+      "path": "examples/error/index.js",
+      "rule": "clean-code/CC-FN-002",
+      "symbol": "error",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 9,
+      "note": "module.exports = users publishes the array through CommonJS, which is the export this rule names.",
+      "pack": "javascript",
+      "path": "examples/content-negotiation/db.js",
+      "rule": "javascript/JS-CJS-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 11,
+      "note": "exports.text assigns a CommonJS export. The rule asks for an export statement.",
+      "pack": "javascript",
+      "path": "examples/content-negotiation/users.js",
+      "rule": "javascript/JS-CJS-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 10,
+      "note": "require('express-session') loads that module with require, which is the call this rule names.",
+      "pack": "javascript",
+      "path": "examples/auth/index.js",
+      "rule": "javascript/JS-REQ-001",
+      "symbol": "session",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 9,
+      "note": "require('node:path') is a require call. The rule asks for an import statement.",
+      "pack": "javascript",
+      "path": "examples/auth/index.js",
+      "rule": "javascript/JS-REQ-001",
+      "symbol": "path",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 109,
+      "note": "Regenerate session when signing in restates the req.session.regenerate call it sits on.",
+      "pack": "pstack",
+      "path": "examples/auth/index.js",
+      "rule": "pstack/PS-COMMENT-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 100,
+      "note": "app.get registers an HTTP route. The call is not a Redis GET of a key.",
+      "pack": "redis",
+      "path": "examples/auth/index.js",
+      "rule": "redis/REDIS-KEY-001",
+      "symbol": "<module>",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 119,
+      "note": "req.get reads the Referrer header. It is not a Redis GET.",
+      "pack": "redis",
+      "path": "examples/auth/index.js",
+      "rule": "redis/REDIS-KEY-001",
+      "symbol": "<module>",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 16,
+      "note": "app.set stores the Express view engine. It is not a Redis SET of a key.",
+      "pack": "redis",
+      "path": "examples/auth/index.js",
+      "rule": "redis/REDIS-KEY-001",
+      "symbol": "<module>",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 578,
+      "note": "Object.keys copies header names. It is not a Redis KEYS scan.",
+      "pack": "redis",
+      "path": "lib/response.js",
+      "rule": "redis/REDIS-SCAN-001",
+      "symbol": "keys",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 308,
+      "note": "Object.keys(req.params) reads route parameters in a test. It is not Redis KEYS.",
+      "pack": "redis",
+      "path": "test/app.router.js",
+      "rule": "redis/REDIS-SCAN-001",
+      "symbol": "keys",
+      "verdict": "false-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 36,
+      "note": "if (err) assigns res.locals.message with no braces around the branch.",
+      "pack": "senior",
+      "path": "examples/auth/index.js",
+      "rule": "senior/SR-BRACE-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 27,
+      "note": "req.params.file.join walks params, file, and join. That is three member hops.",
+      "pack": "senior",
+      "path": "examples/downloads/index.js",
+      "rule": "senior/SR-CHAIN-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 10,
+      "note": "var session declares the express-session binding with var, which is the declaration this rule names.",
+      "pack": "senior",
+      "path": "examples/auth/index.js",
+      "rule": "senior/SR-VAR-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "express",
+      "line": 31,
+      "note": "var err reads the session error with var. const or let would be the binding this rule asks for.",
+      "pack": "senior",
+      "path": "examples/auth/index.js",
+      "rule": "senior/SR-VAR-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "ms",
+      "line": 236,
+      "note": "plural takes ms, msAbs, n, and name. That is four parameters and the limit is three.",
+      "pack": "clean-code",
+      "path": "src/index.ts",
+      "rule": "clean-code/CC-FN-002",
+      "symbol": "plural",
+      "verdict": "true-positive"
+    },
+    {
+      "corpus": "tslib",
+      "line": 2,
+      "note": "require(\"child_process\") is a require call in the test runner.",
+      "pack": "javascript",
+      "path": "test/runTests.js",
+      "rule": "javascript/JS-REQ-001",
+      "symbol": "<module>",
+      "verdict": "true-positive"
+    }
+  ],
+  "schemaVersion": 1
+}

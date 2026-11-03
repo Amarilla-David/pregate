@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Pack precision on a pinned set of public repositories, one or more for each parsed language. `scripts/bench-audit-repos.ts --precision` counts findings per pack. Sample precision is published only for the maintainer-labeled packs in `bench/labels/`. Packs with no labels stay unmeasured. The method and the limits are in `docs/guides/rule-precision.md`.
+- CI measures the compiled Pre hook on 200-line and 2,000-line files on Linux, macOS, and Windows. Each job repeats the sample three times and fails when the median p95 is more than 25% above the baseline in `bench/latency-baseline.json`.
+
 ### Changed
 - Codex 0.166.0 is the verified CLI. For Bash, `PreToolUse` `cwd` is the command's resolved working directory ([openai/codex#57198](https://github.com/openai/codex/pull/57198); permission and post-tool hooks do the same in [#57203](https://github.com/openai/codex/pull/57203)). Relative shell paths resolve against that directory. A working directory in a subfolder still uses the same project root. A working directory outside the repository does not drop that project's gate, and a write that lands in the session project is still judged by that project's contract rather than by another project's. `apply_patch`, `SessionStart`, and `Stop` still carry the session directory. The payload has no version field and the same shape as 0.159.2, so 0.166.0 is the minimum supported Codex release.
 

@@ -1,0 +1,56 @@
+{
+  "labeler": "maintainer",
+  "pack": "javascript",
+  "items": [
+    {
+      "corpus": "express",
+      "pack": "javascript",
+      "rule": "javascript/JS-REQ-001",
+      "path": "examples/auth/index.js",
+      "line": 9,
+      "symbol": "path",
+      "verdict": "true-positive",
+      "note": "require('node:path') is a require call. The rule asks for an import statement."
+    },
+    {
+      "corpus": "express",
+      "pack": "javascript",
+      "rule": "javascript/JS-REQ-001",
+      "path": "examples/auth/index.js",
+      "line": 10,
+      "symbol": "session",
+      "verdict": "true-positive",
+      "note": "require('express-session') loads that module with require, which is the call this rule names."
+    },
+    {
+      "corpus": "tslib",
+      "pack": "javascript",
+      "rule": "javascript/JS-REQ-001",
+      "path": "test/runTests.js",
+      "line": 2,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "require(\"child_process\") is a require call in the test runner."
+    },
+    {
+      "corpus": "express",
+      "pack": "javascript",
+      "rule": "javascript/JS-CJS-001",
+      "path": "examples/content-negotiation/db.js",
+      "line": 9,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "module.exports = users publishes the array through CommonJS, which is the export this rule names."
+    },
+    {
+      "corpus": "express",
+      "pack": "javascript",
+      "rule": "javascript/JS-CJS-001",
+      "path": "examples/content-negotiation/users.js",
+      "line": 11,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "exports.text assigns a CommonJS export. The rule asks for an export statement."
+    }
+  ]
+}

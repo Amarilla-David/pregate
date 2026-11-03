@@ -269,34 +269,56 @@ jobs:
     uses: ./.github/workflows/native-release.yml
     permissions:
       contents: read
-  # Latency informs here (ARCHITECTURE §8, O31): the p95 ≤ 150 ms budget holds on the reference
-  # development machine, and a shared runner with 2 vCPU lands several times above it. The table goes
-  # to the job summary; a miss is a warning, and only a hook that objects fails the step.
-  bench:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    continue-on-error: true
+  # The 150 ms p95 budget belongs to the reference machine (ARCHITECTURE O31). These runners
+  # compare the median of three p95 samples with bench/latency-baseline.json and fail above 25%.
+  latency:
+    name: latency (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version-file: .bun-version
-      - name: Isolate runtime homes
+      - name: Exclude CI work directories from Defender
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          root=/private/tmp/claude-501/pregate-bench
-          sudo mkdir -p "$root"
-          sudo chown "$(id -u):$(id -g)" "$root"
-          for entry in HOME:home XDG_DATA_HOME:data XDG_STATE_HOME:state XDG_CONFIG_HOME:config TMPDIR:tmp CODEX_HOME:codex GROK_HOME:grok; do
-            path="$root/${entry#*:}"
-            mkdir -p "$path"
-            echo "${entry%%:*}=$path" >> "$GITHUB_ENV"
-          done
-      - run: bun install --frozen-lockfile
-      # shell: bash adds pipefail, so a bench that crashes still fails the step through the tee.
-      - name: Latency (informs)
+          $targets = @([IO.Path]::GetFullPath($env:GITHUB_WORKSPACE), [IO.Path]::GetFullPath($env:RUNNER_TEMP))
+          foreach ($path in $targets) { Add-MpPreference -ExclusionPath $path }
+      - name: Isolate runtime homes
         shell: bash
         run: |
-          bun run bench --inform | tee bench.txt
-          if grep -q '^Over budget' bench.txt; then
-            echo "::warning title=Latency (informs)::$(grep '^Over budget' bench.txt) on this runner; the budget is the reference machine's (ARCHITECTURE O31)"
-          fi
+          root="${RUNNER_TEMP}/pregate-bench"
+          mkdir -p "$root/home" "$root/data" "$root/state" "$root/config" "$root/tmp" "$root/codex" "$root/grok"
+          {
+            echo "HOME=$root/home"
+            echo "USERPROFILE=$root/home"
+            echo "XDG_DATA_HOME=$root/data"
+            echo "XDG_STATE_HOME=$root/state"
+            echo "XDG_CONFIG_HOME=$root/config"
+            echo "TMPDIR=$root/tmp"
+            echo "TEMP=$root/tmp"
+            echo "TMP=$root/tmp"
+            echo "CODEX_HOME=$root/codex"
+            echo "GROK_HOME=$root/grok"
+          } >> "$GITHUB_ENV"
+      - name: Git identity for the bench repository
+        shell: bash
+        run: |
+          git config --global user.email "pregate-ci@example.com"
+          git config --global user.name "Pregate CI"
+          git config --global commit.gpgsign false
+      - run: bun install --frozen-lockfile
+      - name: Compiled Pre hook latency
+        shell: bash
+        run: |
+          bun scripts/bench.ts --runs 25 --repeat 3 --inform --gate bench/latency-baseline.json \
+            --only "200 lines, first touch" \
+            --only "200 lines, second touch" \
+            --only "2,000 lines, first touch" \
+            --only "2,000 lines, second touch"
