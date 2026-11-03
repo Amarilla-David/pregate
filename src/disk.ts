@@ -167,9 +167,15 @@ export function canonical(abs: string): string {
 // consent compare those spellings as the same place.
 export function samePlace(a: string, b: string): boolean {
   if (pathKey(a) === pathKey(b)) return true;
+  // realpath keeps an 8.3 short name when that is the path it was given, so the short
+  // name and the long name never compare equal as strings. The file index does.
   try {
-    const final = (path: string) => pathKey(slash(realpathSync.native(path)));
-    return final(a) === final(b);
+    const id = (path: string) => {
+      const stat = statSync(path);
+      return stat.ino ? `${stat.dev}:${stat.ino}` : "";
+    };
+    const left = id(a), right = id(b);
+    return left !== "" && left === right;
   } catch {
     return false;
   }

@@ -56,18 +56,27 @@ function gitDirectory(marker: string, root: string): string {
   return resolve(root, path.trim());
 }
 
+function consentOn(record: { root?: unknown; common?: unknown; disabled?: unknown }, here: string, common: string): boolean {
+  return typeof record.root === "string" && samePlace(record.root, here)
+    && typeof record.common === "string" && samePlace(record.common, common)
+    && record.disabled !== true;
+}
+
 export function enabled(root: string, data = dataHome()): boolean {
-  const path = file(root, data);
+  const here = canonical(root);
   const common = commonDir(root);
-  if (existsSync(path)) {
-    const record = JSON.parse(readFileSync(path, "utf8")) as { root: string; common: string; disabled?: boolean };
-    if (samePlace(record.root, canonical(root)) && samePlace(record.common, common)) return record.disabled !== true;
+  const directory = join(data, "consent");
+  const names = existsSync(directory) ? readdirSync(directory).filter((name) => name.endsWith(".json")) : [];
+  for (const name of names) {
+    const record = consentRecord(join(directory, name));
+    if (record === null) continue;
+    if (consentOn(record, here, common)) return true;
     // Removing .git changes the common dir, which used to make an enabled project look
     // unconsented. Stay enabled so the edit is denied instead of skipped. `pregate disable` still wins.
-    if (record.root === canonical(root) && record.disabled !== true && !existsSync(join(root, ".git"))) return true;
+    if (typeof record.root === "string" && samePlace(record.root, here) && record.disabled !== true && !existsSync(join(here, ".git"))) return true;
   }
   // Only a worktree's top inherits: a nested project inside one keeps its own consent.
-  return existsSync(join(root, ".git")) && common !== canonical(root) && existsSync(repoFile(common, data));
+  return existsSync(join(here, ".git")) && !samePlace(common, here) && existsSync(repoFile(common, data));
 }
 
 export function enable(root: string, data = dataHome()): void {

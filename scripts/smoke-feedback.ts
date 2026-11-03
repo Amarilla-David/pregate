@@ -49,7 +49,7 @@ try {
   const findings = JSON.parse(listed.stdout.toString()).findings;
   const detail = listed.stdout.toString() + observed.stdout.toString() + observed.stderr.toString();
   const shadowed = observed.exitCode === 0 && findings.some((f: { rule: string }) => f.rule === "clean-code/CC-ER-002");
-  assert(shadowed || observed.exitCode === 2, detail);
+  assert(shadowed || observed.exitCode === 2, `exit ${observed.exitCode}\n${detail}`);
   if (shadowed) {
   assert(findings.length === 1, detail);
   const snapshotFile = join(area, "state/pregate/sessions", WINDOWS ? "claude-code~native-feedback" : "claude-code:native-feedback", H(root), "snapshot.json");
