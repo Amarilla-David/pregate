@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Codex 0.166.0 is the verified CLI. For Bash, `PreToolUse` `cwd` is the command's resolved working directory ([openai/codex#57198](https://github.com/openai/codex/pull/57198); permission and post-tool hooks do the same in [#57203](https://github.com/openai/codex/pull/57203)). Relative shell paths resolve against that directory. A working directory in a subfolder still uses the same project root. A working directory outside the repository does not drop that project's gate, and a write that lands in the session project is still judged by that project's contract rather than by another project's. `apply_patch`, `SessionStart`, and `Stop` still carry the session directory. The payload has no version field and the same shape as 0.159.2, so 0.166.0 is the minimum supported Codex release.
+
 ### Fixed
 - Living docs, the skill, and installer messages describe the published 0.0.2 release. They no longer send readers to pre-rename versions, private-repository downloads, or release files that this repository does not publish.
 

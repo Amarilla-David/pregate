@@ -14,13 +14,10 @@ approval command; plain `preset apply` still requires human approval.
 Successful preview states that review is pending and the active contract still
 applies. The agent presents the complete review and waits for the human. Keep the
 proposed files; further trial requests replace the review and its digest.
-Use an absolute request path in Codex because its shell payload does not
-establish the execution directory.
+Codex 0.166 reports the command working directory. A relative request path
+resolves there; name a file outside that directory with an absolute path.
 
-An actual command-discovery probe
-reproduces a denied relative preview even after a valid request is created.
-The corrected rule-conflict and protected-path messages name the absolute
-path requirement. The repeated model turn prepares a valid review while
+The protected-path guidance names that absolute path. A prepared review stays pending while
 preserving active policy and consent; approval remains a separate human step.
 
 For Claude Code interactive parent sessions, the engine asks through the native

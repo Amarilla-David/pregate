@@ -1,20 +1,28 @@
 import { describe, expect, test } from "bun:test";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { decide } from "../../src/decide.ts";
 import { decode, encode } from "../../src/harness/codex.ts";
 import type { Decision, DecideInput, Edit, Emission, HookEvent, HookKind, Lock, ProposedChange, Rejected, Severity, Violation } from "../../src/types.ts";
 import { contract, ENV } from "./contract.ts";
 
-// The Codex CLI 0.159.2 contract (MULTI-HARNESS MH-05, MH-08, MH-14): real payloads from
-// test/payloads/codex decoded to exact events, and the patch grammar on top of them. Patch semantics
-// marked [V] were checked against Codex's own apply_patch (the codex binary run as `apply_patch`).
+// The Codex CLI contract (MULTI-HARNESS MH-05, MH-08, MH-14): real payloads from test/payloads/codex
+// decoded to exact events, and the patch grammar on top of them. The 0.159.2 captures keep the
+// session directory in `cwd`. The 0.166.0 captures (openai/codex#57198) put the Bash command's
+// resolved workdir there; apply_patch, SessionStart and Stop still carry the session directory.
+// Patch semantics marked [V] were checked against Codex 0.159.2's own apply_patch.
 
 const DIR = `${import.meta.dir}/../payloads/codex`;
 const PROJECT = "/home/user/project";
 const BAD = "payload-unrecognized";
 const payload = (name: string): string => readFileSync(`${DIR}/${name}`, "utf8");
 const json = (name: string): Record<string, unknown> => JSON.parse(payload(name)) as Record<string, unknown>;
+const patch166 = (json("pre-apply-patch-166.json").tool_input as { command: string }).command;
 const raw = (o: unknown): string => JSON.stringify(o);
+const tag = (id: string, command: string): string => `${id}~${createHash("sha256").update(command).digest("hex").slice(0, 12)}`;
+const S166 = "01a00000-0000-7000-8000-000000000166";
+const T166 = "01a00000-0000-7000-8000-000000000167";
+const session166 = (turn: string | null) => ({ id: S166, harness: "codex" as const, agentId: null, turnId: turn, interactive: false });
 const sid = (n: number): string => `00000000-0000-4000-8000-00000000000${n}`;
 const turn = (n: string): string => `00000000-0000-4000-8000-a00000000${n}`;
 const exec = (n: string): string => `exec-00000000-0000-4000-8000-c00000000${n}`;
@@ -74,6 +82,41 @@ describe("decode: captured payloads", () => {
         kind: "pre-command", command: { session: session(3, "301"), callId: `${exec("301")}~8642480c8ac8`, tool: "Bash", command: "printf 'n\\n' > n.txt", cwd: PROJECT },
       },
     },
+    // 0.166.0: Bash `cwd` is the resolved workdir. A subfolder is not a new project root; the gate walks up.
+    "pre-bash-workdir-nested.json": {
+      event: "pre", out: {
+        kind: "pre-command", command: {
+          session: session166(T166), callId: tag("call_nested000000000001", "printf 'n\\n' > notes.txt"), tool: "Bash",
+          command: "printf 'n\\n' > notes.txt", cwd: `${PROJECT}/nested`,
+        },
+      },
+    },
+    // A workdir outside the repo stays outside. It must not be rewritten to the session directory.
+    "pre-bash-workdir-outside.json": {
+      event: "pre", out: {
+        kind: "pre-command", command: {
+          session: session166(T166), callId: tag("call_outside00000000001", "printf 'out\\n' > out.txt"), tool: "Bash",
+          command: "printf 'out\\n' > out.txt", cwd: "/home/user/outside",
+        },
+      },
+    },
+    // apply_patch still reports the session directory. The patch itself names the nested file.
+    "pre-apply-patch-166.json": {
+      event: "pre", out: {
+        kind: "pre-edit", changes: [
+          {
+            session: session166(T166), callId: tag("call_patch0000000000001", patch166),
+            tool: "apply_patch", path: `${PROJECT}/nested/added.txt`, edit: { form: "full", content: "added\n" }, from: null,
+          },
+          {
+            session: session166(T166), callId: tag("call_patch0000000000001", patch166),
+            tool: "apply_patch", path: `${PROJECT}/marker.txt`, edit: { form: "hunks", hunks: [hunk(["root"], ["ROOT"])] }, from: null,
+          },
+        ],
+      },
+    },
+    "session-start-166.json": { event: "session-start", out: { kind: "session-start", session: session166(null), cwd: PROJECT } },
+    "stop-166.json": { event: "stop", out: { kind: "stop", session: session166(T166), cwd: PROJECT, reentry: false } },
     "stop.json": { event: "stop", out: { kind: "stop", session: session(1, "101"), cwd: PROJECT, reentry: false } },
     "stop-block-first.json": { event: "stop", out: { kind: "stop", session: session(4, "401"), cwd: PROJECT, reentry: false } },
     "stop-reentry.json": { event: "stop", out: { kind: "stop", session: session(4, "401"), cwd: PROJECT, reentry: true } },

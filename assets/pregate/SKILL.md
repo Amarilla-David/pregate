@@ -210,8 +210,8 @@ any existing pending candidate intact.
 When preview succeeds, show its complete review to the user and wait for human
 approval. Keep the proposed files. The active contract still governs checks;
 do not compile the preset or retry a denied edit to test an unapproved candidate.
-Use an absolute request path in Codex: its shell payload does not establish the
-execution directory.
+Codex 0.166 reports the command working directory. A relative request path
+resolves there; name a file outside that directory with an absolute path.
 `preset compile` validates source fixtures and refreshes the lock; it does not grant consent.
 
 ## Check changes and preserve behavior

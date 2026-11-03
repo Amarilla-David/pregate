@@ -53,8 +53,8 @@ test("blocked request review explains absolute paths in both compact and full gu
   expect(protectedRequest.compact).toContain("preset diagnose --json");
   expect(protectedRequest.compact.length).toBeLessThanOrEqual(256);
   for (const text of [protectedRequest.full, denyText([v(1, 1)], LOCK, 1, "retry", CTX).full]) {
-    expect(text).toContain("Use an absolute request path");
-    expect(text).toContain("Codex");
+    expect(text).toContain("name a file outside that directory with an absolute path");
+    expect(text).toContain("Codex 0.166");
     expect(text).toContain("pregate preset apply <request.json> --preview");
   }
 });

@@ -1090,23 +1090,37 @@ test("without a root there is no launcher to allow", () => {
 });
 
 
-// MH-29: Codex's payload does not carry the directory its shell runs in, so a relative write target
-// is unknown there; elsewhere it resolves against the payload's cwd.
+// Codex 0.166.0 puts the command workdir in `cwd` (openai/codex#57198). A relative target resolves
+// there. A subfolder still lands inside the same root; a directory outside does not become that root.
 describe("relative targets in Codex", () => {
   const payload = (file: string): { command: string; cwd: string } => {
     const p = JSON.parse(readFileSync(join(import.meta.dir, "payloads/codex", file), "utf8")) as { cwd: string; tool_input: { command: string } };
     return { command: p.tool_input.command, cwd: p.cwd };
   };
-  test("the captured redirect to a relative file", () => {
+  test("the captured redirect resolves against the command cwd", () => {
     const { command, cwd } = payload("pre-bash-redirect-write.json");
     expect(command).toBe("printf 'n\\n' > n.txt");
     const root = withLockAt(cwd);
-    expect(guard(command, cwd, { ...root, harness: "codex" })).toBe("shell-write");
+    // n.txt is outside src/, so the session-directory cwd of 0.159.2 and a default workdir agree.
+    expect(guard(command, cwd, { ...root, harness: "codex" })).toBeNull();
     expect(guard(command, cwd, root)).toBeNull();
+    expect(guard("printf 'n\\n' > src/n.txt", cwd, { ...root, harness: "codex" })).toBe("shell-write");
     expect(guard(payload("pre-bash.json").command, cwd, { ...root, harness: "codex" })).toBeNull();
   });
+  test("a subfolder workdir is the base, and an outside workdir does not retarget the root", () => {
+    const nested = payload("pre-bash-workdir-nested.json");
+    const outside = payload("pre-bash-workdir-outside.json");
+    const root = withLockAt("/home/user/project");
+    expect(nested.cwd).toBe("/home/user/project/nested");
+    expect(guard("printf 'n\\n' > n.txt", "/home/user/project/src", { ...root, harness: "codex" })).toBe("shell-write");
+    expect(guard("printf 'n\\n' > notes.txt", nested.cwd, { ...root, harness: "codex" })).toBeNull();
+    expect(outside.cwd).toBe("/home/user/outside");
+    expect(guard("printf 'out\\n' > /home/user/project/src/a.ts", outside.cwd, { ...root, harness: "codex" })).toBe("shell-write");
+    expect(guard("printf 'out\\n' > out.txt", outside.cwd, { ...root, harness: "codex" })).toBeNull();
+  });
   const cases: [string, Cause | null][] = [
-    ["echo x > notes.txt", "shell-write"],
+    ["echo x > notes.txt", null],
+    ["echo x > src/a.ts", "shell-write"],
     ["cat src/a.ts | wc -l", null],
     ["echo x > /tmp/a", null],
     ["cd /repo && echo x > README.md", null],

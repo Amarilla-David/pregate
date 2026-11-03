@@ -55,7 +55,12 @@ if (process.env[MARK] === "1") {
       expect(outside).toEqual([]);
 
       run(["bun", "install"], dest);
-      run(["bun", "test"], dest, { ...process.env, [MARK]: "1" });
+      // The parent job already runs the live Sigstore file after installing cosign.
+      // This clone checks that the tree installs and the default suite passes. A second
+      // sign-blob in the same job uploads to Rekor again; that upload failed CI after 72s.
+      const nested: NodeJS.ProcessEnv = { ...process.env, [MARK]: "1" };
+      delete nested.PREGATE_E2E_SIGSTORE;
+      run(["bun", "test"], dest, nested);
       const tsc = join(dest, "node_modules", ".bin", process.platform === "win32" ? "tsc.cmd" : "tsc");
       run([tsc], dest);
       const os = process.platform === "darwin" ? "darwin" : process.platform === "win32" ? "windows" : "linux";

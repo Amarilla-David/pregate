@@ -7,7 +7,10 @@ import { absolute, absoluteLocation, isObject, json, keys, type Payload, parse }
 // non-empty stderr, and every other failure of the hook runs the tool: decode refuses what it cannot
 // read exactly, and encode never relies on stdout before a tool runs.
 
-export const VERIFIED = "0.159.2";
+// Minimum supported Codex CLI. 0.166.0 is the first stable release whose PreToolUse `cwd` is the
+// command workdir (openai/codex#57198). The payload has no version field and the same shape as
+// 0.159.2, so an older CLI cannot be told apart and is not supported.
+export const VERIFIED = "0.166.0";
 
 const BAD: Cause = "payload-unrecognized";
 const EVENTS: Record<string, HookKind> = { PreToolUse: "pre", Stop: "stop", SessionStart: "session-start" };
@@ -66,8 +69,9 @@ function refuse(event: HookKind, p: Payload | null, env: HookEnv): Rejected {
   };
 }
 
-// The registration matches ^(apply_patch|Bash)$. Both inputs are closed: Codex sends no workdir [V],
-// so a new key may be one, and the paths of a command would be resolved against the wrong cwd.
+// The registration matches ^(apply_patch|Bash)$. `tool_input` is still only `{command}`: Codex puts the
+// resolved workdir in the top-level `cwd` (Bash), not in a second key. apply_patch has no tool cwd, so
+// its `cwd` stays the session directory. An extra tool_input key is still refused.
 function tool(p: Payload, session: Session, cwd: string, env: HookEnv): HookEvent | Rejected | null {
   const input = p.tool_input;
   if (typeof p.tool_name !== "string" || typeof p.tool_use_id !== "string" || !isObject(input)) return null;
@@ -87,9 +91,9 @@ function tool(p: Payload, session: Session, cwd: string, env: HookEnv): HookEven
 
 type Op = Pick<ProposedChange, "path" | "edit" | "from">;
 
-// MH-08: the grammar Codex 0.159.2 applies, without its leniency (a heredoc around the patch, a first
-// hunk without @@, whitespace around markers). What does not parse exactly is never read another
-// way: null. Checked against Codex's own apply_patch: lines split as Rust's lines() splits them, an
+// MH-08: the grammar checked against Codex 0.159.2's apply_patch, without its leniency (a heredoc
+// around the patch, a first hunk without @@, whitespace around markers). What does not parse exactly
+// is never read another way: null. Checked against Codex's own apply_patch: lines split as Rust's lines() splits them, an
 // empty line inside a hunk is an empty context line, and Add content ends in \n.
 function patch(text: string): Op[] | null {
   const lines = text.trim().split(/\r?\n/);

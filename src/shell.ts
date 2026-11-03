@@ -142,13 +142,13 @@ const INTERPRETERS = new Map<string, RegExp>([
 ]);
 
 // PowerShell separates paths with `\`, which a POSIX shell reads as an escape: a command with one
-// is read both ways, and either reading may deny. Codex's payload does not carry the directory its
-// shell runs in (MH-29), so there a relative path is unknown until a literal cd.
+// is read both ways, and either reading may deny. Codex 0.166.0 reports the command's resolved
+// workdir in `cwd` (openai/codex#57198), so a relative path resolves there, including a subfolder
+// or a directory outside the session. A non-literal `cd` still makes the directory unknown.
 export function guard(command: string, cwd: string, context: GuardContext & { machineOnly: boolean; harness: HarnessId }): Cause | null {
   const ctx: Ctx = { ...context, held: null, origin: cwd, guideInspection: isolatedGuideInspection(command), configurationInspection: isolatedConfigurationInspection(command),
     vars: new Map(), pendingProtected: new Set(), bound: new Set(), ciSet: false };
-  const start = ctx.harness === "codex" ? null : cwd;
-  const cause = script(command, start, ctx) ?? (command.includes("\\") ? script(command.replace(/\\(?=[\w.-])/g, "/"), start, ctx) : null);
+  const cause = script(command, cwd, ctx) ?? (command.includes("\\") ? script(command.replace(/\\(?=[\w.-])/g, "/"), cwd, ctx) : null);
   return cause ?? (ctx.held !== null && ctx.touched() ? ctx.held : null);
 }
 
