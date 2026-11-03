@@ -32,7 +32,7 @@ function run(bin: string, args: string[]): { ok: boolean; text: string } {
   return { ok: result.exitCode === 0, text: result.stdout.toString() + result.stderr.toString() };
 }
 
-function keyedSigner(dir: string, bin: string, signArgs: string[] = []): Signer {
+function keyedSigner(dir: string, bin: string): Signer {
   const keyDir = join(dir, "keys");
   mkdirSync(keyDir, { recursive: true });
   const pub = join(keyDir, "cosign.pub");
@@ -42,15 +42,14 @@ function keyedSigner(dir: string, bin: string, signArgs: string[] = []): Signer 
   // A probe catches a shim or cosign that cannot sign at all. The offline shim never leaves the machine.
   const probe = join(keyDir, "probe");
   writeFileSync(probe, "probe\n");
-  const sign = (file: string) => run(bin, ["sign-blob", "--yes", "--key", key, "--bundle", `${file}.bundle`, ...signArgs, file]);
-  const probed = sign(probe);
+  const probed = run(bin, ["sign-blob", "--yes", "--key", key, "--bundle", `${probe}.bundle`, probe]);
   if (!probed.ok) throw new Error(probed.text);
   return {
     kind: "cosign",
     binDir: dirname(bin),
     bin,
     sign(file) {
-      const signed = sign(file);
+      const signed = run(bin, ["sign-blob", "--yes", "--key", key, "--bundle", `${file}.bundle`, file]);
       if (!signed.ok) throw new Error(signed.text);
     },
     verify(file) {
@@ -103,7 +102,5 @@ export function prepareRealCosign(dir: string): Signer {
   if (!sigstoreE2EEnabled()) {
     throw new Error(`prepareRealCosign refused: set ${SIGSTORE_E2E_ENV}=1 to contact Sigstore`);
   }
-  // Keyed bundles are verified with the public key. Uploading each one to Rekor makes the
-  // fresh-clone suite, which runs this file again, fail when the log is slow or rate-limits.
-  return keyedSigner(dir, realCosignOnPath(), ["--tlog-upload=false"]);
+  return keyedSigner(dir, realCosignOnPath());
 }

@@ -27,6 +27,8 @@ const env = {
   ...process.env, HOME: home, USERPROFILE: home, LOCALAPPDATA: join(area, "data"), APPDATA: join(area, "config"),
   XDG_DATA_HOME: join(area, "data"), XDG_STATE_HOME: join(area, "state"), XDG_CONFIG_HOME: join(area, "config"),
   CODEX_HOME: join(home, ".codex"), GROK_HOME: join(home, ".grok"), TMPDIR: area, TMP: area, TEMP: area, CI: "1",
+  // `CI` alone does not approve. init --yes needs the unattended signal from the trust-boundary fix.
+  PREGATE_UNATTENDED_APPROVAL: "1",
 };
 
 function run(args: string[], raw = "", cwd = repo) {
@@ -67,7 +69,7 @@ beforeAll(() => {
   const preset = JSON.parse(readFileSync(presetPath, "utf8")) as { scope: { include: string[]; exclude: string[] } };
   preset.scope = { include: ["only-b/**"], exclude: [] };
   writeFileSync(presetPath, `${JSON.stringify(preset, null, 2)}\n`);
-  const compiled = run(["preset", "compile"], "", other);
+  const compiled = run(["preset", "compile", "--yes"], "", other);
   expect(compiled.code, compiled.text).toBe(0);
 });
 

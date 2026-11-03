@@ -7,9 +7,7 @@ import pkg from "../package.json" with { type: "json" };
 import { WINDOWS } from "../src/platform.ts";
 import { prepareRealCosign, SIGSTORE_E2E_ENV, type Signer } from "./signing-tool.ts";
 
-// Real keyed cosign. Contacts Sigstore's TUF root. Signatures are not uploaded to Rekor:
-// the fresh-clone suite runs this file again, and a second transparency-log upload failed CI.
-// GitHub Actions
+// Real keyed cosign. Contacts Sigstore (TUF, and Rekor when sign-blob uploads). GitHub Actions
 // sets PREGATE_E2E_SIGSTORE=1 after installing cosign. Local `bun test` skips this file.
 
 const enabled = process.env[SIGSTORE_E2E_ENV] === "1" && !WINDOWS;
