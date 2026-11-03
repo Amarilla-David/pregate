@@ -1,4 +1,4 @@
-import { existsSync, lstatSync, readdirSync, readFileSync, readlinkSync, read, realpathSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, readdirSync, readFileSync, readlinkSync, read, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import type { Files } from "./types.ts";
 import { slash } from "./paths.ts";
@@ -174,11 +174,21 @@ function realPathOf(existing: string, rest: string): string | null {
   }
 }
 
+// Missing is absent. A permission or loop error is not "no project": the caller denies.
+function nodeExists(path: string): boolean {
+  try { return statSync(path, { throwIfNoEntry: false }) !== undefined; }
+  catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === "ENOENT" || code === "ENOTDIR") return false;
+    throw error;
+  }
+}
+
 // The first directory from `abs` upward holding .pregate/preset.json that `accepted` takes (A20).
 export function findRoot(abs: string, accepted: (root: string) => boolean): string | null {
   for (let dir = abs; ; dir = dirname(dir)) {
-    if (existsSync(`${dir}/.pregate/preset.json`) && accepted(slash(dir))) return slash(dir);
-    if (existsSync(`${dir}/.git`)) return null;
+    if (nodeExists(`${dir}/.pregate/preset.json`) && accepted(slash(dir))) return slash(dir);
+    if (nodeExists(`${dir}/.git`)) return null;
     if (dirname(dir) === dir) return null;
   }
 }

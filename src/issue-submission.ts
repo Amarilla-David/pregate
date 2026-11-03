@@ -27,7 +27,8 @@ export function submissionOwner(dir: string): SubmissionOwner | null {
 }
 
 function ownerRecord(text: string): { pid?: unknown; host?: unknown; at?: unknown; phase?: unknown } | null {
-  try { return JSON.parse(text); } catch { return null; }
+  try { return JSON.parse(text); }
+  catch (error) { if (error instanceof SyntaxError) return null; throw error; }
 }
 
 function processState(pid: number): SubmissionOwner["state"] {

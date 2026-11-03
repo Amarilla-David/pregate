@@ -423,6 +423,10 @@ describe("message content", () => {
       expect(formText({ cause, line: null }, null, true).full.includes("PREGATE stopped this turn. Do not retry")).toBe(!human);
     }
     expect(formText({ cause: "syntax", line: 7 }, FILE).full).not.toContain("stopped this turn");
+    const shell = formText({ cause: "shell-write", line: null }, null);
+    checkPair(shell);
+    expect(shell.full).toContain("\nWhy: ");
+    expect(shell.full).toContain("\nFix: ");
   });
 
   test("all product text is English (D23)", () => {

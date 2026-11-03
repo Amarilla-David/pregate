@@ -7,9 +7,13 @@ export function pythonInspection(args: { text: string; literal: boolean }[]): bo
   return inspectsJson(tokens);
 }
 
+function inspectionRejected(error: unknown): boolean {
+  return error instanceof Error && error.message === "unsupported inspection";
+}
+
 function inspectsJson(tokens: string[]): boolean {
   try { return new JsonInspection(tokens).parse(); }
-  catch { return false; }
+  catch (error) { if (inspectionRejected(error)) return false; throw error; }
 }
 
 function tokenize(source: string): string[] | null {
@@ -128,7 +132,7 @@ export function nodeInspection(args: { text: string; literal: boolean }[]): bool
   const tokens = tokenize(args[1]!.text);
   if (tokens === null) return false;
   try { return new NodeInspection(tokens).parse(); }
-  catch { return false; }
+  catch (error) { if (inspectionRejected(error)) return false; throw error; }
 }
 
 const NODE_RESERVED = ["require", "JSON", "Object", "console", "const", "let", "var", "true", "false", "null", "undefined"];

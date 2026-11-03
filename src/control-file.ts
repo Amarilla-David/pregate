@@ -11,6 +11,12 @@ const MAX_FILE = 64 * 1024 * 1024;
 const NATIVE = [[0x7f, 0x45, 0x4c, 0x46], [0xfe, 0xed, 0xfa, 0xce], [0xfe, 0xed, 0xfa, 0xcf], [0xce, 0xfa, 0xed, 0xfe],
   [0xcf, 0xfa, 0xed, 0xfe], [0xca, 0xfe, 0xba, 0xbe], [0x4d, 0x5a]];
 
+// Bun.which remembers PATH from process start unless the call passes the current value.
+export function commandOnPath(name: string): string | null {
+  if (name === "" || name.includes("\0") || /[\\/]/.test(name)) return null;
+  return Bun.which(name, { PATH: process.env.PATH ?? process.env.Path ?? "" });
+}
+
 export function controlInFile(path: string | null): Cause | null {
   if (path === null || path === "") return null;
   let fd: number | null = null;

@@ -489,3 +489,76 @@ test("a hook that dies after a checkpoint cannot publish an allow", () => {
   }));
   expect({ code: inert.code, stdout: inert.stdout, stderr: inert.stderr }).toEqual({ code: 0, stdout: "", stderr: "" });
 });
+
+// Owner can chmod the file back. An explicit deny on Windows overrides the allow that the owner inherits.
+function seal(path: string): () => void {
+  if (process.platform === "win32") {
+    const who = Bun.spawnSync(["whoami"], { stdout: "pipe", stderr: "pipe" }).stdout.toString().trim();
+    const icacls = (...args: string[]) => {
+      const out = Bun.spawnSync(["icacls", path, ...args], { stdout: "pipe", stderr: "pipe" });
+      if (out.exitCode !== 0) throw new Error(`icacls ${args.join(" ")} exited ${out.exitCode}: ${out.stderr.toString()}`);
+    };
+    icacls("/deny", `${who}:(R)`);
+    return () => icacls("/remove:d", who);
+  }
+  chmodSync(path, 0o000);
+  return () => chmodSync(path, 0o644);
+}
+
+test("a non-literal script is denied and a literal script or read-only one-liner is not", () => {
+  const r = fresh();
+  const bin = join(r.dir, "bin");
+  mkdirSync(bin);
+  const scriptName = process.platform === "win32" ? "deploy.cmd" : "deploy";
+  const script = join(bin, scriptName);
+  writeFileSync(script, process.platform === "win32" ? "@echo pregate uninstall\r\n" : "#!/bin/sh\npregate uninstall\n");
+  if (process.platform !== "win32") chmodSync(script, 0o755);
+  put(r, "ok.sh", "#!/bin/sh\necho hello\n");
+  put(r, "run.sh", "#!/bin/sh\npregate uninstall\n");
+  r.env.PATH = `${bin}${delimiter}${r.env.PATH}`;
+  const a = claude(r);
+  ok(a.start(), "session");
+  for (const command of ['bash "$SCRIPT"', 'sh "$X"', 'bash < "$S"', 'python3 "$P"', 'node "$P"', 'make -f "$F"', "powershell -File $P"]) {
+    const out = a.bash(command);
+    denied(out, "shell-write");
+    expect(said(out)).toContain("Why:");
+    expect(said(out)).toContain("Fix:");
+  }
+  silent(a.bash('python3 -c "print(1 + 1)"'));
+  silent(a.bash('node -e "console.log(1)"'));
+  silent(a.bash("bash ./ok.sh"));
+  denied(a.bash("bash ./run.sh"), "hook-switch");
+  denied(a.bash("deploy"), "hook-switch");
+  writeFileSync(script, process.platform === "win32" ? "@echo hello\r\n" : "#!/bin/sh\necho hello\n");
+  silent(a.bash("deploy"));
+});
+
+test("malformed or unreadable status and lock JSON is denied", () => {
+  const r = fresh();
+  const a = claude(r);
+  ok(a.start(), "session");
+  const lock = join(r.dir, ".pregate/pregate.lock.json");
+  const preset = join(r.dir, ".pregate/preset.json");
+  const lockBytes = readFileSync(lock);
+  const presetBytes = readFileSync(preset);
+  const note = "src/domain/note.ts";
+  const clean = "export const note = 1;\n";
+  silent(a.write(note, clean));
+  writeFileSync(lock, "{");
+  denied(a.write(note, clean), "lock-stale");
+  writeFileSync(lock, lockBytes);
+  writeFileSync(preset, "{");
+  denied(a.write(note, clean), "lock-stale");
+  writeFileSync(preset, presetBytes);
+  silent(a.write(note, "export const note = 2;\n"));
+  for (const path of [lock, preset]) {
+    const restore = seal(path);
+    try {
+      expect(() => readFileSync(path)).toThrow();
+      denied(a.write(note, "export const note = 3;\n"), "could not evaluate");
+    } finally {
+      restore();
+    }
+  }
+  silent(a.write(note, "export const note = 4;\n"));
+});

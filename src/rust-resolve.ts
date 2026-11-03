@@ -95,7 +95,7 @@ function cargo(from: string, read: Read): { dir: string; config: Record<string, 
 
 function cargoToml(text: string): Record<string, unknown> | null {
   try { return Bun.TOML.parse(text) as Record<string, unknown>; }
-  catch { return null; }
+  catch (error) { if (error instanceof SyntaxError) return null; throw error; }
 }
 
 function moduleParts(suffix: string): string[] {

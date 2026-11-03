@@ -39,7 +39,11 @@ function engineCatalog(binary: string, version: string): CatalogEntry[] | null {
       || !Number.isSafeInteger(pack.checks) || pack.checks < 0 || !Array.isArray(pack.methodologies))) return null;
     return packs.map(pack => ({ ns: pack.ns, version: pack.version, checks: pack.checks,
       methodologies: pack.methodologies.map((method: { id: string }) => method.id) }));
-  } catch { return null; }
+  } catch (error) {
+    // Unknown history must not mark every available pack as new.
+    if (error instanceof SyntaxError || error instanceof TypeError || typeof (error as NodeJS.ErrnoException).code === "string") return null;
+    throw error;
+  }
 }
 
 export function catalogDiscovery(catalog: CatalogEntry[], previous: CatalogEntry[] | null, preset: Preset | null, recommended: { ns: string; methodologies: string[] }[]) {

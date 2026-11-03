@@ -1,0 +1,79 @@
+src/approval.ts	catch { return false; }
+src/approval.ts	catch { return null; }
+src/audit-cache.ts	catch { cache.stats.error = "Cache checkpoint unavailable; current analysis results remain valid."; }
+src/audit-cache.ts	catch { cache.stats.error = "Cache temporary-file cleanup unavailable."; }
+src/audit-cache.ts	catch { cache.stats.error = "Cache unavailable or invalid; analysis runs without reuse."; }
+src/audit-command.ts	catch (e) { return { code: 1, text: visible(`Promotion failed: ${(e as Error).message}`) }; }
+src/audit-command.ts	catch (e) { return { code: 2, text: `PREGATE audit incomplete: ${visible((e as Error).message)}` }; }
+src/audit-command.ts	catch { return true; }
+src/cli.ts	catch (e) { return { code: 1, text: (e as Error).message }; }
+src/cli.ts	catch (e) { return { code: 1, text: `Cannot replay fixture: ${(e as Error).message}` }; }
+src/compile.ts	catch { errors.push(`${label}: invalid JSON`); return undefined; }
+src/consent.ts	catch { return null; // a damaged record is not a registered project; its consent is checked on use }
+src/contract.ts	catch { const diff = contractDiff(null, after, bundled); return { warning: true, lines: [UNREADABLE, ...diff.lines], summary: [UNREADABLE, ...diff.summary] }; }
+src/contract.ts	catch { return CORE_ONLY(); /* An unreadable preset proves no bundled source. */ }
+src/control-file.ts	catch { return null; }
+src/demo-command.ts	catch (e) { return { code: 1, report: { schemaVersion: 1, mode: "isolated-owned-sample-automation", engine: VERSIONS, cleanup: true, attempts: run.attempts, error: String((e as Error).message).replaceAll(run.area, "<owned-demo>") } }; }
+src/dependency-cache.ts	catch { cache.stats.error = "Dependency cache checkpoint unavailable; resolution remains valid."; }
+src/dependency-cache.ts	catch { cache.stats.error = "Dependency cache temporary-file cleanup unavailable."; }
+src/dependency-cache.ts	catch { cache.stats.error = "Dependency cache unavailable; resolver reads will be rebuilt."; }
+src/disk.ts	catch { // Replacement decoding can locate a consenting root, but never admits a malformed input. return { bytes, text: bytes.toString("utf8"), invalid: true, timedOut }; }
+src/dispute-command.ts	catch (error) { return { code: 1, text: `Cannot draft dispute: ${(error as Error).message}` }; }
+src/feedback-command.ts	catch (e) { return { code: 1, text: "Cannot use feedback: " + (e as Error).message + ". Draft retained." }; }
+src/fitness-command.ts	catch (e) { return { code: 1, text: `Fitness verification incomplete: ${visible((e as Error).message)}` }; }
+src/fitness-command.ts	catch (e) { return { hash: "", error: (e as Error).message }; }
+src/fitness-command.ts	catch (e) { return { receipt: null, error: `Cannot read fitness evidence: ${(e as Error).message}` }; }
+src/fixtures.ts	catch (e) { return (e as Error).message; }
+src/fixtures.ts	catch (e) { return [`${(e as Error).message} (${g} grammar)`]; }
+src/fixtures.ts	catch (e) { return `FAIL ${checkId} ${c.name}: ${(e as Error).message}`; }
+src/fixtures.ts	catch (e) { return { valid: false, ok: false, lines: [(e as Error).message] }; }
+src/fixtures.ts	catch { return "missing or invalid JSON"; }
+src/git-changes.ts	catch { return null; }
+src/guided-review.ts	catch { return null; // an unreadable lock: every proposed layer is new to the reviewer }
+src/guided-update.ts	catch (e) { return recovery(`Update could not finish: ${(e as Error).message}`); }
+src/guided.ts	catch (e) { errors.push(`Cannot inventory this project: ${(e as Error).message}`); return {}; }
+src/guided.ts	catch (e) { errors.push(packInferenceError(e)); return []; }
+src/guided.ts	catch (e) { errors.push(packInferenceError(e)); return null; }
+src/guided.ts	catch (e) { return { code: 1, text: `Contract application could not finish: ${(e as Error).message}. A write may have completed; inspect preset diagnose --json, fix the filesystem problem and prepare a fresh review. Protection was not disabled.` }; }
+src/guided.ts	catch (e) { return { code: 1, text: visible(`Guided action could not finish: ${(e as Error).message}\nYour valid contract and protection were not reset. Inspect guide --json or preset diagnose; correct the named cause and retry.`) }; }
+src/harness/wire.ts	catch { return null; // not JSON: the payload is unrecognized, a known cause }
+src/inertia.ts	catch { return undefined; // invalid JSON is a known state: callers treat it as absent }
+src/init.ts	catch (e) { return { code: 1, text: visible(`Initialization failed: ${(e as Error).message}. Run pregate status before retrying.`) }; }
+src/issue-command.ts	catch (e) { return { code: 1, text: (e as Error).message }; }
+src/issue-command.ts	catch (e) { return { code: 1, text: `Cannot report finding: ${(e as Error).message}. Draft retained; if submission began, check GitHub before retrying.` }; }
+src/issue-submission.ts	catch (error) { return (error as NodeJS.ErrnoException).code === "ESRCH" ? "dead" : "unknown"; }
+src/lock-cache.ts	catch { return null; }
+src/lock-cache.ts	catch { return null; }
+src/lock-cache.ts	catch { return null; }
+src/loosening.ts	catch { return false; }
+src/machine.ts	catch (e) { if (i.wrote) save(i.target, i.before); return fail(`Codex: ${(e as Error).message}. Left ${i.file} unchanged; rerun pregate setup.`); }
+src/machine.ts	catch (e) { return (e as Error).message; }
+src/machine.ts	catch (e) { return (e as NodeJS.ErrnoException).code === "EPERM"; } // EPERM: alive, owned by another user
+src/machine.ts	catch (e) { return fail(`Codex: ${(e as Error).message}.`); }
+src/machine.ts	catch { return false; // an unreadable .git pointer: its hooks fail closed on their own; nothing to review }
+src/main.ts	catch { return false; }
+src/pack-command.ts	catch (e) { return { code: 1, text: visible(`Cannot prepare project update: ${(e as Error).message}. Nothing applied; inspect pregate preset diagnose --json.`) }; }
+src/pack-command.ts	catch (e) { return { code: 1, text: visible(`Pack operation failed: ${(e as Error).message}. Inspect preset/status before retrying.`) }; }
+src/pack-command.ts	catch (e) { return { errors: [visible(`Cannot prepare pack selection: ${(e as Error).message}. Nothing activated; correct the selection and retry.`)] }; }
+src/pack-command.ts	catch { return "unreadable: review will require the complete candidate"; }
+src/project-updates.ts	catch (e) { return { error: `${JSON.stringify(path)}: ${(e as Error).message}` }; }
+src/project-updates.ts	catch { return ""; }
+src/register.ts	catch { return s; }
+src/report-command.ts	catch { return { ...result, status: "invalid", reason: "Snapshot metadata cannot be read." }; }
+src/resolve.ts	catch { return null; }
+src/rules-draft-command.ts	catch (e) { return `Cannot read pattern ${file}: ${(e as Error).message}`; }
+src/scan-command.ts	catch (e) { return { code: 1, text: visible(`Scan failed: ${(e as Error).message}. Project and consent unchanged.`) }; }
+src/schema.ts	catch { return false; }
+src/session-command.ts	catch (error) { return { code: 1, text: visible(`Session baseline unchanged: ${(error as Error).message}`) }; }
+src/state.ts	catch { // Without git this is best effort: an unreadable folder or file ends that folder's walk, // keeping what it already read, and the rest of the tree is still walked. return; }
+src/status.ts	catch (e) { errors.push(`Cannot read lock: ${(e as Error).message}`); return null; }
+src/status.ts	catch (e) { errors.push(`Cannot read preset: ${(e as Error).message}`); return null; }
+src/status.ts	catch (e) { errors.push(`Cannot verify local consent: ${(e as Error).message}`); return false; }
+src/status.ts	catch (e) { return { valid: false, errors: [(e as Error).message], lock: null }; }
+src/status.ts	catch { return false; // an engine image that cannot be started does not admit the lock }
+src/status.ts	catch { return null; // an unreadable pending record is reported by approve itself }
+src/storage-command.ts	catch (error) { return { code: 1, text: "Storage operation failed: " + (error as Error).message + ". Inspect storage before retrying; an interrupted apply may have completed part of the approved operation." }; }
+src/storage-recovery.ts	catch (error) { return (error as NodeJS.ErrnoException).code === "ESRCH" ? "dead" : "unknown"; }
+src/storage-recovery.ts	catch { return undefined; }
+src/supervisor.ts	catch (e) { if (!active(run.raw, run.data)) return { exit: 0, stdout: "", stderr: "" }; return launcherFailure(run.kind, run.harness === "claude-code", run.raw, (e as Error).message, run.harness); }
+src/workspace.ts	catch { return null; }

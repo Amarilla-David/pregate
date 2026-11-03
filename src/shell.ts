@@ -35,6 +35,8 @@ export interface GuardContext {
   configurationRead?: (abs: string) => boolean;
   // Reads one literal script for pregate control commands. The shell layer supplies it; the core does not open files.
   readControlFile?: (path: string) => Cause | null;
+  // Resolves a bare command name on PATH. The shell layer supplies it; the core does not read the environment.
+  commandPath?: (name: string) => string | null;
   // The files a git command that moves history or the worktree would change (`args` from the
   // subcommand on), or null when they cannot be known. Without it such a command may write anything.
   gitChanges?: (cwd: string, args: string[]) => GitChanges | null;
@@ -53,6 +55,18 @@ const ALWAYS: ReadonlySet<Cause> = new Set<Cause>(["protected-path", "hook-switc
 
 function controlFile(ctx: Ctx, path: string | null): Cause | null {
   return path === null || path === "" ? null : ctx.readControlFile?.(path) ?? null;
+}
+
+// A path command (`./run`, `scripts/deploy.sh`) is read where it is spelled. A bare name is resolved
+// on PATH and, when that file is a script, scanned the same way. A native executable is not a script.
+function namedScript(head: Word, name: string, cwd: string | null, ctx: Ctx): Cause | null {
+  if (/[\\/]/.test(head.text) || /\.(?:sh|bash|zsh|ksh)$/i.test(name)) {
+    const cause = controlFile(ctx, resolve(cwd, head.text));
+    if (cause !== null) return cause;
+  }
+  if (/[\\/]/.test(head.text) || ctx.commandPath === undefined || head.text === "" || head.text.includes("\0")) return null;
+  const found = ctx.commandPath(head.text);
+  return found === null || found === "" ? null : controlFile(ctx, found);
 }
 
 // `literal`: no expansion happens, so `text` is the exact argument. `subs`: nested scripts
@@ -670,9 +684,11 @@ function simple(cmd: Command, cwd: string | null, ctx: Ctx, pipedIn: boolean): C
   if (usedVar && (precheck || engineInspection)) ctx.pendingProtected.delete(usedVar);
   // A redirection from a literal file keeps the path: a shell or an interpreter that runs its stdin
   // reads that file for control commands. The text itself is not analyzed. null: the terminal.
+  // A non-literal `< "$S"` is not a file this process can read, so the script is unknown.
   const input = redirs.findLast((r) => r.op === "<" || DATA_REDIRS.has(r.op));
   const fromFile = input?.op === "<" && input.target.literal ? resolve(cwd, input.target.text) : null;
-  const stdin = input === undefined ? (pipedIn ? UNKNOWN : null) : input.stdin ?? (fromFile === null ? UNREAD : { ...UNREAD, file: fromFile });
+  const unread = input?.op === "<" && !input.target.literal ? UNKNOWN : UNREAD;
+  const stdin = input === undefined ? (pipedIn ? UNKNOWN : null) : input.stdin ?? (fromFile === null ? unread : { ...UNREAD, file: fromFile });
   const outputs = redirs.filter((r) => WRITE_REDIRS.has(r.op) && !(r.op === ">&" && /^(\d+-?|-)$/.test(r.target.text)));
   return run(words, cwd, ctx, stdin) ?? writes(outputs.map((r) => r.target), cwd, ctx.inScope);
 }
@@ -938,12 +954,8 @@ function invoke(head: Word, args: Word[], cwd: string | null, ctx: Ctx, stdin: W
   const interpreter = name.replace(/^python[\d.]*$/, "python");
   if (INTERPRETERS.has(interpreter)) return interpret(interpreter, args, cwd, ctx, stdin);
   if (name === "make" || name === "gmake" || name === "mingw32-make") return makefile(args, cwd, ctx) ?? writes(targets(name, args), cwd, ctx.inScope);
-  // A literal script run by path: `./run.sh`, `./run` (no suffix), `scripts/deploy`. A bare
-  // command name is looked up on PATH and not read.
-  if (head.literal && (/\.(?:sh|bash|zsh|ksh)$/i.test(name) || /[\\/]/.test(head.text))) {
-    const script = controlFile(ctx, resolve(cwd, head.text));
-    if (script !== null) return script;
-  }
+  const scripted = head.literal ? namedScript(head, name, cwd, ctx) : null;
+  if (scripted !== null) return scripted;
   if (COPIES.has(name)) return copies(name === "copy" || name === "move" ? args.filter((w) => !/^\/-?[yabvndz]$/i.test(w.text)) : args, cwd, ctx);
   if (SESSIONS.has(name)) return "shell-write";
   if (EDITORS.has(name)) return stdin === null ? "shell-write" : first([...args, stdin], (w) => code(w, cwd, ctx));
@@ -1194,7 +1206,7 @@ function find(args: Word[], cwd: string | null, ctx: Ctx): Cause | null {
 }
 
 // sh -c '<literal>' is analyzed again; a script from stdin too. A literal script file is read
-// only for pregate control commands.
+// for pregate control commands. A non-literal script argument is shell-write (`bash "$SCRIPT"`).
 function shell(args: Word[], cwd: string | null, ctx: Ctx, stdin: Word | null): Cause | null {
   // `+o` unsets what `-o` sets: both take a value.
   const options = args.map((w) => (w.text.startsWith("+") ? { ...w, text: `-${w.text.slice(1)}` } : w));
@@ -1205,8 +1217,9 @@ function shell(args: Word[], cwd: string | null, ctx: Ctx, stdin: Word | null): 
   if (command !== undefined) return inline(command[1] ?? operands[0], cwd, ctx);
   // -s and `-` read the script from stdin and take the operands as its arguments.
   const fromStdin = operands.length === 0 || operands[0]!.text === "-" || flags.some(([flag]) => flag === "-s");
-  // A literal script is read for pregate control commands. A non-literal path is not (`bash "$SCRIPT"`).
+  // A literal script is read for pregate control commands. A non-literal one is not (`bash "$SCRIPT"`).
   const script = operands[0];
+  if (!fromStdin && script !== undefined && script.text !== "-" && !script.literal) return "shell-write";
   if (!fromStdin && script?.literal && script.text !== "-") {
     const cause = controlFile(ctx, resolve(cwd, script.text));
     if (cause !== null) return cause;
@@ -1221,7 +1234,7 @@ function shell(args: Word[], cwd: string | null, ctx: Ctx, stdin: Word | null): 
 }
 
 // `make approve` runs the recipe, which the command line does not contain. A literal Makefile is
-// scanned; an unreadable or non-literal `-f` path is not treated as proof either way.
+// scanned. A non-literal `-f` path is shell-write: the file it names cannot be read.
 function makefile(args: Word[], cwd: string | null, ctx: Ctx): Cause | null {
   let named: Word | undefined;
   for (let i = 0; i < args.length; i++) {
@@ -1230,7 +1243,7 @@ function makefile(args: Word[], cwd: string | null, ctx: Ctx): Cause | null {
     if (attached !== null) named = { ...word, text: attached[1]! };
     else if (word.literal && (word.text === "-f" || word.text === "--file" || word.text === "--makefile")) named = args[i + 1];
   }
-  if (named !== undefined && !named.literal) return null;
+  if (named !== undefined && !named.literal) return "shell-write";
   const paths = named !== undefined ? [resolve(cwd, named.text)] : ["Makefile", "makefile", "GNUmakefile"].map((name) => resolve(cwd, name));
   return first(paths, (path) => controlFile(ctx, path));
 }
@@ -1247,6 +1260,7 @@ function powershell(args: Word[], cwd: string | null, ctx: Ctx, stdin: Word | nu
     if ("encodedcommand".startsWith(param) || param === "ec") return "shell-write";
     if (param === "file" || param === "f") {
       const target = args[i + 1];
+      if (target !== undefined && !target.literal) return "shell-write";
       return target?.literal ? controlFile(ctx, resolve(cwd, target.text)) : null;
     }
     if ("command".startsWith(param)) {
@@ -1301,7 +1315,8 @@ function interpret(name: string, args: Word[], cwd: string | null, ctx: Ctx, std
   // Inline code and a literal script file: `python3 -c "subprocess.run(['pregate','approve'...])"`,
   // `node -e`, `perl -e`, `ruby -e`, and `python3 attack.py`.
   const control = first(program, (w) => w.literal ? (w.file === undefined ? pregateControlCause(w.text) : controlFile(ctx, w.file)) : null)
-    ?? (!inlined && operands[0]?.literal && !["-", "repl"].includes(operands[0].text) ? controlFile(ctx, resolve(cwd, operands[0].text)) : null);
+    ?? (!inlined && operands[0] !== undefined && !["-", "repl"].includes(operands[0].text)
+      ? (operands[0].literal ? controlFile(ctx, resolve(cwd, operands[0].text)) : "shell-write") : null);
   if (control !== null) return control;
   // Code that reads its arguments (`sys.argv[1]`, `process.argv`, `@ARGV`) may write the files they
   // name; other code only reads them (`perl -ne 'print' src/a.ts`).

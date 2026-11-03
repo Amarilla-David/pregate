@@ -84,7 +84,7 @@ function changesResolution(rel: string, context: DependencyContext): boolean {
   // (for example an empty block); never prune a possible resolver configuration.
   const config = (text: string): boolean => {
     try { const value: unknown = Bun.JSONC.parse(text); return value !== null && typeof value === "object" && !Array.isArray(value); }
-    catch { return false; }
+    catch (error) { if (error instanceof SyntaxError) return false; throw error; }
   };
   if (config(current) || config(before)) return true;
   const after = context.importsOf!(rel, current), old = context.importsOf!(rel, before);
