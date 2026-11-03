@@ -176,8 +176,12 @@ export function samePlace(a: string, b: string): boolean {
     };
     const left = id(a), right = id(b);
     return left !== "" && left === right;
-  } catch {
-    return false;
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    // A path that is not there is a different place. A permission or loop error is not
+    // "different": the caller denies instead of treating an unreadable directory as unmatched.
+    if (code === "ENOENT" || code === "ENOTDIR") return false;
+    throw error;
   }
 }
 
