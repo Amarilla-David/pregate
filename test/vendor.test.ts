@@ -21,7 +21,18 @@ for (const dir of readdirSync("vendor")) {
   });
 }
 
-test("THIRD_PARTY_NOTICES carries the pinned Bun runtime and the JavaScriptCore LGPL note", () => {
-  expect(notices).toContain(`Bun runtime ${readFileSync(".bun-version", "utf8").trim()}`);
-  expect(notices).toMatch(/JavaScriptCore[^]*LGPL/);
+test("THIRD_PARTY_NOTICES carries the pinned Bun runtime and the JavaScriptCore LGPL terms", () => {
+  const version = readFileSync(".bun-version", "utf8").trim();
+  expect(notices).toContain(`Bun runtime ${version}`);
+  expect(notices).toContain(`https://github.com/oven-sh/bun/tree/bun-v${version}`);
+  expect(notices).toContain("GNU LIBRARY GENERAL PUBLIC LICENSE");
+  expect(notices).toContain("Version 2, June 1991");
+  expect(notices).toContain("END OF TERMS AND CONDITIONS");
+  expect(notices).toContain("d6375c72affe0f70222cdcb45012b10f0bf3a9d5");
+  expect(notices).toContain("https://github.com/oven-sh/WebKit/tree/d6375c72affe0f70222cdcb45012b10f0bf3a9d5");
+  expect(notices).toContain("Written offer");
+  expect(notices).toContain("three years");
+  expect(notices).toContain("bun sync-webkit-source");
+  expect(notices).toContain("section 6(b)");
+  expect(notices).not.toContain("pending owner review");
 });

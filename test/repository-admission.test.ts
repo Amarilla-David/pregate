@@ -47,6 +47,11 @@ function put(path: string, text: string): void {
   writeFileSync(path, text);
 }
 
+function git(cwd: string, ...args: string[]): void {
+  const result = Bun.spawnSync(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], { cwd, stderr: "pipe" });
+  if (result.exitCode !== 0) throw new Error(result.stderr.toString());
+}
+
 function project(preset = actualPreset, lockEnding = "LF") {
   const root = join(work, "repo");
   put(join(root, "src/decide.ts"), "export const value = 1;\n");
@@ -57,6 +62,9 @@ function project(preset = actualPreset, lockEnding = "LF") {
   expect(core).toHaveLength(68);
   expect(core.every((rule) => rule.severity === "deny" && rule.enforcement === "enforce")).toBe(true);
   put(join(root, LOCK), lockEnding === "CRLF" ? result.text.replace(/\n/g, "\r\n") : result.text);
+  git(root, "init", "-q");
+  git(root, "add", ".");
+  git(root, "commit", "-qm", "base");
   enable(root);
   const session: Session = { id: `admission-${turn}`, harness: "claude-code", turnId: "turn", agentId: null, interactive: false };
   onSessionStart({ kind: "session-start", session, cwd: root });

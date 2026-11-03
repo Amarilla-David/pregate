@@ -299,6 +299,8 @@ function installRelease(p: Paths, v: string, tar: string, dir: string): string |
       PS_MODULES + `Expand-Archive -LiteralPath ${psQuote(join(dir, tar))} -DestinationPath ${psQuote(join(dir, "x"))}`]
       : ["tar", "-xzf", join(dir, tar), "-C", dir, ENGINE_FILE];
     if (spawn(extract).exit !== 0) return `${tar} could not be extracted; nothing installed.`;
+    // Notices are optional for an archive that predates them. A current archive has both.
+    if (!WINDOWS) spawn(["tar", "-xzf", join(dir, tar), "-C", dir, "LICENSE", "THIRD_PARTY_NOTICES"]);
     return installEngine(p, join(dir, WINDOWS ? "x" : "", ENGINE_FILE), v);
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -736,7 +738,17 @@ function installEngine(p: Paths, from: string, v: string): string | null {
     return `Engine ${v} does not start (exit ${r.exit}: ${clip(r.stdout + r.stderr) || "no output"}); not installed.`;
   }
   renameReleased(tmp, target);
+  accompanyEngine(from, dirname(target));
   return null;
+}
+
+// The release archive carries LICENSE and THIRD_PARTY_NOTICES beside the binary. Copy them next
+// to the installed engine so the copy a person runs still has the JavaScriptCore notice.
+export function accompanyEngine(from: string, dir: string): void {
+  for (const name of ["LICENSE", "THIRD_PARTY_NOTICES"]) {
+    const source = join(dirname(from), name);
+    if (existsSync(source)) copyFileSync(source, join(dir, name));
+  }
 }
 
 // Engine copies an interrupted install left as <data>/<v>/pregate.<pid>.tmp (about 100 MB each). A copy

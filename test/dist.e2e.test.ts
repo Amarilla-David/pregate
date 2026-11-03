@@ -357,6 +357,13 @@ describe("the built release", () => {
     expect(readFileSync(join(DIST, "install.sh"), "utf8")).toBe(readFileSync(INSTALL, "utf8"));
     const listed = Bun.spawnSync(["tar", "-tzf", join(DIST, tar)]).stdout.toString().split("\n").filter(Boolean);
     expect(listed).toEqual(["pregate", "LICENSE", "THIRD_PARTY_NOTICES", "skills/pregate/SKILL.md"]);
+    const notice = Bun.spawnSync(["tar", "-xOzf", join(DIST, tar), "THIRD_PARTY_NOTICES"], { stdout: "pipe", stderr: "pipe" });
+    expect(notice.exitCode, notice.stderr.toString()).toBe(0);
+    const text = notice.stdout.toString();
+    for (const phrase of [
+      "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991", "END OF TERMS AND CONDITIONS",
+      "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
+    ]) expect(text).toContain(phrase);
   });
 
   test("the bootstrap verifies install.sh and the tar and hands over to the binary", () => {

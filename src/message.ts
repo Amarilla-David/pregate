@@ -65,7 +65,9 @@ const CAUSE_EN: Record<Cause, string> = {
   "version-mismatch": "PREGATE could not evaluate this call: the engine or core version differs from the one the preset pins.",
   "snapshot-missing": "PREGATE could not evaluate this call: the session snapshot is missing.",
   "state-io": "PREGATE could not evaluate this call: its state is busy or unwritable. Run `pregate storage inspect`; the human can review abandoned-owner recovery with `pregate storage recover --preview`, or check permissions and disk space.",
-  "git-failed": "PREGATE could not evaluate this call: git failed or this directory is not in a git repository.",
+  "git-missing": "PREGATE could not evaluate this call: git is not on PATH.",
+  "git-not-repository": "PREGATE could not evaluate this call: this directory is not a Git repository, or its .git directory was removed.",
+  "git-error": "PREGATE could not evaluate this call: git returned an error.",
   "regex-limit": "PREGATE could not evaluate this call: the regex of a rule hit the backtracking limit of the regex engine on this file.",
   "contract-loosened": "the contract enforces less than it did when the session started, and no human approval of that change was recorded. Do not loosen the contract; propose a request for human review instead.",
 };
@@ -81,6 +83,9 @@ const WHY: Record<Cause | Halt, string> = {
   "version-mismatch": "the engine or core version differs from the preset; install the pinned engine or review `pregate update --project --preview` for one complete migration.",
   "snapshot-missing": "the session snapshot is missing; start a new session.",
   "state-io": "cannot write PREGATE state; run `pregate storage inspect`, check permissions/available disk space, and review abandoned-owner recovery with `pregate storage recover --preview`.",
+  "git-missing": "git is not on PATH. Fix: install Git and open a new terminal so `git` is on PATH.",
+  "git-not-repository": "this directory is not a Git repository, or its .git directory was removed. Fix: run `git init` here, or restore the removed .git directory. For a scratch directory that should not be gated, ask the human to run `pregate disable`.",
+  "git-error": "git returned an error. Fix: run `git status` in this directory and repair the Git error. For a scratch directory that should not be gated, ask the human to run `pregate disable`.",
   "regex-limit": "a rule regex hit its backtracking limit; rewrite it without repeated groups and run `pregate preset compile`.",
   "contract-loosened": "the contract was loosened during the session without a recorded human approval; the human restores it (git checkout -- .pregate) or applies the change through a reviewed preview and their own approval.",
 };
@@ -166,6 +171,7 @@ export function formText(f: Form, rel: string | null, halt = false): Text {
     : "If you believe this is a false positive, stop and tell the user (cause and path).";
   const help = detail === null && ["lock-stale", "version-mismatch"].includes(f.cause) ? `\n${WHY[f.cause]} If an old hook rejects new helpers, the human can type ! pregate update inside the harness to install the current engine and prepare one review. Compilation alone does not migrate version pins.`
     : f.cause === "state-io" ? "\n" + WHY["state-io"]
+    : f.cause === "git-missing" || f.cause === "git-not-repository" || f.cause === "git-error" ? "\n" + WHY[f.cause]
     : f.cause === "contract-loosened" ? `${f.detail ? `\n${f.detail}` : ""}\n${WHY["contract-loosened"]}` : f.cause === "protected-path"
     ? "\nPREGATE configuration, rule sources, harness settings and state are protected. Inspect fixed harness configuration files with one literal cat -- /absolute/path/to/settings.json command, without variables, loops, filters, wrappers, pipelines or redirections. Inspect the editable contract with `pregate preset show --json` and diagnose versions/schema with `pregate preset diagnose --json`; do not run a source pre-check on policy files. Read the request format with `pregate preset request-schema`. Propose a preset change in .pregate/requests/<name>.json for human review. Codex 0.166 reports the command working directory, so a relative path resolves there; name a file outside that directory with an absolute path. Validate and prepare its review with `pregate preset apply <request.json> --preview`; this does not activate it. Only the human approves."
     : f.cause === "shell-write"

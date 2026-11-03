@@ -159,7 +159,7 @@ function sample(rand: () => number): Violation[] {
 
 const SAFE_SPAN = /^[A-Za-z0-9@/._$[\]-]{0,80}$/;
 const COMMAND_SPAN =
-  /^(\/home\/user\/project\/\.pregate\/bin\/pregate|pregate) (check --stdin --path ([A-Za-z0-9@/._-]{1,300}|<file>) --format agent|explain [A-Za-z0-9@/._$-]{1,80}|preset (compile|show(?: --json)?|diagnose --json|request-schema|apply <request.json> --preview)|update --project --preview|update --engine <version>|dispute --last|issue draft --last|storage inspect|storage recover --preview|check)$/;
+  /^(git init|git status|pregate disable|(\/home\/user\/project\/\.pregate\/bin\/pregate|pregate) (check --stdin --path ([A-Za-z0-9@/._-]{1,300}|<file>) --format agent|explain [A-Za-z0-9@/._$-]{1,80}|preset (compile|show(?: --json)?|diagnose --json|request-schema|apply <request.json> --preview)|update --project --preview|update --engine <version>|dispute --last|issue draft --last|storage inspect|storage recover --preview|check))$/;
 
 function checkText(out: string, max: number): void {
   expect(out.length).toBeLessThanOrEqual(max);
@@ -427,6 +427,10 @@ describe("message content", () => {
     checkPair(shell);
     expect(shell.full).toContain("\nWhy: ");
     expect(shell.full).toContain("\nFix: ");
+    expect(formText({ cause: "git-missing", line: null }, null).full).toContain("Fix: install Git");
+    expect(formText({ cause: "git-not-repository", line: null }, null).full).toContain("Fix: run `git init`");
+    expect(formText({ cause: "git-not-repository", line: null }, null).full).toContain("restore the removed .git");
+    expect(formText({ cause: "git-error", line: null }, null).full).toContain("pregate disable");
   });
 
   test("all product text is English (D23)", () => {
@@ -434,7 +438,7 @@ describe("message content", () => {
     expect(denyText([v(1, 1)], LOCK, 1, "retry", CTX).full).not.toMatch(spanish);
     for (const cause of Object.keys(FIXABLE_BY) as Cause[]) expect(formText({ cause, line: 1 }, FILE).full).not.toMatch(spanish);
     for (const key of ["no-preset", "no-git", "lock-stale", "halt", "stop-cap", "start-failed", "ask", "approved"] as NoticeKey[]) {
-      expect(notice(key, { reason: "git-failed" })).not.toMatch(spanish);
+      expect(notice(key, { reason: "git-not-repository" })).not.toMatch(spanish);
     }
   });
 
@@ -449,6 +453,9 @@ describe("message content", () => {
       [{ reason: "version-mismatch" }, "the engine or core version"],
       [{ reason: "snapshot-missing" }, "start a new session"],
       [{ reason: "state-io" }, "available disk space"],
+      [{ reason: "git-missing" }, "install Git"],
+      [{ reason: "git-not-repository" }, "git init"],
+      [{ reason: "git-error" }, "pregate disable"],
       [{ reason: "payload-unrecognized" }, "this PREGATE version knows of the harness"],
       [{ reason: "regex-limit", path: FILE }, "PREGATE cannot evaluate at src/billing/invoice.ts: a rule regex hit its backtracking limit"],
     ];

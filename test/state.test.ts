@@ -259,14 +259,14 @@ describe("snapshots", () => {
     expect(ensureSnapshot("s-pre", empty, null)).toEqual(expect.objectContaining({ root: empty, head: null, start: false, dirty: {}, at: expect.any(Number) }));
   });
 
-  test("outside a repository a snapshot is created without git head", () => {
+  test("outside a repository the first contact is denied and no snapshot is stored", () => {
     mkdirSync(`${base}/plain/.pregate`, { recursive: true });
-    expect(ensureSnapshot("s-pre", `${base}/plain`, null)).toEqual(expect.objectContaining({ root: `${base}/plain`, head: null, start: false, dirty: {}, at: expect.any(Number) }));
-    expect(snapshot("s-pre", `${base}/plain`)).not.toBeNull();
+    expect(ensureSnapshot("s-pre", `${base}/plain`, null)).toBe("git-not-repository");
+    expect(snapshot("s-pre", `${base}/plain`)).toBeNull();
   });
 
   test("roots lists every root the session touched", () => {
-    expect(roots("s-pre")).toEqual([root, empty, `${base}/plain`].sort());
+    expect(roots("s-pre")).toEqual([root, empty].sort());
     expect(roots("s-never")).toEqual([]);
   });
 

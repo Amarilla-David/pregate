@@ -44,6 +44,8 @@ try {
   const binary = join(area, "data/pregate", VERSIONS.engine, ENGINE_FILE);
   const expected = `pregate ${VERSIONS.engine} (core ${VERSIONS.core})`;
   if ((await run([binary, "--version"])).trim() !== expected) throw new Error("Installed candidate version differs from source version");
+  assertNotices(noticeText(archive), archive);
+  assertNotices(readFileSync(join(area, "data/pregate", VERSIONS.engine, "THIRD_PARTY_NOTICES"), "utf8"), "installed engine");
   for (const feature of ["stop", "storage", "feedback", "languages", "fitness"]) {
     console.log("Verify candidate " + target + ": " + feature);
     console.log((await run([process.execPath, join(import.meta.dir, `smoke-${feature}.ts`), binary])).trim());
@@ -51,3 +53,19 @@ try {
   console.log((await run([binary, "rules", "test", "docs/examples/docs-to-pack"])).trim());
   console.log(JSON.stringify({ target, archiveSha256: digest, bootstrap: "verified candidate archive and installer", checks: "Stop/repair, storage/recovery, feedback, languages, bounded project fitness and documentation pack", interaction: "native production protocol; actual harness UI not certified", publication: "none" }));
 } finally { rmSync(area, { recursive: true, force: true }); }
+
+const NOTICE_PHRASES = [
+  "GNU LIBRARY GENERAL PUBLIC LICENSE", "Version 2, June 1991", "END OF TERMS AND CONDITIONS",
+  "d6375c72affe0f70222cdcb45012b10f0bf3a9d5", "Written offer", "three years", "section 6(b)", "bun sync-webkit-source",
+];
+
+function assertNotices(text: string, where: string): void {
+  for (const phrase of NOTICE_PHRASES) if (!text.includes(phrase)) throw new Error(`${where} is missing ${JSON.stringify(phrase)}`);
+}
+
+function noticeText(archive: string): string {
+  const args = archive.endsWith(".zip") ? ["tar", "-xOf", archive, "THIRD_PARTY_NOTICES"] : ["tar", "-xOzf", archive, "THIRD_PARTY_NOTICES"];
+  const read = Bun.spawnSync(args, { stdout: "pipe", stderr: "pipe" });
+  if (read.exitCode !== 0) throw new Error(`archive is missing THIRD_PARTY_NOTICES:\n${read.stderr.toString()}`);
+  return read.stdout.toString();
+}

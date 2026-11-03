@@ -122,7 +122,7 @@ test("affected baseline does not prime unrelated body-only changes", () => {
   expect(dependencyReviews(Object.keys(after), { lock, phase: "pre", changed: new Set(["src/domain/value.ts"]), read: read(after), before: baseline, now: performance.now })).toEqual([]);
 });
 
-test.each(["snapshot-missing", "state-io", "git-failed"] as const)("affected baseline preserves host batch cause %s", cause => {
+test.each(["snapshot-missing", "state-io", "git-missing", "git-not-repository", "git-error"] as const)("affected baseline preserves host batch cause %s", cause => {
   const after = { ...base, "src/domain/barrel.ts": 'export * from "../infra/value";\n' };
   const baseline = Object.assign(read(base), { prime: () => cause });
   const actual = dependencyReviews(Object.keys(after), { lock, phase: "pre", changed: new Set(["src/domain/barrel.ts"]), read: read(after), before: baseline, now: performance.now });

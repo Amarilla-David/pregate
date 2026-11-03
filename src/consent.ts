@@ -62,6 +62,9 @@ export function enabled(root: string, data = dataHome()): boolean {
   if (existsSync(path)) {
     const record = JSON.parse(readFileSync(path, "utf8")) as { root: string; common: string; disabled?: boolean };
     if (record.root === canonical(root) && record.common === common) return record.disabled !== true;
+    // Removing .git changes the common dir, which used to make an enabled project look
+    // unconsented. Stay enabled so the edit is denied instead of skipped. `pregate disable` still wins.
+    if (record.root === canonical(root) && record.disabled !== true && !existsSync(join(root, ".git"))) return true;
   }
   // Only a worktree's top inherits: a nested project inside one keeps its own consent.
   return existsSync(join(root, ".git")) && common !== canonical(root) && existsSync(repoFile(common, data));

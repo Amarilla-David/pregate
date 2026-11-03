@@ -7,7 +7,7 @@ import { enabled } from "./consent.ts";
 import { decide } from "./decide.ts";
 import { canonical, findRoot, readTree } from "./disk.ts";
 import { ruleEnforcements } from "./enforcement.ts";
-import { catFileBatch, indexFiles, unmerged } from "./git.ts";
+import { catFileBatch, gitFailure, indexFiles, unmerged } from "./git.ts";
 import { type Call, clock, ENGINE_VERSION, engineHome, FLOOR, isCause, json, launcher, LOCK, type Outcome, PRESET, readText, told, updateReady, VERSIONS, within } from "./inertia.ts";
 import { librarySource } from "./library.ts";
 import { cachedSourcesMatch, loadCompiledLock, storeCompiledLock } from "./lock-cache.ts";
@@ -320,7 +320,7 @@ export function fromDisk(root: string): Loaded | { errors: string[] } {
 // A10: pre-commit and CI rebuild the lock (from the index, or from the tree) and compare bytes.
 export function recompiled(root: string, staged: boolean): Loaded | { errors: string[] } {
   const texts = staged ? catFileBatch(root, [`:./${PRESET}`, `:./${LOCK}`]) : [readText(join(root, PRESET)), readText(join(root, LOCK))];
-  if (texts === null) return { errors: [formText(form("git-failed"), null).full] };
+  if (texts === null) return { errors: [formText(form(gitFailure()), null).full] };
   const [presetText, lockText] = texts;
   if (presetText === null || presetText === undefined) return { errors: [`PREGATE: ${PRESET} is missing${staged ? " from the index" : ""}.`] };
   const filesOf = staged ? (s: Preset["sources"][number]) => (s.kind === "builtin" ? BUILTIN : s.kind === "git" ? cachedPack(s) : s.kind === "library" ? librarySource(s.ns) : indexFiles(root, s.path)) : sourcesOf(root);
