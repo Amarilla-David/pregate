@@ -176,13 +176,13 @@ Run 41575641391 on `a6ad0c49` is not a hook regression. Each of the three jobs p
 | darwin | macos-latest | arm64 | 200 lines, first touch | 107.8 | 145.5 |
 | darwin | macos-latest | arm64 | 200 lines, second touch | 102.4 | 137.3 |
 | darwin | macos-latest | arm64 | 2,000 lines, first touch | 186.8 | 263.0 |
-| darwin | macos-latest | arm64 | 2,000 lines, second touch | 214.3 | 442.3 |
+| darwin | macos-latest | arm64 | 2,000 lines, second touch | 206.1 | 264.4 |
 | windows | windows-latest | x64 | 200 lines, first touch | 766.4 | 811.8 |
 | windows | windows-latest | x64 | 200 lines, second touch | 766.8 | 801.6 |
 | windows | windows-latest | x64 | 2,000 lines, first touch | 892.3 | 948.8 |
 | windows | windows-latest | x64 | 2,000 lines, second touch | 874.3 | 928.4 |
 
-Each baseline p95 is the median of eight hosted median p95s, including run 41575641391, except the macOS 2,000-line second touch. On run 41633174359 that route's median p95 was 442.3 ms, past the previous limit of 409.8 ms (264.4 × 1.55). Linux and Windows on the same commit stayed inside their baselines, so 442.3 ms is the baseline for that macOS route. The p50 in the table is from the run whose p95 was nearest the baseline. The gate still allows 55% above the baseline (442.3 × 1.55 = 685.6 ms on that route). One slow sample inside a job does not fail it: the compared figure is the median of three p95s.
+Each baseline p95 is the median of eight hosted median p95s, including run 41575641391. The p50 is from the run whose p95 was nearest that median. The slowest of those medians was 44.7% above its baseline (macOS, 2,000 lines, second touch, 382.6 ms against 264.4 ms). The gate allows 55%: that excess plus 10 percentage points, so a repeat of the slowest recorded run stays under the limit (264.4 × 1.55 = 409.8 ms) and a larger jump still fails. One slow sample inside a job does not fail it: the compared figure is the median of three p95s.
 
 ## Rule behavior and proof limits
 
