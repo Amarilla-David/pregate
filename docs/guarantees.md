@@ -92,7 +92,7 @@ are the same.
 | Partial or invalid reconstructed edit | Sound | An edit whose old text is missing or not unique is `tool-will-fail`. A patch that does not match, and a pure insertion hunk, are `cannot-reconstruct`. An exact unique edit of clean code is allowed. |
 | Hook process fails midway | Sound | The real engine exiting 1 is a denial, not an allow. A supervised child that prints an allow and then exits after the `rules` checkpoint does not have that stdout forwarded. The same failure against a directory with no consent stays inert. Killing the supervisor itself is not applicable: the harness owns that process. |
 | Non-literal script, or a script found on PATH | Sound | Inside an enabled root, `bash "$SCRIPT"`, `sh "$X"`, `bash < "$S"`, `python3 "$P"`, `node "$P"`, `make -f "$F"` and `powershell -File $P` are `shell-write`. A bare command name is resolved on PATH and scanned when that file is a script. A literal script path and a read-only one-liner stay allowed. |
-| Unreadable or malformed status or lock JSON | Sound | A lock or preset that is not JSON is `lock-stale`. A lock or preset the process cannot read (`EACCES`) is denied. It is not treated as an absent contract. |
+| Unreadable or malformed status or lock JSON | Sound | A lock or preset that is not JSON is `lock-stale`. One the process cannot read (`EACCES`, or a path that is not a file) is denied. It is not treated as permission to edit. |
 
 ### Known gaps
 

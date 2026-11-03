@@ -490,19 +490,23 @@ test("a hook that dies after a checkpoint cannot publish an allow", () => {
   expect({ code: inert.code, stdout: inert.stdout, stderr: inert.stderr }).toEqual({ code: 0, stdout: "", stderr: "" });
 });
 
-// Owner can chmod the file back. An explicit deny on Windows overrides the allow that the owner inherits.
+// Unix: mode 000 is EACCES for the hook. Windows file ACLs do not reliably deny the same user's
+// compiled engine, so the file is replaced by a directory, which no process can read as JSON.
 function seal(path: string): () => void {
+  const bytes = readFileSync(path);
   if (process.platform === "win32") {
-    const who = Bun.spawnSync(["whoami"], { stdout: "pipe", stderr: "pipe" }).stdout.toString().trim();
-    const icacls = (...args: string[]) => {
-      const out = Bun.spawnSync(["icacls", path, ...args], { stdout: "pipe", stderr: "pipe" });
-      if (out.exitCode !== 0) throw new Error(`icacls ${args.join(" ")} exited ${out.exitCode}: ${out.stderr.toString()}`);
+    rmSync(path);
+    mkdirSync(path);
+    return () => {
+      rmSync(path, { recursive: true, force: true });
+      writeFileSync(path, bytes);
     };
-    icacls("/deny", `${who}:(R)`);
-    return () => icacls("/remove:d", who);
   }
   chmodSync(path, 0o000);
-  return () => chmodSync(path, 0o644);
+  return () => {
+    chmodSync(path, 0o644);
+    writeFileSync(path, bytes);
+  };
 }
 
 test("a non-literal script is denied and a literal script or read-only one-liner is not", () => {
@@ -555,7 +559,9 @@ test("malformed or unreadable status and lock JSON is denied", () => {
     const restore = seal(path);
     try {
       expect(() => readFileSync(path)).toThrow();
-      denied(a.write(note, "export const note = 3;\n"), "could not evaluate");
+      const blocked = a.write(note, "export const note = 3;\n");
+      expect(blocked.code, said(blocked)).toBe(2);
+      expect(said(blocked)).toMatch(/could not evaluate|lock-stale/);
     } finally {
       restore();
     }
