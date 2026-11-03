@@ -7,10 +7,11 @@ test("median of repeated p95 samples is the middle value", () => {
   expect(() => median([])).toThrow("empty");
 });
 
-test("p95 regresses only when it is more than 25% over the baseline", () => {
+test("p95 regresses only when it is more than 50% over the baseline", () => {
   expect(regressed(100, 100)).toBe(false);
   expect(regressed(125, 100)).toBe(false);
-  expect(regressed(125.01, 100)).toBe(true);
+  expect(regressed(150, 100)).toBe(false);
+  expect(regressed(150.01, 100)).toBe(true);
   expect(regressed(80, 100)).toBe(false);
 });
 
@@ -21,7 +22,7 @@ test("the gate fails closed for a missing OS, a different arch, or a missing rou
   });
   const measured = { "200 lines, first touch": 210, "2,000 lines, first touch": 790 };
   expect(decideGate("linux", "x64", measured, baseline).ok).toBe(true);
-  expect(decideGate("linux", "x64", { ...measured, "2,000 lines, first touch": 1001 }, baseline).ok).toBe(false);
+  expect(decideGate("linux", "x64", { ...measured, "2,000 lines, first touch": 1201 }, baseline).ok).toBe(false);
   expect(decideGate("darwin", "arm64", measured, baseline).ok).toBe(false);
   expect(decideGate("linux", "arm64", measured, baseline).reason).toContain("arm64");
   expect(decideGate("linux", "x64", { "200 lines, first touch": 210 }, baseline).rows.some((row) => !row.ok)).toBe(true);

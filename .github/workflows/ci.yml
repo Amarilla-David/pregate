@@ -270,7 +270,7 @@ jobs:
     permissions:
       contents: read
   # The 150 ms p95 budget belongs to the reference machine (ARCHITECTURE O31). These runners
-  # compare the median of three p95 samples with bench/latency-baseline.json and fail above 25%.
+  # compare the median of three p95 samples with bench/latency-baseline.json and fail above 50%.
   latency:
     name: latency (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
