@@ -1,0 +1,66 @@
+{
+  "labeler": "maintainer",
+  "pack": "senior",
+  "items": [
+    {
+      "corpus": "express",
+      "pack": "senior",
+      "rule": "senior/SR-VAR-001",
+      "path": "examples/auth/index.js",
+      "line": 10,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "var session declares the express-session binding with var, which is the declaration this rule names."
+    },
+    {
+      "corpus": "express",
+      "pack": "senior",
+      "rule": "senior/SR-VAR-001",
+      "path": "examples/auth/index.js",
+      "line": 31,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "var err reads the session error with var. const or let would be the binding this rule asks for."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "senior",
+      "rule": "senior/SR-BRACE-001",
+      "path": "dedupe.js",
+      "line": 21,
+      "symbol": "appendValue",
+      "verdict": "true-positive",
+      "note": "if (!arg) return has no braces. The rule requires braces on an if."
+    },
+    {
+      "corpus": "express",
+      "pack": "senior",
+      "rule": "senior/SR-BRACE-001",
+      "path": "examples/auth/index.js",
+      "line": 36,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "if (err) assigns res.locals.message with no braces around the branch."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "senior",
+      "rule": "senior/SR-CHAIN-001",
+      "path": "bind.js",
+      "line": 29,
+      "symbol": "parseValue",
+      "verdict": "true-positive",
+      "note": "arg.toString.toString().includes walks three member or call hops, which is the chain this rule rejects."
+    },
+    {
+      "corpus": "express",
+      "pack": "senior",
+      "rule": "senior/SR-CHAIN-001",
+      "path": "examples/downloads/index.js",
+      "line": 27,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "req.params.file.join walks params, file, and join. That is three member hops."
+    }
+  ]
+}

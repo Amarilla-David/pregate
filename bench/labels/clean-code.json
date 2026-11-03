@@ -1,0 +1,56 @@
+{
+  "labeler": "maintainer",
+  "pack": "clean-code",
+  "items": [
+    {
+      "corpus": "classnames",
+      "pack": "clean-code",
+      "rule": "clean-code/CC-FN-001",
+      "path": "bind.js",
+      "line": 16,
+      "symbol": "parseValue",
+      "verdict": "true-positive",
+      "note": "parseValue runs from line 16 through the return on line 42, past the limit of 20."
+    },
+    {
+      "corpus": "classnames",
+      "pack": "clean-code",
+      "rule": "clean-code/CC-FN-001",
+      "path": "tests/bind.js",
+      "line": 16,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "The describe callback starts at line 16 and still contains further tests past line 35, so it is over the 20-line limit."
+    },
+    {
+      "corpus": "express",
+      "pack": "clean-code",
+      "rule": "clean-code/CC-FN-001",
+      "path": "examples/mvc/lib/boot.js",
+      "line": 11,
+      "symbol": "<module>",
+      "verdict": "true-positive",
+      "note": "The exported boot function starts at line 11 and is still loading controllers past line 40, over the 20-line limit."
+    },
+    {
+      "corpus": "ms",
+      "pack": "clean-code",
+      "rule": "clean-code/CC-FN-002",
+      "path": "src/index.ts",
+      "line": 236,
+      "symbol": "plural",
+      "verdict": "true-positive",
+      "note": "plural takes ms, msAbs, n, and name. That is four parameters and the limit is three."
+    },
+    {
+      "corpus": "express",
+      "pack": "clean-code",
+      "rule": "clean-code/CC-FN-002",
+      "path": "examples/error/index.js",
+      "line": 20,
+      "symbol": "error",
+      "verdict": "true-positive",
+      "note": "error takes err, req, res, and next. Express uses that arity for error middleware, and the function is still four parameters over the limit of three."
+    }
+  ]
+}

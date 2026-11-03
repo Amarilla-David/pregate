@@ -1,57 +1,96 @@
 // Hook latency per route (ARCHITECTURE §4.1 budget, §8): the compiled engine behind the global
-// launcher, on a git copy of test/demo-repo, run the way Claude Code runs the hook (`sh -c` with the
-// command `setup` registered). Every sample starts a fresh session, so each one measures the same
-// state. Internal: it is not shipped. Usage: bun run bench [--runs N] [--inform] (N ≥ 25, default 30).
-// The budget holds on the reference development machine (O31); --inform reports a miss without
-// failing, as CI does on its shared runners. With GITHUB_STEP_SUMMARY set, the table goes there too.
+// launcher, on a git copy of test/demo-repo, run the way the harness runs the hook. Every sample
+// starts a fresh session, so each one measures the same state. Internal: it is not shipped.
+// Usage: bun run bench [--runs N] [--repeat K] [--inform] [--gate <baseline>] [--only <route>]
+// (N ≥ 25, default 30; K ≥ 1, default 1). The 150 ms budget holds on the reference machine (O31);
+// --inform reports that miss without failing. --gate fails when the median p95 of K repeats
+// regresses more than 55% against the committed per-OS baseline. With GITHUB_STEP_SUMMARY set,
+// the table goes there too.
 import { appendFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { cpus, tmpdir } from "node:os";
 import { join } from "node:path";
 import { compileBinary, hostTarget } from "./build";
 import { confirmOnTerminal } from "./confirm-terminal.ts";
+import { decideGate, formatGate, median, parseBaseline, parseBenchArgs, type BenchOptions } from "./latency-gate.ts";
 
 const ROOT = join(import.meta.dir, "..");
 const BUDGET_MS = 150;      // p95 of any Pre (§4.1)
 const SHELL_P50_MS = 25;    // p50 of the shell guard and no-preset path (§7.2 #5, MH-WI)
 // Domain files that pass every rule, and one whose committed text already carries debt: then the
 // "before" runs again every rule the "after" violates.
-const LEDGERS = { 300: "src/domain/ledger-300.ts", 2000: "src/domain/ledger-2000.ts", debt: "src/domain/ledger-debt-2000.ts" };
+const LEDGERS = { 200: "src/domain/ledger-200.ts", 300: "src/domain/ledger-300.ts", 2000: "src/domain/ledger-2000.ts", debt: "src/domain/ledger-debt-2000.ts" };
 
 type Env = Record<string, string>;
 interface Repo { dir: string; env: Env; pre: string; start: string }
 interface Route { name: string; prepare: Payload[]; timed: Payload }
 type Payload = Record<string, unknown>;
 
+interface Stats { name: string; runs: number; p50: number; p95: number; max: number }
+
 function main(): number {
-  const { runs, inform } = optionsOf(process.argv.slice(2));
-  return benchIn(realpathSync(mkdtempSync(join(tmpdir(), "pregate-bench-"))), runs, inform);
+  return benchIn(realpathSync(mkdtempSync(join(tmpdir(), "pregate-bench-"))), parseBenchArgs(process.argv.slice(2)));
 }
 
-function benchIn(work: string, runs: number, inform: boolean): number {
+function benchIn(work: string, options: BenchOptions): number {
   try {
     const repo = setUp(work);
-    const samples = measure(repo, routes(repo.dir), runs);
-    const over = [...samples].filter(([name, ms]) => percentile(ms, 95) > BUDGET_MS || ((name === "shell" || name === "no preset") && percentile(ms, 50) > SHELL_P50_MS));
-    const verdict = over.length === 0
-      ? `p95 ≤ ${BUDGET_MS} ms on every route, shell and no-preset p50 ≤ ${SHELL_P50_MS} ms.`
-      : `Over budget (p95 ${BUDGET_MS} ms, shell/no-preset p50 ${SHELL_P50_MS} ms): ${over.map(([name]) => name).join(", ")}`;
-    console.log(`${table(samples)}\n\n${verdict}`);
+    const selected = selectRoutes(routes(repo.dir), options.only);
+    const stats = combine(repeatMeasure(repo, selected, options.runs, options.repeat));
+    const over = overBudget(stats);
+    const verdict = budgetText(over);
+    console.log(`${table(stats)}\n\n${verdict}`);
     const summary = process.env.GITHUB_STEP_SUMMARY;
-    if (summary) appendFileSync(summary, markdown(samples, verdict));
-    return over.length === 0 || inform ? 0 : 1;
+    if (summary) appendFileSync(summary, markdown(stats, verdict));
+    const gate = options.gate === null ? 0 : applyGate(stats, options.gate);
+    return (over.length > 0 && !options.inform) || gate !== 0 ? 1 : 0;
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
 }
 
-function optionsOf(args: string[]): { runs: number; inform: boolean } {
-  const i = args.indexOf("--runs");
-  const runs = i < 0 ? 30 : Number(args[i + 1]);
-  const inform = args.includes("--inform");
-  if (!Number.isInteger(runs) || runs < 25 || args.length !== (i < 0 ? 0 : 2) + (inform ? 1 : 0)) {
-    throw new Error("usage: bench.ts [--runs N≥25] [--inform]");
-  }
-  return { runs, inform };
+function selectRoutes(all: Route[], only: string[]): Route[] {
+  const missing = only.filter((name) => !all.some((route) => route.name === name));
+  if (missing.length) throw new Error(`unknown route: ${missing.join(", ")}`);
+  return only.length === 0 ? all : all.filter((route) => only.includes(route.name));
+}
+
+function repeatMeasure(repo: Repo, all: Route[], runs: number, times: number): Map<string, number[]>[] {
+  const series: Map<string, number[]>[] = [];
+  for (let i = 0; i < times; i++) series.push(measure(repo, all, runs));
+  return series;
+}
+
+function combine(series: Map<string, number[]>[]): Stats[] {
+  const names = [...(series[0]?.keys() ?? [])];
+  return names.map((name) => statsFor(name, series.map((samples) => samples.get(name) ?? [])));
+}
+
+function statsFor(name: string, groups: number[][]): Stats {
+  return {
+    name, runs: groups.reduce((sum, ms) => sum + ms.length, 0),
+    p50: median(groups.map((ms) => percentile(ms, 50))), p95: median(groups.map((ms) => percentile(ms, 95))),
+    max: Math.max(...groups.map((ms) => Math.max(...ms))),
+  };
+}
+
+function overBudget(stats: Stats[]): string[] {
+  return stats.filter((row) => row.p95 > BUDGET_MS || ((row.name === "shell" || row.name === "no preset") && row.p50 > SHELL_P50_MS)).map((row) => row.name);
+}
+
+function budgetText(over: string[]): string {
+  return over.length === 0
+    ? `p95 ≤ ${BUDGET_MS} ms on every route, shell and no-preset p50 ≤ ${SHELL_P50_MS} ms.`
+    : `Over budget (p95 ${BUDGET_MS} ms, shell/no-preset p50 ${SHELL_P50_MS} ms): ${over.join(", ")}`;
+}
+
+function applyGate(stats: Stats[], path: string): number {
+  const measured: Record<string, number> = {};
+  const p50: Record<string, number> = {};
+  for (const row of stats) { measured[row.name] = row.p95; p50[row.name] = row.p50; }
+  console.log(JSON.stringify({ platform: process.platform, arch: process.arch, medianP50: p50, medianP95: measured }));
+  const decision = decideGate(process.platform, process.arch, measured, parseBaseline(JSON.parse(readFileSync(path, "utf8"))));
+  console.log(formatGate(decision));
+  return decision.ok ? 0 : 1;
 }
 
 // ── The repo under test ────────────────────────────────────────────────────────────
@@ -66,27 +105,38 @@ function setUp(work: string): Repo {
     GIT_AUTHOR_NAME: "bench", GIT_AUTHOR_EMAIL: "bench@localhost", GIT_COMMITTER_NAME: "bench", GIT_COMMITTER_EMAIL: "bench@localhost",
   };
   // Compiled with the release flags, so the bench times what ships.
-  const engine = join(work, "pregate");
+  const engine = join(work, process.platform === "win32" ? "pregate.exe" : "pregate");
   compileBinary(hostTarget(), engine);
   seed(dir);
   mkdirSync(join(work, "no-preset"));
   mkdirSync(join(env.HOME!, ".claude"), { recursive: true });
-  env.PATH = `${env.HOME}/.local/bin:/usr/bin:/bin`;
+  env.PATH = process.platform === "win32" ? (process.env.PATH ?? "") : `${env.HOME}/.local/bin:/usr/bin:/bin`;
   for (const argv of [[engine, "setup"], ["git", "init", "-q", "-b", "main"], [engine, "preset", "compile"], [engine, "install"], ["git", "add", "-A"], ["git", "commit", "-q", "-m", "bench"]]) {
     run(dir, env, argv);
   }
-  // The release binary asks a person to type y. The bench types it on a pty. It does not
-  // pass --yes and it does not set CI, so this is not a product shortcut.
-  const enabled = confirmOnTerminal([engine, "enable"], dir, env);
-  if (enabled.code !== 0) throw new Error(`pregate enable failed (exit ${enabled.code}): ${enabled.stdout}${enabled.stderr}`);
+  enableProject(engine, dir, env);
   const repo = { dir, env, ...hookCommands(env.HOME!) };
   activeCanary(repo);
   return repo;
 }
 
+// POSIX types y on a pseudo-terminal. Windows runners have no /dev/tty, so enable uses the
+// product's unattended opt-in for that one setup process. The timed hook does not inherit it.
+function enableProject(engine: string, dir: string, env: Env): void {
+  if (process.platform !== "win32") {
+    const enabled = confirmOnTerminal([engine, "enable"], dir, env);
+    if (enabled.code !== 0) throw new Error(`pregate enable failed (exit ${enabled.code}): ${enabled.stdout}${enabled.stderr}`);
+    return;
+  }
+  const result = Bun.spawnSync([engine, "enable", "--yes"], {
+    cwd: dir, env: { ...env, PREGATE_UNATTENDED_APPROVAL: "1" }, stdout: "pipe", stderr: "pipe",
+  });
+  if (result.exitCode !== 0) throw new Error(`pregate enable failed (exit ${result.exitCode}): ${result.stdout}${result.stderr}`);
+}
+
 function activeCanary(repo: Repo): void {
   const payload = envelope(repo.dir, "bench-canary", tool("Write", { file_path: join(repo.dir, "src/domain/canary.ts"), content: "export const invalid = ;\n" }));
-  const r = Bun.spawnSync(["sh", "-c", repo.pre], { cwd: repo.dir, env: repo.env, stdin: Buffer.from(JSON.stringify(payload)), stdout: "pipe", stderr: "pipe" });
+  const r = Bun.spawnSync(hookArgv(repo.pre), { cwd: repo.dir, env: repo.env, stdin: Buffer.from(JSON.stringify(payload)), stdout: "pipe", stderr: "pipe" });
   if (r.exitCode !== 2 || !r.stderr.toString().includes("syntax")) throw new Error("Benchmark gate is inactive or broken: invalid syntax was not denied.");
 }
 
@@ -95,6 +145,7 @@ function seed(dir: string): void {
   cpSync(join(ROOT, "test/demo-repo"), dir, { recursive: true });
   mkdirSync(join(dir, ".pregate"));
   cpSync(join(ROOT, "catalog/presets/backend-clean-ddd.json"), join(dir, ".pregate/preset.json"));
+  writeFileSync(join(dir, LEDGERS[200]), ledger(200));
   writeFileSync(join(dir, LEDGERS[300]), ledger(300));
   writeFileSync(join(dir, LEDGERS[2000]), ledger(2000));
   writeFileSync(join(dir, LEDGERS.debt), ledger(2000, true));
@@ -160,6 +211,8 @@ function routes(dir: string): Route[] {
     { name: "no preset", prepare: [], timed: { ...shell, cwd: join(dir, "../no-preset") } },
     { name: "out of scope", prepare: [start], timed: write },
     { name: "shell", prepare: [start], timed: shell },
+    { name: "200 lines, first touch", prepare: [start], timed: edit(LEDGERS[200]) },
+    { name: "200 lines, second touch", prepare: [start, edit(LEDGERS[200])], timed: edit(LEDGERS[200]) },
     { name: "300 lines, first touch", prepare: [start], timed: edit(LEDGERS[300]) },
     { name: "300 lines, second touch", prepare: [start, edit(LEDGERS[300])], timed: edit(LEDGERS[300]) },
     { name: "2,000 lines, first touch", prepare: [start], timed: edit(LEDGERS[2000]) },
@@ -195,11 +248,15 @@ function envelope(dir: string, session: string, p: Payload): Payload {
 
 // Each sample has to take the route it names: exit 0, and no objection (Pre prints nothing) or no
 // notice to the human (SessionStart prints the contract, and a systemMessage only when it degrades).
+function hookArgv(command: string): string[] {
+  return process.platform === "win32" ? ["cmd.exe", "/d", "/c", command] : ["sh", "-c", command];
+}
+
 function hook(repo: Repo, payload: Payload): number {
   const command = payload.hook_event_name === "SessionStart" ? repo.start : repo.pre;
   const stdin = Buffer.from(`${JSON.stringify(payload)}\n`);
   const t0 = performance.now();
-  const r = Bun.spawnSync(["sh", "-c", command], { cwd: repo.dir, env: repo.env, stdin, stdout: "pipe", stderr: "pipe" });
+  const r = Bun.spawnSync(hookArgv(command), { cwd: repo.dir, env: repo.env, stdin, stdout: "pipe", stderr: "pipe" });
   const ms = performance.now() - t0;
   const quiet = payload.hook_event_name === "SessionStart" ? r.stdout.toString().includes('"additionalContext"') && !r.stdout.toString().includes('"systemMessage"') : r.stdout.length === 0;
   if (r.exitCode !== 0 || !quiet) throw new Error(`hook objected (exit ${r.exitCode}): ${r.stdout}${r.stderr}`);
@@ -214,19 +271,18 @@ function percentile(ms: number[], q: number): number {
   return sorted[Math.ceil((q / 100) * sorted.length) - 1]!;
 }
 
-function table(samples: Map<string, number[]>): string {
-  const width = Math.max(...[...samples.keys()].map((k) => k.length));
+function table(stats: Stats[]): string {
+  const width = Math.max(...stats.map((row) => row.name.length));
   const cell = (n: number) => n.toFixed(1).padStart(7);
-  const rows = [...samples].map(([name, ms]) =>
-    `${name.padEnd(width)}  ${String(ms.length).padStart(4)}  ${cell(percentile(ms, 50))}  ${cell(percentile(ms, 95))}  ${cell(Math.max(...ms))}`);
+  const rows = stats.map((row) => `${row.name.padEnd(width)}  ${String(row.runs).padStart(4)}  ${cell(row.p50)}  ${cell(row.p95)}  ${cell(row.max)}`);
   return [`${"route".padEnd(width)}  runs   p50 ms   p95 ms   max ms`, ...rows].join("\n");
 }
 
 // The same table for the CI job summary, with the machine it ran on: the budget is the reference
 // machine's (O31), and a runner with few cores lands well above it.
-function markdown(samples: Map<string, number[]>, verdict: string): string {
+function markdown(stats: Stats[], verdict: string): string {
   const cell = (n: number) => n.toFixed(1);
-  const rows = [...samples].map(([name, ms]) => `| ${name} | ${ms.length} | ${cell(percentile(ms, 50))} | ${cell(percentile(ms, 95))} | ${cell(Math.max(...ms))} |`);
+  const rows = stats.map((row) => `| ${row.name} | ${row.runs} | ${cell(row.p50)} | ${cell(row.p95)} | ${cell(row.max)} |`);
   return [
     "### Hook latency (`bun run bench`)", "",
     `${process.platform}-${process.arch}, ${cpus().length} CPUs (${cpus()[0]?.model ?? "unknown"}), Bun ${Bun.version}.`, "",
