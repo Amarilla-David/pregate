@@ -30,6 +30,10 @@ try {
   git(["init", "-q", "-b", "main"]);
   const init = run(["init", "--yes", "--preset", "legacy-safe"]);
   assert(init.exitCode === 0, init.stdout.toString() + init.stderr.toString());
+  // Commit the preset. First contact also admits an untracked preset by timestamp, and a Windows
+  // file clock can put that timestamp ahead of the hook, which used to skip the edit.
+  git(["add", "-A"]);
+  git(["commit", "-qm", "smoke baseline"]);
   const lock = readFileSync(join(root, ".pregate/pregate.lock.json"), "utf8");
   const observed = run(["hook", "pre", "--harness", "claude-code"], {
     cwd: root, session_id: "native-feedback", hook_event_name: "PreToolUse", permission_mode: "default",

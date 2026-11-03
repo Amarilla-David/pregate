@@ -294,17 +294,27 @@ export function owned(root: string, rels: string[], isAccepted: (dir: string) =>
   return rels.filter((rel) => findRoot(dirname(join(root, rel)), ok) === root);
 }
 
+// Windows file times can sit a little ahead of Date.now(). Only the first contact, which has no
+// earlier session timestamp, allows that skew: a preset already on disk is the initialized project.
+const FIRST_CONTACT_SKEW_MS = 2000;
+
 // MH-33: a root is accepted when this session already took its snapshot, when its preset predates
 // the session's first contact with any root (this very call, on a first contact), or when it is
 // tracked in HEAD. A preset created later, through a channel the guard does not see, cannot loosen
 // a root.
 export function accepted(sid: string): (dir: string) => boolean {
   let since: number | undefined;
+  let first = false;
   return (d) => {
     if (!enabled(d)) return false;
-    since ??= state.firstContact(sid) ?? Date.now();
+    if (since === undefined) {
+      const saved = state.firstContact(sid);
+      first = saved === null;
+      since = saved ?? Date.now();
+    }
     const preset = statSync(join(d, PRESET), { throwIfNoEntry: false });
-    return state.snapshot(sid, d) !== null || (preset !== undefined && preset.ctimeMs < since) || tracked(d);
+    const present = preset !== undefined && preset.ctimeMs < since + (first ? FIRST_CONTACT_SKEW_MS : 0);
+    return state.snapshot(sid, d) !== null || present || tracked(d);
   };
 }
 

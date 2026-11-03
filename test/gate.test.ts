@@ -1384,6 +1384,17 @@ describe("MH-33: preset ctime against the first root contact", () => {
     expect(d.cause).toBe("syntax");
     expect(state.roots(state.key(session()))).toEqual([root]);
   });
+  test("first contact still enforces a preset whose timestamp is slightly ahead of the clock", async () => {
+    const root = repo("ahead", false);
+    const ctime = statSync(join(root, PRESET)).ctimeMs;
+    const clock = spyOn(Date, "now").mockReturnValue(ctime - 500);
+    try {
+      const d = await onPreEdit([change(root, "src/domain/bad.ts", { form: "full", content: "export const bad = ;" })]);
+      expect(d.cause).toBe("syntax");
+    } finally {
+      clock.mockRestore();
+    }
+  });
   test("a later nested preset cannot weaken the parent's rules, even with backdated mtime", async () => {
     const root = repo();
     onSessionStart({ kind: "session-start", session: session(), cwd: root });
