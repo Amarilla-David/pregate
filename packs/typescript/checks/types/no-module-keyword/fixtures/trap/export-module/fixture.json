@@ -6,16 +6,12 @@
   "before": null,
   "expect": {
     "verdict": "fail",
-    "violations": [
-      {
-        "line": 2
-      }
-    ]
+    "violations": [{ "line": 2 }]
   },
   "trap": {
     "family": "export-module-keyword",
     "origin": "forge",
     "discovered": "2026-11-04",
-    "note": "export module Billing is the module keyword form of a namespace. TypeScript 7 rejects it. An ambient string module is a different shape."
+    "note": "export module Billing is the module keyword form. TypeScript 7 rejects it. An ambient string module is a different shape."
   }
 }

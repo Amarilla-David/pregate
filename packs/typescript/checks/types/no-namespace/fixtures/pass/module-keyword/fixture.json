@@ -4,12 +4,5 @@
   "params": {},
   "target": "src/billing/module-ns.ts",
   "before": null,
-  "expect": {
-    "verdict": "fail",
-    "violations": [
-      {
-        "line": 2
-      }
-    ]
-  }
+  "expect": { "verdict": "pass" }
 }

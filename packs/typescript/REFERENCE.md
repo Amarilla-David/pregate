@@ -566,7 +566,7 @@ Source metadata:
 
 ## typescript/strict-types
 
-Manifest version: `1.4.0`. Status: **complete**.
+Manifest version: `1.5.0`. Status: **complete**.
 
 ### typescript/TS-ANY-001
 
@@ -794,19 +794,19 @@ Source metadata:
 
 ### typescript/TS-NS-001
 
-Check: [`typescript/types/no-namespace@1.1.0`](checks/types/no-namespace/check.json). Default severity: **warn**.
+Check: [`typescript/types/no-namespace@1.2.0`](checks/types/no-namespace/check.json). Default severity: **warn**.
 
 Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
 
 Languages: `typescript`. Cardinality: `singleton`. Dimension: `types.namespace`. Minimum severity: `none`.
 
-A namespace merges values and types in a way modules already express. namespace remains valid TypeScript, including for declaration merging, so the default contract advises. The module keyword for that same declaration is a TypeScript 7 hard error, and this rule reports it too.
+A namespace merges values and types in a way modules already express. namespace remains valid TypeScript, including for declaration merging, so the default contract advises.
 
 Default parameters: `{}`.
 
-**Repair:** Move the values to an ES module and export them by name. A namespace that must stay is written with namespace, never module.
+**Repair:** Move the values to an ES module and export them by name.
 
-**Scope and limits:** export namespace and export module are still this declaration. declare module "pkg", declare module 'pkg' and declare module "*.json" name an ambient module and stay allowed. A class or a plain object does not need a namespace.
+**Scope and limits:** export namespace is still a namespace. A namespace written with the module keyword is TS-MODKW-001. declare module "pkg" is an ambient module. A class or a plain object does not need a namespace.
 
 Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
 
@@ -818,9 +818,41 @@ Source metadata:
 
 ```json
 {
-  "work": "TypeScript handbook, namespaces and modules, and the TypeScript 7.0 announcement",
+  "work": "TypeScript handbook, namespaces and modules",
+  "locator": "modules over namespaces",
+  "paraphrase": "For application code, ES modules replace namespaces. A namespace is an older container that merges across files."
+}
+```
+
+### typescript/TS-MODKW-001
+
+Check: [`typescript/types/no-module-keyword@1.0.0`](checks/types/no-module-keyword/check.json). Default severity: **deny**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `types.module-keyword`. Minimum severity: `none`.
+
+module Name is a hard compile error on TypeScript 7.0. namespace remains valid, so this rule denies only when the project installs or declares TypeScript 7.0.0 or newer. On an older or unknown compiler the same declaration is a warning.
+
+Default parameters: `{}`.
+
+**Repair:** Replace module with namespace, or move the values into an ES module and export them by name.
+
+**Scope and limits:** declare module "pkg", declare module 'pkg' and declare module "*.json" name an ambient module and stay allowed. export module and declare module Billing are still the keyword form. A namespace keyword is TS-NS-001, not this rule.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Announcing TypeScript 7.0",
   "locator": "https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/",
-  "paraphrase": "For application code, ES modules replace namespaces. TypeScript 7 also rejects a namespace written with the module keyword. An ambient module such as declare module \"pkg\" stays valid."
+  "paraphrase": "TypeScript 7 rejects a namespace written with the module keyword. Write namespace, or export the values from an ES module. declare module \"pkg\" stays valid."
 }
 ```
 

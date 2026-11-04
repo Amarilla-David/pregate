@@ -1,15 +1,17 @@
 import { compareVersions } from "./product.ts";
-import type { LockRule, Read } from "./types.ts";
+import type { LockRule, Read, Severity } from "./types.ts";
 
 // TypeScript 7.0 makes a few 6.0 deprecations into hard errors. A rule opts into that
 // boundary with `when`. The installed compiler wins over the declared range, because that
-// is the compiler that will accept or reject the file. An unknown or older compiler does
-// not run the rule: `assert` still compiles before 7.0, and a pre-release is not 7.0.0.
-export function dependencyAllows(rule: LockRule, rel: string, read: Read): boolean {
+// is the compiler that will accept or reject the file. Without `otherwise`, an unknown or
+// older compiler does not run the rule. With `otherwise: "warn"`, that same compiler still
+// reports the finding as a warning. A pre-release is not 7.0.0.
+export function gatedSeverity(rule: LockRule, rel: string, read: Read): Severity | null {
   const when = rule.when;
-  if (when === undefined) return true;
+  if (when === undefined) return rule.severity;
   const version = typescriptVersion(rel, read);
-  return version !== null && compareVersions(version, when.min) >= 0;
+  if (version !== null && compareVersions(version, when.min) >= 0) return rule.severity;
+  return when.otherwise ?? null;
 }
 
 export function typescriptVersion(rel: string, read: Read): string | null {

@@ -6,11 +6,7 @@
   "before": null,
   "expect": {
     "verdict": "fail",
-    "violations": [
-      {
-        "line": 3
-      }
-    ]
+    "violations": [{ "line": 3 }]
   },
   "trap": {
     "family": "namespace-inside-ambient-module",

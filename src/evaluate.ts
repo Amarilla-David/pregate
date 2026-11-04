@@ -4,14 +4,14 @@ import { compilePattern, type Compiled, findAll } from "./match.ts";
 import { inScope, layerOf, matches, REQUESTS, ruleApplies as applies } from "./paths.ts";
 import { type Edge, loadTsPaths, reexportTargets, resolve } from "./resolve.ts";
 import { astHash, classes, functions, grammarOf, imports, nestings, type Node, type Parsed, parse, suggestFunctionSplit, suggestNestingFix, symbolBodies, symbolOf, symbols } from "./ts.ts";
-import type { Analysis, Clock, Form, Grammar, Host, Impl, Lock, LockRule, PatternConfig, Phase, Placement, Read, Violation } from "./types.ts";
+import type { Analysis, Clock, Form, Grammar, Host, Impl, Lock, LockRule, PatternConfig, Phase, Placement, Read, Severity, Violation } from "./types.ts";
 import { languageApplies } from "./languages.ts";
 import { markerLocations } from "./markers.ts";
 import { unboundedDrizzleSelects } from "./drizzle-query.ts";
 import { intervalsWithoutCleanup } from "./interval-cleanup.ts";
 import { reactIndexKeys } from "./react-index-key.ts";
 import { credentialLiterals } from "./credential-literal.ts";
-import { dependencyAllows } from "./typescript-version.ts";
+import { gatedSeverity } from "./typescript-version.ts";
 
 const MODULE = "<module>";
 const TSCONFIG_INVALID = "tsconfig.json, or a local config it extends, is missing or invalid, so a bare import may be an alias of any path. Fix the tsconfig, or import by a relative path.";
@@ -21,14 +21,20 @@ const compiled = new WeakMap<PatternConfig, Partial<Record<Grammar, Compiled>>>(
 // (0). A caller that already parsed the text hands over its Parsed, so the file is parsed once.
 // `host.now` times the regexes that can give up (match.ts).
 export function analyze(lock: Lock, phase: Phase, rel: string, state: string | Parsed | null, host: Host): Analysis | Form {
-  const rules = (inScope(lock, rel) ? running(lock, phase, rel) : []).filter((rule) => dependencyAllows(rule, rel, host.read));
+  const gated = new Map<string, Severity>();
+  const rules = (inScope(lock, rel) ? running(lock, phase, rel) : []).filter((rule) => {
+    const severity = gatedSeverity(rule, rel, host.read);
+    if (severity === null) return false;
+    gated.set(rule.id, severity);
+    return true;
+  });
   const p = typeof state !== "string" ? state : grammarOf(rel) !== null ? parse(rel, state) : null;
   const text = typeof state === "string" ? state : state?.text ?? null;
   const found: Violation[] = [];
   const counts: Record<string, number> = {};
   const markerSites: NonNullable<Analysis["markerSites"]> = {};
   const report = (r: LockRule, line: number, symbol: string, measured: number | null = null, limit: number | null = null): Violation => {
-    const v: Violation = { rule: r.id, path: rel, line, symbol, measured, limit, atSessionStart: null, severity: r.severity };
+    const v: Violation = { rule: r.id, path: rel, line, symbol, measured, limit, atSessionStart: null, severity: gated.get(r.id) ?? r.severity };
     found.push(v);
     return v;
   };

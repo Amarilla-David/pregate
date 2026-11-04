@@ -25,7 +25,8 @@ Ready-made combinations live in `packs/presets/`.
 | `TS-BOOL-001` | An if, while, do, or for condition whose expression is .length, a string literal, a number literal, or a ! chain on .length. | A length or a literal used as a condition hides the comparison. 0 and "" are easy to misread as a boolean the domain named. | warn |
 | `TS-EXPORT-ANY-001` | An unannotated TS parameter directly owned by a directly exported function or unannotated exported function-valued variable, including defaulted parameters. | Optional explicit-boundary policy; inference is valid TypeScript. Opt-in. JS/MJS are excluded. | off |
 | `TS-READONLY-001` | A property signature that is not readonly, inside an exported interface or type alias, except options, config, and input types. | Opt-in. Readonly on every public property changes library APIs. Options, config, and input bags stay exempt when the check is enabled. | off |
-| `TS-NS-001` | A namespace declaration, including `namespace`, `export namespace`, and the `module Name` keyword form. Ambient `declare module "pkg"` stays allowed. | A namespace merges values and types in a way modules already express. TypeScript 7 rejects the `module` keyword for that declaration. | warn |
+| `TS-NS-001` | A `namespace` declaration, including one that is exported. | A namespace merges values and types in a way modules already express. `namespace` remains valid TypeScript, so this stays a warning. | warn |
+| `TS-MODKW-001` | A namespace written with the `module` keyword (`module Name {}`). Ambient `declare module "pkg"` stays allowed. | TypeScript 7 rejects that keyword. The finding denies when the project is on TypeScript 7.0.0 or newer, and warns on an older or unknown compiler. | deny |
 | `TS-ASSERT-001` | `import ... assert { ... }` and `import(path, { assert: ... })` when the project is on TypeScript 7.0.0 or newer. | TypeScript 7 rejects import assertions. Write `with` instead. Older TypeScript still accepts `assert`, so the rule stays quiet there. | deny |
 | `TS-WRAPPER-001` | The boxed types `String`, `Number`, `Boolean`, `Symbol` or `Object` in a TS type position, including generic constraints. | They name object wrappers, and Object accepts every primitive, so the annotation stops describing the value. | warn |
 | `TS-FLOAT-001` | A statement whose expression is an async-shaped call or new Promise, and is not awaited. | A floating promise rejects into an unhandled rejection. The caller continues as if the work had been scheduled with a result. | deny |
@@ -38,7 +39,7 @@ Ready-made combinations live in `packs/presets/`.
 
 ## Methodologies
 
-- `typescript/strict-types` — TS-ANY-001, TS-SWITCH-001, TS-BANG-001, TS-ENUM-001, TS-BOOL-001, TS-EXPORT-ANY-001, TS-READONLY-001, TS-NS-001, TS-WRAPPER-001
+- `typescript/strict-types` — TS-ANY-001, TS-SWITCH-001, TS-BANG-001, TS-ENUM-001, TS-BOOL-001, TS-EXPORT-ANY-001, TS-READONLY-001, TS-NS-001, TS-MODKW-001, TS-WRAPPER-001
 - `typescript/async-results` — TS-FLOAT-001, TS-THROW-001
 - `typescript/named-exports` — TS-DEFAULT-001
 - `typescript/framework-entries` — TS-ENTRY-001
@@ -65,7 +66,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 
 ## Exact rule contract
 
-Category: **language**. Version: `1.3.0`. 25 distinct check IDs.
+Category: **language**. Version: `1.3.0`. 26 distinct check IDs.
 
 Methodologies: `typescript/anti-evasion` (complete), `typescript/async-results` (complete), `typescript/discipline` (complete), `typescript/framework-entries` (complete), `typescript/legacy` (complete), `typescript/named-exports` (complete), `typescript/strict-types` (complete).
 

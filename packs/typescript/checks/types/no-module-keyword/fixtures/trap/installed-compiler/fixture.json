@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/module-ns.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [{ "line": 2 }]
+  },
+  "trap": {
+    "family": "installed-typescript-7",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "The installed compiler is 7.0.2 even though package.json still declares a 5.x range. The installed compiler decides the hard error."
+  }
+}

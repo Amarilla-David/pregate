@@ -6,11 +6,7 @@
   "before": null,
   "expect": {
     "verdict": "fail",
-    "violations": [
-      {
-        "line": 2
-      }
-    ]
+    "violations": [{ "line": 2 }]
   },
   "trap": {
     "family": "declare-module-identifier",
