@@ -1,0 +1,3 @@
+const interval = 60;
+export { interval as revalidate };
+export default function Page() { return null; }

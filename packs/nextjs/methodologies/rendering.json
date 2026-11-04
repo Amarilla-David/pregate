@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "nextjs/rendering",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -65,13 +65,13 @@
       "defaults": {},
       "severity": "off",
       "source": {
-        "work": "Next.js data fetching docs, caching and revalidating",
-        "locator": "fetch cache and next.revalidate options",
-        "paraphrase": "A fetch without cache options uses the documented default auto no cache behavior; explicit options are optional."
+        "work": "Next.js fetch reference, https://nextjs.org/docs/app/api-reference/functions/fetch; Migrating to Cache Components, https://nextjs.org/docs/app/guides/migrating-to-cache-components",
+        "locator": "options.cache auto no cache; fetch cache options",
+        "paraphrase": "In the previous model, fetch defaults to auto no cache, so a missing cache option is not a violation. With cacheComponents enabled, fetch is uncached unless it runs inside use cache, and cache or next options are not required."
       },
-      "why": "The default is a legitimate choice, so missing cache options cannot be a universal violation.",
-      "fixHint": "Pass cache or next.revalidate in the fetch options. Choose force-cache, no-store, or an interval on purpose.",
-      "avoid": "Passing an empty options object or an unrelated option like signal does not declare a cache policy.",
+      "why": "The default is valid in both models. The check stays off. It runs only when Cache Components is not enabled, so a bare fetch inside use cache is not reported as a missing fetch cache option.",
+      "fixHint": "In the previous model, pass cache or next.revalidate only when you want an explicit policy. With cacheComponents, cache the function with use cache and cacheLife instead of fetch cache options.",
+      "avoid": "An empty options object or an unrelated option such as signal does not declare a policy. The check does not run when the first existing root next.config.js, next.config.mjs, or next.config.ts sets cacheComponents to literal true. A nested experimental.cacheComponents, a comment, or a computed flag does not enable that exception. next.config.mts is not read.",
       "examples": {
         "pass": "pass/next-revalidate",
         "fail": "fail/bare-fetch"

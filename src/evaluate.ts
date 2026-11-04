@@ -16,6 +16,7 @@ import { gatedSeverity } from "./typescript-version.ts";
 import { dependencySatisfies } from "./dependency-since.ts";
 import { pythonLegacyHits } from "./python-legacy.ts";
 import { versionGateMatches } from "./package-version.ts";
+import { cacheComponentsEnabled } from "./next-config.ts";
 
 const MODULE = "<module>";
 const TSCONFIG_INVALID = "tsconfig.json, or a local config it extends, is missing or invalid, so a bare import may be an alias of any path. Fix the tsconfig, or import by a relative path.";
@@ -159,8 +160,11 @@ function ruleSeverity(rule: LockRule, rel: string, host: Host): Severity | null 
 // up voids the whole search.
 function matched(r: LockRule, configs: PatternConfig[], p: Parsed, host: Host, report: Report): Form | null {
   const allow = (r.params.allow as string[] | undefined) ?? [];
+  let cacheComponents: boolean | undefined;
+  const enabled = (): boolean => cacheComponents ??= cacheComponentsEnabled(host.read);
   for (const c of configs) {
     if (!current(c, p.rel, host.read)) continue;
+    if (c.when !== undefined && (c.when.cacheComponents === "on") !== enabled()) continue;
     const hits = findAll(p, pattern(c, grammarOf(p.rel)!), host.now);
     if (!Array.isArray(hits)) return hits;
     for (const m of hits) if (!pure(m.node, allow)) report(r, m.node.startPosition.row + 1, symbolOf(m.node));
@@ -171,6 +175,7 @@ function matched(r: LockRule, configs: PatternConfig[], p: Parsed, host: Host, r
 // Pattern counts use the same matcher as ordinary pattern rules; marker counts share their sites.
 function count(what: Exclude<Extract<Impl, { primitive: "diff" }>["count"], "markers">, p: Parsed | null, host: Host): number | Form {
   if (p && !current(what.pattern, p.rel, host.read)) return 0;
+  if (p && what.pattern.when !== undefined && (what.pattern.when.cacheComponents === "on") !== cacheComponentsEnabled(host.read)) return 0;
   const hits = p ? findAll(p, pattern(what.pattern, grammarOf(p.rel)!), host.now) : [];
   return Array.isArray(hits) ? hits.length : hits;
 }

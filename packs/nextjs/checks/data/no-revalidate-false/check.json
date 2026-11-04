@@ -1,7 +1,7 @@
 {
   "$schema": "../../../../../schema/check.v1.json",
   "id": "nextjs/data/no-revalidate-false",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "area": "data",
   "cardinality": "singleton",
   "dimension": "nextjs.no-revalidate-false",
@@ -12,10 +12,63 @@
     "patterns": {
       "typescript": [
         {
-          "id": "revalidate-false",
+          "id": "revalidate-export",
+          "when": { "cacheComponents": "on" },
+          "files": [
+            "app/**/page.*",
+            "app/**/layout.*",
+            "app/**/route.*",
+            "src/app/**/page.*",
+            "src/app/**/layout.*",
+            "src/app/**/route.*"
+          ],
           "rule": {
-            "kind": "lexical_declaration",
-            "regex": "\\brevalidate\\s*=\\s*false\\b"
+            "kind": "identifier",
+            "regex": "^revalidate$",
+            "all": [
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "export_statement",
+                    "regex": "^export\\s+type\\b"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "kind": "program",
+                    "stopBy": "end",
+                    "has": {
+                      "kind": "expression_statement",
+                      "regex": "^[\"']use client[\"'];?$"
+                    }
+                  }
+                }
+              },
+              {
+                "any": [
+                  {
+                    "inside": {
+                      "field": "name",
+                      "kind": "variable_declarator",
+                      "inside": {
+                        "any": [
+                          { "kind": "lexical_declaration" },
+                          { "kind": "variable_declaration" }
+                        ],
+                        "inside": { "kind": "export_statement" }
+                      }
+                    }
+                  },
+                  {
+                    "nthChild": { "position": 1, "reverse": true },
+                    "inside": { "kind": "export_specifier" }
+                  }
+                ]
+              }
+            ]
           }
         }
       ]
@@ -28,6 +81,6 @@
     "ci"
   ],
   "feedback": {
-    "message": "{symbol} disables revalidation with revalidate = false. Set an explicit revalidate interval instead."
+    "message": "{symbol} exports revalidate, which Next.js rejects when cacheComponents is enabled. Remove it and use cacheLife inside use cache, or leave the data uncached."
   }
 }

@@ -4,6 +4,23 @@ Judgment, cross-file facts, or checks the TS syntax tree cannot decide. All five
 **candidate** rules: the closed pattern vocabulary inspects syntax in one file, so it
 cannot prove absence, resolve imports across modules, or read file-system conventions.
 
+## Cache Components limits
+
+`NEXT-CACHE-001`, `NEXT-REVAL-001`, and `NEXT-SERVER-EXPORT-001` read the first existing
+root `next.config.js`, `next.config.mjs`, or `next.config.ts` while judging a file.
+They treat Cache Components as on only when that file's exported config object sets
+`cacheComponents` to literal `true`. These are not detected:
+
+- `next.config.mts`, `next.config.cjs`, or `next.config.cts`
+- a config in a nested app (`apps/web/next.config.ts`)
+- `experimental.cacheComponents`, a comment, or a computed value
+- `defineConfig({ cacheComponents: true })` and other wrapper calls
+- an empty `generateStaticParams` return (`empty-generate-static-params`)
+
+Existing `fetch` `cache` and `next` options still work under Cache Components, so they
+are not reported. A Pre edit that only changes `next.config` does not rescan route files;
+the next check of those files, or `pregate check`, sees the new flag.
+
 ## Candidate rules
 
 - **route.ts method exports presence.** A route handler only runs when the file exports

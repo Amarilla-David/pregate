@@ -298,6 +298,8 @@ export interface PatternConfig {   // "x-*" keys are ignored (notes); any other 
   id: string; rule: MatchRule;
   constraints?: Record<string, MatchRule>; utils?: Record<string, MatchRule>;
   files?: string[]; ignores?: string[];  // accepted in the format; compile copies them into params.paths/exclude
+  since?: { dependencies: string[]; version: string };
+  when?: { cacheComponents: "on" | "off" }; // literal cacheComponents on the first existing root next.config.js, .mjs, or .ts
 }
 
 export type Placement = "new-in-exclude" | "edit-generated-or-excluded" | "no-language-pack-in-layer";

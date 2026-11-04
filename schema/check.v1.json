@@ -46,6 +46,12 @@
                         },
                         "required": ["dependencies", "version"],
                         "additionalProperties": false
+                      },
+                      "when": {
+                        "type": "object",
+                        "properties": { "cacheComponents": { "enum": ["on", "off"] } },
+                        "required": ["cacheComponents"],
+                        "additionalProperties": false
                       }
                     },
                     "required": ["id", "rule"]
@@ -69,6 +75,12 @@
                           "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" }
                         },
                         "required": ["dependencies", "version"],
+                        "additionalProperties": false
+                      },
+                      "when": {
+                        "type": "object",
+                        "properties": { "cacheComponents": { "enum": ["on", "off"] } },
+                        "required": ["cacheComponents"],
                         "additionalProperties": false
                       }
                     },
@@ -94,6 +106,12 @@
                         },
                         "required": ["dependencies", "version"],
                         "additionalProperties": false
+                      },
+                      "when": {
+                        "type": "object",
+                        "properties": { "cacheComponents": { "enum": ["on", "off"] } },
+                        "required": ["cacheComponents"],
+                        "additionalProperties": false
                       }
                     },
                     "required": ["id", "rule"]
@@ -117,6 +135,12 @@
                           "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" }
                         },
                         "required": ["dependencies", "version"],
+                        "additionalProperties": false
+                      },
+                      "when": {
+                        "type": "object",
+                        "properties": { "cacheComponents": { "enum": ["on", "off"] } },
+                        "required": ["cacheComponents"],
                         "additionalProperties": false
                       }
                     },
@@ -195,6 +219,12 @@
                             "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" }
                           },
                           "required": ["dependencies", "version"],
+                          "additionalProperties": false
+                        },
+                        "when": {
+                          "type": "object",
+                          "properties": { "cacheComponents": { "enum": ["on", "off"] } },
+                          "required": ["cacheComponents"],
                           "additionalProperties": false
                         }
                       },

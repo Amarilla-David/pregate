@@ -132,6 +132,7 @@ export interface MatchRule {
   all?: MatchRule[]; any?: MatchRule[]; not?: MatchRule;
 }
 export interface Relation extends MatchRule { field?: string; stopBy?: "neighbor" | "end" | MatchRule }
+export interface PatternWhen { cacheComponents: "on" | "off" }
 export interface PatternConfig {   // "x-*" keys are ignored (notes); any other unknown key ⇒ error
   id: string; rule: MatchRule;
   constraints?: Record<string, MatchRule>; utils?: Record<string, MatchRule>;
@@ -139,6 +140,7 @@ export interface PatternConfig {   // "x-*" keys are ignored (notes); any other 
   // Quiet unless a named dependency is known to be at least this version. The first name with
   // evidence decides. A lower bound below the floor wins, so an older package is not newly denied.
   since?: { dependencies: string[]; version: string };
+  when?: PatternWhen;                    // gates the pattern on a literal root next.config cacheComponents
 }
 
 export type Placement = "new-in-exclude" | "edit-generated-or-excluded" | "no-language-pack-in-layer";

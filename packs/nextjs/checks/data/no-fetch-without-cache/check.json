@@ -1,7 +1,7 @@
 {
   "$schema": "../../../../../schema/check.v1.json",
   "id": "nextjs/data/no-fetch-without-cache",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "area": "data",
   "cardinality": "singleton",
   "dimension": "nextjs.no-fetch-without-cache",
@@ -13,6 +13,7 @@
       "typescript": [
         {
           "id": "fetch-cache",
+          "when": { "cacheComponents": "off" },
           "rule": {
             "kind": "call_expression",
             "has": {
@@ -37,6 +38,6 @@
     "ci"
   ],
   "feedback": {
-    "message": "{symbol} fetches without a cache policy. Pass cache or next.revalidate in the options."
+    "message": "{symbol} fetches without a cache, revalidate, or next option. In the previous model the default is auto no cache; set cache or next.revalidate only to choose an explicit policy."
   }
 }

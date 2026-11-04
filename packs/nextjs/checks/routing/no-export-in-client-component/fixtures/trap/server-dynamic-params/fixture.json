@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/app/items/page.tsx",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [{ "line": 1 }]
+  },
+  "trap": {
+    "family": "server-segment-removed",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "dynamicParams is a server route segment export, so the 'use client' check does not see it. With cacheComponents enabled Next.js rejects it on the server too."
+  }
+}

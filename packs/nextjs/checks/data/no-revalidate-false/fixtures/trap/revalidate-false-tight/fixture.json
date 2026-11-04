@@ -2,20 +2,16 @@
   "$schema": "../../../../../../../schema/fixture.v1.json",
   "language": "typescript",
   "params": {},
-  "target": "src/app/tight.ts",
+  "target": "src/app/tight/page.ts",
   "before": null,
   "expect": {
     "verdict": "fail",
-    "violations": [
-      {
-        "line": 1
-      }
-    ]
+    "violations": [{ "line": 1 }]
   },
   "trap": {
     "family": "spacing-evasion",
     "origin": "forge",
-    "discovered": "2026-10-03",
-    "note": "Removing the spaces around the equals sign does not change the declaration the rule reads. The pattern allows any spacing."
+    "discovered": "2026-11-04",
+    "note": "Removing the spaces around the equals sign does not hide an exported revalidate when the root next.config.ts sets cacheComponents to literal true."
   }
 }

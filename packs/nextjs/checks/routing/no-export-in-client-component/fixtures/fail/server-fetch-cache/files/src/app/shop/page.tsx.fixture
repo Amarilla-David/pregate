@@ -1,0 +1,4 @@
+export const fetchCache = "force-cache";
+export default function Page() {
+  return null;
+}

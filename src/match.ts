@@ -25,7 +25,7 @@ type PNode = { var: MetaVar } | { leaf: string; named: boolean; kind: number } |
 interface Scope { grammar: Grammar; utils: Map<string, Test>; rawUtils: Record<string, unknown>; refs: string[]; vars: Set<string>; indexed: boolean }
 
 const RULE_KEYS = ["pattern", "kind", "regex", "nthChild", "all", "any", "not", "matches", "scope", "inside", "has", "precedes", "follows"];
-const CONFIG_KEYS = new Set(["id", "rule", "constraints", "utils", "files", "ignores", "since"]);
+const CONFIG_KEYS = new Set(["id", "rule", "constraints", "utils", "files", "ignores", "since", "when"]);
 // Escapes that mean the same in Rust's regex and in a JS RegExp without flags; anything else
 // (\A, \z, \p{…}, \x{…}, octal) would be read differently, so it is rejected instead.
 const SAME_ESCAPE = /^(?:[^0-9A-Za-z]|[dDwWsSbBnrtfv]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})/;
@@ -48,6 +48,12 @@ const kindIndexes = new WeakMap<Rec, Rec[][]>();
 export function compilePattern(c: PatternConfig, g: Grammar): Compiled {
   const unknown = Object.keys(c).filter((k) => !CONFIG_KEYS.has(k) && !k.startsWith("x-"));
   if (unknown.length) throw new Error(`${c.id}: unknown key ${unknown.join(", ")}`);
+  if (c.when !== undefined) {
+    const keys = Object.keys(c.when);
+    if (keys.length !== 1 || keys[0] !== "cacheComponents" || (c.when.cacheComponents !== "on" && c.when.cacheComponents !== "off")) {
+      throw new Error(`${c.id}: when.cacheComponents must be on or off`);
+    }
+  }
   const utils = record(c.utils ?? {}, `${c.id}.utils`);
   const s: Scope = { grammar: g, utils: new Map(), rawUtils: utils, refs: [], vars: new Set(), indexed: false };
   for (const [id, rule] of Object.entries(utils)) s.utils.set(id, compileRule(rule, s, `${c.id}.utils.${id}`));
