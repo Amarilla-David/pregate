@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/modules/no-module-register",
+  "version": "1.0.0",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "node.no-module-register",
+  "minSeverity": null,
+  "params": {
+    "minNode": { "type": "integer", "minimum": 1 }
+  },
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "module-register",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "all": [
+                    { "has": { "field": "property", "regex": "^register$" } },
+                    {
+                      "any": [
+                        { "has": { "field": "object", "kind": "identifier", "regex": "^module$" } },
+                        { "has": { "field": "object", "regex": "node:module" } }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "subscript_expression",
+                  "all": [
+                    { "has": { "field": "object", "kind": "identifier", "regex": "^module$" } },
+                    { "has": { "field": "index", "regex": "^[\"']register[\"']$" } }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "named-register",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              { "has": { "field": "function", "kind": "identifier", "regex": "^register$" } },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      { "has": { "stopBy": "end", "kind": "string_fragment", "regex": "^node:module$" } },
+                      {
+                        "has": {
+                          "stopBy": "end",
+                          "kind": "import_specifier",
+                          "has": { "field": "name", "regex": "^register$" }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} calls module.register, which Node.js 26 deprecates. Use module.registerHooks instead."
+  }
+}

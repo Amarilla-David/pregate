@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": { "minNode": 26 },
+  "target": "src/stream/internal.ts",
+  "before": null,
+  "expect": { "verdict": "fail", "violations": [{ "line": 1 }] }
+}

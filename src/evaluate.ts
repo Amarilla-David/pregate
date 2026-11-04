@@ -1,6 +1,7 @@
 // The rules of the lock over one file in one state (ARCHITECTURE §6.3): patterns, metrics, imports
 // and the counts the diff rules compare; placement() parses only a possible generated marker.
 import { compilePattern, type Compiled, findAll } from "./match.ts";
+import { declaredNodeMajor } from "./node-target.ts";
 import { inScope, layerOf, matches, REQUESTS, ruleApplies as applies } from "./paths.ts";
 import { type Edge, loadTsPaths, reexportTargets, resolve } from "./resolve.ts";
 import { astHash, classes, functions, grammarOf, imports, nestings, type Node, type Parsed, parse, suggestFunctionSplit, suggestNestingFix, symbolBodies, symbolOf, symbols } from "./ts.ts";
@@ -22,7 +23,7 @@ const compiled = new WeakMap<PatternConfig, Partial<Record<Grammar, Compiled>>>(
 // `host.now` times the regexes that can give up (match.ts).
 export function analyze(lock: Lock, phase: Phase, rel: string, state: string | Parsed | null, host: Host): Analysis | Form {
   const gated = new Map<string, Severity>();
-  const rules = (inScope(lock, rel) ? running(lock, phase, rel) : []).filter((rule) => {
+  const rules = (inScope(lock, rel) ? applicable(lock, phase, rel, host) : []).filter((rule) => {
     const severity = gatedSeverity(rule, rel, host.read);
     if (severity === null) return false;
     gated.set(rule.id, severity);
@@ -120,6 +121,18 @@ export function placement(lock: Lock, phase: Phase, rel: string, created: boolea
 // The rules that run on `rel` in this phase: PREGATE's, not ArkGate's, and whose paths take it in.
 function running(lock: Lock, phase: Phase, rel: string): LockRule[] {
   return lock.rules.filter((r) => r.phases.includes(phase) && !lock.ownedByArkgate.includes(r.id) && applies(r, rel) && languageApplies(r, rel));
+}
+
+// params.minNode is the first Node.js major a removal or deprecation applies to. The rule stays
+// quiet when the project does not declare that major, or when any pin still allows an older one.
+function applicable(lock: Lock, phase: Phase, rel: string, host: Host): LockRule[] {
+  const rules = running(lock, phase, rel);
+  if (!rules.some((rule) => typeof rule.params.minNode === "number")) return rules;
+  const major = declaredNodeMajor(rel, host.read);
+  return rules.filter((rule) => {
+    const min = rule.params.minNode;
+    return typeof min !== "number" || (major !== null && major >= min);
+  });
 }
 
 // Reports every match of a pattern rule except those `params.allow` declares pure; a regex that gave

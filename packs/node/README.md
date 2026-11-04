@@ -27,12 +27,17 @@ stay out of new code.
 | `node/modules/no-module-compile` | `module._compile` / `require.extensions` | Loader internals have unstable contracts | deny |
 | `node/security/no-exec-interpolation` | `exec` with a template or concatenated command string | The shell parses the spliced value as commands | deny |
 | `node/security/no-create-cipher` | `crypto.createCipher` / `createDecipher` | Removed in Node.js 22; weak key derivation | deny |
+| `node/api/no-write-header` | `ServerResponse.writeHeader()` | Removed in Node.js 26 (DEP0063); use `writeHead` | deny |
+| `node/modules/no-stream-internal` | `node:_stream_*` imports | Removed in Node.js 26 (DEP0193); use `node:stream` | deny |
+| `node/modules/no-module-register` | `module.register()` | Runtime-deprecated in Node.js 26 (DEP0205); use `module.registerHooks` | warn |
 
 ## Methodologies
 
-- `node/runtime` — NODE-SYNC-001, NODE-EXIT-001, NODE-ENV-001, NODE-PREFIX-001, NODE-BUF-001, NODE-URL-001
+- `node/runtime` — NODE-SYNC-001, NODE-EXIT-001, NODE-ENV-001, NODE-PREFIX-001, NODE-BUF-001, NODE-URL-001, NODE-HEADER-001
 - `node/security` — NODE-EXEC-001, NODE-VM-001, NODE-EXEC-002, NODE-CIPHER-001
-- `node/internals` — NODE-BIND-001, NODE-UNCAUGHT-001, NODE-TLS-001, NODE-SHELL-001, NODE-COMPILE-001
+- `node/internals` — NODE-BIND-001, NODE-UNCAUGHT-001, NODE-TLS-001, NODE-SHELL-001, NODE-COMPILE-001, NODE-STREAM-001, NODE-REGISTER-001
+
+The Node.js 26 rules apply only when every declared Node.js target for that file is 26 or newer. Pins are read from `package.json` `engines.node` and `volta.node`, `.nvmrc`, `.node-version`, and `.tool-versions`, walking from the file's directory to the repository root. A missing pin, an older pin beside a newer one, or an unreadable pin such as `lts/*` leaves the rule quiet, so a project that still supports an older Node.js is not newly denied or warned.
 
 <!-- BEGIN generated reference -->
 
@@ -40,7 +45,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 
 ## Exact rule contract
 
-Category: **library**. Version: `1.2.1`. 16 distinct check IDs.
+Category: **library**. Version: `1.3.0`. 19 distinct check IDs.
 
 Methodologies: `node/internals` (complete), `node/runtime` (complete), `node/security` (complete).
 
