@@ -94,7 +94,7 @@ What setup registers, for harnesses it finds:
 - The `pregate-global` plugin for Antigravity (`agy`)
 - The `/pregate` companion skill
 
-`pregate install --git-hook --ci github` is a separate command. It adds a repository pre-commit hook and a GitHub Actions workflow. Setup does not do that. The shell guard is the shell half of the same global Pre hook, not a separate switch.
+`pregate install --git-hook --ci github` is a separate command. It adds a repository pre-commit hook and a GitHub Actions workflow. `pregate install --ci vercel` adds the Vercel build recipe instead, including on a repository with no Actions workflow. `pregate install --ci github,vercel` adds both, and both have to pass. Setup does not do that. The shell guard is the shell half of the same global Pre hook, not a separate switch.
 
 To stop it:
 
@@ -146,6 +146,16 @@ pregate audit --plan
 pregate promote --preview
 pregate promote --rule core/EVA-TS-001,clean-code/CC-FN-001 --preview
 ```
+
+## Vercel
+
+Pregate can gate the Vercel build itself. The recipe installs the pinned linux-x64 release, runs `pregate check` before the framework build, and fails the deployment on a deny. That works when the repository has no GitHub Actions. When both are configured, `pregate ci status` waits on the Actions check and on the Vercel commit status (`Vercel` or `Vercel – <project>`). Ready passes. Error, Canceled, and a missing status do not.
+
+```sh
+pregate install --ci vercel
+```
+
+The steps, the cache, and how preview differs from production are in the [Vercel guide](docs/guides/vercel-ci.md).
 
 ## GitHub Action and SARIF
 

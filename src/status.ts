@@ -25,6 +25,7 @@ import { H, sha256, stateDir } from "./state.ts";
 import { canonical } from "./disk.ts";
 import { normalize } from "./reconstruct.ts";
 import { readBatch, readProposal } from "./proposal.ts";
+import { detectProviders } from "./ci/detect.ts";
 
 // Recovery must be readable even when admission of the active contract fails.
 export function contractDiagnosis(root: string) {
@@ -93,7 +94,8 @@ function backstops(root: string) {
   const top = repository ? git(root, ["rev-parse", "--show-toplevel"])?.trim() : undefined;
   return { repository, available, baseline: repository ? "CLI: Git HEAD/index/merge-base; Stop: retained session snapshot (pregate report --json)" : "filesystem snapshot; check --all scans the complete tree",
     preCommitConfigured: hook !== undefined && present(resolve(root, hook)) && (text(resolve(root, hook)) ?? "").includes("check --staged"),
-    ciTemplatePresent: top !== undefined && existsSync(join(top, ".github/workflows/pregate.yml")) };
+    ciTemplatePresent: top !== undefined && existsSync(join(top, ".github/workflows/pregate.yml")),
+    ciProviders: detectProviders(root).map((provider) => ({ id: provider.id, detail: provider.detail, checks: provider.checks })) };
 }
 
 // Path-kind rule folders inside the project with files Git does not hold: teammates compile a stale lock.
@@ -273,6 +275,14 @@ function nextStep(s: Status): string {
   return "pregate audit.";
 }
 
+function providerLine(providers: { id: string; detail: string; checks: string[] }[]): string {
+  if (providers.length === 0) return "CI providers: none configured.";
+  const parts = providers.map((provider) => provider.checks.length === 0
+    ? `${provider.id} (${provider.detail})`
+    : `${provider.id} (${provider.detail}, checks ${provider.checks.join(", ")})`);
+  return `CI providers: ${parts.join("; ")}.`;
+}
+
 function verboseStatus(s: Status): string {
   const { enforced, advisor, shadow, warns } = ruleCounts(s);
   return [
@@ -289,7 +299,7 @@ function verboseStatus(s: Status): string {
     ...(s.unsupportedInScope.length === 0 ? [] : [`Unsupported source files in scope: ${s.unsupportedInScope.join(", ")}`]),
     ...(s.uncoveredInScope.length === 0 ? [] : [`Parsed files without an applicable language policy: ${s.uncoveredInScope.join(", ")}. Add and select a language pack.`]),
     "Harness configuration:", ...s.harnesses.map((h) => `  ${h.id}: ${h.configured ? "configured" : "missing/disabled/untrusted"}; native approval: ${h.nativeApproval ?? "human command route"}; warning channel: ${h.warnings ? "yes" : "no"}.`),
-    ...(s.git === null ? [] : [`Baseline: ${s.git.baseline}. Pre-commit configured: ${s.git.preCommitConfigured}. CI template present: ${s.git.ciTemplatePresent}.`]),
+    ...(s.git === null ? [] : [`Baseline: ${s.git.baseline}. Pre-commit configured: ${s.git.preCommitConfigured}. CI template present: ${s.git.ciTemplatePresent}. ${providerLine(s.git.ciProviders)}`]),
     ...s.limits, "Next: pregate doctor checks the installation and runtime canaries; pregate status --json shows each effective rule.",
   ].join("\n");
 }

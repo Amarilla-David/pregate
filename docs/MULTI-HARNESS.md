@@ -332,7 +332,7 @@ The shared registration is written if any of the three that read it is present, 
   - of the repo: `disableAllHooks` in `.claude/settings*.json`, `[features] hooks = false` in `.codex/config.toml`, and a project plugin or a `plugins.json` that names `pregate` under `.agents/`.
   - The pre-commit is the only channel to the human that exists on all five harnesses, and it also works when the one that was turned off is the Codex hook, whose SessionStart also does not run without trust.
 
-**MH-28. `pregate install` (per repo) stops registering hooks and committing a launcher.** It remains for what belongs to the repo: `--git-hook` and `--ci github`.
+**MH-28. `pregate install` (per repo) stops registering hooks and committing a launcher.** It remains for what belongs to the repo: `--git-hook`, `--ci github`, and `--ci vercel`. `--ci github,vercel` writes both. Vercel is a build recipe (`scripts/pregate-vercel-build.sh` and `vercel.json`), so a repository with no Actions workflow can still gate the deployment. `pregate ci status` and `pregate ci wait` read GitHub commit statuses and check runs for the providers that are configured and fail closed when a required one is missing or failing.
 - The pre-commit calls `pregate check --staged --ratchet` from the PATH (`command -v pregate || "$HOME/.local/bin/pregate"`). If it is missing, the commit fails with "install PREGATE". By MH-19, it runs the engine the lock asks for.
 - The CI template reads `"engine"` from the lock and downloads that version, verified against `SHA256SUMS` (`sha256sum -c --ignore-missing`).
 - If it finds our own 0.1.0 groups in `.claude/settings.json`, or a committed `.pregate/bin/pregate`, it removes them and warns.

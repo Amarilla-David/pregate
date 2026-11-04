@@ -9,6 +9,7 @@ import { inlineSink } from "./inline-sinks.ts";
 const HELP_COMMANDS = new Set([
   "check", "audit", "promote", "fitness", "init", "scan", "demo", "report", "feedback", "storage", "dispute", "issue", "pack", "explain",
   "preset", "rules", "rules test", "rules draft", "rules add", "status", "approve", "enable", "disable", "install", "setup", "update", "uninstall", "doctor", "guide", "session", "session rebase",
+  "ci", "ci detect", "ci status", "ci wait",
   "preset apply", "preset compile", "preset diagnose", "preset show", "preset schema", "preset request-schema",
   "pack list", "pack show", "pack init", "pack add", "pack apply", "pack restore", "pack update", "pack enable", "pack disable", "pack remove",
   "fitness status", "fitness run", "fitness plan", "fitness fingerprint", "fitness bind", "issue list", "issue draft", "issue show", "issue submit",
@@ -716,6 +717,26 @@ function readContractInput(args: Word[], cwd: string | null): Word | null {
   return at < 0 ? null : args[at + 1] ?? null;
 }
 
+// `ci` only reads provider files and GitHub. It does not change the contract or the installation.
+function ciInspection(args: Word[]): boolean {
+  if (args[0]?.text !== "ci" || !args.every((word) => word.literal && word.subs.length === 0)) return false;
+  const sub = args[1]?.text;
+  if (sub === "detect") return args.length === 2 || (args.length === 3 && args[2]?.text === "--json");
+  if (sub !== "status" && sub !== "wait") return false;
+  for (let i = 2; i < args.length; i++) {
+    const flag = args[i]!.text;
+    if (flag === "--json") continue;
+    if (!["--sha", "--require", "--timeout", "--interval"].includes(flag)) return false;
+    if (sub === "status" && (flag === "--timeout" || flag === "--interval")) return false;
+    const value = args[++i]?.text;
+    if (value === undefined || value.startsWith("-")) return false;
+    if (flag === "--require" && !["github-actions", "vercel", "github"].includes(value)) return false;
+    if ((flag === "--timeout" || flag === "--interval") && !/^\d+$/.test(value)) return false;
+    if (flag === "--sha" && !/^[0-9a-f]{7,64}$/i.test(value)) return false;
+  }
+  return true;
+}
+
 // Allowed pregate subcommands: read-only ones. Through the launcher, `check` must read stdin.
 function contractRecovery(args: Word[]): boolean {
   if (!args.every(w => w.literal)) return false;
@@ -809,6 +830,7 @@ function readOnlyPregate(args: Word[], stdinOnly: boolean): boolean {
   }
   if (args[0]?.text === "report") return true;
   if (args.length === 1 && ["--version", "doctor", "report", "status"].includes(args[0]!.text)) return true;
+  if (ciInspection(args)) return true;
   const [sub, second] = args.filter((w) => !w.text.startsWith("-")).map((w) => w.text);
   if (sub === "check") return !stdinOnly || args.some((w) => w.text === "--stdin");
   return sub === "explain" || (sub === "preset" && second === "show") || (sub === "rules" && second === "test");

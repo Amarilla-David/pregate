@@ -159,6 +159,14 @@ cannot select an older engine by editing its own lock. Repository variables
 are outside the change under review; the workflow file is not, so protect
 `.pregate/` and `.github/workflows/` with CODEOWNERS and required reviews.
 
+The same gate can run inside the Vercel build, with or without that workflow:
+
+```sh
+pregate install --ci vercel
+```
+
+`pregate install --ci github,vercel` writes both. A repository that has both configured must see a passing Actions check and a passing Vercel deployment status. The [Vercel guide](vercel-ci.md) covers the build command, the linux-x64 install, the build cache, and preview versus production.
+
 ## Updates and removal
 
 `pregate update` selects the latest published release. `update --version <v>` selects

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Vercel is a CI provider next to GitHub Actions. `pregate install --ci vercel` writes a build recipe that installs the pinned linux-x64 release and runs the gate before the framework build, including on a repository with no Actions workflow. `pregate install --ci github` is unchanged. `pregate install --ci github,vercel` writes both.
+- `pregate ci detect`, `pregate ci status`, and `pregate ci wait` read GitHub commit statuses and check runs. Vercel contexts are `Vercel` and `Vercel – <project>` (Ready passes; Error, Canceled, and a missing status do not). A repository that configures both providers must see both pass. A required status that is missing or failing does not pass.
+- The [Vercel guide](docs/guides/vercel-ci.md) covers `vercel.json` `buildCommand`, the package script, the build cache, and preview versus production.
+
 ### Changed
 - The mattpocock pack is reviewed at [mattpocock/skills@4ae2317](https://github.com/mattpocock/skills/commit/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d) (2026-10-31), 26 commits after `6fd947921b935b7e1e69293a200400f0fdd5c15f` (2026-10-06). Pack version `1.1.1`. The seven warning checks stay. Upstream did not drop the sections those checks paraphrase (`tdd` tautologies, relative mocks, call counts, conditional mocks; small function surfaces; tagged `[DEBUG-...]` logs; the Total TypeScript enum companion). The new requirements are workflow or session evidence and are recorded in `packs/mattpocock/INVARIANTS.md`: fresh subagent context, a fresh implementer per ticket, a standards-file search during code review, a diff that proves a forced mutation landed before trusting a red test, a one-line seam note, a fetched ticket title, wayfinder label and research-branch rules, setup and wizard template fixes, and the in-progress `software-factory` and `chief-of-staff` skills. `MP-DEBUG-001` states that the mutation diff is outside the check. The MIT notice in `packs/mattpocock/LICENSE` is unchanged and matches upstream.
 

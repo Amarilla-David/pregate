@@ -169,7 +169,8 @@
         "src/embedded.ts",
         "src/rules-add-command.ts",
         "src/git-changes.ts",
-        "src/loosening.ts"
+        "src/loosening.ts",
+        "src/ci/**"
       ],
       "mayImport": [
         "core"

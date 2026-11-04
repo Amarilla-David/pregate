@@ -633,8 +633,10 @@ limit and never present off as the normal performance fix.
 Leave installation changes to explicitly authorized work. setup installs global
 registrations/instructions (Codex and agy only when their binary is on PATH;
 doctor reports a binary-less one as INFO); update selects latest or --version/--engine; uninstall
-optionally --purge removes state. install --git-hook --ci github adds repository
-backstops. enable/disable require human consent. Use top-level --help/-h for forms.
+optionally --purge removes state. install --git-hook --ci github adds the GitHub
+Actions workflow. install --ci vercel adds the Vercel build recipe, which can be the
+only CI on a repository. install --ci github,vercel adds both, and both must pass.
+enable/disable require human consent. Use top-level --help/-h for forms.
 
 State can retain complete source blobs. Inspect `storage inspect --json`; prepare
 `storage prune --older-than <days> --preview` or `storage recover --preview`.
@@ -695,7 +697,10 @@ usage:
   pregate pack apply <plan.json> [--preview|--yes] | restore
   pregate pack disable <ns/methodology> | remove <ns> | update <ns> [--preview|--yes]
   pregate pack update --all [--preview|--yes]
-  pregate install [--git-hook] [--ci github]
+  pregate install [--git-hook] [--ci github|vercel|github,vercel]
+  pregate ci detect [--json]
+  pregate ci status [--sha <sha>] [--require github-actions|vercel] [--json]
+  pregate ci wait [--sha <sha>] [--timeout <seconds>] [--interval <seconds>] [--require github-actions|vercel] [--json]
   pregate setup | update [--version <v> | --engine <v>] | uninstall [--purge] [--yes] | doctor
   pregate update --project [--preview|--yes]
   pregate update --projects <path...> [--preview|--yes [--no-commit]]

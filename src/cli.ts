@@ -87,7 +87,10 @@ const USAGE = `usage:
   pregate pack apply <plan.json> [--preview|--yes] | restore
   pregate pack disable <ns/methodology> | remove <ns> | update <ns> [--preview|--yes]
   pregate pack update --all [--preview|--yes]
-  pregate install [--git-hook] [--ci github]
+  pregate install [--git-hook] [--ci github|vercel|github,vercel]
+  pregate ci detect [--json]
+  pregate ci status [--sha <sha>] [--require github-actions|vercel] [--json]
+  pregate ci wait [--sha <sha>] [--timeout <seconds>] [--interval <seconds>] [--require github-actions|vercel] [--json]
   pregate setup | update [--version <v> | --engine <v>] | uninstall [--purge] [--yes] | doctor
   pregate update --project [--preview|--yes]
   pregate update --projects <path...> [--preview|--yes [--no-commit]]
@@ -134,6 +137,7 @@ async function command([cmd, ...args]: string[]): Promise<Result> {
       : args[0] === "draft" ? grammars().then(async () => (await import("./rules-draft-command.ts")).rulesDraft(args.slice(1), here()))
       : args[0] === "add" ? grammars().then(async () => (await import("./rules-add-command.ts")).rulesAdd(args.slice(1), here())) : BAD;
     case "install": return installCommand(args);
+    case "ci": return (await import("./ci/command.ts")).ciCommand(args);
     case "setup": return args.length === 0 ? setup() : BAD;
     case "update": return updateCommand(args);
     case "uninstall": {
@@ -355,10 +359,24 @@ function testFiles(files: import("./types.ts").Files): { ok: boolean; lines: str
 
 function installCommand(args: string[]): Result {
   const o = options(args, ["--ci"], ["--git-hook"]);
-  if (o === null || o.operands.length > 0 || (o.opts.get("--ci") ?? "github") !== "github") return BAD;
+  const ci = o === null ? null : ciProviders(o.opts.get("--ci"));
+  if (o === null || ci === null || o.operands.length > 0) return BAD;
   const root = here();
   if (root === null) return { code: 1, text: `No ${PRESET} here or above; create one (see catalog/presets) and run pregate preset compile.` };
-  return install(root, { gitHook: o.opts.has("--git-hook"), ci: o.opts.has("--ci") });
+  return install(root, { gitHook: o.opts.has("--git-hook"), ci });
+}
+
+// `--ci github` stays the Actions workflow. `vercel` is the build recipe. A comma list writes both.
+function ciProviders(value: string | undefined): Array<"github-actions" | "vercel"> | null {
+  if (value === undefined) return [];
+  const providers: Array<"github-actions" | "vercel"> = [];
+  for (const part of value.split(",")) {
+    const name = part.trim();
+    const id = name === "github" ? "github-actions" : name === "vercel" ? "vercel" : null;
+    if (id === null || name === "") return null;
+    if (!providers.includes(id)) providers.push(id);
+  }
+  return providers.length === 0 ? null : providers;
 }
 
 function updateCommand(args: string[]): Promise<Result> | Result {
