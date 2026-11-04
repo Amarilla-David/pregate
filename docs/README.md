@@ -8,6 +8,7 @@ its recorded candidate, not proof that a later candidate passes.
 ## Start and use the tool
 
 - [Install, update and remove](guides/installation.md)
+- [Gate a Vercel build](guides/vercel-ci.md)
 - [Try the owned language demos](guides/demo.md)
 - [Use the pregate skill in your coding harness](guides/pregate-skill.md)
 - [Update one or several projects](features/project-update.md)
@@ -130,6 +131,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 | [guides/rule-precision.md](guides/rule-precision.md) | Product/reference |
 | [guides/source-invariants.md](guides/source-invariants.md) | Product/reference |
 | [guides/team-contracts.md](guides/team-contracts.md) | Product/reference |
+| [guides/vercel-ci.md](guides/vercel-ci.md) | Product/reference |
 | [guides/windows-verification.md](guides/windows-verification.md) | Product/reference |
 | [inputs/core-invariants-48.md](inputs/core-invariants-48.md) | Original input |
 | [MULTI-HARNESS.md](MULTI-HARNESS.md) | Product/reference |

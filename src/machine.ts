@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { ASSETS } from "./assets.ts";
 import { canonical, removeReleased, renameReleased } from "./disk.ts";
+import { describeCi } from "./ci/detect.ts";
 import { consentedPlaces, consentedRoots, dataHome, disable, enable, enabled, status } from "./consent.ts";
 import { findRoot } from "./disk.ts";
 import { launcherVersion } from "./inertia.ts";
@@ -384,7 +385,8 @@ export async function doctor(): Promise<Result> {
   const found = detect(p);
   // Codex and agy without a binary do not run here; the shared files stay checked for IDE apps.
   const checked = new Map([...found].filter(([h, bin]) => bin !== null || SHARED.includes(h)));
-  const lines = [installed(p), ok(status(findRoot(canonical(process.cwd()), () => true)))];
+  const ci = describeCi(canonical(process.cwd()));
+  const lines = [installed(p), ok(status(findRoot(canonical(process.cwd()), () => true))), ci.providers.length === 0 ? info(ci.text) : ok(ci.text)];
   lines.push(...skillProblems().map(fail));
   if (found.size === 0) lines.push(fail("No harness found; PREGATE gates nothing on this machine."));
   else if (checked.size === 0) lines.push(warn("No harness with its binary on PATH; PREGATE gates nothing yet."));

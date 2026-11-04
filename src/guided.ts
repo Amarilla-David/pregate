@@ -11,6 +11,7 @@ import { grammars, LOCK, PRESET, readText, VERSIONS } from "./gate.ts";
 import { git } from "./git.ts";
 import { init, repoFiles } from "./init.ts";
 import { librarySource } from "./library.ts";
+import { describeCi } from "./ci/detect.ts";
 import { doctor, setup } from "./machine.ts";
 import { detectedScope, detectStack, emptyLayerLines, scopeCoverage } from "./onboard.ts";
 import { composePackPlan, projectUpdate } from "./pack-command.ts";
@@ -136,6 +137,7 @@ export async function inspectProject(directory: string) {
       shadow: status.rules.filter(rule => rule.implementation !== "fitness" && rule.enforcement === "shadow").length,
       warning: status.rules.filter(rule => rule.severity === "warn").length, unverified: status.fitnessCoverage.unverified },
     actions, errors, next: diagnosis?.next ?? [], knownProjects: knownProjects(),
+    ci: describeCi(root),
   };
 }
 
@@ -150,6 +152,7 @@ function projectActions(state: string, installation: Installation, outside: numb
     ...(!installation.launcherPresent || !installation.enginePresent || !installation.harnessesConfigured ? [{ id: "setup", label: "Repair installation and hooks", reason: "Missing installation or hooks prevent effective protection.", command: "pregate setup" }] : []),
     { id: "global", label: "Install the latest engine", reason: "Download and verify the release through the normal updater.", command: "pregate update" },
     { id: "doctor", label: "Diagnose installation", reason: "Check registrations and real denial canaries.", command: "pregate doctor" },
+    { id: "ci", label: "Add a CI backstop", reason: "GitHub Actions, the Vercel build, or both. A repository does not need Actions to gate a Vercel deployment.", command: "pregate install --ci github,vercel" },
   ].map(action => ({ ...action, recommended: action.id === preferred }));
   return actions.sort((a, b) => Number(b.recommended) - Number(a.recommended));
 }
@@ -166,6 +169,7 @@ function card(info: Awaited<ReturnType<typeof inspectProject>>): string {
     ...info.layerWarnings, ...info.globWarnings,
     ...(info.onboarding ? [`No project rules yet. Let's scan documentation, stack and code.`, `Custom pack idea: ${info.documentation.customPack.ns}. ${info.documentation.customPack.reason}`,
       ...(info.documentation.requirements.length ? [`Optional: draft a project pack from ${info.documentation.requirements.length} documented requirements: pregate guide --preview --custom-from-docs`] : ["The agent can use scan --json to propose domain rules and tests from the project evidence."])] : []),
+    info.ci.text,
     ...info.errors, ...info.actions.filter(action => action.recommended).map(action => `Suggested: ${action.label}. ${action.command}`),
     "The agent can inspect guide --json and prepare guide --preview. Only the human confirms activation; no approval is inferred from a terminal."].join("\n");
 }
@@ -362,7 +366,7 @@ function noNewDone(root: string): string {
   const inGit = git(root, ["rev-parse", "--is-inside-work-tree"])?.trim() === "true";
   const committed = () => git(root, ["status", "--porcelain", "--", PRESET, LOCK]) === "" && !!git(root, ["ls-files", "--", PRESET])?.trim();
   if (!inGit || committed()) return `${done} Try: ask your agent to edit something.`;
-  return `${done} The contract is not committed yet: commit ${PRESET} and ${LOCK}, then CI can run pregate check --ratchet --base <that commit>.`;
+  return `${done} The contract is not committed yet: commit ${PRESET} and ${LOCK}, then CI can run pregate check --ratchet --base <that commit> (GitHub Actions, the Vercel build, or both).`;
 }
 
 function quoted(path: string): string {
