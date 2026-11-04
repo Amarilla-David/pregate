@@ -43,15 +43,17 @@ function installedVersion(text: string | null): string | null {
   try {
     const version = (JSON.parse(text) as { version?: unknown }).version;
     return typeof version === "string" ? concrete(version.trim().replace(/^v/, "")) : null;
-  } catch {
-    return null;
+  } catch (error) {
+    if (error instanceof SyntaxError) return null;
+    throw error;
   }
 }
 
 function declaredMinimum(text: string | null): { present: boolean; version: string | null } {
   if (text === null) return { present: false, version: null };
   let pkg: Record<string, unknown>;
-  try { pkg = JSON.parse(text) as Record<string, unknown>; } catch { return { present: false, version: null }; }
+  try { pkg = JSON.parse(text) as Record<string, unknown>; }
+  catch (error) { if (error instanceof SyntaxError) return { present: false, version: null }; throw error; }
   for (const field of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
     const table = pkg[field];
     if (table === null || typeof table !== "object" || Array.isArray(table)) continue;
