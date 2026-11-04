@@ -50,7 +50,10 @@ function detectActions(top: string): DetectedProvider | null {
   if (!existsSync(directory)) return null;
   let entries: string[] = [];
   try { entries = readdirSync(directory); }
-  catch { return null; }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
   const checks = new Set<string>();
   let found = false;
   for (const name of entries) {

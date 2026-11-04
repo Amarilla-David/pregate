@@ -43,7 +43,10 @@ async function watchCommand(mode: "status" | "wait", args: string[]): Promise<Re
   if (repository === null) return { code: 1, text: "CI needs a GitHub repository (origin, or PREGATE_GITHUB_REPOSITORY=owner/repo)." };
   let api: string;
   try { api = githubApiBase(process.env.PREGATE_GITHUB_API); }
-  catch (error) { return { code: 1, text: (error as Error).message }; }
+  catch (error) {
+    if (!(error instanceof GitHubCiError)) throw error;
+    return { code: 1, text: error.message };
+  }
   const detected = detectProviders(dir);
   const expectations = expectationsOf(detected, options.require);
   const source = { api, token: githubToken() };
@@ -56,8 +59,8 @@ async function watchCommand(mode: "status" | "wait", args: string[]): Promise<Re
       const signals = await readGitHubSignals(repository, sha, source, actionChecks(expectations));
       report = judge(expectations, signals);
     } catch (error) {
-      const message = error instanceof GitHubCiError ? error.message : "CI status could not be read.";
-      return { code: 1, text: message };
+      if (!(error instanceof GitHubCiError)) throw error;
+      return { code: 1, text: error.message };
     }
     if (report.verdict === "pass" || report.verdict === "fail") break;
     if (mode === "status" || Date.now() >= deadline) break;

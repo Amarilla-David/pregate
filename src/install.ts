@@ -104,7 +104,10 @@ function vercel(root: string): string {
   }
   let parsed: unknown;
   try { parsed = JSON.parse(readFileSync(config, "utf8")); }
-  catch { return [...lines, "vercel.json is not valid JSON, so it was left unchanged.", `Set its buildCommand to \`${VERCEL_BUILD}\`.`].join("\n"); }
+  catch (error) {
+    if (!(error instanceof SyntaxError)) throw error;
+    return [...lines, "vercel.json is not valid JSON, so it was left unchanged.", `Set its buildCommand to \`${VERCEL_BUILD}\`.`].join("\n");
+  }
   if (!isObject(parsed)) return [...lines, "vercel.json is not a JSON object, so it was left unchanged.", `Set its buildCommand to \`${VERCEL_BUILD}\`.`].join("\n");
   const current = parsed.buildCommand;
   if (typeof current === "string" && current.includes("pregate-vercel-build.sh")) {
