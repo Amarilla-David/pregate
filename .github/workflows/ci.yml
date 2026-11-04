@@ -286,10 +286,7 @@ jobs:
         include:
           - os: ubuntu-latest
             check: bench
-          # macos-latest jobs sit in the queue and are cancelled at 15 minutes without a
-          # runner. macos-15 is the same darwin arm64 gate and is actually assigned a machine.
-          # The check name stays latency (macos-latest) so the required status check is unchanged.
-          - os: macos-15
+          - os: macos-latest
             check: latency (macos-latest)
           - os: windows-latest
             check: latency (windows-latest)
