@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-co-lnotab",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.co-lnotab",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "co-lnotab"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.15 removed code.co_lnotab. Use code.co_lines() to read the line-number table."
+  }
+}

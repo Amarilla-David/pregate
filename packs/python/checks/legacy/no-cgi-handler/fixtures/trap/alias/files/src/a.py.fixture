@@ -1,0 +1,4 @@
+from http.server import CGIHTTPRequestHandler as CGI
+
+class App(CGI):
+    pass

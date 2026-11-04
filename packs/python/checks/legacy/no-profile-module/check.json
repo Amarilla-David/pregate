@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-profile-module",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.profile",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "profile-module"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.17 removes the profile module. Use profiling.tracing, which provides the same API."
+  }
+}

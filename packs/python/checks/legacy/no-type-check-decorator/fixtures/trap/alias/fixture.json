@@ -1,0 +1,22 @@
+{
+  "language": "python",
+  "params": {
+    "api": "no-type-check-decorator"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "no-type-check-decorator-alias",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "Importing the removed decorator under another name is still that import."
+  }
+}

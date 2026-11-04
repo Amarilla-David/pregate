@@ -58,6 +58,7 @@
         "src/react-index-key.ts",
         "src/credential-literal.ts",
         "src/typescript-version.ts",
+        "src/python-legacy.ts",
         "src/sarif.ts",
         "src/inline-sinks.ts"
       ]
@@ -159,7 +160,7 @@
     "name": "pregate",
     "version": "0.1.0"
   },
-  "presetHash": "fa85dad5af01be5d5b5ca0ae45e7e967b2d660492293c1b389b89e63cdcf2db5",
+  "presetHash": "9c7f9e99717bbc7b7960932a68ea73e76e56376ac13873a10ac434a510de4793",
   "ratchet": "no-new",
   "rules": [
     {
@@ -231,6 +232,7 @@
           "src/react-index-key.ts",
           "src/credential-literal.ts",
           "src/typescript-version.ts",
+          "src/python-legacy.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts"
         ]
@@ -354,6 +356,7 @@
           "src/react-index-key.ts",
           "src/credential-literal.ts",
           "src/typescript-version.ts",
+          "src/python-legacy.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts"
         ]
@@ -880,6 +883,7 @@
           "src/react-index-key.ts",
           "src/credential-literal.ts",
           "src/typescript-version.ts",
+          "src/python-legacy.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts"
         ]
@@ -5368,6 +5372,7 @@
           "src/react-index-key.ts",
           "src/credential-literal.ts",
           "src/typescript-version.ts",
+          "src/python-legacy.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts",
           "src/main.ts",

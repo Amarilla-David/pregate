@@ -1,0 +1,4 @@
+from collections.abc import Buffer
+
+def take(value: Buffer) -> None:
+    return None

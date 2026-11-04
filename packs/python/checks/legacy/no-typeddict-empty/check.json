@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-typeddict-empty",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.typeddict",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "typeddict-empty"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.15 removed TypedDict(\"TD\") and TypedDict(\"TD\", None). Use class TD(TypedDict): pass, or TypedDict(\"TD\", {})."
+  }
+}

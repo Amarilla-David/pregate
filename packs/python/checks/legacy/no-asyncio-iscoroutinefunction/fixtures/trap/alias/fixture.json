@@ -1,0 +1,25 @@
+{
+  "language": "python",
+  "params": {
+    "api": "asyncio-iscoroutinefunction"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "asyncio-iscoroutinefunction-alias",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "Importing asyncio.iscoroutinefunction under another name and calling the alias is still that function."
+  }
+}

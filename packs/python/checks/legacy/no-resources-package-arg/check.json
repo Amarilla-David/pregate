@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-resources-package-arg",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.resources-package",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "resources-package"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.15 removed the package argument of importlib.resources.files. Pass the anchor positionally, or name it anchor."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "language": "python",
+  "params": {
+    "api": "sre-modules"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "sre-modules-dynamic",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "A string passed to __import__ is still an import of the removed module."
+  }
+}

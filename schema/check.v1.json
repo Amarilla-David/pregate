@@ -144,7 +144,7 @@
           "type": "object",
           "properties": {
             "kind": { "const": "primitive" },
-            "primitive": { "enum": ["drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal"] }
+            "primitive": { "enum": ["drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal", "python-legacy"] }
           },
           "required": ["kind", "primitive"],
           "additionalProperties": false

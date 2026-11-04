@@ -1,0 +1,22 @@
+{
+  "language": "python",
+  "params": {
+    "api": "bool-invert"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "bool-invert-parens",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "Parentheses around True do not make bitwise inversion of a bool valid."
+  }
+}

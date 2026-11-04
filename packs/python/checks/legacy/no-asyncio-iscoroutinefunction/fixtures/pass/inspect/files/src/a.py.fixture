@@ -1,0 +1,4 @@
+import inspect
+
+def run(fn):
+    return inspect.iscoroutinefunction(fn)

@@ -1,0 +1,2 @@
+def take(value: bytes | bytearray | memoryview) -> None:
+    return None

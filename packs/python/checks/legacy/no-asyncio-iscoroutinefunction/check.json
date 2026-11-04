@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-asyncio-iscoroutinefunction",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.asyncio-iscoroutinefunction",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "asyncio-iscoroutinefunction"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.16 removes asyncio.iscoroutinefunction. Use inspect.iscoroutinefunction."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "params": {
+    "api": "resources-package"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+from asyncio import iscoroutinefunction as is_coro
+
+def run(fn):
+    return is_coro(fn)

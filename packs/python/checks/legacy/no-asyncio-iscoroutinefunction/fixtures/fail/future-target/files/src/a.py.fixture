@@ -1,0 +1,4 @@
+import asyncio
+
+def run(fn):
+    return asyncio.iscoroutinefunction(fn)
