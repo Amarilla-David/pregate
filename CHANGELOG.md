@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- The mattpocock pack is reviewed at [mattpocock/skills@4ae2317](https://github.com/mattpocock/skills/commit/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d) (2026-10-31), 26 commits after `6fd947921b935b7e1e69293a200400f0fdd5c15f` (2026-10-06). Pack version `1.1.1`. The seven warning checks stay. Upstream did not drop the sections those checks paraphrase (`tdd` tautologies, relative mocks, call counts, conditional mocks; small function surfaces; tagged `[DEBUG-...]` logs; the Total TypeScript enum companion). The new requirements are workflow or session evidence and are recorded in `packs/mattpocock/INVARIANTS.md`: fresh subagent context, a fresh implementer per ticket, a standards-file search during code review, a diff that proves a forced mutation landed before trusting a red test, a one-line seam note, a fetched ticket title, wayfinder label and research-branch rules, setup and wizard template fixes, and the in-progress `software-factory` and `chief-of-staff` skills. `MP-DEBUG-001` states that the mutation diff is outside the check. The MIT notice in `packs/mattpocock/LICENSE` is unchanged and matches upstream.
+
 ## [0.0.3] - 2026-11-03
 
 What changed for people installing or gating a repository. **Windows users of 0.0.2 should upgrade.** Two bugs on that release could let an edit through on Windows without a finding. Notes: [0.0.3](docs/releases/0.0.3.md). The previous public tag is [v0.0.2](https://github.com/pedroknigge/pregate/releases/tag/v0.0.2).

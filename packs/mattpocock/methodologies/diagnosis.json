@@ -20,12 +20,12 @@
       "severity": "warn",
       "source": {
         "work": "Matt Pocock — Skills For Real Engineers",
-        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/diagnosing-bugs/SKILL.md — Phase 4: Instrument; Phase 6: Cleanup",
+        "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/diagnosing-bugs/SKILL.md — Phase 4: Instrument; Phase 6: Cleanup",
         "paraphrase": "Remove temporary debug instrumentation once the original reproduction and regression checks pass."
       },
       "why": "A tagged console message is a concrete remnant of temporary diagnostic instrumentation.",
       "fixHint": "Remove the temporary tagged log after diagnosis, preserving any permanent operational logging the project needs.",
-      "avoid": "Detects direct console.log/debug/info/warn/error/trace calls with a string/template argument beginning [DEBUG-...]. It runs at all phases and can warn during active diagnosis; it cannot know when debugging is finished. Comments, unused strings and ordinary logs are allowed. Logger wrappers, console aliases, bracket calls, constructed prefixes and untagged instrumentation are outside scope. Use paths/exclude for deliberate debug artifacts.",
+      "avoid": "Detects direct console.log/debug/info/warn/error/trace calls with a string/template argument beginning [DEBUG-...]. It runs at all phases and can warn during active diagnosis; it cannot know when debugging is finished. A Phase 5 diff that proves a forced mutation landed is an execution step this check does not observe. Comments, unused strings and ordinary logs are allowed. Logger wrappers, console aliases, bracket calls, constructed prefixes and untagged instrumentation are outside scope. Use paths/exclude for deliberate debug artifacts.",
       "examples": {
         "pass": "pass/operational-log",
         "fail": "fail/log"

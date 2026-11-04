@@ -20,7 +20,7 @@
       "severity": "warn",
       "source": {
         "work": "Matt Pocock — Skills For Real Engineers",
-        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/SKILL.md — Anti-patterns / Tautological",
+        "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/SKILL.md — Anti-patterns / Tautological",
         "paraphrase": "An assertion needs an independent expected result; comparing an identifier or scalar literal with itself supplies none."
       },
       "why": "A positive equality assertion against the same stable expression cannot detect an incorrect result.",
@@ -46,7 +46,7 @@
       "severity": "warn",
       "source": {
         "work": "Matt Pocock — Skills For Real Engineers",
-        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/mocking.md — When to Mock",
+        "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/mocking.md — When to Mock",
         "paraphrase": "Use real owned modules in tests and substitute dependencies at system boundaries."
       },
       "why": "Replacing a relative module can couple the test to internal wiring rather than behavior at its agreed seam.",
@@ -72,7 +72,7 @@
       "severity": "warn",
       "source": {
         "work": "Matt Pocock — Skills For Real Engineers",
-        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/tests.md — Bad Tests / Red flags",
+        "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/tests.md — Bad Tests / Red flags",
         "paraphrase": "Prefer observed results at the tested interface over assertions about collaborator call counts or ordering."
       },
       "why": "Internal call counts and order often change during a refactor that preserves the user's result.",
@@ -98,7 +98,7 @@
       "severity": "warn",
       "source": {
         "work": "Matt Pocock — Skills For Real Engineers",
-        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/mocking.md — Designing for Mockability / Prefer SDK-style interfaces",
+        "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/mocking.md — Designing for Mockability / Prefer SDK-style interfaces",
         "paraphrase": "Each boundary mock should provide a specific response rather than select response shapes through conditional logic."
       },
       "why": "A branching mock duplicates endpoint routing or production decisions, making the setup harder to trust.",

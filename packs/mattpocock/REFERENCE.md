@@ -2,7 +2,7 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Version: `1.1.0`. Category: **practice**.
+Version: `1.1.1`. Category: **practice**.
 
 These are manifest defaults. All core rules activate automatically and enforce unless explicitly disabled in the reviewed preset. Optional packs activate only when selected. `pregate preset show` gives the effective contract. A manifest's `complete` label refers to that manifest, not full library or methodology compliance.
 
@@ -46,7 +46,7 @@ Source metadata:
 ```json
 {
   "work": "Matt Pocock — Skills For Real Engineers",
-  "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/codebase-design/SKILL.md — Designing for testability / Small surface area",
+  "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/codebase-design/SKILL.md — Designing for testability / Small surface area",
   "paraphrase": "Reduce the inputs a caller must understand when choosing a module interface."
 }
 ```
@@ -101,7 +101,7 @@ Default parameters: `{}`.
 
 **Repair:** Remove the temporary tagged log after diagnosis, preserving any permanent operational logging the project needs.
 
-**Scope and limits:** Detects direct console.log/debug/info/warn/error/trace calls with a string/template argument beginning [DEBUG-...]. It runs at all phases and can warn during active diagnosis; it cannot know when debugging is finished. Comments, unused strings and ordinary logs are allowed. Logger wrappers, console aliases, bracket calls, constructed prefixes and untagged instrumentation are outside scope. Use paths/exclude for deliberate debug artifacts.
+**Scope and limits:** Detects direct console.log/debug/info/warn/error/trace calls with a string/template argument beginning [DEBUG-...]. It runs at all phases and can warn during active diagnosis; it cannot know when debugging is finished. A Phase 5 diff that proves a forced mutation landed is an execution step this check does not observe. Comments, unused strings and ordinary logs are allowed. Logger wrappers, console aliases, bracket calls, constructed prefixes and untagged instrumentation are outside scope. Use paths/exclude for deliberate debug artifacts.
 
 **Interactions when active together:**
 
@@ -118,7 +118,7 @@ Source metadata:
 ```json
 {
   "work": "Matt Pocock — Skills For Real Engineers",
-  "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/diagnosing-bugs/SKILL.md — Phase 4: Instrument; Phase 6: Cleanup",
+  "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/diagnosing-bugs/SKILL.md — Phase 4: Instrument; Phase 6: Cleanup",
   "paraphrase": "Remove temporary debug instrumentation once the original reproduction and regression checks pass."
 }
 ```
@@ -154,7 +154,7 @@ Source metadata:
 ```json
 {
   "work": "Matt Pocock — Skills For Real Engineers",
-  "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/SKILL.md — Anti-patterns / Tautological",
+  "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/SKILL.md — Anti-patterns / Tautological",
   "paraphrase": "An assertion needs an independent expected result; comparing an identifier or scalar literal with itself supplies none."
 }
 ```
@@ -186,7 +186,7 @@ Source metadata:
 ```json
 {
   "work": "Matt Pocock — Skills For Real Engineers",
-  "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/mocking.md — When to Mock",
+  "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/mocking.md — When to Mock",
   "paraphrase": "Use real owned modules in tests and substitute dependencies at system boundaries."
 }
 ```
@@ -218,7 +218,7 @@ Source metadata:
 ```json
 {
   "work": "Matt Pocock — Skills For Real Engineers",
-  "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/tests.md — Bad Tests / Red flags",
+  "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/tests.md — Bad Tests / Red flags",
   "paraphrase": "Prefer observed results at the tested interface over assertions about collaborator call counts or ordering."
 }
 ```
@@ -250,7 +250,7 @@ Source metadata:
 ```json
 {
   "work": "Matt Pocock — Skills For Real Engineers",
-  "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/tdd/mocking.md — Designing for Mockability / Prefer SDK-style interfaces",
+  "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/tdd/mocking.md — Designing for Mockability / Prefer SDK-style interfaces",
   "paraphrase": "Each boundary mock should provide a specific response rather than select response shapes through conditional logic."
 }
 ```

@@ -1,13 +1,13 @@
 # mattpocock rules pack
 
-Optional engineering practice rules derived from [Matt Pocock's engineering skills](https://github.com/mattpocock/skills/tree/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering), reviewed at commit `6fd947921b935b7e1e69293a200400f0fdd5c15f`. This is a PREGATE adaptation, not an official Matt Pocock pack. Upstream skills are source material; selecting this pack does not invoke their workflows.
+Optional engineering practice rules derived from [Matt Pocock's engineering skills](https://github.com/mattpocock/skills/tree/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering), reviewed at commit `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`. This is a PREGATE adaptation, not an official Matt Pocock pack. Upstream skills are source material; selecting this pack does not invoke their workflows.
 
 The complete review of all 20 skills and their companion references is in [INVARIANTS.md](INVARIANTS.md). [BACKLOG.md](BACKLOG.md) records the requirements the current engine cannot establish. [REFERENCE.md](REFERENCE.md) gives each executable rule's precise scope, defaults, provenance and repairs. See the [pack library](../README.md) and [conversion guide](../../docs/guides/docs-to-rule-pack.md).
 
 The conversation review and
 [domain-language guide](../../docs/guides/domain-language.md) show how to combine
 this pack with pstack and project-specific assertions. They add workflow guidance
-and an executable example; the six bounded rule contracts remain unchanged.
+and an executable example; the seven bounded rule contracts remain unchanged.
 
 ## Selectable policies
 
@@ -27,13 +27,13 @@ Four inputs is a local, configurable calibration of small function interfaces, n
 
 ## Coverage and compatibility
 
-Version `1.1.0`; included in 0.0.3. TypeScript/TSX and JavaScript files use PREGATE's TypeScript/TSX grammars. Fixtures exercise TypeScript, TSX and JavaScript. No Python, Go, Markdown, HTML or Bash checks are promised.
+Version `1.1.1`; included in 0.0.3. TypeScript/TSX and JavaScript files use PREGATE's TypeScript/TSX grammars. Fixtures exercise TypeScript, TSX and JavaScript. No Python, Go, Markdown, HTML or Bash checks are promised.
 
 Testing policies default to `*.test.*`, `*.spec.*`, `__tests__/`, `test/` and `tests/` paths. Design and diagnosis default to the selected project's scope. Every check runs at pre, stop, commit and CI phases. `paths`, `exclude`, severity and enforcement can be selected through the reviewed project contract.
 
-Name-based AST patterns do not resolve imported bindings. Aliased test utilities, computed module paths, path aliases and bracket access are documented limits. The pack does not establish test execution, red-before-green order, user-approved seams, independent truth for every expected value, cleanup completion or conformity to a spec.
+Name-based AST patterns do not resolve imported bindings. Aliased test utilities, computed module paths, path aliases and bracket access are documented limits. The pack does not establish test execution, red-before-green order, a forced-red mutation diff, user-approved seams and their catch/miss notes, independent truth for every expected value, cleanup completion, subagent context, tracker actions or conformity to a spec.
 
-Existing `testing/tdd` and `pstack/proof` cover adjacent syntax; this pack does not copy their checks. Assertion-count ratchets must be reviewed when deepening modules: [upstream DEEPENING.md](https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/codebase-design/DEEPENING.md) allows replacing old shallow tests with interface tests. `mattpocock/design` and `clean-code/clean-code` use different checks in the `fn.params` dimension. The engine can retain both policies; select one or use `resolve.fn.params` to choose the desired policy explicitly.
+Existing `testing/tdd` and `pstack/proof` cover adjacent syntax; this pack does not copy their checks. Assertion-count ratchets must be reviewed when deepening modules: [upstream DEEPENING.md](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/codebase-design/DEEPENING.md) allows replacing old shallow tests with interface tests. `mattpocock/design` and `clean-code/clean-code` use different checks in the `fn.params` dimension. The engine can retain both policies; select one or use `resolve.fn.params` to choose the desired policy explicitly.
 
 ## Inspect, validate and adopt
 
@@ -59,9 +59,9 @@ Adding the source and selecting methodologies are separate operations. This cont
 
 ## Provenance and changes
 
-Review date: 2026-10-06. Every admitted invariant links a source file at the pinned revision and names the relevant section. Requirements are paraphrased; upstream prompts and executable templates are not installed. Upstream is MIT licensed; its copyright and permission notice are preserved in [LICENSE](LICENSE). The upstream `pr` skill credits Dex Horthy / Humanlayer; it contributes only a workflow entry here.
+Review date: 2026-11-04, at commit `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` (2026-10-31). Previous review: 2026-10-06, at commit `6fd947921b935b7e1e69293a200400f0fdd5c15f`. Every admitted invariant links a source file at the pinned revision and names the relevant section. Requirements are paraphrased; upstream prompts and executable templates are not installed. Upstream is MIT licensed; its copyright and permission notice are preserved in [LICENSE](LICENSE). That notice is byte-identical to the upstream `LICENSE` at this pin and at the previous pin (Copyright (c) 2026 Matt Pocock). The upstream `pr` skill credits Dex Horthy / Humanlayer; it contributes only a workflow entry here.
 
-Initial version: six bounded checks, pass/fail/trap fixtures and a complete engineering-skill review. Revisit the pinned source, scope and fixtures before publishing a changed pack version.
+Initial version: six bounded checks, pass/fail/trap fixtures and a complete engineering-skill review. The published pack also carries `MP-ENUM-001`, a Total TypeScript companion. Version 1.1.1 keeps those seven checks. The 26 commits since the previous pin change workflow and session steps, recorded in [INVARIANTS.md](INVARIANTS.md). They do not add or drop an executable slice. `MP-DEBUG-001` now states that a Phase 5 mutation diff is outside the check.
 
 <!-- BEGIN generated reference -->
 
@@ -69,7 +69,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 
 ## Exact rule contract
 
-Category: **practice**. Version: `1.1.0`. 7 distinct check IDs.
+Category: **practice**. Version: `1.1.1`. 7 distinct check IDs.
 
 Methodologies: `mattpocock/design` (preview), `mattpocock/diagnosis` (preview), `mattpocock/testing` (preview).
 
