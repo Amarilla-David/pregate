@@ -722,7 +722,7 @@ Categories: `invariants`, `language`, `pattern`, `library`, `practice`, `process
 - `go@1.2.0` — language: `go/architecture` (complete), `go/effects` (complete), `go/quality` (complete)
 - `javascript@1.2.0` — language: `javascript/esm` (complete), `javascript/legacy` (complete), `javascript/safety` (complete)
 - `maintainability@1.2.0` — practice: `maintainability/engineering` (preview), `maintainability/future-humans` (preview), `maintainability/maintainability` (complete)
-- `mattpocock@1.1.0` — practice: `mattpocock/design` (preview), `mattpocock/diagnosis` (preview), `mattpocock/testing` (preview)
+- `mattpocock@1.1.1` — practice: `mattpocock/design` (preview), `mattpocock/diagnosis` (preview), `mattpocock/testing` (preview)
 - `mongodb@1.2.0` — library: `mongodb/models` (complete), `mongodb/queries` (complete)
 - `musk@1.0.1` — process: `musk/algorithm` (complete)
 - `nestjs@1.2.0` — library: `nestjs/controllers` (complete), `nestjs/providers` (complete)

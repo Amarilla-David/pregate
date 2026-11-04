@@ -78,7 +78,7 @@ test.each([
 
 test("mattpocock methodologies compile as optional warnings with test-only scope", () => {
   const p = preset();
-  p.sources = [{ ns: "core", kind: "builtin", version: VERSIONS.core }, { ns: "mattpocock", kind: "library", version: "1.1.0" }];
+  p.sources = [{ ns: "core", kind: "builtin", version: VERSIONS.core }, { ns: "mattpocock", kind: "library", version: "1.1.1" }];
   p.methodologies = ["mattpocock/testing", "mattpocock/design", "mattpocock/diagnosis"];
   p.enforcement = "enforce";
   const lock = compiled(p);

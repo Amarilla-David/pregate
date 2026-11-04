@@ -58,7 +58,7 @@ These are implementation counts, not a certified enforce-ready total. Prefer sta
 | [go](../packs/go/REFERENCE.md) | language | 1.2.0 | 10 | `go/architecture` (complete), `go/effects` (complete), `go/quality` (complete) |
 | [javascript](../packs/javascript/REFERENCE.md) | language | 1.2.0 | 19 | `javascript/esm` (complete), `javascript/legacy` (complete), `javascript/safety` (complete) |
 | [maintainability](../packs/maintainability/REFERENCE.md) | practice | 1.2.0 | 209 | `maintainability/engineering` (preview), `maintainability/future-humans` (preview), `maintainability/maintainability` (complete) |
-| [mattpocock](../packs/mattpocock/REFERENCE.md) | practice | 1.1.0 | 7 | `mattpocock/design` (preview), `mattpocock/diagnosis` (preview), `mattpocock/testing` (preview) |
+| [mattpocock](../packs/mattpocock/REFERENCE.md) | practice | 1.1.1 | 7 | `mattpocock/design` (preview), `mattpocock/diagnosis` (preview), `mattpocock/testing` (preview) |
 | [mongodb](../packs/mongodb/REFERENCE.md) | library | 1.2.0 | 10 | `mongodb/models` (complete), `mongodb/queries` (complete) |
 | [musk](../packs/musk/REFERENCE.md) | process | 1.0.1 | 5 | `musk/algorithm` (complete) |
 | [nestjs](../packs/nestjs/REFERENCE.md) | library | 1.2.0 | 11 | `nestjs/controllers` (complete), `nestjs/providers` (complete) |

@@ -100,6 +100,7 @@ test("the compiled library is discoverable and its fixtures run offline before i
   expect([packs.length, Object.values(authored).reduce((n, c) => n + c, 0)]).toEqual([Number(documented[1]), Number(documented[2])]);
   expect(packs.find((pack: { ns: string }) => pack.ns === "maintainability")).toMatchObject({ checks: 209, source: { version: "1.2.0" } });
   expect(packs.find((pack: { ns: string }) => pack.ns === "pstack")).toMatchObject({ checks: 97, source: { version: "1.1.1" } });
+  expect(packs.find((pack: { ns: string }) => pack.ns === "mattpocock")).toMatchObject({ checks: 7, source: { version: "1.1.1" } });
   const languages = p.run(["pack", "list", "--library", "--category", "language", "--json"]);
   expect(languages.code).toBe(0);
   expect(JSON.parse(languages.text).packs.map((pack: { ns: string }) => pack.ns)).toEqual(["go", "javascript", "python", "rust", "typescript"]);
@@ -246,3 +247,71 @@ test.each(["python", "go"])("%s dependency edits recheck unchanged importers thr
     expect(out.text).toContain(alias);
   }
 });
+
+test("mattpocock pass, fail and trap fixtures reach check and the Pre hook", () => {
+  const p = project({ "src/keep.ts": "export const kept = 1;\n" });
+  p.git("init", "-q");
+  p.approve(["init", "--preview", "--preset", "integrity-only"]);
+  p.approve(["pack", "add", "--library", "mattpocock", "--source-only", "--preview"]);
+  for (const method of ["testing", "design", "diagnosis"]) p.approve(["pack", "enable", `mattpocock/${method}`, "--preview"]);
+  p.request([{ op: "replace", path: "/enforcement", value: "enforce" }]);
+  const shown = JSON.parse(p.run(["pack", "show", "mattpocock", "--json"]).text);
+  expect(shown.packs[0].source.version).toBe("1.1.1");
+  p.git("add", "-A");
+  p.git("commit", "-qm", "contract");
+  const sid = randomUUID();
+  expect(p.hook("SessionStart", sid, { source: "startup" }).code).toBe(0);
+  const aliases = new Map<string, string>();
+  for (const method of ["testing", "design", "diagnosis"]) {
+    const manifest = JSON.parse(readFileSync(join(repo, "packs/mattpocock/methodologies", method + ".json"), "utf8"));
+    for (const rule of manifest.invariants) aliases.set(rule.check, rule.id);
+  }
+  const counts = new Map<string, { pass: number; fail: number; trap: number }>();
+  const fixtures = [...new Bun.Glob("mattpocock/checks/**/fixture.json").scanSync(join(repo, "packs"))].sort();
+  expect(fixtures.length).toBeGreaterThan(0);
+  for (const rel of fixtures) {
+    const parts = rel.split(/[\\/]/);
+    const at = parts.indexOf("fixtures");
+    const kind = parts[at + 1] as "pass" | "fail" | "trap";
+    const spec = JSON.parse(readFileSync(join(repo, "packs", rel), "utf8")) as { target: string; expect: { verdict: string } };
+    const checkId = JSON.parse(readFileSync(join(repo, "packs", ...parts.slice(0, at), "check.json"), "utf8")).id as string;
+    const short = aliases.get(checkId);
+    if (short === undefined) throw new Error(`No alias for ${checkId}`);
+    const alias = `mattpocock/${short}`;
+    const content = readFileSync(join(repo, "packs", ...parts.slice(0, at + 3), "files", spec.target + ".fixture"), "utf8");
+    const want = kind === "pass" ? "pass" : "fail";
+    if (spec.expect.verdict !== want) throw new Error(`${rel} expects ${spec.expect.verdict}`);
+    const checked = p.run(["check", "--stdin", "--path", spec.target], content);
+    const warned = p.hook("PreToolUse", sid, { tool_name: "Write", tool_use_id: rel, tool_input: { file_path: join(p.root, spec.target), content } });
+    const detail = `${rel}\ncheck ${checked.code}: ${checked.text}\nhook ${warned.code}: ${warned.text}\n${checked.error}${warned.error}`;
+    if (kind === "pass") {
+      expect(checked.code, detail).toBe(0);
+      expect(checked.text, detail).not.toContain(alias);
+      expect(warned.code, detail).toBe(0);
+      expect(warned.text, detail).not.toContain(alias);
+    } else {
+      expect(checked.code, detail).toBe(0);
+      expect(checked.text, detail).toContain(`PREGATE WARN ${alias}`);
+      expect(warned.code, detail).toBe(0);
+      const context = JSON.parse(warned.text).hookSpecificOutput.additionalContext as string;
+      expect(context, detail).toContain(`PREGATE WARN ${alias}`);
+    }
+    const row = counts.get(checkId) ?? { pass: 0, fail: 0, trap: 0 };
+    row[kind] += 1;
+    counts.set(checkId, row);
+  }
+  expect([...counts.keys()].sort()).toEqual([
+    "mattpocock/diagnostics/no-tagged-debug-log",
+    "mattpocock/interfaces/fn-max-params",
+    "mattpocock/tests/no-call-count-or-order",
+    "mattpocock/tests/no-conditional-mock",
+    "mattpocock/tests/no-internal-module-mock",
+    "mattpocock/tests/no-self-equality",
+    "mattpocock/types/no-enum",
+  ]);
+  for (const [check, row] of counts) {
+    expect(row.pass, check).toBeGreaterThanOrEqual(2);
+    expect(row.fail, check).toBeGreaterThanOrEqual(2);
+    expect(row.trap, check).toBeGreaterThanOrEqual(1);
+  }
+}, 180_000);

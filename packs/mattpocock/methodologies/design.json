@@ -22,7 +22,7 @@
       "severity": "warn",
       "source": {
         "work": "Matt Pocock — Skills For Real Engineers",
-        "locator": "https://github.com/mattpocock/skills/blob/6fd947921b935b7e1e69293a200400f0fdd5c15f/skills/engineering/codebase-design/SKILL.md — Designing for testability / Small surface area",
+        "locator": "https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/codebase-design/SKILL.md — Designing for testability / Small surface area",
         "paraphrase": "Reduce the inputs a caller must understand when choosing a module interface."
       },
       "why": "A wide function input surface makes calling and testing the function harder. Four inputs is this pack's starting calibration, not an upstream numeric rule or a measure of module depth.",
