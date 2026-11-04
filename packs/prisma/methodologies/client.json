@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "prisma/client",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -128,7 +128,7 @@
         "paraphrase": "Each PrismaClient owns a connection pool. Constructing one per request exhausts the database, so handlers must share a singleton."
       },
       "why": "A fresh client per request opens a fresh pool per request, and the database runs out of connections under load.",
-      "fixHint": "Import the shared client from the server db module, which keeps one instance on globalThis across reloads.",
+      "fixHint": "Import one shared client and keep it on globalThis. On Prisma ORM 7, construct it with a driver adapter (new PrismaClient({ adapter })) or accelerateUrl for Accelerate. https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7",
       "avoid": "Exporting the new client from the route file still builds one pool per route module. The singleton module itself is the only place that may construct.",
       "examples": {
         "pass": "pass/shared-import",
@@ -151,6 +151,60 @@
       "examples": {
         "pass": "pass/error-log",
         "fail": "fail/query-array"
+      }
+    },
+    {
+      "id": "PRISMA-MIDDLEWARE-001",
+      "check": "prisma/client/no-client-middleware",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Upgrade to Prisma ORM 7",
+        "locator": "Client middleware removed; https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7",
+        "paraphrase": "Prisma ORM 7 removes the client middleware API. The upgrade guide replaces prisma.$use with a client extension created by $extends."
+      },
+      "why": "On Prisma ORM 7 the $use call throws at runtime, so the query behavior it used to wrap never runs.",
+      "fixHint": "Replace $use with a client extension: db.$extends({ query: { $allModels: { async $allOperations({ args, query }) { return query(args); } } } }). https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7",
+      "avoid": "This runs only when @prisma/client, or prisma when the client package is absent, is known to be at least 7.0.0. A lower bound below 7, including ^6, wins over a newer hoisted install. workspace:* counts only when the installed copy is 7 or newer. A $use value that is not called stays quiet.",
+      "examples": {
+        "pass": "pass/client-extension",
+        "fail": "fail/direct-use"
+      }
+    },
+    {
+      "id": "PRISMA-VALIDATOR-001",
+      "check": "prisma/client/no-validator",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Prisma ORM v7 generators reference",
+        "locator": "Breaking changes from prisma-client-js; https://www.prisma.io/docs/orm/v7/prisma-schema/overview/generators",
+        "paraphrase": "The prisma-client generator, which is the default in Prisma ORM 7, has no Prisma.validator. TypeScript's satisfies keyword replaces it. The deprecated prisma-client-js generator still provides the helper."
+      },
+      "why": "A Prisma.validator call fails to typecheck against the default Prisma ORM 7 client, which no longer generates that function.",
+      "fixHint": "Use satisfies instead of Prisma.validator, for example { email: true } satisfies Prisma.UserSelect. https://www.prisma.io/docs/orm/v7/prisma-schema/overview/generators",
+      "avoid": "Warns only on Prisma 7 or newer. prisma-client-js still has Prisma.validator; this check cannot read the generator, so that deprecated generator still warns. A Prisma.validator reference that is not called stays quiet.",
+      "examples": {
+        "pass": "pass/satisfies",
+        "fail": "fail/validator-call"
+      }
+    },
+    {
+      "id": "PRISMA-ADAPTER-001",
+      "check": "prisma/client/no-missing-adapter",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Upgrade to Prisma ORM 7",
+        "locator": "Driver adapters; https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7",
+        "paraphrase": "Prisma ORM 7 requires a driver adapter for every database when constructing PrismaClient. Accelerate is the documented exception and passes accelerateUrl with no adapter. The 7.0.0 changelog also removes the datasources and datasourceUrl constructor options."
+      },
+      "why": "A Prisma ORM 7 client constructed without a driver adapter cannot connect, and the old datasources and datasourceUrl options are no longer accepted.",
+      "fixHint": "Pass a driver adapter: new PrismaClient({ adapter }). Accelerate uses new PrismaClient({ accelerateUrl }) and no adapter. https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7",
+      "avoid": "Warns only on Prisma 7 or newer. { adapter } and { accelerateUrl } pass, including quoted keys. A variable, call, spread, or nested adapter key stays quiet. Prisma 6 constructs without an adapter and stays quiet.",
+      "examples": {
+        "pass": "pass/with-adapter",
+        "fail": "fail/bare-client"
       }
     }
   ]

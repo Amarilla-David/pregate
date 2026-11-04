@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-missing-adapter",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.driver-adapter",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "missing-driver-adapter",
+          "since": {
+            "dependencies": ["@prisma/client", "prisma"],
+            "version": "7.0.0"
+          },
+          "rule": {
+            "kind": "new_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "constructor",
+                  "regex": "(^|\\.)PrismaClient$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "regex": "^\\(\\s*\\)$"
+                    }
+                  },
+                  {
+                    "not": {
+                      "has": {
+                        "field": "arguments",
+                        "regex": "\\("
+                      }
+                    }
+                  },
+                  {
+                    "has": {
+                      "field": "arguments",
+                      "has": {
+                        "nthChild": 1,
+                        "kind": "object",
+                        "not": {
+                          "has": {
+                            "stopBy": "end",
+                            "any": [
+                              {
+                                "kind": "spread_element"
+                              },
+                              {
+                                "kind": "shorthand_property_identifier",
+                                "regex": "^(adapter|accelerateUrl)$"
+                              },
+                              {
+                                "kind": "pair",
+                                "has": {
+                                  "field": "key",
+                                  "regex": "^[\"']?(adapter|accelerateUrl)[\"']?$"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} constructs PrismaClient without a driver adapter. Pass { adapter }, or { accelerateUrl } for Accelerate. datasources and datasourceUrl were removed."
+  }
+}

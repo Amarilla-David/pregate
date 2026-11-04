@@ -25,6 +25,7 @@
         "src/module-resolve.ts",
         "src/evaluate.ts",
         "src/node-target.ts",
+        "src/dependency-since.ts",
         "src/ratchet.ts",
         "src/decide.ts",
         "src/message.ts",
@@ -158,7 +159,7 @@
     "name": "pregate",
     "version": "0.1.0"
   },
-  "presetHash": "f237cbd3b72f05a11d9940f3586c1caf4d9f2bead2e0732cb441bde1852f941f",
+  "presetHash": "fa85dad5af01be5d5b5ca0ae45e7e967b2d660492293c1b389b89e63cdcf2db5",
   "ratchet": "no-new",
   "rules": [
     {
@@ -197,6 +198,7 @@
           "src/module-resolve.ts",
           "src/evaluate.ts",
           "src/node-target.ts",
+          "src/dependency-since.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",
@@ -319,6 +321,7 @@
           "src/module-resolve.ts",
           "src/evaluate.ts",
           "src/node-target.ts",
+          "src/dependency-since.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",
@@ -844,6 +847,7 @@
           "src/module-resolve.ts",
           "src/evaluate.ts",
           "src/node-target.ts",
+          "src/dependency-since.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",
@@ -5331,6 +5335,7 @@
           "src/module-resolve.ts",
           "src/evaluate.ts",
           "src/node-target.ts",
+          "src/dependency-since.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",

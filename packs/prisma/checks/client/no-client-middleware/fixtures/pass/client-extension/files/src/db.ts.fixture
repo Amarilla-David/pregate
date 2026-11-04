@@ -1,0 +1,12 @@
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient({ adapter });
+export const db = prisma.$extends({
+  query: {
+    $allModels: {
+      async $allOperations({ args, query }) {
+        return query(args);
+      },
+    },
+  },
+});

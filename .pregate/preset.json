@@ -67,6 +67,7 @@
         "src/module-resolve.ts",
         "src/evaluate.ts",
         "src/node-target.ts",
+        "src/dependency-since.ts",
         "src/ratchet.ts",
         "src/decide.ts",
         "src/message.ts",

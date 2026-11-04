@@ -1,0 +1,3 @@
+import { Prisma } from "@prisma/client";
+
+export const userSelect = { email: true } satisfies Prisma.UserSelect;
