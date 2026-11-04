@@ -1,0 +1,14 @@
+
+module Billing {
+  export const currency = "USD";
+}
+
+export module Orders {
+  export const open = "open";
+}
+
+declare module "rates" {
+  module Hidden {
+    export const currency: string;
+  }
+}

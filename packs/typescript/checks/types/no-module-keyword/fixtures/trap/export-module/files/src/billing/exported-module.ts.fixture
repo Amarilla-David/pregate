@@ -1,0 +1,4 @@
+
+export module Billing {
+  export const currency = "USD";
+}

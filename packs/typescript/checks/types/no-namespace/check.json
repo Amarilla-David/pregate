@@ -1,7 +1,7 @@
 {
   "$schema": "../../../../../schema/check.v1.json",
   "id": "typescript/types/no-namespace",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "area": "types",
   "cardinality": "singleton",
   "dimension": "types.namespace",
@@ -28,6 +28,6 @@
     "ci"
   ],
   "feedback": {
-    "message": "{symbol} declares a namespace. Use a module."
+    "message": "{symbol} declares a namespace. Move the values into an ES module and export them by name."
   }
 }

@@ -55,6 +55,7 @@
         "src/interval-cleanup.ts",
         "src/react-index-key.ts",
         "src/credential-literal.ts",
+        "src/typescript-version.ts",
         "src/sarif.ts",
         "src/inline-sinks.ts"
       ]
@@ -156,7 +157,7 @@
     "name": "pregate",
     "version": "0.1.0"
   },
-  "presetHash": "037262d640f9c23647b1e2b0489f9b6ae951957fe80f299b72f4b6726da752b5",
+  "presetHash": "2fa4868ba4185da209ea58edf88848966df68a81f937b94545eab9ec7dd7c855",
   "ratchet": "no-new",
   "rules": [
     {
@@ -225,6 +226,7 @@
           "src/interval-cleanup.ts",
           "src/react-index-key.ts",
           "src/credential-literal.ts",
+          "src/typescript-version.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts"
         ]
@@ -345,6 +347,7 @@
           "src/interval-cleanup.ts",
           "src/react-index-key.ts",
           "src/credential-literal.ts",
+          "src/typescript-version.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts"
         ]
@@ -868,6 +871,7 @@
           "src/interval-cleanup.ts",
           "src/react-index-key.ts",
           "src/credential-literal.ts",
+          "src/typescript-version.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts"
         ]
@@ -5353,6 +5357,7 @@
           "src/interval-cleanup.ts",
           "src/react-index-key.ts",
           "src/credential-literal.ts",
+          "src/typescript-version.ts",
           "src/sarif.ts",
           "src/inline-sinks.ts",
           "src/main.ts",
@@ -5498,5 +5503,5 @@
     ]
   },
   "sourceDirs": [],
-  "sourcesHash": "59d5ad5c05b027469f053ea99a059f85a3a56563577cc693e683b759d9b19eca"
+  "sourcesHash": "9eebcac9ca136ea156ef697937c02d48ff74ec5e1ae3e3520e252cf51429e905"
 }

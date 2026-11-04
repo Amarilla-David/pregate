@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "typescript/strict-types",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -141,12 +141,30 @@
         "locator": "modules over namespaces",
         "paraphrase": "For application code, ES modules replace namespaces. A namespace is an older container that merges across files."
       },
-      "why": "A namespace merges values and types in a way modules already express. Namespaces remain valid TypeScript, including for declaration merging, so the default contract advises.",
-      "fixHint": "Move the values to a module and export them by name.",
-      "avoid": "export namespace is still a namespace. A class or a plain object does not need one.",
+      "why": "A namespace merges values and types in a way modules already express. namespace remains valid TypeScript, including for declaration merging, so the default contract advises.",
+      "fixHint": "Move the values to an ES module and export them by name.",
+      "avoid": "export namespace is still a namespace. A namespace written with the module keyword is TS-MODKW-001. declare module \"pkg\" is an ambient module. A class or a plain object does not need a namespace.",
       "examples": {
         "pass": "pass/module-exports",
         "fail": "fail/namespace-block"
+      }
+    },
+    {
+      "id": "TS-MODKW-001",
+      "check": "typescript/types/no-module-keyword",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Announcing TypeScript 7.0",
+        "locator": "https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/",
+        "paraphrase": "TypeScript 7 rejects a namespace written with the module keyword. Write namespace, or export the values from an ES module. declare module \"pkg\" stays valid."
+      },
+      "why": "module Name is a hard compile error on TypeScript 7.0. namespace remains valid, so this rule denies only when the project installs or declares TypeScript 7.0.0 or newer. On an older or unknown compiler the same declaration is a warning.",
+      "fixHint": "Replace module with namespace, or move the values into an ES module and export them by name.",
+      "avoid": "declare module \"pkg\", declare module 'pkg' and declare module \"*.json\" name an ambient module and stay allowed. export module and declare module Billing are still the keyword form. A namespace keyword is TS-NS-001, not this rule.",
+      "examples": {
+        "pass": "pass/ambient-module-string",
+        "fail": "fail/module-keyword"
       }
     },
     {

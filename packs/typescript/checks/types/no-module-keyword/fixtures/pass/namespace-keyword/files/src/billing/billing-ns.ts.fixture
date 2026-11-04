@@ -1,0 +1,8 @@
+
+namespace Billing {
+  export const currency = "USD";
+}
+
+export namespace Orders {
+  export const open = "open";
+}

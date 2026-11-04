@@ -159,6 +159,7 @@ export interface Check {
   cardinality: "singleton" | "multi"; dimension: string; minSeverity: Severity | null;
   params: Record<string, unknown>;             // JSON Schema per parameter
   impl: Impl; phase: Phase[]; feedback: { message: string }; languages?: RuleLanguage[];
+  when?: { dependency: "typescript"; min: string; otherwise?: "warn" }; // min: hard gate; otherwise warn below it
 }                                               // v1 keys (ir, measures, fingerprint…) are accepted and ignored
 export interface Alias {
   id: string; check: string; defaults: Record<string, unknown>; severity: Severity | "off";
@@ -219,6 +220,7 @@ export interface LockRule {
   integrity: boolean;              // builtin core: enforces by default; human-reviewed off is permitted
   origin: Record<string, string>;  // "params.max" → "resolve.fn.size" | "overrides.CC-FN-001" | "alias"
   text: { message: string; why: string; fix: string; avoid: string | null; source: string };
+  when?: { dependency: "typescript"; min: string; otherwise?: "warn" };
 }
 export interface Lock {            // lockHash = sha256 of the file bytes (the text is already canonical JSON)
   fitness?: Record<string, FitnessBinding>;

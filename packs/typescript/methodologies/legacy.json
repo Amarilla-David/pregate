@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "typescript/legacy",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -113,6 +113,24 @@
       "examples": {
         "pass": "pass/explicit-assign",
         "fail": "fail/private-readonly"
+      }
+    },
+    {
+      "id": "TS-ASSERT-001",
+      "check": "typescript/modules/no-import-assert",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Announcing TypeScript 7.0, and the TypeScript 6.0 implementation of the import-assertion deprecation",
+        "locator": "https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/",
+        "paraphrase": "TypeScript 7 rejects an import assertion. Write with { type: \"json\" } instead of assert { type: \"json\" }. The announcement spells the keyword asserts; the compiler diagnostic says assert."
+      },
+      "why": "TypeScript 7.0 turns the TypeScript 6.0 deprecation of import assertions into a parse error, so the file does not compile. The replacement with is valid import-attribute syntax. The rule runs only when the project installs or declares TypeScript 7.0.0 or newer, because older compilers still accept assert.",
+      "fixHint": "Replace assert with with. A static import becomes import rates from \"./rates.json\" with { type: \"json\" }. A dynamic import renames the option: import(\"./rates.json\", { with: { type: \"json\" } }).",
+      "avoid": "with { type: \"json\" } is the replacement and is allowed. A return type of asserts value is T, and a call to a function named assert, are not import assertions. The announcement's spelling asserts is not the keyword the compiler rejects. A re-export such as export { row } from \"./rows.json\" assert { type: \"json\" } is not recognized by the parser this check uses. The rule stays quiet when TypeScript is missing, older than 7.0.0, or only a pre-release.",
+      "examples": {
+        "pass": "pass/with-attribute",
+        "fail": "fail/static-assert"
       }
     }
   ]

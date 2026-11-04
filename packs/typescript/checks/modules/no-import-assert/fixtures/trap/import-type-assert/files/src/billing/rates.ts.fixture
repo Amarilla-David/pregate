@@ -1,0 +1,2 @@
+import type Rates from "./rates.json" assert { type: "json" };
+export type Bill = Rates;
