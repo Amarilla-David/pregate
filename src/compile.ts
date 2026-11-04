@@ -393,7 +393,8 @@ function ruleOf(group: Entry[], resolved: Map<Entry, Params>, errors: string[]):
   const base = integrity.length ? integrity : group;
   const winner = base[0]!;
   const same = (e: Entry): boolean =>
-    equal(resolved.get(e), resolved.get(winner)) && (integrity.length > 0 || (e.severity === winner.severity && e.enforcement === winner.enforcement));
+    equal(resolved.get(e), resolved.get(winner)) && (integrity.length > 0 || (e.severity === winner.severity && e.enforcement === winner.enforcement))
+    && (winner.origin.severity !== "alias" || equal(e.alias.versionGate ?? null, winner.alias.versionGate ?? null));
   const severity = group.map((e) => e.severity as Severity).reduce((a, b) => (RANK[b] > RANK[a] ? b : a));
   const min = winner.check.minSeverity;
   if (!base.every(same)) errors.push(conflict(group));
@@ -401,6 +402,8 @@ function ruleOf(group: Entry[], resolved: Map<Entry, Params>, errors: string[]):
   else return {
     id: winner.fqn, aliases: group.map((e) => e.fqn), ...shape(winner.check, winner.alias), params: resolved.get(winner)!,
     severity, enforcement: winner.enforcement, integrity: integrity.length > 0, origin: winner.origin,
+    // A reviewed severity override replaces the gate; the alias no longer chooses by package version.
+    ...(winner.origin.severity === "alias" && winner.alias.versionGate ? { versionGate: winner.alias.versionGate } : {}),
   };
   return null;
 }

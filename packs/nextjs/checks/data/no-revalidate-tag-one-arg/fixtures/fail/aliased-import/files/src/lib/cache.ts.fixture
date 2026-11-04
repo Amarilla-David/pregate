@@ -1,0 +1,5 @@
+import { revalidateTag as refresh } from "next/cache";
+
+export function publish(tag: string) {
+  refresh(tag);
+}

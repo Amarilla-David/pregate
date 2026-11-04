@@ -1,0 +1,5 @@
+export function middleware(request: Request) {
+  return Response.redirect(request.url);
+}
+
+export const config = { runtime: "nodejs" };

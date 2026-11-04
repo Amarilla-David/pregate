@@ -1,0 +1,5 @@
+function auth(request: Request) {
+  return Response.redirect(request.url);
+}
+
+export { auth as middleware };

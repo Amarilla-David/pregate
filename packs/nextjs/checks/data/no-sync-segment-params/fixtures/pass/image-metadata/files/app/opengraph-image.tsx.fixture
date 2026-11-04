@@ -1,0 +1,10 @@
+export async function generateImageMetadata({ params }: { params: { slug: string } }) {
+  const { slug } = params;
+  const title = params.slug;
+  return [{ id: slug, alt: title, size: { width: 1200, height: 630 } }];
+}
+
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return new Response(slug);
+}

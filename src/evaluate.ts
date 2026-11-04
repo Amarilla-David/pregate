@@ -15,6 +15,7 @@ import { credentialLiterals } from "./credential-literal.ts";
 import { gatedSeverity } from "./typescript-version.ts";
 import { dependencySatisfies } from "./dependency-since.ts";
 import { pythonLegacyHits } from "./python-legacy.ts";
+import { versionGateMatches } from "./package-version.ts";
 
 const MODULE = "<module>";
 const TSCONFIG_INVALID = "tsconfig.json, or a local config it extends, is missing or invalid, so a bare import may be an alias of any path. Fix the tsconfig, or import by a relative path.";
@@ -26,7 +27,7 @@ const compiled = new WeakMap<PatternConfig, Partial<Record<Grammar, Compiled>>>(
 export function analyze(lock: Lock, phase: Phase, rel: string, state: string | Parsed | null, host: Host): Analysis | Form {
   const gated = new Map<string, Severity>();
   const rules = (inScope(lock, rel) ? applicable(lock, phase, rel, host) : []).filter((rule) => {
-    const severity = gatedSeverity(rule, rel, host.read);
+    const severity = ruleSeverity(rule, rel, host);
     if (severity === null) return false;
     gated.set(rule.id, severity);
     return true;
@@ -142,6 +143,16 @@ function applicable(lock: Lock, phase: Phase, rel: string, host: Host): LockRule
     const min = rule.params.minNode;
     return typeof min !== "number" || (major !== null && major >= min);
   });
+}
+
+// A pack versionGate reads the nearest package.json. It composes with the TypeScript `when` gate:
+// either one can keep the rule quiet. Placement has no file read, so it keeps the alias severity.
+function ruleSeverity(rule: LockRule, rel: string, host: Host): Severity | null {
+  const base = gatedSeverity(rule, rel, host.read);
+  const gate = rule.versionGate;
+  if (base === null || gate === undefined) return base;
+  if (versionGateMatches(host.read, rel, gate)) return gate.severity;
+  return gate.unmatched === "skip" ? null : base;
 }
 
 // Reports every match of a pattern rule except those `params.allow` declares pure; a regex that gave

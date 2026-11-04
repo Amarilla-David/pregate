@@ -1,0 +1,4 @@
+export default function Layout({ params }: { params: Promise<{ locale: string }> }) {
+  const locale = params?.locale ?? "en";
+  return <html lang={locale}><body>{locale}</body></html>;
+}

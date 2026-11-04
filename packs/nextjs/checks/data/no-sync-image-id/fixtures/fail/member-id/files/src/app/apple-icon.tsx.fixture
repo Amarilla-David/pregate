@@ -1,0 +1,3 @@
+export default function AppleIcon({ id }: { id: Promise<string> }) {
+  return new Response(id.length);
+}

@@ -1,0 +1,5 @@
+export default async function Page(props: { params: Promise<{ slug: string }>; searchParams: Promise<{ q?: string }> }) {
+  const slug = props.params.slug;
+  const q = props.searchParams.q;
+  return <h1>{slug}{q}</h1>;
+}

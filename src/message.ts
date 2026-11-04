@@ -194,7 +194,7 @@ export function contract(lock: Lock, launcher: string): string {
   const rules = lock.rules.filter((r) => !lock.ownedByArkgate.includes(r.id)).map((r) => {
     const paths = (r.params.paths as string[] | undefined) ?? [];
     const where = paths.length === 1 && paths[0] === "**" ? "" : ` in ${paths.join(", ") || "no file"}`;
-    return `- ${r.id} (${r.severity}, ${enforcementOf(lock, r)}${where}): ${clip(oneLine(r.text.why || r.text.message), 200)}`;
+    return `- ${r.id} (${severityText(r)}, ${enforcementOf(lock, r)}${where}): ${clip(oneLine(r.text.why || r.text.message), 200)}`;
   });
   const layers = Object.entries(lock.layers).map(([name, l]) =>
     `- ${name} (${l.paths.join(", ")}) may import ${l.mayImport.length === 0 ? "nothing outside itself" : l.mayImport.join(", ")}`);
@@ -240,10 +240,18 @@ export function briefing(lock: Lock, launcher: string, lead: string | null = nul
 function briefRule(lock: Lock, r: LockRule): string {
   const params = Object.entries(r.params).filter(([key, value]) => key === "max" || key === "packages" || (key === "paths" && !equalPaths(value)));
   const detail = params.map(([key, value]) => `${key}=${Array.isArray(value) ? value.join(",") : String(value)}`).join("; ");
-  return `- ${safe(r.id)} (${r.severity}, ${enforcementOf(lock, r)}): ${safe(r.check.split("/").at(-1)!.split("@")[0]!)}${detail ? ` (${clip(oneLine(detail), 160)})` : ""}`;
+  return `- ${safe(r.id)} (${severityText(r)}, ${enforcementOf(lock, r)}): ${safe(r.check.split("/").at(-1)!.split("@")[0]!)}${detail ? ` (${clip(oneLine(detail), 160)})` : ""}`;
 }
 
 // A fitness requirement runs only through a reviewed binding (lock.fitness); without one it is evidence owed.
+function severityText(r: LockRule): string {
+  const gate = r.versionGate;
+  if (!gate) return r.severity;
+  if (gate.unmatched === "skip") return `${gate.severity} when ${gate.package} ${gate.range}`;
+  if (gate.severity === r.severity) return r.severity;
+  return `${gate.severity} when ${gate.package} ${gate.range}, otherwise ${r.severity}`;
+}
+
 function unbound(lock: Lock, r: LockRule): boolean {
   if (r.impl.kind !== "primitive" || r.impl.primitive !== "fitness") return false;
   const verifier = r.params.verifier;

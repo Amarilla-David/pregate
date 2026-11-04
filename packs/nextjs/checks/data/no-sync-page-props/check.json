@@ -1,0 +1,268 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-sync-page-props",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.sync-page-props",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sync-page-member",
+          "files": [
+            "app/**/page.*",
+            "src/app/**/page.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "member_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "object",
+                      "kind": "identifier",
+                      "regex": "^(params|searchParams)$"
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "image-metadata"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "subscript_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "object",
+                      "kind": "identifier",
+                      "regex": "^(params|searchParams)$"
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "image-metadata"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sync-page-destructure",
+          "files": [
+            "app/**/page.*",
+            "src/app/**/page.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "identifier",
+            "regex": "^(params|searchParams)$",
+            "all": [
+              {
+                "inside": {
+                  "field": "value",
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "kind": "object_pattern"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "matches": "image-metadata"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "sync-page-nested",
+          "files": [
+            "app/**/page.*",
+            "src/app/**/page.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "pair_pattern",
+            "all": [
+              {
+                "has": {
+                  "field": "key",
+                  "regex": "^(params|searchParams)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "value",
+                  "kind": "object_pattern"
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "matches": "image-metadata"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "sync-page-props",
+          "files": [
+            "app/**/page.*",
+            "src/app/**/page.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "member_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "property",
+                  "regex": "^(params|searchParams)$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "inside": {
+                      "kind": "member_expression"
+                    }
+                  },
+                  {
+                    "inside": {
+                      "kind": "subscript_expression"
+                    }
+                  }
+                ]
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "await_expression"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "matches": "image-metadata"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reads params or searchParams synchronously. Await the Promise, then read it. https://nextjs.org/docs/app/guides/upgrading/version-16"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/routing/no-middleware-named-export",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "nextjs.middleware-named-export",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "named-middleware-export",
+          "files": [
+            "proxy.ts",
+            "proxy.tsx",
+            "proxy.js",
+            "proxy.jsx",
+            "proxy.mjs",
+            "proxy.cjs",
+            "src/proxy.ts",
+            "src/proxy.tsx",
+            "src/proxy.js",
+            "src/proxy.jsx",
+            "src/proxy.mjs",
+            "src/proxy.cjs"
+          ],
+          "rule": {
+            "kind": "identifier",
+            "regex": "^middleware$",
+            "any": [
+              {
+                "inside": {
+                  "field": "name",
+                  "kind": "function_declaration",
+                  "inside": {
+                    "kind": "export_statement",
+                    "not": { "regex": "^export\\s+default\\b" }
+                  }
+                }
+              },
+              {
+                "inside": {
+                  "field": "name",
+                  "kind": "variable_declarator",
+                  "inside": {
+                    "any": [
+                      { "kind": "lexical_declaration" },
+                      { "kind": "variable_declaration" }
+                    ],
+                    "inside": {
+                      "kind": "export_statement",
+                      "not": { "regex": "^export\\s+default\\b" }
+                    }
+                  }
+                }
+              },
+              {
+                "nthChild": { "position": 1, "reverse": true },
+                "inside": { "kind": "export_specifier" }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} is a named middleware export in proxy.ts. Rename it to proxy. A default export can keep its local name. https://nextjs.org/docs/app/api-reference/file-conventions/proxy"
+  }
+}

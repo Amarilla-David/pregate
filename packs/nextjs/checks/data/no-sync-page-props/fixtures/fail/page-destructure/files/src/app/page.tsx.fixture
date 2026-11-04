@@ -1,0 +1,4 @@
+export default function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = params;
+  return <h1>{slug}</h1>;
+}

@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "nextjs/rendering",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -141,12 +141,108 @@
         "locator": "cookies good to know; Async Request APIs (breaking change)",
         "paraphrase": "cookies, headers and draftMode are async and must be awaited or unwrapped with React's use. Next.js 15 kept temporary synchronous access with a warning; Next.js 16 removes it."
       },
-      "why": "On Next.js 16 the call returns a Promise, so .get or .isEnabled reads undefined or throws; on 15 it logs a deprecation warning on every request.",
-      "fixHint": "Await the call first, for example const store = await cookies(); store.get('theme'). In a component that cannot be async, unwrap the Promise with React's use().",
-      "avoid": "Only a member read directly on cookies(), headers() or draftMode() imported from next/headers, including renamed imports, is flagged. Awaited calls, use(...), .then/.catch/.finally and same-named functions from other modules pass. A result stored in a variable first is not traced. Warn only: Next.js 14 projects use the synchronous API correctly.",
+      "why": "On Next.js 16 the call returns a Promise, so .get or .isEnabled reads undefined or throws. Next.js 15 still accepts the synchronous call and logs a deprecation warning.",
+      "fixHint": "Await the call first, for example const store = await cookies(); store.get('theme'). In a component that cannot be async, unwrap the Promise with React's use(). https://nextjs.org/docs/app/guides/upgrading/version-16",
+      "avoid": "Only a member read directly on cookies(), headers() or draftMode() imported from next/headers, including renamed imports, is flagged. Awaited calls, use(...), .then/.catch/.finally and same-named functions from other modules pass. A result stored in a variable first is not traced. The finding is a warning unless the nearest package.json declares next entirely on 16 or newer (including 16 prereleases). Next.js 15, an older release, and a specifier that can still install 15 stay warnings.",
+      "versionGate": { "package": "next", "range": ">=16.0.0", "severity": "deny", "unmatched": "inherit" },
       "examples": {
         "pass": "pass/awaited",
         "fail": "fail/cookies-get"
+      }
+    },
+    {
+      "id": "NEXT-PARAMS-001",
+      "check": "nextjs/data/no-sync-page-props",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+        "locator": "Async Request APIs (Breaking change)",
+        "paraphrase": "Next.js 16 removes synchronous access to params and searchParams in page.js. Next.js 15 kept a temporary synchronous compatibility path."
+      },
+      "why": "The page props are Promises. Reading .slug or destructuring them without await yields undefined query data instead of the requested page.",
+      "fixHint": "Await the prop, then read it: const { slug } = await params and const query = await searchParams. In a Client Component, unwrap the Promise with React's use(). https://nextjs.org/docs/app/guides/upgrading/version-16",
+      "avoid": "Only page files under app/ or src/app/ are read. An identifier named params or searchParams is flagged for a member read, index read, object destructure, or nested parameter pattern, and so is props.params.x or props.searchParams.x when that access is not itself awaited. Await, React use(), and a local const under another name pass. A local that reuses the name params is flagged too; assignments are not traced. The rule runs only when next is declared entirely on 16 or newer.",
+      "versionGate": { "package": "next", "range": ">=16.0.0", "severity": "deny", "unmatched": "skip" },
+      "examples": {
+        "pass": "pass/awaited-page",
+        "fail": "fail/page-params-member"
+      }
+    },
+    {
+      "id": "NEXT-SEGMENT-001",
+      "check": "nextjs/data/no-sync-segment-params",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+        "locator": "Async Request APIs (Breaking change); Async parameters for icon and open-graph Image",
+        "paraphrase": "params in layout, route, default, opengraph-image, twitter-image, icon, and apple-icon are Promises. generateImageMetadata still receives synchronous params. searchParams is documented for page.js."
+      },
+      "why": "A synchronous read of the params Promise drops the dynamic segment, so the layout, route, or image is built for the wrong key.",
+      "fixHint": "Await params before reading it: const { slug } = await params. Keep the synchronous read inside generateImageMetadata. https://nextjs.org/docs/app/guides/upgrading/version-16",
+      "avoid": "Page files are covered by NEXT-PARAMS-001. This rule reads layout, route, default, and the image generator files. searchParams in a layout is not the page request API and is not flagged. generateImageMetadata is excluded. A stored awaited result is not traced. The rule runs only when next is declared entirely on 16 or newer.",
+      "versionGate": { "package": "next", "range": ">=16.0.0", "severity": "deny", "unmatched": "skip" },
+      "examples": {
+        "pass": "pass/image-metadata",
+        "fail": "fail/nested-layout-params"
+      }
+    },
+    {
+      "id": "NEXT-SITEMAP-001",
+      "check": "nextjs/data/no-sync-sitemap-id",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+        "locator": "Async id parameter for sitemap",
+        "paraphrase": "The sitemap function receives id as a Promise. generateSitemaps still returns plain ids. The previous code multiplied the id number directly."
+      },
+      "why": "Multiplying the Promise produces NaN, so the generated sitemap URLs start at the wrong offset.",
+      "fixHint": "Await id, then convert it: const resolved = await id; const start = Number(resolved) * 50000. https://nextjs.org/docs/app/guides/upgrading/version-16",
+      "avoid": "Only sitemap files under app/ or src/app/ are read. The flagged shape is an identifier named id used in arithmetic, including Number(id) and parentheses. await id passes. A local const that reuses the name id is flagged too. generateSitemaps is excluded. The rule runs only when next is declared entirely on 16 or newer.",
+      "versionGate": { "package": "next", "range": ">=16.0.0", "severity": "deny", "unmatched": "skip" },
+      "examples": {
+        "pass": "pass/awaited-id",
+        "fail": "fail/multiplied-id"
+      }
+    },
+    {
+      "id": "NEXT-IMAGE-001",
+      "check": "nextjs/data/no-sync-image-id",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+        "locator": "Async parameters for icon and open-graph Image",
+        "paraphrase": "The image generating function in opengraph-image, twitter-image, icon, and apple-icon receives id as a Promise. generateImageMetadata still receives synchronous params and does not receive this id."
+      },
+      "why": "Storing or reading the Promise as if it were the image id string builds the wrong image, or none.",
+      "fixHint": "Await id, or unwrap it with React's use() in a Client Component: const imageId = await id. https://nextjs.org/docs/app/guides/upgrading/version-16",
+      "avoid": "Only opengraph-image, twitter-image, icon, and apple-icon files are read. An identifier named id is flagged when it is stored in a const, read as a member, or indexed, including through parentheses. await id and use(id) pass. A helper that copies an id parameter into a const is flagged too. The rule runs only when next is declared entirely on 16 or newer.",
+      "versionGate": { "package": "next", "range": ">=16.0.0", "severity": "deny", "unmatched": "skip" },
+      "examples": {
+        "pass": "pass/awaited-id",
+        "fail": "fail/stored-id"
+      }
+    },
+    {
+      "id": "NEXT-REVALTAG-001",
+      "check": "nextjs/data/no-revalidate-tag-one-arg",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16; Next.js 16 release, https://nextjs.org/blog/next-16",
+        "locator": "Caching APIs, revalidateTag; revalidateTag() (updated)",
+        "paraphrase": "revalidateTag now requires a second argument. The upgrade guide shows a cacheLife profile such as 'max'. The Next.js 16 release also allows an inline { expire: number } object. The single-argument form is deprecated and is a TypeScript error."
+      },
+      "why": "A one-argument call no longer typechecks on Next.js 16, so the tag the author meant to refresh is not part of a typed cache profile. Next.js 15 still uses the single-argument form.",
+      "fixHint": "Pass a cacheLife profile, usually 'max', or { expire: seconds }: revalidateTag('posts', 'max'). For read-your-writes inside a Server Action, call updateTag(tag) instead. https://nextjs.org/docs/app/guides/upgrading/version-16",
+      "avoid": "Only a call whose function is revalidateTag imported from next/cache, including a renamed import, is flagged, and only when it has fewer than two arguments and no spread. A profile string, a variable, and { expire: number } all satisfy the second argument. updateTag and a same-named helper from another module pass. The rule runs only when next is declared entirely on 16 or newer.",
+      "versionGate": { "package": "next", "range": ">=16.0.0", "severity": "deny", "unmatched": "skip" },
+      "examples": {
+        "pass": "pass/profile",
+        "fail": "fail/one-argument"
       }
     }
   ]

@@ -1,0 +1,8 @@
+export function middleware(request) {
+  return Response.redirect(request.url);
+}
+
+export const config = {
+  matcher: ["/dashboard/:path*"],
+  runtime: "nodejs",
+};
