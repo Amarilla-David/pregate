@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/billing/inner-module.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "namespace-inside-ambient-module",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "declare module \"rates\" is allowed. A module keyword namespace nested inside it is still reported."
+  }
+}

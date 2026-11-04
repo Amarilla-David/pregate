@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "typescript/strict-types",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -137,13 +137,13 @@
       "defaults": {},
       "severity": "warn",
       "source": {
-        "work": "TypeScript handbook, namespaces and modules",
-        "locator": "modules over namespaces",
-        "paraphrase": "For application code, ES modules replace namespaces. A namespace is an older container that merges across files."
+        "work": "TypeScript handbook, namespaces and modules, and the TypeScript 7.0 announcement",
+        "locator": "https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/",
+        "paraphrase": "For application code, ES modules replace namespaces. TypeScript 7 also rejects a namespace written with the module keyword. An ambient module such as declare module \"pkg\" stays valid."
       },
-      "why": "A namespace merges values and types in a way modules already express. Namespaces remain valid TypeScript, including for declaration merging, so the default contract advises.",
-      "fixHint": "Move the values to a module and export them by name.",
-      "avoid": "export namespace is still a namespace. A class or a plain object does not need one.",
+      "why": "A namespace merges values and types in a way modules already express. namespace remains valid TypeScript, including for declaration merging, so the default contract advises. The module keyword for that same declaration is a TypeScript 7 hard error, and this rule reports it too.",
+      "fixHint": "Move the values to an ES module and export them by name. A namespace that must stay is written with namespace, never module.",
+      "avoid": "export namespace and export module are still this declaration. declare module \"pkg\", declare module 'pkg' and declare module \"*.json\" name an ambient module and stay allowed. A class or a plain object does not need a namespace.",
       "examples": {
         "pass": "pass/module-exports",
         "fail": "fail/namespace-block"

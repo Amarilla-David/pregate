@@ -180,6 +180,15 @@
         }
       ]
     },
+    "when": {
+      "type": "object",
+      "properties": {
+        "dependency": { "const": "typescript" },
+        "min": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" }
+      },
+      "required": ["dependency", "min"],
+      "additionalProperties": false
+    },
     "phase": { "type": "array", "items": { "enum": ["pre", "stop", "commit", "ci"] } },
     "languages": { "type": "array", "items": { "enum": ["typescript", "python", "go", "rust"] }, "minItems": 1 },
     "feedback": {

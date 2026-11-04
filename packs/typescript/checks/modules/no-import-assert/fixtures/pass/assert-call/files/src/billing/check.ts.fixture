@@ -1,0 +1,5 @@
+import { assert } from "./guard";
+
+export function requireReady(ready: boolean): void {
+  assert(ready);
+}

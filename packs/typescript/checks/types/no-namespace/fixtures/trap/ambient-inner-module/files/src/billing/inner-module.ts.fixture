@@ -1,0 +1,6 @@
+
+declare module "rates" {
+  module Billing {
+    export const currency: string;
+  }
+}

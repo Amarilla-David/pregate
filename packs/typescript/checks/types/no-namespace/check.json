@@ -1,7 +1,7 @@
 {
   "$schema": "../../../../../schema/check.v1.json",
   "id": "typescript/types/no-namespace",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "area": "types",
   "cardinality": "singleton",
   "dimension": "types.namespace",
@@ -17,6 +17,16 @@
             "kind": "internal_module",
             "regex": "^\\s*namespace\\b"
           }
+        },
+        {
+          "id": "module-keyword-namespace",
+          "rule": {
+            "kind": "module",
+            "has": {
+              "field": "name",
+              "kind": "identifier"
+            }
+          }
         }
       ]
     }
@@ -28,6 +38,6 @@
     "ci"
   ],
   "feedback": {
-    "message": "{symbol} declares a namespace. Use a module."
+    "message": "{symbol} declares a namespace. Move the values into an ES module and export them by name. TypeScript 7 rejects a namespace written with the module keyword: write namespace, or replace the block with exports."
   }
 }

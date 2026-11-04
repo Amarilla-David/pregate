@@ -1,0 +1,4 @@
+
+declare module 'rates' {
+  export const currency: string;
+}

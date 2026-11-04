@@ -11,6 +11,7 @@ import { unboundedDrizzleSelects } from "./drizzle-query.ts";
 import { intervalsWithoutCleanup } from "./interval-cleanup.ts";
 import { reactIndexKeys } from "./react-index-key.ts";
 import { credentialLiterals } from "./credential-literal.ts";
+import { dependencyAllows } from "./typescript-version.ts";
 
 const MODULE = "<module>";
 const TSCONFIG_INVALID = "tsconfig.json, or a local config it extends, is missing or invalid, so a bare import may be an alias of any path. Fix the tsconfig, or import by a relative path.";
@@ -20,7 +21,7 @@ const compiled = new WeakMap<PatternConfig, Partial<Record<Grammar, Compiled>>>(
 // (0). A caller that already parsed the text hands over its Parsed, so the file is parsed once.
 // `host.now` times the regexes that can give up (match.ts).
 export function analyze(lock: Lock, phase: Phase, rel: string, state: string | Parsed | null, host: Host): Analysis | Form {
-  const rules = inScope(lock, rel) ? running(lock, phase, rel) : [];
+  const rules = (inScope(lock, rel) ? running(lock, phase, rel) : []).filter((rule) => dependencyAllows(rule, rel, host.read));
   const p = typeof state !== "string" ? state : grammarOf(rel) !== null ? parse(rel, state) : null;
   const text = typeof state === "string" ? state : state?.text ?? null;
   const found: Violation[] = [];

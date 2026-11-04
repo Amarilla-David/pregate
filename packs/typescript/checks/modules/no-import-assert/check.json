@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "typescript/modules/no-import-assert",
+  "version": "1.0.0",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "modules.import-assert",
+  "minSeverity": null,
+  "params": {},
+  "when": {
+    "dependency": "typescript",
+    "min": "7.0.0"
+  },
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "static-import-assert",
+          "rule": {
+            "kind": "import_attribute",
+            "regex": "^\\s*assert\\b"
+          }
+        },
+        {
+          "id": "dynamic-import-assert",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "import"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "kind": "object",
+                    "stopBy": "neighbor",
+                    "has": {
+                      "kind": "pair",
+                      "stopBy": "neighbor",
+                      "has": {
+                        "field": "key",
+                        "regex": "^[\"']?assert[\"']?$"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses the removed import assertion keyword assert. TypeScript 7 rejects it. Write with instead: import rates from \"./rates.json\" with { type: \"json\" }."
+  }
+}

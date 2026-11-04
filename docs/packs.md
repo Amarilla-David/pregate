@@ -30,12 +30,12 @@ For one combined selection, use `guide --preview --packs <ns,ns>` or an edited `
 
 ## Bundled library inventory
 
-45 optional packs; 1046 distinct check IDs. Counts do not measure semantic coverage or precision.
+45 optional packs; 1047 distinct check IDs. Counts do not measure semantic coverage or precision.
 
 | Checker family | Checks | Evidence needed for enforcement |
 | --- | ---: | --- |
 | Project fitness obligations | 577 | Reviewed current project assertions; unbound means UNVERIFIED |
-| Static pattern, import and change checks | 452 | Precise applicability, valid alternatives and passing/failing/trap controls |
+| Static pattern, import and change checks | 453 | Precise applicability, valid alternatives and passing/failing/trap controls |
 | Metrics | 17 | A measured project budget; a threshold is not a universal invariant |
 
 These are implementation counts, not a certified enforce-ready total. Prefer stable conditions to prescribed mechanisms; keep contextual policies optional and heuristics advisory until admitted. See [invariant enforcement criteria](guides/invariant-enforcement.md).
@@ -83,7 +83,7 @@ These are implementation counts, not a certified enforce-ready total. Prefer sta
 | [tailwind](../packs/tailwind/REFERENCE.md) | library | 1.2.0 | 9 | `tailwind/classes` (complete) |
 | [testing](../packs/testing/REFERENCE.md) | practice | 1.2.1 | 4 | `testing/tdd` (complete) |
 | [trpc](../packs/trpc/REFERENCE.md) | library | 1.2.0 | 12 | `trpc/client` (complete), `trpc/router` (complete) |
-| [typescript](../packs/typescript/REFERENCE.md) | language | 1.2.0 | 24 | `typescript/anti-evasion` (complete), `typescript/async-results` (complete), `typescript/discipline` (complete), `typescript/framework-entries` (complete), `typescript/legacy` (complete), `typescript/named-exports` (complete), `typescript/strict-types` (complete) |
+| [typescript](../packs/typescript/REFERENCE.md) | language | 1.3.0 | 25 | `typescript/anti-evasion` (complete), `typescript/async-results` (complete), `typescript/discipline` (complete), `typescript/framework-entries` (complete), `typescript/legacy` (complete), `typescript/named-exports` (complete), `typescript/strict-types` (complete) |
 | [vercel](../packs/vercel/REFERENCE.md) | library | 1.0.0 | 15 | `vercel/configuration` (preview), `vercel/cron` (preview), `vercel/environment` (preview), `vercel/functions` (preview), `vercel/protection` (preview), `vercel/recovery` (preview) |
 | [vibe-proof](../packs/vibe-proof/REFERENCE.md) | practice | 1.1.0 | 17 | `vibe-proof/hygiene` (complete), `vibe-proof/secrets` (complete), `vibe-proof/transport` (complete) |
 | [vue](../packs/vue/REFERENCE.md) | library | 1.2.0 | 11 | `vue/reactivity` (complete), `vue/sfc` (complete) |

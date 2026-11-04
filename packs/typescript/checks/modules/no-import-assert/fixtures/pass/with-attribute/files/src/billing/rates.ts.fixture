@@ -1,0 +1,2 @@
+import rates from "./rates.json" with { type: "json" };
+export const currency = rates;

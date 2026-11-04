@@ -2,7 +2,7 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Version: `1.2.0`. Category: **language**.
+Version: `1.3.0`. Category: **language**.
 
 These are manifest defaults. All core rules activate automatically and enforce unless explicitly disabled in the reviewed preset. Optional packs activate only when selected. `pregate preset show` gives the effective contract. A manifest's `complete` label refers to that manifest, not full library or methodology compliance.
 
@@ -323,7 +323,7 @@ Source metadata:
 
 ## typescript/legacy
 
-Manifest version: `1.0.1`. Status: **complete**.
+Manifest version: `1.1.0`. Status: **complete**.
 
 ### typescript/TS-LEGACY-001
 
@@ -491,6 +491,38 @@ Source metadata:
 }
 ```
 
+### typescript/TS-ASSERT-001
+
+Check: [`typescript/modules/no-import-assert@1.0.0`](checks/modules/no-import-assert/check.json). Default severity: **deny**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `modules.import-assert`. Minimum severity: `none`.
+
+TypeScript 7.0 turns the TypeScript 6.0 deprecation of import assertions into a parse error, so the file does not compile. The replacement with is valid import-attribute syntax. The rule runs only when the project installs or declares TypeScript 7.0.0 or newer, because older compilers still accept assert.
+
+Default parameters: `{}`.
+
+**Repair:** Replace assert with with. A static import becomes import rates from "./rates.json" with { type: "json" }. A dynamic import renames the option: import("./rates.json", { with: { type: "json" } }).
+
+**Scope and limits:** with { type: "json" } is the replacement and is allowed. A return type of asserts value is T, and a call to a function named assert, are not import assertions. The announcement's spelling asserts is not the keyword the compiler rejects. A re-export such as export { row } from "./rows.json" assert { type: "json" } is not recognized by the parser this check uses. The rule stays quiet when TypeScript is missing, older than 7.0.0, or only a pre-release.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Announcing TypeScript 7.0, and the TypeScript 6.0 implementation of the import-assertion deprecation",
+  "locator": "https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/",
+  "paraphrase": "TypeScript 7 rejects an import assertion. Write with { type: \"json\" } instead of assert { type: \"json\" }. The announcement spells the keyword asserts; the compiler diagnostic says assert."
+}
+```
+
 ## typescript/named-exports
 
 Manifest version: `1.1.0`. Status: **complete**.
@@ -534,7 +566,7 @@ Source metadata:
 
 ## typescript/strict-types
 
-Manifest version: `1.3.0`. Status: **complete**.
+Manifest version: `1.4.0`. Status: **complete**.
 
 ### typescript/TS-ANY-001
 
@@ -762,19 +794,19 @@ Source metadata:
 
 ### typescript/TS-NS-001
 
-Check: [`typescript/types/no-namespace@1.0.0`](checks/types/no-namespace/check.json). Default severity: **warn**.
+Check: [`typescript/types/no-namespace@1.1.0`](checks/types/no-namespace/check.json). Default severity: **warn**.
 
 Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
 
 Languages: `typescript`. Cardinality: `singleton`. Dimension: `types.namespace`. Minimum severity: `none`.
 
-A namespace merges values and types in a way modules already express. Namespaces remain valid TypeScript, including for declaration merging, so the default contract advises.
+A namespace merges values and types in a way modules already express. namespace remains valid TypeScript, including for declaration merging, so the default contract advises. The module keyword for that same declaration is a TypeScript 7 hard error, and this rule reports it too.
 
 Default parameters: `{}`.
 
-**Repair:** Move the values to a module and export them by name.
+**Repair:** Move the values to an ES module and export them by name. A namespace that must stay is written with namespace, never module.
 
-**Scope and limits:** export namespace is still a namespace. A class or a plain object does not need one.
+**Scope and limits:** export namespace and export module are still this declaration. declare module "pkg", declare module 'pkg' and declare module "*.json" name an ambient module and stay allowed. A class or a plain object does not need a namespace.
 
 Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
 
@@ -786,9 +818,9 @@ Source metadata:
 
 ```json
 {
-  "work": "TypeScript handbook, namespaces and modules",
-  "locator": "modules over namespaces",
-  "paraphrase": "For application code, ES modules replace namespaces. A namespace is an older container that merges across files."
+  "work": "TypeScript handbook, namespaces and modules, and the TypeScript 7.0 announcement",
+  "locator": "https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/",
+  "paraphrase": "For application code, ES modules replace namespaces. TypeScript 7 also rejects a namespace written with the module keyword. An ambient module such as declare module \"pkg\" stays valid."
 }
 ```
 

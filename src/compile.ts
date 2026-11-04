@@ -501,10 +501,11 @@ function paramsSchema(check: Check): Record<string, unknown> {
   };
 }
 
-function shape(check: Check, alias: Alias | null): Pick<LockRule, "check" | "impl" | "phases" | "text" | "languages"> {
+function shape(check: Check, alias: Alias | null): Pick<LockRule, "check" | "impl" | "phases" | "text" | "languages" | "when"> {
   return {
     check: `${check.id}@${check.version}`, impl: stripped(check.impl), phases: check.phase,
     ...(check.languages ? { languages: check.languages } : {}),
+    ...(check.when ? { when: check.when } : {}),
     text: {
       message: check.feedback.message, why: alias?.why ?? "", fix: alias?.fixHint ?? "", avoid: alias?.avoid || null,
       source: alias ? `${alias.source.work}, ${alias.source.locator}` : "",
