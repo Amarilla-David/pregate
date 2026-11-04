@@ -41,7 +41,7 @@ Ready-made combinations live in `packs/presets/`.
 
 `PRISMA-VALIDATOR-001` is a warning because the removal is confirmed for the default `prisma-client` generator. The deprecated `prisma-client-js` generator still provides `Prisma.validator`, and this pack cannot see the generator.
 
-`PRISMA-TXCLIENT-001` cites the Prisma ORM 7 interactive-transactions page. The unversioned transactions page now describes Prisma ORM 8, which removed `$transaction`.
+`PRISMA-TXCLIENT-001` cites the Prisma ORM 7 interactive-transactions page. The Prisma ORM 8 transactions page says: "Prisma ORM 8 has no `$transaction`, so both of the Prisma ORM 7 forms become `db.transaction(async (tx) => ...)`." ([Transactions, Coming from Prisma ORM 7](https://www.prisma.io/docs/orm/v8/fundamentals/transactions)). Prisma ORM 8 is still a release candidate ([changelog, 2026-10-02](https://www.prisma.io/changelog/2026-10-02)). Follow-up rules for that client are listed in `BACKLOG.md` and are not part of this pack.
 
 ## Methodologies
 

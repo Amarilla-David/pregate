@@ -66,8 +66,9 @@ function parse(text: string | null): Record<string, unknown> | null {
   try {
     const value = Bun.JSONC.parse(text);
     return typeof value === "object" && value !== null && !Array.isArray(value) ? value as Record<string, unknown> : null;
-  } catch {
-    return null;
+  } catch (error) {
+    if (error instanceof SyntaxError) return null;
+    throw error;
   }
 }
 
