@@ -78,7 +78,8 @@ function candidateProject(label: string) {
   const file = join(root, "pregate.fitness.json"); writeFileSync(file, JSON.stringify(manifest));
   const env = { ...process.env, CI: "1", PREGATE_UNATTENDED_APPROVAL: "1", HOME: join(area, label + "-home"), XDG_DATA_HOME: join(area, label + "-data"), XDG_STATE_HOME: join(area, label + "-state") };
   const run = (...args: string[]) => {
-    const child = spawnSync(binary, args, { cwd: root, env, encoding: "utf8", timeout: 10000 });
+    // A cold Windows spawn of the compiled engine can sit past 10s while the scanner releases it.
+    const child = spawnSync(binary, args, { cwd: root, env, encoding: "utf8", timeout: 20000 });
     if (child.error || child.signal) throw new Error(`${args}: ${child.error?.message ?? child.signal}`);
     return { code: child.status, text: child.stdout };
   };
@@ -252,7 +253,7 @@ test("candidate selectors, flags and external files cannot mutate policy or exec
   expect(p.run("fitness", "bind", "--candidates", external, "--preview").code).toBe(1);
   expect(p.run("fitness", "plan", "--template", "--candidates", "pregate.fitness.json").code).toBe(1);
   expect(p.run("approve", "--yes").code).toBe(1); expect(p.contract()).toEqual(original); p.untouched();
-});
+}, 30_000); // Several compiled CLI calls; a Windows spawn can use most of bun's 5s default.
 
 function verifierProject(kind: "source" | "compiled", label: string, code: string, timeoutMs: number) {
   const name = `${label}-${kind}`, root = join(area, name), marker = join(root, "child-pid");
