@@ -2,13 +2,13 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Version: `1.3.0`. Category: **library**.
+Version: `1.4.0`. Category: **library**.
 
 These are manifest defaults. All core rules activate automatically and enforce unless explicitly disabled in the reviewed preset. Optional packs activate only when selected. `pregate preset show` gives the effective contract. A manifest's `complete` label refers to that manifest, not full library or methodology compliance.
 
 ## nextjs/rendering
 
-Manifest version: `1.2.0`. Status: **complete**.
+Manifest version: `1.3.0`. Status: **complete**.
 
 ### nextjs/NEXT-HEAD-001
 
@@ -108,19 +108,19 @@ Source metadata:
 
 ### nextjs/NEXT-CACHE-001
 
-Check: [`nextjs/data/no-fetch-without-cache@1.0.0`](checks/data/no-fetch-without-cache/check.json). Default severity: **off**.
+Check: [`nextjs/data/no-fetch-without-cache@1.1.0`](checks/data/no-fetch-without-cache/check.json). Default severity: **off**.
 
 Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
 
 Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.no-fetch-without-cache`. Minimum severity: `none`.
 
-The default is a legitimate choice, so missing cache options cannot be a universal violation.
+The default is valid in both models. The check stays off. It runs only when Cache Components is not enabled, so a bare fetch inside use cache is not reported as a missing fetch cache option.
 
 Default parameters: `{}`.
 
-**Repair:** Pass cache or next.revalidate in the fetch options. Choose force-cache, no-store, or an interval on purpose.
+**Repair:** In the previous model, pass cache or next.revalidate only when you want an explicit policy. With cacheComponents, cache the function with use cache and cacheLife instead of fetch cache options.
 
-**Scope and limits:** Passing an empty options object or an unrelated option like signal does not declare a cache policy.
+**Scope and limits:** An empty options object or an unrelated option such as signal does not declare a policy. The check does not run when the first existing root next.config.js, next.config.mjs, or next.config.ts sets cacheComponents to literal true. A nested experimental.cacheComponents, a comment, or a computed flag does not enable that exception. next.config.mts is not read.
 
 Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
 
@@ -132,9 +132,9 @@ Source metadata:
 
 ```json
 {
-  "work": "Next.js data fetching docs, caching and revalidating",
-  "locator": "fetch cache and next.revalidate options",
-  "paraphrase": "A fetch without cache options uses the documented default auto no cache behavior; explicit options are optional."
+  "work": "Next.js fetch reference, https://nextjs.org/docs/app/api-reference/functions/fetch; Migrating to Cache Components, https://nextjs.org/docs/app/guides/migrating-to-cache-components",
+  "locator": "options.cache auto no cache; fetch cache options",
+  "paraphrase": "In the previous model, fetch defaults to auto no cache, so a missing cache option is not a violation. With cacheComponents enabled, fetch is uncached unless it runs inside use cache, and cache or next options are not required."
 }
 ```
 
@@ -428,7 +428,7 @@ Source metadata:
 
 ## nextjs/routing
 
-Manifest version: `1.3.0`. Status: **complete**.
+Manifest version: `1.4.0`. Status: **complete**.
 
 ### nextjs/NEXT-LINK-001
 
@@ -528,19 +528,19 @@ Source metadata:
 
 ### nextjs/NEXT-REVAL-001
 
-Check: [`nextjs/data/no-revalidate-false@1.0.0`](checks/data/no-revalidate-false/check.json). Default severity: **off**.
+Check: [`nextjs/data/no-revalidate-false@1.1.0`](checks/data/no-revalidate-false/check.json). Default severity: **deny**.
 
 Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
 
 Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.no-revalidate-false`. Minimum severity: `none`.
 
-The syntax does not reveal the intended cache lifetime, so an unconditional block is unjustified.
+A literal false or a number is legal in the previous model, so it is not reported unless the root Next config enables Cache Components. Then Next.js rejects the export at build time.
 
 Default parameters: `{}`.
 
-**Repair:** Set an explicit interval in seconds, or declare the segment dynamic on purpose instead of disabling revalidation.
+**Repair:** Remove the revalidate export. For data that should be cached, add use cache and cacheLife. For data that must run every request, leave it outside use cache.
 
-**Scope and limits:** A comment next to false does not make the opt-out explicit. Name the caching intent in code.
+**Scope and limits:** Only an exported revalidate on a page, layout, or route is matched, and only when the first existing root next.config.js, next.config.mjs, or next.config.ts sets cacheComponents to literal true. A 'use client' file is left to NEXT-SERVER-EXPORT-001. A local variable, a fetch next.revalidate option, and a commented or nested flag are not this export. Computed cacheComponents values are not detected.
 
 Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
 
@@ -552,9 +552,9 @@ Source metadata:
 
 ```json
 {
-  "work": "Next.js data fetching docs, time-based revalidation",
-  "locator": "revalidate segment option",
-  "paraphrase": "A false revalidation value is an explicit supported choice for an indefinitely cached resource; it does not by itself prove an error."
+  "work": "Migrating to Cache Components, https://nextjs.org/docs/app/guides/migrating-to-cache-components; Caching and Revalidating (Previous Model), https://nextjs.org/docs/app/guides/caching-without-cache-components",
+  "locator": "revalidate; Route segment config revalidate",
+  "paraphrase": "Without Cache Components, revalidate = false is the documented default and caches indefinitely. With cacheComponents enabled, exporting revalidate from a page, layout, or route errors. Replace a positive interval with cacheLife inside use cache, and delete revalidate = 0."
 }
 ```
 
@@ -592,19 +592,19 @@ Source metadata:
 
 ### nextjs/NEXT-SERVER-EXPORT-001
 
-Check: [`nextjs/routing/no-export-in-client-component@1.0.0`](checks/routing/no-export-in-client-component/check.json). Default severity: **deny**.
+Check: [`nextjs/routing/no-export-in-client-component@1.1.0`](checks/routing/no-export-in-client-component/check.json). Default severity: **deny**.
 
 Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
 
 Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.server-exports-in-client`. Minimum severity: `none`.
 
-Exporting server route segment options or generateStaticParams from a file marked 'use client' either fails the Next.js build or is silently ignored.
+Exporting server route segment options or generateStaticParams from a file marked 'use client' either fails the Next.js build or is silently ignored. With cacheComponents enabled, Next.js also errors on server exports of dynamic, dynamicParams, revalidate, fetchCache, and runtime.
 
 Default parameters: `{}`.
 
-**Repair:** Keep the route segment config and generateStaticParams in the Server Component page or layout, and move interactive UI into a child Client Component.
+**Repair:** Move the export to a Server Component page, layout, or route. When cacheComponents is enabled, delete dynamic, dynamicParams, revalidate, fetchCache, and runtime. Cache with use cache and cacheLife, or leave the data uncached.
 
-**Scope and limits:** Direct variable exports, function exports, and export list specifiers for dynamic, revalidate, runtime, preferredRegion, maxDuration, and generateStaticParams in 'use client' files are matched. Local unexported variables pass.
+**Scope and limits:** Direct variable exports, function exports, and export list specifiers in 'use client' page, layout, and route files are matched, including dynamicParams and fetchCache. Local unexported variables pass. When the first existing root next.config.js, next.config.mjs, or next.config.ts sets cacheComponents to literal true, server files are also checked for dynamic, dynamicParams, fetchCache, and runtime. preferredRegion, maxDuration, generateStaticParams, ensureStatic, and instant are not flagged on the server. A nested or computed flag is not treated as enabled. An empty generateStaticParams return is a separate build error and is not matched.
 
 Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
 
@@ -616,9 +616,9 @@ Source metadata:
 
 ```json
 {
-  "work": "Next.js App Router documentation, Route Segment Config (https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config)",
-  "locator": "Route Segment Config options and Server Components",
-  "paraphrase": "Route segment configuration exports (dynamic, revalidate, runtime, preferredRegion, maxDuration) and generateStaticParams only apply in Server Components and cannot be exported from a Client Component."
+  "work": "Route Segment Config, https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config; cacheComponents, https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents; Migrating to Cache Components, https://nextjs.org/docs/app/guides/migrating-to-cache-components",
+  "locator": "Version history v16.0.0; runtime; dynamic, revalidate, and fetchCache",
+  "paraphrase": "Route segment options and generateStaticParams apply only in Server Components. When cacheComponents is enabled, dynamic, dynamicParams, revalidate, and fetchCache are removed, and runtime is unsupported, including runtime = 'nodejs'."
 }
 ```
 

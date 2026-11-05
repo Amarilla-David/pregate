@@ -31,7 +31,7 @@ including optional heuristics, and do not certify every match as a defect.
 | Documentation checked live | Verified consequence | Pack correction |
 | --- | --- | --- |
 | [Firebase Firestore writes](https://firebase.google.com/docs/firestore/manage-data/add-data) | `setDoc` can intentionally create or replace a document without merge. | `FB-WRITE-001` off; same-statement batch check `FB-BATCH-001` off. |
-| [Next.js fetch](https://nextjs.org/docs/app/api-reference/functions/fetch) | A fetch without cache options has a documented default; `cache: 'no-store'` conflicts with a positive `next.revalidate`. | `NEXT-CACHE-001` off; `NEXT-CONFLICT-001` denies the contradictory options. `NEXT-HEAD-001` is scoped to `app/`, with a Pages Router pass fixture. |
+| [Next.js fetch](https://nextjs.org/docs/app/api-reference/functions/fetch) and [Cache Components](https://nextjs.org/docs/app/guides/migrating-to-cache-components) | A fetch without cache options has a documented default in both models. `cache: 'no-store'` conflicts with a positive `next.revalidate` in the previous model. With `cacheComponents`, exporting `revalidate`, `dynamic`, `dynamicParams`, `fetchCache`, or `runtime` errors. | `NEXT-CACHE-001` stays off and does not run when the root Next config sets literal `cacheComponents: true`. `NEXT-REVAL-001` denies that `revalidate` export only then. `NEXT-SERVER-EXPORT-001` still denies client segment exports and, when the flag is on, those removed server exports. `NEXT-CONFLICT-001` denies the contradictory fetch options. |
 | [tRPC procedures](https://trpc.io/docs/server/procedures) | The official example uses `publicProcedure.mutation`. | `TRPC-PROC-001` off; optional input/output/context policy bans also off. |
 | [Vue API styles](https://vuejs.org/guide/introduction.html#api-styles) | Options API and Composition API are both supported. | `VUE-OPT-001` off. |
 | [Tailwind source detection](https://tailwindcss.com/docs/detecting-classes-in-source-files) | The scanner reads entire source files as text, including complete class literals in arrays and variables. | `TW-JOIN-001` and `TW-VAR-001` off; other style preferences advisory. |
@@ -67,10 +67,10 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 
 | Default severity | Aliases |
 | --- | ---: |
-| deny | 935 |
+| deny | 936 |
 | ask | 5 |
 | warn | 108 |
-| off | 28 |
+| off | 27 |
 
 These are declarations, not effective project policy or verification of complete semantic requirements. [All defaults, scope, phases and rule limits](../docs/packs.md).
 <!-- END generated reference -->

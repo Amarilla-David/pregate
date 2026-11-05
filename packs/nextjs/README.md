@@ -23,11 +23,11 @@ The contract is the repository preset, not this pack. Take every pack, some pack
 | `NEXT-HEAD-001` | Importing `next/head` from `app/` or `src/app/`, including runtime loaders. | The Pages Router API does not configure App Router metadata. | deny |
 | `NEXT-IMG-001` | Raw `<img>` elements, self-closing and open-plus-close forms. | May skip image optimization. | warn |
 | `NEXT-FONT-001` | `<link>` tags pointing at `fonts.googleapis.com`, literal and expression forms. | Remote font stylesheets undo self-hosting. | deny |
-| `NEXT-CACHE-001` | `fetch(...)` with no `cache`, `revalidate`, or `next` key in the arguments. | The default `auto no cache` is supported. | off |
+| `NEXT-CACHE-001` | `fetch(...)` with no `cache`, `revalidate`, or `next` key, only when Cache Components is off. | Both models allow a bare fetch. With `cacheComponents` the check does not run. | off |
 | `NEXT-LINK-001` | `<a href="/internal">` anchors, literal and expression forms. | A full reload may be intentional; consider `Link` for client-side transitions. | warn |
 | `NEXT-DOC-001` | Importing `next/document` under `app/` or `src/app/`, including runtime loaders. | Pages Router document; inert under the App Router. | deny |
 | `NEXT-ROUTE-001` | A proven imported Next Router or local imported `useRouter()` receiver pushes a `+`-built href. | Optional readability advice; Next accepts string hrefs and concatenation is not a universal production defect. | warn |
-| `NEXT-REVAL-001` | `export const revalidate = false`, any spacing. | An intentional indefinite cache is supported; intent is unknown. | off |
+| `NEXT-REVAL-001` | An exported `revalidate` on a page, layout, or route when the root Next config sets `cacheComponents: true`. | That export errors under Cache Components. `false` remains the previous model's default and is not reported. | deny |
 | `NEXT-CONFLICT-001` | `fetch` options containing both `cache: 'no-store'` and a positive `next.revalidate`. | Next.js ignores both conflicting cache settings. | deny |
 | `NEXT-NAV-001` | A value import, re-export or runtime load of `next/router` under `app/` or `src/app/`. Type-only imports pass. | The Pages Router hook throws "NextRouter was not mounted" in the App Router. | deny |
 | `NEXT-DIRECTIVE-001` | `'use client'`/`'use server'` after other code, `'use client'` inside a function, `'use server'` after a statement in a function body, or either in backticks. | A misplaced directive is an ordinary string; the boundary silently does not exist. | deny |
@@ -40,7 +40,7 @@ The contract is the repository preset, not this pack. Take every pack, some pack
 | `NEXT-REVALTAG-001` | `revalidateTag` from `next/cache` with fewer than two arguments. | Next.js 16 requires a cacheLife profile or `{ expire }`. The one-argument form is a TypeScript error. Does not run below 16. | deny on Next >= 16 |
 | `NEXT-PROXY-001` | A named `middleware` export in `proxy.ts`. | Proxy calls `proxy` or the default export. Does not run below 16. | deny on Next >= 16 |
 | `NEXT-PROXY-002` | `middleware.ts` with `export const config = { runtime: "nodejs" }`. | That Node.js file is the deprecated filename; proxy owns Node. Edge middleware, the default, stays. Does not run below 16. | warn on Next >= 16 |
-| `NEXT-SERVER-EXPORT-001` | Exporting route segment config options (`dynamic`, `revalidate`, `runtime`, `preferredRegion`, `maxDuration`) or `generateStaticParams` from a `'use client'` page, layout, or route file. | Route segment options and `generateStaticParams` only take effect in Server Components. | deny |
+| `NEXT-SERVER-EXPORT-001` | Route segment exports from a `'use client'` page, layout, or route. With `cacheComponents: true`, also `dynamic`, `dynamicParams`, `fetchCache`, and `runtime` on the server, including `runtime = "nodejs"`. | Client Components cannot export them. Those four are removed or unsupported when Cache Components is on. | deny |
 
 ## Methodologies
 
@@ -49,9 +49,9 @@ The contract is the repository preset, not this pack. Take every pack, some pack
 
 ## Fixture coverage and limits
 
-`pregate rules test packs/nextjs` runs **129** real fixtures. Every check has two passing and two failing cases plus a failing trap with exact lines. Regression cases preserve next/headers, exported module-name notes, import options, CMS HTML strings and unrelated attribute text; an arrow-rendered internal anchor still reports. External anchors, `next/image`, icon and local stylesheet links, explicit cache options, template-literal pushes, and numeric `revalidate` values remain pass guards. Next.js 16 fixtures also keep awaited props, `{ expire }` and a cacheLife profile, Edge middleware, a default export named `middleware`, and synchronous `params` inside `generateImageMetadata`.
+`pregate rules test packs/nextjs` runs **142** real fixtures. Every check has two passing and two failing cases plus a failing trap with exact lines. Regression cases preserve next/headers, exported module-name notes, import options, CMS HTML strings and unrelated attribute text; an arrow-rendered internal anchor still reports. External anchors, `next/image`, icon and local stylesheet links, explicit cache options, template-literal pushes, and numeric `revalidate` values remain pass guards. Next.js 16 fixtures also keep awaited props, `{ expire }` and a cacheLife profile, Edge middleware, a default export named `middleware`, and synchronous `params` inside `generateImageMetadata`. Cache Components fixtures cover a literal `cacheComponents: true` in the root Next config and the previous model without it.
 
-Fixtures only prove the sample syntax. The [fetch reference](https://nextjs.org/docs/app/api-reference/functions/fetch) explicitly documents default `auto no cache` behavior; no option is required. NEXT-LINK-001 now identifies actual anchor/attribute structure anywhere in JSX and remains advisory because navigation intent is unknown. Other JSX rules still have their documented expression limits. Open cross-file questions are catalogued in [BACKLOG.md](BACKLOG.md).
+Fixtures only prove the sample syntax. The [fetch reference](https://nextjs.org/docs/app/api-reference/functions/fetch) documents default `auto no cache`. With [Cache Components](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents), fetch stays uncached unless it runs inside `use cache`. NEXT-LINK-001 now identifies actual anchor/attribute structure anywhere in JSX and remains advisory because navigation intent is unknown. Other JSX rules still have their documented expression limits. Open cross-file questions are catalogued in [BACKLOG.md](BACKLOG.md).
 
 The router rule preserves array `push`, arbitrary injected methods, non-Next
 hooks and locally shadowed imported bindings. It admits imported hook aliases,
@@ -67,7 +67,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 
 ## Exact rule contract
 
-Category: **library**. Version: `1.3.0`. 21 distinct check IDs.
+Category: **library**. Version: `1.4.0`. 21 distinct check IDs.
 
 Methodologies: `nextjs/rendering` (complete), `nextjs/routing` (complete).
 

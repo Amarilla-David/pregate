@@ -1,7 +1,7 @@
 {
   "$schema": "../../../../../schema/check.v1.json",
   "id": "nextjs/routing/no-export-in-client-component",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "area": "routing",
   "cardinality": "singleton",
   "dimension": "nextjs.server-exports-in-client",
@@ -23,7 +23,7 @@
           ],
           "rule": {
             "kind": "identifier",
-            "regex": "^(dynamic|revalidate|runtime|preferredRegion|maxDuration|generateStaticParams)$",
+            "regex": "^(dynamic|dynamicParams|revalidate|fetchCache|runtime|preferredRegion|maxDuration|generateStaticParams)$",
             "all": [
               {
                 "not": {
@@ -42,16 +42,10 @@
                       "kind": "variable_declarator",
                       "inside": {
                         "any": [
-                          {
-                            "kind": "lexical_declaration"
-                          },
-                          {
-                            "kind": "variable_declaration"
-                          }
+                          { "kind": "lexical_declaration" },
+                          { "kind": "variable_declaration" }
                         ],
-                        "inside": {
-                          "kind": "export_statement"
-                        }
+                        "inside": { "kind": "export_statement" }
                       }
                     }
                   },
@@ -59,19 +53,12 @@
                     "inside": {
                       "field": "name",
                       "kind": "function_declaration",
-                      "inside": {
-                        "kind": "export_statement"
-                      }
+                      "inside": { "kind": "export_statement" }
                     }
                   },
                   {
-                    "nthChild": {
-                      "position": 1,
-                      "reverse": true
-                    },
-                    "inside": {
-                      "kind": "export_specifier"
-                    }
+                    "nthChild": { "position": 1, "reverse": true },
+                    "inside": { "kind": "export_specifier" }
                   }
                 ]
               },
@@ -87,6 +74,66 @@
               }
             ]
           }
+        },
+        {
+          "id": "segment-removed",
+          "when": { "cacheComponents": "on" },
+          "files": [
+            "app/**/page.*",
+            "app/**/layout.*",
+            "app/**/route.*",
+            "src/app/**/page.*",
+            "src/app/**/layout.*",
+            "src/app/**/route.*"
+          ],
+          "rule": {
+            "kind": "identifier",
+            "regex": "^(dynamic|dynamicParams|fetchCache|runtime)$",
+            "all": [
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "export_statement",
+                    "regex": "^export\\s+type\\b"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "kind": "program",
+                    "stopBy": "end",
+                    "has": {
+                      "kind": "expression_statement",
+                      "regex": "^[\"']use client[\"'];?$"
+                    }
+                  }
+                }
+              },
+              {
+                "any": [
+                  {
+                    "inside": {
+                      "field": "name",
+                      "kind": "variable_declarator",
+                      "inside": {
+                        "any": [
+                          { "kind": "lexical_declaration" },
+                          { "kind": "variable_declaration" }
+                        ],
+                        "inside": { "kind": "export_statement" }
+                      }
+                    }
+                  },
+                  {
+                    "nthChild": { "position": 1, "reverse": true },
+                    "inside": { "kind": "export_specifier" }
+                  }
+                ]
+              }
+            ]
+          }
         }
       ]
     }
@@ -98,6 +145,6 @@
     "ci"
   ],
   "feedback": {
-    "message": "{symbol} is exported from a 'use client' module. Route segment options and generateStaticParams only take effect in Server Components."
+    "message": "{symbol} is a route segment export Next.js will not apply in this file. A Client Component cannot export it. With cacheComponents enabled, dynamic, dynamicParams, revalidate, fetchCache, and runtime are removed from Server Components too."
   }
 }

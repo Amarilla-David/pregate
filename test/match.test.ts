@@ -317,11 +317,13 @@ test("compilePattern rejects what it cannot evaluate exactly", () => {
     ["util cycle through nthChild.ofRule", { utils: { a: { nthChild: { position: 1, ofRule: { matches: "a" } } } }, rule: { matches: "a" } }, "refers to itself"],
     ["constraint on an unbound name", { rule: { pattern: "f($A)" }, constraints: { B: { kind: "number" } } }, "undefined metavariable B"],
     ["functional nthChild", { rule: { nthChild: "2n+1" } }, "expected an object"],
+    ["when value", { rule: { kind: "identifier" }, when: { cacheComponents: "maybe" } }, "when.cacheComponents must be on or off"],
   ];
   for (const [name, config, error] of table) {
     expect(() => compilePattern({ id: "t", ...(config as Config) }, "typescript")).toThrow(error);
   }
   expect(() => compilePattern({ id: "t", rule: { kind: "identifier" }, "x-note": "notes are ignored" } as PatternConfig, "typescript")).not.toThrow();
+  expect(() => compilePattern({ id: "t", rule: { kind: "identifier" }, when: { cacheComponents: "on" } }, "typescript")).not.toThrow();
   expect(() => findAll(parse("a.tsx", "x"), compilePattern({ id: "t", rule: { kind: "identifier" } }, "typescript"), clock)).toThrow("compiled for typescript");
 });
 

@@ -1,0 +1,5 @@
+const url = "https://api.example.com/data";
+export async function getData() {
+  "use cache";
+  return fetch(url);
+}

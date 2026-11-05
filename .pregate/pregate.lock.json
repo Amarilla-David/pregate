@@ -27,6 +27,7 @@
         "src/node-target.ts",
         "src/dependency-since.ts",
         "src/package-version.ts",
+        "src/next-config.ts",
         "src/ratchet.ts",
         "src/decide.ts",
         "src/message.ts",
@@ -161,7 +162,7 @@
     "name": "pregate",
     "version": "0.1.0"
   },
-  "presetHash": "33b36b30fbf5f987113dc13eafa43f99f12ab5873d2b1d8de30fafdd4089b37a",
+  "presetHash": "188cefbb1784906c8c5ae1a5a479ec90faafd6d5374f8495af2c1e24c9de8c50",
   "ratchet": "no-new",
   "rules": [
     {
@@ -202,6 +203,7 @@
           "src/node-target.ts",
           "src/dependency-since.ts",
           "src/package-version.ts",
+          "src/next-config.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",
@@ -327,6 +329,7 @@
           "src/node-target.ts",
           "src/dependency-since.ts",
           "src/package-version.ts",
+          "src/next-config.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",
@@ -855,6 +858,7 @@
           "src/node-target.ts",
           "src/dependency-since.ts",
           "src/package-version.ts",
+          "src/next-config.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",
@@ -5345,6 +5349,7 @@
           "src/node-target.ts",
           "src/dependency-since.ts",
           "src/package-version.ts",
+          "src/next-config.ts",
           "src/ratchet.ts",
           "src/decide.ts",
           "src/message.ts",
