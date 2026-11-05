@@ -20,11 +20,15 @@ import { discoverDocumentation } from "./project-discovery.ts";
 
 // Exact manifest dependencies are evidence for applicability, not for compliance.
 // Token, CORS and LLM SDKs make the client-and-agents hardening checks applicable.
+// `svelte` and `@sveltejs/*` use that same shipped-dependency evidence. The package
+// named `svelte`, a `.svelte` file, or `svelte.config.*` also select the Svelte pack.
 const CLIENT_SECURITY: [string, string[]] = ["security-audit", ["security-audit/client-and-agents"]];
+const SVELTE: [string, string[]] = ["svelte", ["svelte/runes", "svelte/stores"]];
 const DEPENDENCIES: Record<string, [string, string[]]> = {
   next: ["nextjs", ["nextjs/rendering", "nextjs/routing"]],
   react: ["react", ["react/components", "react/hooks"]],
   vue: ["vue", ["vue/reactivity", "vue/sfc"]],
+  svelte: SVELTE,
   "drizzle-orm": ["drizzle", ["drizzle/queries", "drizzle/schema"]],
   "@supabase/supabase-js": ["supabase", ["supabase/client", "supabase/storage"]],
   "@nestjs/core": ["nestjs", ["nestjs/controllers", "nestjs/providers"]],
@@ -69,6 +73,7 @@ export function recommendPacks(files: Files, languages: string[], base: string[]
   if (languages.includes("Rust")) add("rust", ["rust/quality"], "Rust source or Cargo metadata detected; source AST only, no macro expansion or compiler proof");
   const manifests = Object.entries(files).filter(([path]) => /(^|\/)package\.json$/.test(path)).sort(([a], [b]) => a.localeCompare(b));
   for (const [path, text] of manifests) manifestRecommendations(add, path, text);
+  svelteSourceRecommendations(add, files);
   layeredRecommendations(add, files, base);
   applicableRecommendations(add, files, base, selected.has("security-audit"));
   const available = new Set(librarySources().map((pin) => pin.ns));
@@ -81,14 +86,23 @@ type Add = (ns: string, methodologies: string[], reason: string, owner?: string)
 
 // Shipped dependencies and peers name the frameworks in use; a devDependency only names tooling.
 function manifestRecommendations(add: Add, path: string, text: string): void {
-  const pkg = JSON.parse(text) as { dependencies?: Record<string, unknown>; devDependencies?: Record<string, unknown>; peerDependencies?: Record<string, unknown> };
+  const pkg = JSON.parse(text) as { name?: unknown; dependencies?: Record<string, unknown>; devDependencies?: Record<string, unknown>; peerDependencies?: Record<string, unknown> };
+  // The Svelte repository is the package named `svelte`; it does not depend on `svelte`.
+  if (pkg.name === "svelte") add(SVELTE[0], SVELTE[1], `${path} is named svelte`, manifestRoot(path));
   for (const dep of Object.keys({ ...pkg.dependencies, ...pkg.peerDependencies })) {
-    const policy = DEPENDENCIES[dep];
+    const policy = DEPENDENCIES[dep] ?? (dep.startsWith("@sveltejs/") ? SVELTE : undefined);
     if (policy) add(policy[0], policy[1], `${path} declares ${dep}`, manifestRoot(path));
   }
   if (pkg.devDependencies && ["vitest", "jest", "@playwright/test"].some((name) => name in pkg.devDependencies!)) {
     add("testing", ["testing/tdd"], `${path} declares a test runner; test-file presence is not coverage`);
   }
+}
+
+// File evidence recommends Svelte and does not invent an owning workspace. A manifest
+// owner, when one exists, still confines the recommendation the way a Vue declaration does.
+function svelteSourceRecommendations(add: Add, files: Files): void {
+  if (Object.keys(files).some((path) => /\.svelte$/i.test(path))) add(SVELTE[0], SVELTE[1], ".svelte source detected");
+  for (const path of Object.keys(files).filter((path) => /(^|\/)svelte\.config\.[^/]+$/i.test(path)).sort()) add(SVELTE[0], SVELTE[1], `${path} detected`);
 }
 
 // Clean architecture and FCIS both resolve deps.layers, so TypeScript gets no second layer policy.

@@ -73,6 +73,13 @@ methodologies in their owning package. This does not add a Vue SFC parser;
 `.vue` bodies remain visibly unsupported. A similarly named dependency does
 not count as a declaration of Vue.
 
+Exact `svelte` declarations and `@sveltejs/*` dependencies, including peer
+dependencies, recommend the Svelte methodologies in their owning package.
+A package named `svelte` does too, because that package is Svelte and does not
+depend on `svelte`. A `.svelte` file or `svelte.config.*` also recommends
+Svelte; those files do not add a package owner. A similarly named dependency
+does not count as a declaration of Svelte.
+
 When nested related and unrelated owners cannot be represented by one include/
 exclude policy, scan reports `scopeProblems`; choose an explicit reviewed scope
 instead of silently applying an overbroad policy. Dependency ownership is
