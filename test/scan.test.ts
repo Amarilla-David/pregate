@@ -28,6 +28,43 @@ test("scan recognizes exact Vue peer dependencies and confines recommendations t
   expect(recommendPacks({ "package.json": files["package.json"]! }, []).some(item => item.ns === "vue")).toBe(false);
 });
 
+test("scan recognizes exact Svelte peer dependencies and confines recommendations to their owning workspace", () => {
+  const files = { "package.json": '{"peerDependencies":{"svelte-helper":"1.0.0"}}',
+    "packages/store/package.json": '{"peerDependencies":{"svelte":"^5.0.0"}}',
+    "packages/site/package.json": '{"dependencies":{"react":"19.0.0"}}' };
+  const svelte = recommendPacks(files, ["TypeScript"]).find(item => item.ns === "svelte")!;
+  expect(svelte.methodologies).toEqual(["svelte/runes", "svelte/stores"]);
+  expect(svelte.reasons).toEqual(["packages/store/package.json declares svelte"]);
+  expect(svelte.scope).toEqual({ include: ["packages/store/**"], exclude: [] });
+  expect(recommendPacks({ "package.json": files["package.json"]! }, []).some(item => item.ns === "svelte")).toBe(false);
+});
+
+test("scan recommends svelte for the package named svelte, Svelte sources, config, and @sveltejs dependencies", () => {
+  const repo = {
+    "package.json": '{"name":"svelte-monorepo","devDependencies":{"svelte":"workspace:*","@sveltejs/eslint-config":"^9"}}',
+    "packages/svelte/package.json": '{"name":"svelte","dependencies":{"@sveltejs/acorn-typescript":"^1.0.0"}}',
+    "packages/svelte/src/main.svelte": "",
+    "svelte.config.js": "",
+  };
+  const svelte = recommendPacks(repo, ["TypeScript"]).find(item => item.ns === "svelte")!;
+  expect(svelte.methodologies).toEqual(["svelte/runes", "svelte/stores"]);
+  expect(svelte.reasons).toEqual([
+    "packages/svelte/package.json is named svelte",
+    "packages/svelte/package.json declares @sveltejs/acorn-typescript",
+    ".svelte source detected",
+    "svelte.config.js detected",
+  ]);
+  expect(svelte.scope).toEqual({ include: ["packages/svelte/**"], exclude: [] });
+  const kit = recommendPacks({ "packages/app/package.json": '{"peerDependencies":{"@sveltejs/kit":"^2.0.0"}}' }, []).find(item => item.ns === "svelte")!;
+  expect(kit.reasons).toEqual(["packages/app/package.json declares @sveltejs/kit"]);
+  expect(kit.scope).toEqual({ include: ["packages/app/**"], exclude: [] });
+  expect(recommendPacks({ "src/App.svelte": "" }, []).find(item => item.ns === "svelte")).toEqual({
+    ns: "svelte", methodologies: ["svelte/runes", "svelte/stores"], reasons: [".svelte source detected"] });
+  expect(recommendPacks({ "apps/web/svelte.config.mjs": "" }, []).find(item => item.ns === "svelte")!.reasons).toEqual(["apps/web/svelte.config.mjs detected"]);
+  expect(recommendPacks({ "package.json": '{"dependencies":{"eslint-plugin-svelte":"3","svelte-check":"4"}}' }, []).some(item => item.ns === "svelte")).toBe(false);
+  expect(recommendPacks({ "package.json": '{"name":"svelte-kit","devDependencies":{"svelte":"^5","@sveltejs/kit":"^2"}}' }, []).some(item => item.ns === "svelte")).toBe(false);
+});
+
 test("proposed scope uses the initial recipe and detected roots without hiding unsupported files or activating a contract", () => {
   const files = { "app/page.tsx": "export const page = 1;\n", "components/Form.rb": "", "src/generated/client.ts": "export const client = 1;\n" };
   const stack = detectStack(files), scope = proposedScope(files, stack), coverage = scopeCoverage(files, scope);

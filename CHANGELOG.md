@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - `JS-EVAL-001` flags indirect `eval`. A comma expression that yields `eval` was missed, including `(0, eval)(code)`, `(1, eval)(code)`, and `(void 0, eval)(code)`. `globalThis.eval(code)` and `window.eval(code)` stay flagged. A name that only contains those letters, such as `evaluate(code)` or `item.evaluate(code)`, is not. The javascript pack is 1.2.1 and `javascript/safety/no-eval-call` is 1.0.1.
+- `pregate scan` recommends the Svelte pack (`svelte/runes` and `svelte/stores`, catalog `svelte@1.2.0`) when a project is Svelte. Exact `svelte` dependencies and peer dependencies are confined to the package that declares them, the same way Vue declarations are. `@sveltejs/*` dependencies and peer dependencies count too. The Svelte repository is the package named `svelte` and does not depend on `svelte`, so that package name counts. A `.svelte` source file or a `svelte.config.*` file counts as well; those files do not add a package owner. A devDependency and a similarly named package, such as `eslint-plugin-svelte`, do not.
 
 ## [0.0.3] - 2026-11-03
 
