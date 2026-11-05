@@ -66,16 +66,20 @@ export function recommendPacks(files: Files, languages: string[], base: string[]
     selected.set(ns, item);
     return item;
   };
-  if (languages.includes("TypeScript")) add("typescript", ["typescript/strict-types", "typescript/anti-evasion"], "TypeScript source or tsconfig detected");
-  if (languages.includes("JavaScript")) add("javascript", ["javascript/safety"], "JavaScript source detected");
-  if (languages.includes("Python")) add("python", ["python/quality"], "Python source or project metadata detected");
-  if (languages.includes("Go")) add("go", ["go/quality"], "Go source or module metadata detected");
-  if (languages.includes("Rust")) add("rust", ["rust/quality"], "Rust source or Cargo metadata detected; source AST only, no macro expansion or compiler proof");
+  // A caller-supplied language with no file evidence stays (Cargo.toml may be known outside this map).
+  // Evidence that exists only in a docs site, examples tree, website, CI workflow, or tiny scripts/ folder does not.
+  const peripheral = peripheralPackPath(files);
+  const primary = Object.fromEntries(Object.entries(files).filter(([path]) => !peripheral(path)));
+  if (languages.includes("TypeScript") && !peripheralLanguageOnly("TypeScript", files, peripheral)) add("typescript", ["typescript/strict-types", "typescript/anti-evasion"], "TypeScript source or tsconfig detected");
+  if (languages.includes("JavaScript") && !peripheralLanguageOnly("JavaScript", files, peripheral)) add("javascript", ["javascript/safety"], "JavaScript source detected");
+  if (languages.includes("Python") && !peripheralLanguageOnly("Python", files, peripheral)) add("python", ["python/quality"], "Python source or project metadata detected");
+  if (languages.includes("Go") && !peripheralLanguageOnly("Go", files, peripheral)) add("go", ["go/quality"], "Go source or module metadata detected");
+  if (languages.includes("Rust") && !peripheralLanguageOnly("Rust", files, peripheral)) add("rust", ["rust/quality"], "Rust source or Cargo metadata detected; source AST only, no macro expansion or compiler proof");
   const manifests = Object.entries(files).filter(([path]) => /(^|\/)package\.json$/.test(path)).sort(([a], [b]) => a.localeCompare(b));
-  for (const [path, text] of manifests) manifestRecommendations(add, path, text);
-  svelteSourceRecommendations(add, files);
-  layeredRecommendations(add, files, base);
-  applicableRecommendations(add, files, base, selected.has("security-audit"));
+  manifestRecommendations(add, manifests, peripheral);
+  svelteSourceRecommendations(add, files, peripheral);
+  layeredRecommendations(add, primary, base);
+  applicableRecommendations(add, primary, base, selected.has("security-audit"));
   const available = new Set(librarySources().map((pin) => pin.ns));
   return [...selected.values()].filter((item) => available.has(item.ns)).sort((a, b) => a.ns.localeCompare(b.ns))
     .map(({ owners, ...item }) => owners ? { ...item, ...ownershipScope(owners, manifests.map(([path]) => manifestRoot(path))) } : item);
@@ -85,24 +89,90 @@ type Selected = Recommendation & { owners?: string[] };
 type Add = (ns: string, methodologies: string[], reason: string, owner?: string) => Selected;
 
 // Shipped dependencies and peers name the frameworks in use; a devDependency only names tooling.
-function manifestRecommendations(add: Add, path: string, text: string): void {
-  const pkg = JSON.parse(text) as { name?: unknown; dependencies?: Record<string, unknown>; devDependencies?: Record<string, unknown>; peerDependencies?: Record<string, unknown> };
-  // The Svelte repository is the package named `svelte`; it does not depend on `svelte`.
-  if (pkg.name === "svelte") add(SVELTE[0], SVELTE[1], `${path} is named svelte`, manifestRoot(path));
-  for (const dep of Object.keys({ ...pkg.dependencies, ...pkg.peerDependencies })) {
-    const policy = DEPENDENCIES[dep] ?? (dep.startsWith("@sveltejs/") ? SVELTE : undefined);
-    if (policy) add(policy[0], policy[1], `${path} declares ${dep}`, manifestRoot(path));
+// A docs site or other peripheral manifest does not select a pack unless a primary manifest declares it too.
+// The Svelte repository is the package named `svelte`; it does not depend on `svelte`.
+function manifestRecommendations(add: Add, manifests: [string, string][], peripheral: (path: string) => boolean): void {
+  const rows = manifests.map(([path, text]) => ({
+    path, peripheral: peripheral(path),
+    pkg: JSON.parse(text) as { name?: unknown; dependencies?: Record<string, unknown>; devDependencies?: Record<string, unknown>; peerDependencies?: Record<string, unknown> },
+  }));
+  const hits: { path: string; peripheral: boolean; reason: string; policy: [string, string[]] }[] = [];
+  for (const row of rows) {
+    if (row.pkg.name === "svelte") hits.push({ path: row.path, peripheral: row.peripheral, reason: `${row.path} is named svelte`, policy: SVELTE });
+    for (const dep of Object.keys({ ...row.pkg.dependencies, ...row.pkg.peerDependencies })) {
+      const policy = DEPENDENCIES[dep] ?? (dep.startsWith("@sveltejs/") ? SVELTE : undefined);
+      if (policy) hits.push({ path: row.path, peripheral: row.peripheral, reason: `${row.path} declares ${dep}`, policy });
+    }
   }
-  if (pkg.devDependencies && ["vitest", "jest", "@playwright/test"].some((name) => name in pkg.devDependencies!)) {
-    add("testing", ["testing/tdd"], `${path} declares a test runner; test-file presence is not coverage`);
+  const backed = new Set(hits.filter((hit) => !hit.peripheral).map((hit) => hit.policy[0]));
+  for (const hit of hits) {
+    if (hit.peripheral || !backed.has(hit.policy[0])) continue;
+    add(hit.policy[0], hit.policy[1], hit.reason, manifestRoot(hit.path));
   }
+  for (const row of rows) {
+    if (row.peripheral || !row.pkg.devDependencies) continue;
+    if (["vitest", "jest", "@playwright/test"].some((name) => name in row.pkg.devDependencies!)) {
+      add("testing", ["testing/tdd"], `${row.path} declares a test runner; test-file presence is not coverage`);
+    }
+  }
+}
+
+// Docs sites, example trees, and website folders are not the product. The folder name matches at any
+// depth, so packages/docs and website/ are the same kind of signal. GitHub workflows and a scripts/
+// directory of at most three inventoried files are CI or tooling, not a language project.
+const PERIPHERAL_DIR = /^(?:doc|docs|documentation|website|examples?|samples?|demos?|playground)$/;
+const TINY_SCRIPT_FILES = 3;
+
+function peripheralPackPath(files: Files): (path: string) => boolean {
+  const tiny = tinyScriptDirs(Object.keys(files));
+  return (path) => {
+    const dirs = path.split("/").slice(0, -1);
+    if (dirs.some((dir) => dir === ".github" || PERIPHERAL_DIR.test(dir))) return true;
+    return dirs.some((_, index) => tiny.has(dirs.slice(0, index + 1).join("/")));
+  };
+}
+
+function tinyScriptDirs(paths: string[]): Set<string> {
+  const counts = new Map<string, number>();
+  for (const path of paths) {
+    const dirs = path.split("/").slice(0, -1);
+    const at = dirs.indexOf("scripts");
+    if (at === -1) continue;
+    const dir = dirs.slice(0, at + 1).join("/");
+    counts.set(dir, (counts.get(dir) ?? 0) + 1);
+  }
+  return new Set([...counts].filter(([, count]) => count <= TINY_SCRIPT_FILES).map(([dir]) => dir));
+}
+
+const LANGUAGE_EXTENSIONS: Record<string, string> = {
+  ts: "TypeScript", tsx: "TypeScript", mts: "TypeScript", cts: "TypeScript",
+  js: "JavaScript", jsx: "JavaScript", mjs: "JavaScript", cjs: "JavaScript",
+  py: "Python", go: "Go", rs: "Rust",
+};
+
+function languageEvidence(language: string, path: string): boolean {
+  if (LANGUAGE_EXTENSIONS[path.split(".").pop()!.toLowerCase()] === language) return true;
+  if (language === "TypeScript" && /(^|\/)tsconfig\.json$/.test(path)) return true;
+  if (language === "Python" && /(^|\/)(pyproject\.toml|requirements\.txt|Pipfile)$/.test(path)) return true;
+  if (language === "Go" && /(^|\/)go\.(mod|work)$/.test(path)) return true;
+  if (language === "Rust" && /(^|\/)Cargo\.toml$/.test(path)) return true;
+  return false;
+}
+
+// No inventoried evidence means the caller already decided the language. Evidence that is entirely
+// peripheral is not a second vote for that language.
+function peripheralLanguageOnly(language: string, files: Files, peripheral: (path: string) => boolean): boolean {
+  const evidence = Object.keys(files).filter((path) => languageEvidence(language, path));
+  return evidence.length > 0 && evidence.every(peripheral);
 }
 
 // File evidence recommends Svelte and does not invent an owning workspace. A manifest
 // owner, when one exists, still confines the recommendation the way a Vue declaration does.
-function svelteSourceRecommendations(add: Add, files: Files): void {
-  if (Object.keys(files).some((path) => /\.svelte$/i.test(path))) add(SVELTE[0], SVELTE[1], ".svelte source detected");
-  for (const path of Object.keys(files).filter((path) => /(^|\/)svelte\.config\.[^/]+$/i.test(path)).sort()) add(SVELTE[0], SVELTE[1], `${path} detected`);
+// A `.svelte` file or `svelte.config.*` that exists only under a docs site, examples tree,
+// website, CI workflow, or tiny scripts/ folder does not select the pack.
+function svelteSourceRecommendations(add: Add, files: Files, peripheral: (path: string) => boolean): void {
+  if (Object.keys(files).some((path) => /\.svelte$/i.test(path) && !peripheral(path))) add(SVELTE[0], SVELTE[1], ".svelte source detected");
+  for (const path of Object.keys(files).filter((path) => /(^|\/)svelte\.config\.[^/]+$/i.test(path) && !peripheral(path)).sort()) add(SVELTE[0], SVELTE[1], `${path} detected`);
 }
 
 // Clean architecture and FCIS both resolve deps.layers, so TypeScript gets no second layer policy.

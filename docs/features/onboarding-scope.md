@@ -78,7 +78,9 @@ dependencies, recommend the Svelte methodologies in their owning package.
 A package named `svelte` does too, because that package is Svelte and does not
 depend on `svelte`. A `.svelte` file or `svelte.config.*` also recommends
 Svelte; those files do not add a package owner. A similarly named dependency
-does not count as a declaration of Svelte.
+does not count as a declaration of Svelte. A `.svelte` file, `svelte.config.*`,
+or Svelte dependency that appears only under a docs site, examples tree, or
+website folder does not recommend Svelte. The same evidence in primary source still does.
 
 When nested related and unrelated owners cannot be represented by one include/
 exclude policy, scan reports `scopeProblems`; choose an explicit reviewed scope
