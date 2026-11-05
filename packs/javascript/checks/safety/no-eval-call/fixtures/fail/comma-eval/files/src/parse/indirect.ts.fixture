@@ -1,0 +1,15 @@
+export function zero(code) {
+  return (0, eval)(code);
+}
+
+export function one(code) {
+  return (1, eval)(code);
+}
+
+export function blank(code) {
+  return (void 0, eval)(code);
+}
+
+export function member(code) {
+  return (0, globalThis.eval)(code);
+}

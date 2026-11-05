@@ -2,7 +2,7 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Version: `1.2.0`. Category: **language**.
+Version: `1.2.1`. Category: **language**.
 
 These are manifest defaults. All core rules activate automatically and enforce unless explicitly disabled in the reviewed preset. Optional packs activate only when selected. `pregate preset show` gives the effective contract. A manifest's `complete` label refers to that manifest, not full library or methodology compliance.
 
@@ -240,7 +240,7 @@ Source metadata:
 
 ## javascript/safety
 
-Manifest version: `1.2.0`. Status: **complete**.
+Manifest version: `1.2.1`. Status: **complete**.
 
 ### javascript/JS-PROTO-001
 
@@ -276,7 +276,7 @@ Source metadata:
 
 ### javascript/JS-EVAL-001
 
-Check: [`javascript/safety/no-eval-call@1.0.0`](checks/safety/no-eval-call/check.json). Default severity: **deny**.
+Check: [`javascript/safety/no-eval-call@1.0.1`](checks/safety/no-eval-call/check.json). Default severity: **deny**.
 
 Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
 
@@ -288,7 +288,7 @@ Default parameters: `{}`.
 
 **Repair:** Parse the value with the parser for its format, or call the named function instead of compiling its name.
 
-**Scope and limits:** Calling eval through another object still compiles the string. A renamed local holding the same builtin is still this call.
+**Scope and limits:** Calling eval through another object still compiles the string. A comma expression that yields eval, such as (0, eval)(code), is the same call. A renamed local holding the same builtin is still this call.
 
 Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
 
