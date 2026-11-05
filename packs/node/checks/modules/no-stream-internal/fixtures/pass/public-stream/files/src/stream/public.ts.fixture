@@ -1,0 +1,7 @@
+import { Readable } from "node:stream";
+
+const note = "node:_stream_readable was removed; use node:stream";
+
+export function open(source: Readable): Readable {
+  return source;
+}

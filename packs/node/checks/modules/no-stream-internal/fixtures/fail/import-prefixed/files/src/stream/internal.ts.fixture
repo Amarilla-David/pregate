@@ -1,0 +1,5 @@
+import { Readable } from "node:_stream_readable";
+
+export function open(source: Readable): Readable {
+  return source;
+}

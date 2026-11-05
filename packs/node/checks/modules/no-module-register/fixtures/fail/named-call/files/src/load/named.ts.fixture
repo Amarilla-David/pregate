@@ -1,0 +1,5 @@
+import { register } from "node:module";
+
+export function load(url: string) {
+  register("./hooks.mjs", url);
+}

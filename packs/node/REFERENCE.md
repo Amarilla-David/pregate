@@ -2,13 +2,13 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Version: `1.2.1`. Category: **library**.
+Version: `1.3.0`. Category: **library**.
 
 These are manifest defaults. All core rules activate automatically and enforce unless explicitly disabled in the reviewed preset. Optional packs activate only when selected. `pregate preset show` gives the effective contract. A manifest's `complete` label refers to that manifest, not full library or methodology compliance.
 
 ## node/internals
 
-Manifest version: `1.0.0`. Status: **complete**.
+Manifest version: `1.1.0`. Status: **complete**.
 
 ### node/NODE-BIND-001
 
@@ -170,9 +170,83 @@ Source metadata:
 }
 ```
 
+### node/NODE-STREAM-001
+
+Check: [`node/modules/no-stream-internal@1.0.0`](checks/modules/no-stream-internal/check.json). Default severity: **deny**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `node.no-stream-internal`. Minimum severity: `none`.
+
+Those internal modules no longer resolve, so the import throws before the stream is used.
+
+Default parameters: `{"minNode":26}`.
+
+**Repair:** Import Readable, Writable, Duplex, Transform, or PassThrough from node:stream.
+
+**Scope and limits:** node:stream and a string that only mentions an internal name are allowed. require('_stream_readable') and import('node:_stream_duplex') are the same removed modules. The check stays quiet unless every Node.js pin for this file is Node.js 26 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{
+  "minNode": {
+    "type": "integer",
+    "minimum": 1
+  }
+}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Node.js 26.0.0 release notes and deprecated APIs",
+  "locator": "https://nodejs.org/docs/latest-v26.x/api/deprecations.html#dep0193-requirenode_stream_",
+  "paraphrase": "DEP0193 removed node:_stream_duplex, node:_stream_passthrough, node:_stream_readable, node:_stream_transform, node:_stream_wrap, and node:_stream_writable in Node.js 26.0.0. Import from node:stream."
+}
+```
+
+### node/NODE-REGISTER-001
+
+Check: [`node/modules/no-module-register@1.0.0`](checks/modules/no-module-register/check.json). Default severity: **warn**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `node.no-module-register`. Minimum severity: `none`.
+
+The call still runs, and Node.js prints a deprecation warning because register will be removed.
+
+Default parameters: `{"minNode":26}`.
+
+**Repair:** Call module.registerHooks with the hook callbacks.
+
+**Scope and limits:** registerHooks is the replacement. A different object's register method is not this API. A renamed import, such as import { register as load }, is not seen. The warning stays quiet unless every Node.js pin for this file is Node.js 26 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{
+  "minNode": {
+    "type": "integer",
+    "minimum": 1
+  }
+}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Node.js 26.0.0 release notes and deprecated APIs",
+  "locator": "https://nodejs.org/docs/latest-v26.x/api/deprecations.html#dep0205-moduleregister",
+  "paraphrase": "DEP0205 runtime-deprecates module.register in Node.js 26.0.0. module.registerHooks is the synchronous replacement and still covers every module type."
+}
+```
+
 ## node/runtime
 
-Manifest version: `1.0.1`. Status: **complete**.
+Manifest version: `1.1.0`. Status: **complete**.
 
 ### node/NODE-SYNC-001
 
@@ -363,6 +437,43 @@ Source metadata:
   "work": "Node.js documentation, legacy URL API",
   "locator": "url.parse deprecation",
   "paraphrase": "The legacy parser is frozen and kept for compatibility. New code parses with the WHATWG URL class."
+}
+```
+
+### node/NODE-HEADER-001
+
+Check: [`node/api/no-write-header@1.0.0`](checks/api/no-write-header/check.json). Default severity: **deny**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `node.no-write-header`. Minimum severity: `none`.
+
+On Node.js 26 the method is gone, so the response never receives its status line.
+
+Default parameters: `{"minNode":26}`.
+
+**Repair:** Call writeHead with the status code and headers.
+
+**Scope and limits:** writeHead is the replacement. A comment or a string that names writeHeader is not a call. The check stays quiet unless every Node.js pin for this file (package.json engines.node and volta.node, .nvmrc, .node-version, and .tool-versions, from the file's directory up to the repository root) is Node.js 26 or newer. An older pin, a missing pin, or a pin such as lts/* keeps the call allowed.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{
+  "minNode": {
+    "type": "integer",
+    "minimum": 1
+  }
+}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Node.js 26.0.0 release notes and deprecated APIs",
+  "locator": "https://nodejs.org/docs/latest-v26.x/api/deprecations.html#dep0063-serverresponseprototypewriteheader",
+  "paraphrase": "DEP0063 ServerResponse.writeHeader reached end of life in Node.js 26.0.0. The supported method is writeHead."
 }
 ```
 

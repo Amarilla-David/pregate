@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/api/no-write-header",
+  "version": "1.0.0",
+  "area": "api",
+  "cardinality": "singleton",
+  "dimension": "node.no-write-header",
+  "minSeverity": null,
+  "params": {
+    "minNode": { "type": "integer", "minimum": 1 }
+  },
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "write-header",
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "has": { "field": "property", "regex": "^writeHeader$" }
+                },
+                {
+                  "kind": "subscript_expression",
+                  "has": { "field": "index", "regex": "^[\"']writeHeader[\"']$" }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} calls ServerResponse.writeHeader, which Node.js 26 removed. Use writeHead instead."
+  }
+}

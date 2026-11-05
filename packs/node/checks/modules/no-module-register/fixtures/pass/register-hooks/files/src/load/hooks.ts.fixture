@@ -1,0 +1,6 @@
+import { registerHooks } from "node:module";
+
+export function load(app: { register(name: string): void }) {
+  registerHooks({ load() {} });
+  app.register("routes");
+}

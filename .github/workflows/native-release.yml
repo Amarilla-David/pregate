@@ -4,18 +4,26 @@ on:
   workflow_call:
 jobs:
   native:
+    # The check context stays "native (macos-15, darwin-arm64)". GitHub is not
+    # assigning macos-15 runners (the job is cancelled after 15 minutes in the
+    # queue). macos-latest is arm64 and is being assigned, so the same smoke runs there.
+    name: native (${{ matrix.check }}, ${{ matrix.target }})
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: macos-15
+          - os: macos-latest
             target: darwin-arm64
+            check: macos-15
           - os: ubuntu-24.04
             target: linux-x64
+            check: ubuntu-24.04
           - os: ubuntu-24.04-arm
             target: linux-arm64
+            check: ubuntu-24.04-arm
           - os: windows-2022
             target: windows-x64
+            check: windows-2022
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     permissions:

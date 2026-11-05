@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "node/internals",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -59,6 +59,36 @@
       "fixHint": "Use import or a supported loader integration instead.",
       "avoid": "Using Module._compile or assigning require.extensions is still a loader modification.",
       "examples": { "pass": "pass/dynamic-import", "fail": "fail/module-compile" }
+    },
+    {
+      "id": "NODE-STREAM-001",
+      "check": "node/modules/no-stream-internal",
+      "defaults": { "minNode": 26 },
+      "severity": "deny",
+      "source": {
+        "work": "Node.js 26.0.0 release notes and deprecated APIs",
+        "locator": "https://nodejs.org/docs/latest-v26.x/api/deprecations.html#dep0193-requirenode_stream_",
+        "paraphrase": "DEP0193 removed node:_stream_duplex, node:_stream_passthrough, node:_stream_readable, node:_stream_transform, node:_stream_wrap, and node:_stream_writable in Node.js 26.0.0. Import from node:stream."
+      },
+      "why": "Those internal modules no longer resolve, so the import throws before the stream is used.",
+      "fixHint": "Import Readable, Writable, Duplex, Transform, or PassThrough from node:stream.",
+      "avoid": "node:stream and a string that only mentions an internal name are allowed. require('_stream_readable') and import('node:_stream_duplex') are the same removed modules. The check stays quiet unless every Node.js pin for this file is Node.js 26 or newer.",
+      "examples": { "pass": "pass/public-stream", "fail": "fail/import-prefixed" }
+    },
+    {
+      "id": "NODE-REGISTER-001",
+      "check": "node/modules/no-module-register",
+      "defaults": { "minNode": 26 },
+      "severity": "warn",
+      "source": {
+        "work": "Node.js 26.0.0 release notes and deprecated APIs",
+        "locator": "https://nodejs.org/docs/latest-v26.x/api/deprecations.html#dep0205-moduleregister",
+        "paraphrase": "DEP0205 runtime-deprecates module.register in Node.js 26.0.0. module.registerHooks is the synchronous replacement and still covers every module type."
+      },
+      "why": "The call still runs, and Node.js prints a deprecation warning because register will be removed.",
+      "fixHint": "Call module.registerHooks with the hook callbacks.",
+      "avoid": "registerHooks is the replacement. A different object's register method is not this API. A renamed import, such as import { register as load }, is not seen. The warning stays quiet unless every Node.js pin for this file is Node.js 26 or newer.",
+      "examples": { "pass": "pass/register-hooks", "fail": "fail/namespace-call" }
     }
   ]
 }

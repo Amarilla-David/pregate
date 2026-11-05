@@ -1,0 +1,8 @@
+import { createServer } from "node:http";
+
+export function listen() {
+  return createServer((_req, res) => {
+    res.writeHeader(200, { "content-type": "text/plain" });
+    res.end("ok");
+  });
+}

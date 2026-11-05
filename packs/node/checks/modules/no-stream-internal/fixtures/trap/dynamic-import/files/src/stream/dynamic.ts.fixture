@@ -1,0 +1,4 @@
+export async function load() {
+  const duplex = await import("node:_stream_duplex");
+  return duplex;
+}

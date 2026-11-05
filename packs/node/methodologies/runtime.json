@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "node/runtime",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -111,6 +111,24 @@
       "examples": {
         "pass": "pass/new-url",
         "fail": "fail/legacy-parse"
+      }
+    },
+    {
+      "id": "NODE-HEADER-001",
+      "check": "node/api/no-write-header",
+      "defaults": { "minNode": 26 },
+      "severity": "deny",
+      "source": {
+        "work": "Node.js 26.0.0 release notes and deprecated APIs",
+        "locator": "https://nodejs.org/docs/latest-v26.x/api/deprecations.html#dep0063-serverresponseprototypewriteheader",
+        "paraphrase": "DEP0063 ServerResponse.writeHeader reached end of life in Node.js 26.0.0. The supported method is writeHead."
+      },
+      "why": "On Node.js 26 the method is gone, so the response never receives its status line.",
+      "fixHint": "Call writeHead with the status code and headers.",
+      "avoid": "writeHead is the replacement. A comment or a string that names writeHeader is not a call. The check stays quiet unless every Node.js pin for this file (package.json engines.node and volta.node, .nvmrc, .node-version, and .tool-versions, from the file's directory up to the repository root) is Node.js 26 or newer. An older pin, a missing pin, or a pin such as lts/* keeps the call allowed.",
+      "examples": {
+        "pass": "pass/write-head",
+        "fail": "fail/response-call"
       }
     }
   ]

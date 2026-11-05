@@ -1,0 +1,76 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "node/modules/no-stream-internal",
+  "version": "1.0.0",
+  "area": "modules",
+  "cardinality": "singleton",
+  "dimension": "node.no-stream-internal",
+  "minSeverity": null,
+  "params": {
+    "minNode": { "type": "integer", "minimum": 1 }
+  },
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "stream-internal",
+          "rule": {
+            "kind": "string_fragment",
+            "regex": "^(?:node:)?_stream_(?:duplex|passthrough|readable|transform|wrap|writable)(?:/.*)?$",
+            "inside": {
+              "any": [
+                {
+                  "inside": {
+                    "field": "source",
+                    "any": [
+                      { "kind": "import_statement" },
+                      { "kind": "export_statement" },
+                      { "kind": "import_require_clause" }
+                    ]
+                  }
+                },
+                {
+                  "nthChild": { "position": 1, "ofRule": { "not": { "kind": "comment" } } },
+                  "inside": {
+                    "kind": "arguments",
+                    "inside": {
+                      "field": "arguments",
+                      "kind": "call_expression",
+                      "has": {
+                        "field": "function",
+                        "any": [
+                          { "kind": "import" },
+                          { "kind": "identifier", "regex": "^require$" },
+                          {
+                            "kind": "member_expression",
+                            "all": [
+                              { "has": { "field": "object", "kind": "identifier", "regex": "^module$" } },
+                              { "has": { "field": "property", "kind": "property_identifier", "regex": "^require$" } }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ],
+              "all": [
+                {
+                  "any": [
+                    { "kind": "string" },
+                    { "kind": "template_string", "not": { "has": { "kind": "template_substitution" } } }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} imports a removed internal stream module. Import from node:stream instead."
+  }
+}
