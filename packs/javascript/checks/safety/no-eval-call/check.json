@@ -1,1 +1,87 @@
-{"$schema": "../../../../../schema/check.v1.json","id": "javascript/safety/no-eval-call","version": "1.0.0","area": "safety","cardinality": "singleton","dimension": "javascript.eval-call","minSeverity": null,"params": {},"impl": {"kind": "pattern","patterns": {"typescript": [{"id": "eval-call","rule": {"any": [{"kind": "call_expression","has": {"field": "function","regex": "^eval$"}},{"kind": "call_expression","has": {"field": "function","regex": "\\.eval$"}},{"kind": "new_expression","has": {"field": "constructor","regex": "^Function$"}}]}}]}},"phase": ["pre","stop","commit","ci"],"feedback": {"message": "{symbol} evaluates a string as code. Parse the value or call the function directly."}}
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "javascript/safety/no-eval-call",
+  "version": "1.0.1",
+  "area": "safety",
+  "cardinality": "singleton",
+  "dimension": "javascript.eval-call",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "eval-call",
+          "rule": {
+            "any": [
+              {
+                "kind": "call_expression",
+                "has": {
+                  "field": "function",
+                  "matches": "eval-callee"
+                }
+              },
+              {
+                "kind": "new_expression",
+                "has": {
+                  "field": "constructor",
+                  "regex": "^Function$"
+                }
+              }
+            ]
+          },
+          "utils": {
+            "eval-atom": {
+              "any": [
+                {
+                  "kind": "identifier",
+                  "regex": "^eval$"
+                },
+                {
+                  "kind": "member_expression",
+                  "regex": "\\.eval$"
+                }
+              ]
+            },
+            "eval-callee": {
+              "any": [
+                {
+                  "matches": "eval-atom"
+                },
+                {
+                  "kind": "parenthesized_expression",
+                  "has": {
+                    "matches": "eval-callee"
+                  }
+                },
+                {
+                  "matches": "eval-comma"
+                }
+              ]
+            },
+            "eval-comma": {
+              "kind": "sequence_expression",
+              "has": {
+                "matches": "eval-callee",
+                "nthChild": {
+                  "position": 1,
+                  "reverse": true
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} evaluates a string as code. Parse the value or call the function directly."
+  }
+}

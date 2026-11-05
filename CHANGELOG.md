@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`NEXT-REVAL-001` is now deny, and only when `cacheComponents: true`.** Without that flag, `export const revalidate = false` is the documented default and is not reported. With the flag, an exported `revalidate` on a page, layout, or route is denied, including `false`, `0`, and a positive number. Remove it and use `cacheLife` inside `use cache`, or leave the data uncached.
 - **`NEXT-SERVER-EXPORT-001` newly denies server-file exports when Cache Components is on.** It still denies route segment exports from a `'use client'` page, layout, or route, and that list now includes `dynamicParams` and `fetchCache`. With `cacheComponents: true` it also denies server exports of `dynamic`, `dynamicParams`, `fetchCache`, and `runtime`, including `runtime = "nodejs"`. `preferredRegion`, `maxDuration`, `generateStaticParams`, `ensureStatic`, and `instant` are not flagged on the server.
 
+### Fixed
+- `JS-EVAL-001` flags indirect `eval`. A comma expression that yields `eval` was missed, including `(0, eval)(code)`, `(1, eval)(code)`, and `(void 0, eval)(code)`. `globalThis.eval(code)` and `window.eval(code)` stay flagged. A name that only contains those letters, such as `evaluate(code)` or `item.evaluate(code)`, is not. The javascript pack is 1.2.1 and `javascript/safety/no-eval-call` is 1.0.1.
+
 ## [0.0.3] - 2026-11-03
 
 What changed for people installing or gating a repository. **Windows users of 0.0.2 should upgrade.** Two bugs on that release could let an edit through on Windows without a finding. Notes: [0.0.3](docs/releases/0.0.3.md). The previous public tag is [v0.0.2](https://github.com/pedroknigge/pregate/releases/tag/v0.0.2).

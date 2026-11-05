@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/methodology.v1.json",
   "id": "javascript/safety",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "status": "complete",
   "conflicts": [],
   "invariants": [
@@ -35,7 +35,7 @@
       },
       "why": "A string that reaches eval becomes code with full access, so any injection in the string is an injection in the program.",
       "fixHint": "Parse the value with the parser for its format, or call the named function instead of compiling its name.",
-      "avoid": "Calling eval through another object still compiles the string. A renamed local holding the same builtin is still this call.",
+      "avoid": "Calling eval through another object still compiles the string. A comma expression that yields eval, such as (0, eval)(code), is the same call. A renamed local holding the same builtin is still this call.",
       "examples": {
         "pass": "pass/json-parse",
         "fail": "fail/bare-eval"

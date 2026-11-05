@@ -1,0 +1,26 @@
+export function run(code) {
+  return evaluate(code);
+}
+
+export function score(item) {
+  return item.evaluate(item);
+}
+
+export function other(code) {
+  return (0, evaluate)(code);
+}
+
+export function named(code) {
+  return (1, otherFn)(code);
+}
+
+export function local(code) {
+  return myEval(code);
+}
+
+const sample = "(0, eval)(code)";
+const note = `(0, eval)(${sample})`;
+
+export function sum(code) {
+  return (eval + 1)(code);
+}
