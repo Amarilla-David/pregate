@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "prisma/client/no-client-middleware",
+  "version": "1.0.0",
+  "area": "client",
+  "cardinality": "singleton",
+  "dimension": "prisma.client-middleware",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "client-middleware",
+          "since": {
+            "dependencies": ["@prisma/client", "prisma"],
+            "version": "7.0.0"
+          },
+          "rule": {
+            "kind": "call_expression",
+            "has": {
+              "field": "function",
+              "any": [
+                {
+                  "kind": "member_expression",
+                  "has": {
+                    "field": "property",
+                    "regex": "^\\$use$"
+                  }
+                },
+                {
+                  "kind": "subscript_expression",
+                  "has": {
+                    "field": "index",
+                    "regex": "^[\"'`]\\$use[\"'`]$"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} calls $use, which Prisma ORM 7 removed. Move that logic into a client extension with $extends."
+  }
+}

@@ -2,13 +2,13 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Version: `1.2.0`. Category: **library**.
+Version: `1.3.0`. Category: **library**.
 
 These are manifest defaults. All core rules activate automatically and enforce unless explicitly disabled in the reviewed preset. Optional packs activate only when selected. `pregate preset show` gives the effective contract. A manifest's `complete` label refers to that manifest, not full library or methodology compliance.
 
 ## prisma/client
 
-Manifest version: `1.1.0`. Status: **complete**.
+Manifest version: `1.2.0`. Status: **complete**.
 
 ### prisma/PRISMA-RAW-001
 
@@ -191,7 +191,7 @@ A fresh client per request opens a fresh pool per request, and the database runs
 
 Default parameters: `{}`.
 
-**Repair:** Import the shared client from the server db module, which keeps one instance on globalThis across reloads.
+**Repair:** Import one shared client and keep it on globalThis. On Prisma ORM 7, construct it with a driver adapter (new PrismaClient({ adapter })) or accelerateUrl for Accelerate. https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7
 
 **Scope and limits:** Exporting the new client from the route file still builds one pool per route module. The singleton module itself is the only place that may construct.
 
@@ -243,9 +243,105 @@ Source metadata:
 }
 ```
 
+### prisma/PRISMA-MIDDLEWARE-001
+
+Check: [`prisma/client/no-client-middleware@1.0.0`](checks/client/no-client-middleware/check.json). Default severity: **deny**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `prisma.client-middleware`. Minimum severity: `none`.
+
+On Prisma ORM 7 the $use call throws at runtime, so the query behavior it used to wrap never runs.
+
+Default parameters: `{}`.
+
+**Repair:** Replace $use with a client extension: db.$extends({ query: { $allModels: { async $allOperations({ args, query }) { return query(args); } } } }). https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7
+
+**Scope and limits:** This runs only when @prisma/client, or prisma when the client package is absent, is known to be at least 7.0.0. A lower bound below 7, including ^6, wins over a newer hoisted install. workspace:* counts only when the installed copy is 7 or newer. A $use value that is not called stays quiet.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Upgrade to Prisma ORM 7",
+  "locator": "Client middleware removed; https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7",
+  "paraphrase": "Prisma ORM 7 removes the client middleware API. The upgrade guide replaces prisma.$use with a client extension created by $extends."
+}
+```
+
+### prisma/PRISMA-VALIDATOR-001
+
+Check: [`prisma/client/no-validator@1.0.0`](checks/client/no-validator/check.json). Default severity: **warn**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `prisma.validator`. Minimum severity: `none`.
+
+A Prisma.validator call fails to typecheck against the default Prisma ORM 7 client, which no longer generates that function.
+
+Default parameters: `{}`.
+
+**Repair:** Use satisfies instead of Prisma.validator, for example { email: true } satisfies Prisma.UserSelect. https://www.prisma.io/docs/orm/v7/prisma-schema/overview/generators
+
+**Scope and limits:** Warns only on Prisma 7 or newer. prisma-client-js still has Prisma.validator; this check cannot read the generator, so that deprecated generator still warns. A Prisma.validator reference that is not called stays quiet.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Prisma ORM v7 generators reference",
+  "locator": "Breaking changes from prisma-client-js; https://www.prisma.io/docs/orm/v7/prisma-schema/overview/generators",
+  "paraphrase": "The prisma-client generator, which is the default in Prisma ORM 7, has no Prisma.validator. TypeScript's satisfies keyword replaces it. The deprecated prisma-client-js generator still provides the helper."
+}
+```
+
+### prisma/PRISMA-ADAPTER-001
+
+Check: [`prisma/client/no-missing-adapter@1.0.0`](checks/client/no-missing-adapter/check.json). Default severity: **warn**.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `prisma.driver-adapter`. Minimum severity: `none`.
+
+A Prisma ORM 7 client constructed without a driver adapter cannot connect, and the old datasources and datasourceUrl options are no longer accepted.
+
+Default parameters: `{}`.
+
+**Repair:** Pass a driver adapter: new PrismaClient({ adapter }). Accelerate uses new PrismaClient({ accelerateUrl }) and no adapter. https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7
+
+**Scope and limits:** Warns only on Prisma 7 or newer. { adapter } and { accelerateUrl } pass, including quoted keys. A variable, call, spread, or nested adapter key stays quiet. Prisma 6 constructs without an adapter and stays quiet.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Upgrade to Prisma ORM 7",
+  "locator": "Driver adapters; https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7",
+  "paraphrase": "Prisma ORM 7 requires a driver adapter for every database when constructing PrismaClient. Accelerate is the documented exception and passes accelerateUrl with no adapter. The 7.0.0 changelog also removes the datasources and datasourceUrl constructor options."
+}
+```
+
 ## prisma/writes
 
-Manifest version: `1.2.0`. Status: **complete**.
+Manifest version: `1.3.0`. Status: **complete**.
 
 ### prisma/PRISMA-DELETE-001
 
@@ -342,7 +438,7 @@ Source metadata:
 ```json
 {
   "work": "Prisma docs, Transactions and batch queries",
-  "locator": "Interactive transactions; https://www.prisma.io/docs/v6/orm/prisma-client/queries/transactions#interactive-transactions",
+  "locator": "Interactive transactions; https://www.prisma.io/docs/orm/v7/prisma-client/queries/transactions#interactive-transactions",
   "paraphrase": "The async function passed to $transaction receives a Prisma Client instance, tx. Only calls made on that tx instance are encapsulated in the transaction."
 }
 ```

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/db.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "computed-use",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "A string index prisma[\"$use\"] is the same removed middleware call as the dotted form."
+  }
+}

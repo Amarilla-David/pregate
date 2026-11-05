@@ -5,7 +5,7 @@ import { declaredNodeMajor } from "./node-target.ts";
 import { inScope, layerOf, matches, REQUESTS, ruleApplies as applies } from "./paths.ts";
 import { type Edge, loadTsPaths, reexportTargets, resolve } from "./resolve.ts";
 import { astHash, classes, functions, grammarOf, imports, nestings, type Node, type Parsed, parse, suggestFunctionSplit, suggestNestingFix, symbolBodies, symbolOf, symbols } from "./ts.ts";
-import type { Analysis, Clock, Form, Grammar, Host, Impl, Lock, LockRule, PatternConfig, Phase, Placement, Read, Severity, Violation } from "./types.ts";
+import type { Analysis, Form, Grammar, Host, Impl, Lock, LockRule, PatternConfig, Phase, Placement, Read, Severity, Violation } from "./types.ts";
 import { languageApplies } from "./languages.ts";
 import { markerLocations } from "./markers.ts";
 import { unboundedDrizzleSelects } from "./drizzle-query.ts";
@@ -13,6 +13,7 @@ import { intervalsWithoutCleanup } from "./interval-cleanup.ts";
 import { reactIndexKeys } from "./react-index-key.ts";
 import { credentialLiterals } from "./credential-literal.ts";
 import { gatedSeverity } from "./typescript-version.ts";
+import { dependencySatisfies } from "./dependency-since.ts";
 
 const MODULE = "<module>";
 const TSCONFIG_INVALID = "tsconfig.json, or a local config it extends, is missing or invalid, so a bare import may be an alias of any path. Fix the tsconfig, or import by a relative path.";
@@ -46,11 +47,11 @@ export function analyze(lock: Lock, phase: Phase, rel: string, state: string | P
     const form = ruleProgress(host, r, (): Form | null => {
       if (impl.kind === "pattern") {
         const g = grammarOf(rel);
-        const form = p && g && matched(r, impl.patterns[g === "tsx" ? "typescript" : g] ?? [], p, host.now, report);
+        const form = p && g && matched(r, impl.patterns[g === "tsx" ? "typescript" : g] ?? [], p, host, report);
         if (form) return form;
       } else if (impl.primitive === "diff") {
         const sites = impl.count === "markers" && text !== null ? markerLocations(rel, text, r.params.markers as string[], p, lock.generatedMarkers) : [];
-        const n = impl.count === "markers" ? sites.length : count(impl.count, p, host.now);
+        const n = impl.count === "markers" ? sites.length : count(impl.count, p, host);
         if (typeof n !== "number") return n;
         counts[r.id] = n;
         if (impl.count === "markers" && text !== null) markerSites[r.id] = sites;
@@ -137,10 +138,11 @@ function applicable(lock: Lock, phase: Phase, rel: string, host: Host): LockRule
 
 // Reports every match of a pattern rule except those `params.allow` declares pure; a regex that gave
 // up voids the whole search.
-function matched(r: LockRule, configs: PatternConfig[], p: Parsed, now: Clock, report: Report): Form | null {
+function matched(r: LockRule, configs: PatternConfig[], p: Parsed, host: Host, report: Report): Form | null {
   const allow = (r.params.allow as string[] | undefined) ?? [];
   for (const c of configs) {
-    const hits = findAll(p, pattern(c, grammarOf(p.rel)!), now);
+    if (!current(c, p.rel, host.read)) continue;
+    const hits = findAll(p, pattern(c, grammarOf(p.rel)!), host.now);
     if (!Array.isArray(hits)) return hits;
     for (const m of hits) if (!pure(m.node, allow)) report(r, m.node.startPosition.row + 1, symbolOf(m.node));
   }
@@ -148,9 +150,15 @@ function matched(r: LockRule, configs: PatternConfig[], p: Parsed, now: Clock, r
 }
 
 // Pattern counts use the same matcher as ordinary pattern rules; marker counts share their sites.
-function count(what: Exclude<Extract<Impl, { primitive: "diff" }>["count"], "markers">, p: Parsed | null, now: Clock): number | Form {
-  const hits = p ? findAll(p, pattern(what.pattern, grammarOf(p.rel)!), now) : [];
+function count(what: Exclude<Extract<Impl, { primitive: "diff" }>["count"], "markers">, p: Parsed | null, host: Host): number | Form {
+  if (p && !current(what.pattern, p.rel, host.read)) return 0;
+  const hits = p ? findAll(p, pattern(what.pattern, grammarOf(p.rel)!), host.now) : [];
   return Array.isArray(hits) ? hits.length : hits;
+}
+
+// `since` is evidence about the package, not the syntax. Missing or older evidence stays quiet.
+function current(c: PatternConfig, rel: string, read: Read): boolean {
+  return c.since === undefined || dependencySatisfies(read, rel, c.since);
 }
 
 // params.allow names qualified references a project declares pure: a match is allowed when the member

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/db.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "installed-workspace-protocol",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "workspace:* does not name a version, but the installed @prisma/client is 7.0.0, so $use is already removed."
+  }
+}

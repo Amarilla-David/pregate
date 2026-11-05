@@ -129,6 +129,14 @@ Declare `languages` for primitive checks (`typescript`, `python`, `go`, `rust`) 
 corresponding implementation keys for pattern checks. Without an explicit
 language declaration, existing metric/import rules retain their JS/TS scope.
 Use the matching language in every fixture and a matching target extension.
+A pattern may set `since` to `{ "dependencies": ["pkg"], "version": "7.0.0" }`.
+The pattern stays quiet unless that package is known to be at least the named
+version. The first listed name with evidence decides. Evidence is the nearest
+`package.json` range and, when one is installed, the copy under `node_modules`.
+A lower bound below the version wins, so an older package is not newly denied
+when a sibling has hoisted a newer install. An unreadable range such as
+`workspace:*` counts only from the installed copy. Put a `package.json` in the
+fixture tree when the rule depends on it.
 Static checks also accept implicit `paths`, `exclude` and `within` parameters;
 do not redeclare them in the check-specific parameter schema. `within` intersects
 the existing policy paths and a pattern's `files`, so a workspace recommendation
