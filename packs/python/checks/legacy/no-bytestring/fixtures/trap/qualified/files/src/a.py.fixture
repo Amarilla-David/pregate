@@ -1,0 +1,4 @@
+import typing
+
+def take(value: typing.ByteString) -> None:
+    return None

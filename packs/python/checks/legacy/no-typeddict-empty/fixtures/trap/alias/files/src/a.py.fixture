@@ -1,0 +1,3 @@
+from typing import TypedDict as TD
+
+Empty = TD("Empty", None)

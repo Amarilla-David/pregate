@@ -1,0 +1,11 @@
+{
+  "language": "python",
+  "params": {
+    "api": "cgi-handler"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "pass"
+  }
+}

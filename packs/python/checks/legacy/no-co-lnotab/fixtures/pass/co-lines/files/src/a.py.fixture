@@ -1,0 +1,2 @@
+def show(code):
+    return list(code.co_lines())

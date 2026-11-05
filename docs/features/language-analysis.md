@@ -47,6 +47,15 @@ Rust dimensions are independent of JS/TS, so selecting one does not change anoth
 language's thresholds. Bundled sources pin version and evaluable content; see
 [pack composition](pack-composition.md) for approval and update semantics.
 
+`python/legacy` is a separate methodology for the removals in Python 3.15 and the
+APIs scheduled for removal in 3.16 and 3.17. Init does not select it. The check
+reads the oldest declared Python: `requires-python`, then `python_requires`, then
+a Pipfile version, and only then `.python-version` or `runtime.txt`. A 3.15
+removal denies when that floor is 3.15 or newer. An older floor, and a project
+with no declaration, is not denied. A 3.16 or 3.17 removal warns until the floor
+reaches that release, then denies. The finding names the replacement. Enable it
+with `pregate pack enable python/legacy --preview`.
+
 Release archives embed the grammars. After building, run
 `bun run scripts/smoke-languages.ts` to admit a
 temporary ten-fixture Python/Go pack, audit both expected findings and reject

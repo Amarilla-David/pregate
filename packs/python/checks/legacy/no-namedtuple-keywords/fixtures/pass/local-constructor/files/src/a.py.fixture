@@ -1,0 +1,4 @@
+def NamedTuple(name, **fields):
+    return name
+
+Point = NamedTuple("Point", x=int)

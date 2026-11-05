@@ -1,0 +1,3 @@
+from typing import TypedDict
+
+TD = TypedDict("TD", None)

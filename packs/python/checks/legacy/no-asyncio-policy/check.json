@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-asyncio-policy",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.asyncio-policy",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "asyncio-policy"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.16 removes the asyncio event-loop policy. Use asyncio.run or asyncio.Runner, and pass loop_factory when you need a specific loop."
+  }
+}

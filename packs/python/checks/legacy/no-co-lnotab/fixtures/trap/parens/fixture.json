@@ -1,0 +1,22 @@
+{
+  "language": "python",
+  "params": {
+    "api": "co-lnotab"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 2
+      }
+    ]
+  },
+  "trap": {
+    "family": "co-lnotab-parens",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "Parentheses around the code object do not hide co_lnotab."
+  }
+}

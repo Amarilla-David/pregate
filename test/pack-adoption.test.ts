@@ -81,7 +81,7 @@ test("pack add selects the pack's complete methodologies in the same review; pre
   expect(practices.text).toContain("(preview methodology)");
   const preview = p.cli(["pack", "add", "--library", "python", "--preview"]);
   expect(preview.code, preview.text).toBe(0);
-  expect(preview.text).toMatch(/^Selected: python\/quality\./m);
+  expect(preview.text).toMatch(/^Selected: python\/legacy, python\/quality\./m);
   expect(preview.text).toContain("Skipped: python/architecture (");
   expect(p.contract()).toEqual(before);
   const digest = preview.text.match(/Digest: ([0-9a-f]{64})/)![1]!;

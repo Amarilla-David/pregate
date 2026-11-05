@@ -1,0 +1,22 @@
+{
+  "language": "python",
+  "params": {
+    "api": "namedtuple-keywords"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "namedtuple-keywords-alias",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "An alias of typing.NamedTuple still uses the removed keyword form."
+  }
+}

@@ -215,7 +215,7 @@ The warning column is uneven on purpose. A harness that does not show advisory t
 
 <!-- BEGIN readme catalog -->
 
-Static checks: **481** (4 in core, 477 in optional packs). These can run from syntax or a diff.
+Static checks: **493** (4 in core, 489 in optional packs). These can run from syntax or a diff.
 Fitness obligations: **641** (64 in core, 577 in optional packs). A fitness obligation stays unverified, and does not block, until a project binds a command.
 Pattern checks by language: typescript 418, python 17, go 8, rust 6. A check with two languages is counted in each. These are pattern checks only, not a claim that every grammar has the same coverage.
 

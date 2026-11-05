@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "params": {
+    "api": "asyncio-iscoroutinefunction"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  }
+}

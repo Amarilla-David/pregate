@@ -38,7 +38,7 @@ export function languageApplies(r: { impl: Impl; languages?: RuleLanguage[] }, r
 
 export function staticRulesFor(lock: Lock, rel: string) {
   return lock.rules.filter((r) => !lock.ownedByArkgate.includes(r.id) && languageApplies(r, rel)
-    && (r.impl.kind === "pattern" || ["metric", "layer-edge", "banned-import", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal"].includes(r.impl.primitive))
+    && (r.impl.kind === "pattern" || ["metric", "layer-edge", "banned-import", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal", "python-legacy"].includes(r.impl.primitive))
     && ruleApplies(r, rel));
 }
 

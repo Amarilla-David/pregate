@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-bytestring",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.bytestring",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "bytestring"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.17 removes typing.ByteString and collections.abc.ByteString. Use collections.abc.Buffer, or bytes | bytearray | memoryview."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "params": {
+    "api": "no-type-check-decorator"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  }
+}

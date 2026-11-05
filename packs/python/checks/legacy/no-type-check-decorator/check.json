@@ -1,0 +1,32 @@
+{
+  "id": "python/legacy/no-type-check-decorator",
+  "version": "1.0.0",
+  "area": "legacy",
+  "cardinality": "singleton",
+  "dimension": "python.legacy.no-type-check-decorator",
+  "minSeverity": null,
+  "languages": [
+    "python"
+  ],
+  "params": {
+    "api": {
+      "type": "string",
+      "enum": [
+        "no-type-check-decorator"
+      ]
+    }
+  },
+  "impl": {
+    "kind": "primitive",
+    "primitive": "python-legacy"
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol}: Python 3.15 removed typing.no_type_check_decorator. No major type checker implemented it. Call typing.no_type_check on the one function you want to skip."
+  }
+}

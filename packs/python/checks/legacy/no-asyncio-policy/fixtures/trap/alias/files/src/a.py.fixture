@@ -1,0 +1,3 @@
+from asyncio import set_event_loop_policy as set_policy
+
+set_policy(None)

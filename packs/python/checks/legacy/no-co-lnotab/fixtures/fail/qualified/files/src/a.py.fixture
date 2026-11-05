@@ -1,0 +1,2 @@
+def show(fn):
+    return fn.__code__.co_lnotab

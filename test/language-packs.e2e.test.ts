@@ -160,7 +160,7 @@ test("library addition selects no rules; selective enable, update and removal ar
   const before = readFileSync(join(p.root, ".pregate/preset.json"), "utf8");
   const proposed = p.run(["pack", "add", "--library", "python", "--preview"]);
   expect(proposed.code).toBe(0);
-  expect(proposed.text).toMatch(/^Selected: python\/quality\. Skipped: python\/architecture \(.*\); python\/effects \(/m);
+  expect(proposed.text).toMatch(/^Selected: python\/legacy, python\/quality\. Skipped: python\/architecture \(.*\); python\/effects \(/m);
   expect(readFileSync(join(p.root, ".pregate/preset.json"), "utf8")).toBe(before);
   p.approve(["pack", "add", "--library", "python", "--source-only", "--preview"]);
   expect(JSON.parse(p.run(["audit", "--json"]).text).uncovered).toContain("a.py");
@@ -392,4 +392,60 @@ test("TypeScript 7 hook and CLI catch module-keyword namespaces and import asser
   const olderModule = older.hook("PreToolUse", olderSid, { tool_name: "Write", tool_use_id: "old-module", tool_input: { file_path: join(older.root, "src/billing.ts"), content: keyword } });
   expect(olderModule.code).toBe(0);
   expect(olderModule.text).toContain("typescript/TS-MODKW-001");
+});
+
+test("python legacy denies a 3.15 removal only for that target and warns on a 3.16 removal", () => {
+  const named = "from typing import NamedTuple\n\nPoint = NamedTuple(\"Point\", x=int, y=int)\n";
+  const later = "import asyncio\n\ndef run(fn):\n    return asyncio.iscoroutinefunction(fn)\n";
+  const p = project({
+    "pyproject.toml": "[project]\nname = \"app\"\nrequires-python = \">=3.15\"\n",
+    "src/a.py": "x = 1\n",
+  });
+  p.git("init", "-q");
+  p.approve(["init", "--preview"]);
+  p.approve(["pack", "disable", "core/software-invariants", "--preview"]);
+  p.approve(["pack", "enable", "python/legacy", "--preview"]);
+  p.request([{ op: "add", path: "/enforcement", value: "enforce" }]);
+  p.git("add", "-A");
+  p.git("commit", "-qm", "baseline");
+  const denied = p.run(["check", "--stdin", "--path", "src/a.py"], named);
+  expect(denied.code).toBe(1);
+  expect(denied.text).toContain("PY-315-NT-001");
+  expect(denied.text).toContain("class Point(NamedTuple)");
+  const sid = randomUUID();
+  expect(p.hook("SessionStart", sid, { source: "startup" }).code).toBe(0);
+  const hookDenied = p.hook("PreToolUse", sid, { tool_name: "Write", tool_use_id: "nt", tool_input: { file_path: join(p.root, "src/a.py"), content: named } });
+  expect(hookDenied.code).toBe(2);
+  expect(JSON.parse(hookDenied.text).hookSpecificOutput.permissionDecision).toBe("deny");
+  expect(hookDenied.text).toContain("PY-315-NT-001");
+  expect(hookDenied.text).toContain("NamedTuple(\\\"Point\\\", [(\\\"x\\\", int)])");
+  p.put("pyproject.toml", "[project]\nname = \"app\"\nrequires-python = \">=3.12\"\n");
+  const older = p.run(["check", "--stdin", "--path", "src/a.py"], named);
+  expect(older.code).toBe(0);
+  expect(older.text).not.toContain("PY-315-NT-001");
+  const hookOlder = p.hook("PreToolUse", sid, { tool_name: "Write", tool_use_id: "old", tool_input: { file_path: join(p.root, "src/a.py"), content: named } });
+  expect(hookOlder.code).toBe(0);
+  expect(hookOlder.text).not.toContain("PY-315-NT-001");
+  p.put("pyproject.toml", "[project]\nname = \"app\"\nrequires-python = \">=3.15\"\n");
+  const warned = p.run(["check", "--stdin", "--path", "src/a.py"], later);
+  expect(warned.code).toBe(0);
+  expect(warned.text).toContain("PY-316-ASYNC-001");
+  expect(warned.text).toContain("inspect.iscoroutinefunction");
+  const hookWarn = p.hook("PreToolUse", sid, { tool_name: "Write", tool_use_id: "warn", tool_input: { file_path: join(p.root, "src/a.py"), content: later } });
+  expect(hookWarn.code).toBe(0);
+  expect(hookWarn.text).toContain("PY-316-ASYNC-001");
+  expect(hookWarn.text).not.toContain("\"permissionDecision\": \"deny\"");
+  p.put("pyproject.toml", "[project]\nname = \"app\"\nrequires-python = \">=3.16\"\n");
+  const future = p.run(["check", "--stdin", "--path", "src/a.py"], later);
+  expect(future.code).toBe(1);
+  expect(future.text).toContain("PY-316-ASYNC-001");
+  const hookFuture = p.hook("PreToolUse", sid, { tool_name: "Write", tool_use_id: "future", tool_input: { file_path: join(p.root, "src/a.py"), content: later } });
+  expect(hookFuture.code).toBe(2);
+  expect(JSON.parse(hookFuture.text).hookSpecificOutput.permissionDecision).toBe("deny");
+  p.put("pyproject.toml", "# application metadata without a Python floor\n");
+  p.put("setup.cfg", "[options]\npython_requires = >=3.15\n");
+  const cgi = p.run(["check", "--stdin", "--path", "src/a.py"], "from http.server import CGIHTTPRequestHandler\n");
+  expect(cgi.code).toBe(1);
+  expect(cgi.text).toContain("PY-315-CGI-001");
+  expect(cgi.text).toContain("BaseHTTPRequestHandler");
 });

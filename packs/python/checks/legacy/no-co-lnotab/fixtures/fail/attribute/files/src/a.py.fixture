@@ -1,0 +1,2 @@
+def show(code):
+    return code.co_lnotab

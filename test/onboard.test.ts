@@ -605,7 +605,7 @@ test("language metadata recommends starters and mixed projects select only their
   expect(stack.recommended).toBe("mixed-starter");
   const preset = onboardingPreset(stack.recommended, BUILTIN, VERSIONS, stack, librarySources())!;
   expect(preset.sources.filter((s) => s.kind === "library")).toEqual([
-    { ns: "python", kind: "library", version: "1.2.0" }, { ns: "clean-code", kind: "library", version: "1.2.0" },
+    { ns: "python", kind: "library", version: "1.3.0" }, { ns: "clean-code", kind: "library", version: "1.2.0" },
   ]);
   expect(preset.methodologies).toEqual(["core/pregate-integrity", "python/quality", "clean-code/clean-code"]);
   expect(preset.enforcement).toBe("shadow");

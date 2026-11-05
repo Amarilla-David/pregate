@@ -100,6 +100,7 @@
         "src/react-index-key.ts",
         "src/credential-literal.ts",
         "src/typescript-version.ts",
+        "src/python-legacy.ts",
         "src/sarif.ts",
         "src/inline-sinks.ts"
       ],

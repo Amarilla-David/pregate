@@ -1,0 +1,25 @@
+{
+  "language": "python",
+  "params": {
+    "api": "asyncio-policy"
+  },
+  "target": "src/a.py",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      },
+      {
+        "line": 3
+      }
+    ]
+  },
+  "trap": {
+    "family": "asyncio-policy-alias",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "Renaming set_event_loop_policy and calling the alias still uses the policy system."
+  }
+}

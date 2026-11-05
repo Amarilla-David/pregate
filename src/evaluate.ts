@@ -14,6 +14,7 @@ import { reactIndexKeys } from "./react-index-key.ts";
 import { credentialLiterals } from "./credential-literal.ts";
 import { gatedSeverity } from "./typescript-version.ts";
 import { dependencySatisfies } from "./dependency-since.ts";
+import { pythonLegacyHits } from "./python-legacy.ts";
 
 const MODULE = "<module>";
 const TSCONFIG_INVALID = "tsconfig.json, or a local config it extends, is missing or invalid, so a bare import may be an alias of any path. Fix the tsconfig, or import by a relative path.";
@@ -43,7 +44,7 @@ export function analyze(lock: Lock, phase: Phase, rel: string, state: string | P
   const measurements: Measurements = { report };
   for (const r of rules) {
     const impl = r.impl;
-    if (impl.kind === "primitive" && !["diff", "metric", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal"].includes(impl.primitive)) continue;
+    if (impl.kind === "primitive" && !["diff", "metric", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal", "python-legacy"].includes(impl.primitive)) continue;
     const form = ruleProgress(host, r, (): Form | null => {
       if (impl.kind === "pattern") {
         const g = grammarOf(rel);
@@ -63,7 +64,7 @@ export function analyze(lock: Lock, phase: Phase, rel: string, state: string | P
   const importRules = rules.filter(r => isImportRule(r) && !(r.impl.kind === "primitive" && r.impl.primitive === "drizzle-bounded-select"));
   const form = p && importRules.length ? checkImports(lock, p, importRules, host, report) : null;
   if (form) return form;
-  const named = rules.some((r) => r.impl.kind === "pattern" || ["metric", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal"].includes(r.impl.primitive));
+  const named = rules.some((r) => r.impl.kind === "pattern" || ["metric", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal", "python-legacy"].includes(r.impl.primitive));
   // Body hashes only when the ratchet has a violation to follow across a rename, move or extraction:
   // a "before" with none frees nothing, and an "after" with none claims nothing.
   return { symbols: p ? (named ? symbols(p) : [MODULE]) : [], violations: found, counts, markerSites,
@@ -81,6 +82,13 @@ function measureRule(rule: LockRule, parsed: Parsed, host: Host, measurements: M
     if (impl.metric === "control.nesting") metric(rule, nestings(parsed), report, (line) => suggestNestingFix(parsed, line));
     else if (impl.metric === "class.publicMethods") metric(rule, classes(parsed).map(c => ({ ...c, measured: c.publicMethods, own: null })), report);
     else metric(rule, owned(measurements.functions ??= functions(parsed)).map(f => ({ ...f, measured: impl.metric === "fn.lines" ? f.lines : f.params })), report, impl.metric === "fn.lines" ? (line, max) => suggestFunctionSplit(parsed, line, max) : undefined);
+    return;
+  }
+  if (impl.primitive === "python-legacy") {
+    for (const hit of pythonLegacyHits(parsed, host.read, String(rule.params.api ?? ""))) {
+      const found = report(rule, hit.node.startPosition.row + 1, symbolOf(hit.node));
+      if (hit.severity === "deny") found.severity = "deny";
+    }
     return;
   }
   const nodes = impl.primitive === "drizzle-bounded-select" ? unboundedDrizzleSelects(parsed, host)
@@ -104,7 +112,7 @@ export function placement(lock: Lock, phase: Phase, rel: string, created: boolea
   const excluded = lock.scope.exclude.some((glob) => matches(glob, rel));
   const grammar = grammarOf(rel);
   const foreign = grammar === "python" || grammar === "go" || grammar === "rust";
-  const covered = lock.rules.some((r) => (r.impl.kind === "pattern" || (r.impl.kind === "primitive" && ["metric", "layer-edge", "banned-import", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal"].includes(r.impl.primitive)))
+  const covered = lock.rules.some((r) => (r.impl.kind === "pattern" || (r.impl.kind === "primitive" && ["metric", "layer-edge", "banned-import", "drizzle-bounded-select", "interval-cleanup", "react-index-key", "credential-literal", "python-legacy"].includes(r.impl.primitive)))
     && languageApplies(r, rel) && applies(r, rel));
   const unparsed = layerOf(lock, rel) !== null && (grammar === null || (foreign && !covered));
   const ext = /\.([^./]+)$/.exec(rel)?.[1]?.toLowerCase() ?? "";
