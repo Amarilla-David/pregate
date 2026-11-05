@@ -20,7 +20,7 @@ const marker = "<!-- BEGIN generated reference -->";
 const endMarker = "<!-- END generated reference -->";
 const categories = JSON.parse(readFileSync(join(root, "schema/source.v1.json"), "utf8")).properties.category.enum as string[];
 type Manifest = { id: string; version: string; status: string; invariants: Rule[] };
-type Rule = { id: string; check: string; severity: string; defaults: object; why: string; fixHint: string; avoid: string; source: object; relations?: RuleRelation[] };
+type Rule = { id: string; check: string; severity: string; defaults: object; why: string; fixHint: string; avoid: string; source: object; relations?: RuleRelation[]; versionGate?: { package: string; range: string; severity: string; unmatched: string } };
 type Source = { ns: string; version: string; category?: string };
 type Pack = { path: string; source: Source; methodologies: Manifest[]; checks: number; definitions: Map<string, { path: string; data: Check }> };
 
@@ -82,7 +82,10 @@ function rule(r: Rule, p: Pack): string {
   const fitness = c.impl.kind === "primitive" && c.impl.primitive === "fitness";
   const guard = c.impl.kind === "primitive" && (c.impl.primitive === "placement" || (c.impl.primitive === "diff" && c.impl.count === "markers"));
   const link = p.path === "catalog" ? `../${definition.path}` : definition.path.slice(p.path.length + 1);
-  return [`### ${p.source.ns}/${r.id}`, "", `Check: [\`${r.check}@${c.version}\`](${link}). Default severity: **${r.severity}**.`, "",
+  const gate = r.versionGate
+    ? ` Version gate: **${r.versionGate.severity}** when the nearest \`${r.versionGate.package}\` declaration is entirely \`${r.versionGate.range}\`; otherwise ${r.versionGate.unmatched === "skip" ? "the rule does not run" : `severity stays **${r.severity}**`}. A specifier that can still install an older release, or that cannot be read, does not match.`
+    : "";
+  return [`### ${p.source.ns}/${r.id}`, "", `Check: [\`${r.check}@${c.version}\`](${link}). Default severity: **${r.severity}**.${gate}`, "",
     `Implementation: \`${c.impl.kind === "primitive" ? c.impl.primitive : "pattern"}\`. Phases: ${c.phase.map((v) => `\`${v}\``).join(", ")}.`, "",
     `Languages: ${fitness ? "language-independent project verification" : guard ? "language-independent change guard" : languages.map((v) => `\`${v}\``).join(", ")}. Cardinality: \`${c.cardinality}\`. Dimension: \`${c.dimension}\`. Minimum severity: \`${c.minSeverity ?? "none"}\`.`, "",
     r.why, "", `Default parameters: \`${JSON.stringify(r.defaults)}\`.`, "", `**Repair:** ${r.fixHint}`, "",

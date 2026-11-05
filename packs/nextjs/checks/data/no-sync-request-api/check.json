@@ -1,7 +1,7 @@
 {
   "$schema": "../../../../../schema/check.v1.json",
   "id": "nextjs/data/no-sync-request-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "area": "data",
   "cardinality": "singleton",
   "dimension": "nextjs.no-sync-request-api",
@@ -101,6 +101,6 @@
     "ci"
   ],
   "feedback": {
-    "message": "{symbol} reads a next/headers API synchronously. cookies(), headers() and draftMode() return Promises; await them (or unwrap with React's use) before reading."
+    "message": "{symbol} reads cookies(), headers(), or draftMode() synchronously. Await the call, or unwrap it with React's use(), before reading the value. https://nextjs.org/docs/app/guides/upgrading/version-16"
   }
 }

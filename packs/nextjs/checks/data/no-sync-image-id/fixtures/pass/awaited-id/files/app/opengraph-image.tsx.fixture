@@ -1,0 +1,4 @@
+export default async function Image({ id }: { id: Promise<string> }) {
+  const imageId = await id;
+  return new Response(imageId);
+}

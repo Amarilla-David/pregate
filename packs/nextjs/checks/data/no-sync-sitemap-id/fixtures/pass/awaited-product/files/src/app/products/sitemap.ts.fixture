@@ -1,0 +1,4 @@
+export default async function sitemap({ id }: { id: Promise<string> }) {
+  const start = Number(await id) * 50000;
+  return [{ url: `https://example.com/${start}` }];
+}

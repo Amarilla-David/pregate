@@ -2,13 +2,13 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Version: `1.2.0`. Category: **library**.
+Version: `1.3.0`. Category: **library**.
 
 These are manifest defaults. All core rules activate automatically and enforce unless explicitly disabled in the reviewed preset. Optional packs activate only when selected. `pregate preset show` gives the effective contract. A manifest's `complete` label refers to that manifest, not full library or methodology compliance.
 
 ## nextjs/rendering
 
-Manifest version: `1.1.0`. Status: **complete**.
+Manifest version: `1.2.0`. Status: **complete**.
 
 ### nextjs/NEXT-HEAD-001
 
@@ -236,19 +236,19 @@ Source metadata:
 
 ### nextjs/NEXT-ASYNC-001
 
-Check: [`nextjs/data/no-sync-request-api@1.0.0`](checks/data/no-sync-request-api/check.json). Default severity: **warn**.
+Check: [`nextjs/data/no-sync-request-api@1.0.1`](checks/data/no-sync-request-api/check.json). Default severity: **warn**. Version gate: **deny** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise severity stays **warn**. A specifier that can still install an older release, or that cannot be read, does not match.
 
 Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
 
 Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.no-sync-request-api`. Minimum severity: `none`.
 
-On Next.js 16 the call returns a Promise, so .get or .isEnabled reads undefined or throws; on 15 it logs a deprecation warning on every request.
+On Next.js 16 the call returns a Promise, so .get or .isEnabled reads undefined or throws. Next.js 15 still accepts the synchronous call and logs a deprecation warning.
 
 Default parameters: `{}`.
 
-**Repair:** Await the call first, for example const store = await cookies(); store.get('theme'). In a component that cannot be async, unwrap the Promise with React's use().
+**Repair:** Await the call first, for example const store = await cookies(); store.get('theme'). In a component that cannot be async, unwrap the Promise with React's use(). https://nextjs.org/docs/app/guides/upgrading/version-16
 
-**Scope and limits:** Only a member read directly on cookies(), headers() or draftMode() imported from next/headers, including renamed imports, is flagged. Awaited calls, use(...), .then/.catch/.finally and same-named functions from other modules pass. A result stored in a variable first is not traced. Warn only: Next.js 14 projects use the synchronous API correctly.
+**Scope and limits:** Only a member read directly on cookies(), headers() or draftMode() imported from next/headers, including renamed imports, is flagged. Awaited calls, use(...), .then/.catch/.finally and same-named functions from other modules pass. A result stored in a variable first is not traced. The finding is a warning unless the nearest package.json declares next entirely on 16 or newer (including 16 prereleases). Next.js 15, an older release, and a specifier that can still install 15 stay warnings.
 
 Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
 
@@ -266,9 +266,169 @@ Source metadata:
 }
 ```
 
+### nextjs/NEXT-PARAMS-001
+
+Check: [`nextjs/data/no-sync-page-props@1.0.0`](checks/data/no-sync-page-props/check.json). Default severity: **deny**. Version gate: **deny** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise the rule does not run. A specifier that can still install an older release, or that cannot be read, does not match.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.sync-page-props`. Minimum severity: `none`.
+
+The page props are Promises. Reading .slug or destructuring them without await yields undefined query data instead of the requested page.
+
+Default parameters: `{}`.
+
+**Repair:** Await the prop, then read it: const { slug } = await params and const query = await searchParams. In a Client Component, unwrap the Promise with React's use(). https://nextjs.org/docs/app/guides/upgrading/version-16
+
+**Scope and limits:** Only page files under app/ or src/app/ are read. An identifier named params or searchParams is flagged for a member read, index read, object destructure, or nested parameter pattern, and so is props.params.x or props.searchParams.x when that access is not itself awaited. Await, React use(), and a local const under another name pass. A local that reuses the name params is flagged too; assignments are not traced. The rule runs only when next is declared entirely on 16 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+  "locator": "Async Request APIs (Breaking change)",
+  "paraphrase": "Next.js 16 removes synchronous access to params and searchParams in page.js. Next.js 15 kept a temporary synchronous compatibility path."
+}
+```
+
+### nextjs/NEXT-SEGMENT-001
+
+Check: [`nextjs/data/no-sync-segment-params@1.0.0`](checks/data/no-sync-segment-params/check.json). Default severity: **deny**. Version gate: **deny** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise the rule does not run. A specifier that can still install an older release, or that cannot be read, does not match.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.sync-segment-params`. Minimum severity: `none`.
+
+A synchronous read of the params Promise drops the dynamic segment, so the layout, route, or image is built for the wrong key.
+
+Default parameters: `{}`.
+
+**Repair:** Await params before reading it: const { slug } = await params. Keep the synchronous read inside generateImageMetadata. https://nextjs.org/docs/app/guides/upgrading/version-16
+
+**Scope and limits:** Page files are covered by NEXT-PARAMS-001. This rule reads layout, route, default, and the image generator files. searchParams in a layout is not the page request API and is not flagged. generateImageMetadata is excluded. A stored awaited result is not traced. The rule runs only when next is declared entirely on 16 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+  "locator": "Async Request APIs (Breaking change); Async parameters for icon and open-graph Image",
+  "paraphrase": "params in layout, route, default, opengraph-image, twitter-image, icon, and apple-icon are Promises. generateImageMetadata still receives synchronous params. searchParams is documented for page.js."
+}
+```
+
+### nextjs/NEXT-SITEMAP-001
+
+Check: [`nextjs/data/no-sync-sitemap-id@1.0.0`](checks/data/no-sync-sitemap-id/check.json). Default severity: **deny**. Version gate: **deny** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise the rule does not run. A specifier that can still install an older release, or that cannot be read, does not match.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.sync-sitemap-id`. Minimum severity: `none`.
+
+Multiplying the Promise produces NaN, so the generated sitemap URLs start at the wrong offset.
+
+Default parameters: `{}`.
+
+**Repair:** Await id, then convert it: const resolved = await id; const start = Number(resolved) * 50000. https://nextjs.org/docs/app/guides/upgrading/version-16
+
+**Scope and limits:** Only sitemap files under app/ or src/app/ are read. The flagged shape is an identifier named id used in arithmetic, including Number(id) and parentheses. await id passes. A local const that reuses the name id is flagged too. generateSitemaps is excluded. The rule runs only when next is declared entirely on 16 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+  "locator": "Async id parameter for sitemap",
+  "paraphrase": "The sitemap function receives id as a Promise. generateSitemaps still returns plain ids. The previous code multiplied the id number directly."
+}
+```
+
+### nextjs/NEXT-IMAGE-001
+
+Check: [`nextjs/data/no-sync-image-id@1.0.0`](checks/data/no-sync-image-id/check.json). Default severity: **deny**. Version gate: **deny** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise the rule does not run. A specifier that can still install an older release, or that cannot be read, does not match.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.sync-image-id`. Minimum severity: `none`.
+
+Storing or reading the Promise as if it were the image id string builds the wrong image, or none.
+
+Default parameters: `{}`.
+
+**Repair:** Await id, or unwrap it with React's use() in a Client Component: const imageId = await id. https://nextjs.org/docs/app/guides/upgrading/version-16
+
+**Scope and limits:** Only opengraph-image, twitter-image, icon, and apple-icon files are read. An identifier named id is flagged when it is stored in a const, read as a member, or indexed, including through parentheses. await id and use(id) pass. A helper that copies an id parameter into a const is flagged too. The rule runs only when next is declared entirely on 16 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16",
+  "locator": "Async parameters for icon and open-graph Image",
+  "paraphrase": "The image generating function in opengraph-image, twitter-image, icon, and apple-icon receives id as a Promise. generateImageMetadata still receives synchronous params and does not receive this id."
+}
+```
+
+### nextjs/NEXT-REVALTAG-001
+
+Check: [`nextjs/data/no-revalidate-tag-one-arg@1.0.0`](checks/data/no-revalidate-tag-one-arg/check.json). Default severity: **deny**. Version gate: **deny** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise the rule does not run. A specifier that can still install an older release, or that cannot be read, does not match.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.revalidate-tag-one-arg`. Minimum severity: `none`.
+
+A one-argument call no longer typechecks on Next.js 16, so the tag the author meant to refresh is not part of a typed cache profile. Next.js 15 still uses the single-argument form.
+
+Default parameters: `{}`.
+
+**Repair:** Pass a cacheLife profile, usually 'max', or { expire: seconds }: revalidateTag('posts', 'max'). For read-your-writes inside a Server Action, call updateTag(tag) instead. https://nextjs.org/docs/app/guides/upgrading/version-16
+
+**Scope and limits:** Only a call whose function is revalidateTag imported from next/cache, including a renamed import, is flagged, and only when it has fewer than two arguments and no spread. A profile string, a variable, and { expire: number } all satisfy the second argument. updateTag and a same-named helper from another module pass. The rule runs only when next is declared entirely on 16 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16; Next.js 16 release, https://nextjs.org/blog/next-16",
+  "locator": "Caching APIs, revalidateTag; revalidateTag() (updated)",
+  "paraphrase": "revalidateTag now requires a second argument. The upgrade guide shows a cacheLife profile such as 'max'. The Next.js 16 release also allows an inline { expire: number } object. The single-argument form is deprecated and is a TypeScript error."
+}
+```
+
 ## nextjs/routing
 
-Manifest version: `1.2.0`. Status: **complete**.
+Manifest version: `1.3.0`. Status: **complete**.
 
 ### nextjs/NEXT-LINK-001
 
@@ -459,5 +619,69 @@ Source metadata:
   "work": "Next.js App Router documentation, Route Segment Config (https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config)",
   "locator": "Route Segment Config options and Server Components",
   "paraphrase": "Route segment configuration exports (dynamic, revalidate, runtime, preferredRegion, maxDuration) and generateStaticParams only apply in Server Components and cannot be exported from a Client Component."
+}
+```
+
+### nextjs/NEXT-PROXY-001
+
+Check: [`nextjs/routing/no-middleware-named-export@1.0.0`](checks/routing/no-middleware-named-export/check.json). Default severity: **deny**. Version gate: **deny** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise the rule does not run. A specifier that can still install an older release, or that cannot be read, does not match.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.middleware-named-export`. Minimum severity: `none`.
+
+Proxy runs the default export or the export named proxy. A named middleware export is not that function, so the request reaches the route with none of the redirect, rewrite, or header changes.
+
+Default parameters: `{}`.
+
+**Repair:** Rename the named export to proxy: export function proxy(request) {}. A default export may keep its local name. https://nextjs.org/docs/app/api-reference/file-conventions/proxy
+
+**Scope and limits:** Only proxy.ts and src/proxy.ts (and the same .js, .jsx, .tsx, .mjs, .cjs names) are read. export function, export const, and export { x as middleware } are flagged. export default function middleware is not, because a default export is a supported proxy function. A local unexported function named middleware passes. The rule runs only when next is declared entirely on 16 or newer.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16; Proxy file convention, https://nextjs.org/docs/app/api-reference/file-conventions/proxy",
+  "locator": "middleware to proxy; Migration to Proxy",
+  "paraphrase": "The named export middleware is deprecated. proxy.ts must export a function named proxy, or a default export. The guide recommends renaming a default export too, and that remains a recommendation."
+}
+```
+
+### nextjs/NEXT-PROXY-002
+
+Check: [`nextjs/routing/no-nodejs-middleware-file@1.0.0`](checks/routing/no-nodejs-middleware-file/check.json). Default severity: **warn**. Version gate: **warn** when the nearest `next` declaration is entirely `>=16.0.0`; otherwise the rule does not run. A specifier that can still install an older release, or that cannot be read, does not match.
+
+Implementation: `pattern`. Phases: `pre`, `stop`, `commit`, `ci`.
+
+Languages: `typescript`. Cardinality: `singleton`. Dimension: `nextjs.nodejs-middleware-file`. Minimum severity: `none`.
+
+A Node.js middleware.ts file is the deprecated filename for the runtime proxy.ts now owns. Leaving it splits request interception across two conventions. Edge middleware is still the supported middleware.ts file.
+
+Default parameters: `{}`.
+
+**Repair:** Rename middleware.ts to proxy.ts, export proxy, and delete config.runtime. Keep middleware.ts when the file should stay on the Edge runtime, which is the default when config.runtime is not "nodejs". https://nextjs.org/docs/app/guides/upgrading/version-16
+
+**Scope and limits:** Only middleware.ts and src/middleware.ts (and the same JavaScript extensions) are read. The finding is the exported config object's own runtime: "nodejs" pair, in either quote style. A matcher-only config, runtime: "edge", and a nested runtime string are not the Node.js opt-in. The rule runs only when next is declared entirely on 16 or newer, and it warns rather than denies because the file still runs.
+
+Check-specific parameter schema (this check also accepts `paths`, `exclude` and intersecting `within` globs):
+
+```json
+{}
+```
+
+Source metadata:
+
+```json
+{
+  "work": "Next.js 16 upgrade guide, https://nextjs.org/docs/app/guides/upgrading/version-16; Next.js 15 middleware runtime, https://nextjs.org/docs/15/app/api-reference/file-conventions/middleware",
+  "locator": "middleware to proxy; Runtime",
+  "paraphrase": "The middleware filename is deprecated in favor of proxy. Proxy runs on Node.js and cannot set a runtime. Middleware defaults to the Edge runtime; Node.js is selected with export const config = { runtime: 'nodejs' }. Edge middleware stays in middleware.ts."
 }
 ```

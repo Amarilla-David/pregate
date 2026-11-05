@@ -1,0 +1,316 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-sync-segment-params",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.sync-segment-params",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sync-segment-member",
+          "files": [
+            "app/**/layout.*",
+            "app/**/route.*",
+            "app/**/default.*",
+            "app/**/opengraph-image.*",
+            "app/**/twitter-image.*",
+            "app/**/icon.*",
+            "app/**/apple-icon.*",
+            "src/app/**/layout.*",
+            "src/app/**/route.*",
+            "src/app/**/default.*",
+            "src/app/**/opengraph-image.*",
+            "src/app/**/twitter-image.*",
+            "src/app/**/icon.*",
+            "src/app/**/apple-icon.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "member_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "object",
+                      "kind": "identifier",
+                      "regex": "^params$"
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "image-metadata"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "subscript_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "object",
+                      "kind": "identifier",
+                      "regex": "^params$"
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "image-metadata"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sync-segment-destructure",
+          "files": [
+            "app/**/layout.*",
+            "app/**/route.*",
+            "app/**/default.*",
+            "app/**/opengraph-image.*",
+            "app/**/twitter-image.*",
+            "app/**/icon.*",
+            "app/**/apple-icon.*",
+            "src/app/**/layout.*",
+            "src/app/**/route.*",
+            "src/app/**/default.*",
+            "src/app/**/opengraph-image.*",
+            "src/app/**/twitter-image.*",
+            "src/app/**/icon.*",
+            "src/app/**/apple-icon.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "identifier",
+            "regex": "^params$",
+            "all": [
+              {
+                "inside": {
+                  "field": "value",
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "kind": "object_pattern"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "matches": "image-metadata"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "sync-segment-nested",
+          "files": [
+            "app/**/layout.*",
+            "app/**/route.*",
+            "app/**/default.*",
+            "app/**/opengraph-image.*",
+            "app/**/twitter-image.*",
+            "app/**/icon.*",
+            "app/**/apple-icon.*",
+            "src/app/**/layout.*",
+            "src/app/**/route.*",
+            "src/app/**/default.*",
+            "src/app/**/opengraph-image.*",
+            "src/app/**/twitter-image.*",
+            "src/app/**/icon.*",
+            "src/app/**/apple-icon.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "pair_pattern",
+            "all": [
+              {
+                "has": {
+                  "field": "key",
+                  "regex": "^params$"
+                }
+              },
+              {
+                "has": {
+                  "field": "value",
+                  "kind": "object_pattern"
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "matches": "image-metadata"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "sync-segment-props",
+          "files": [
+            "app/**/layout.*",
+            "app/**/route.*",
+            "app/**/default.*",
+            "app/**/opengraph-image.*",
+            "app/**/twitter-image.*",
+            "app/**/icon.*",
+            "app/**/apple-icon.*",
+            "src/app/**/layout.*",
+            "src/app/**/route.*",
+            "src/app/**/default.*",
+            "src/app/**/opengraph-image.*",
+            "src/app/**/twitter-image.*",
+            "src/app/**/icon.*",
+            "src/app/**/apple-icon.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "kind": "member_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "property",
+                  "regex": "^params$"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "inside": {
+                      "kind": "member_expression"
+                    }
+                  },
+                  {
+                    "inside": {
+                      "kind": "subscript_expression"
+                    }
+                  }
+                ]
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "await_expression"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "matches": "image-metadata"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} reads params synchronously. Await the Promise, then read it. generateImageMetadata still receives a synchronous params object. https://nextjs.org/docs/app/guides/upgrading/version-16"
+  }
+}

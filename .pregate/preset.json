@@ -68,6 +68,7 @@
         "src/evaluate.ts",
         "src/node-target.ts",
         "src/dependency-since.ts",
+        "src/package-version.ts",
         "src/ratchet.ts",
         "src/decide.ts",
         "src/message.ts",

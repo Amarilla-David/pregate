@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-sync-sitemap-id",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.sync-sitemap-id",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sync-sitemap-id",
+          "files": [
+            "app/**/sitemap.*",
+            "src/app/**/sitemap.*"
+          ],
+          "rule": {
+            "kind": "identifier",
+            "regex": "^id$",
+            "all": [
+              {
+                "inside": {
+                  "stopBy": "end",
+                  "kind": "binary_expression"
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "await_expression"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "inside": {
+                    "stopBy": "end",
+                    "kind": "function_declaration",
+                    "has": {
+                      "field": "name",
+                      "regex": "^generateSitemaps$"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses the sitemap id synchronously. Await id before multiplying or formatting it. https://nextjs.org/docs/app/guides/upgrading/version-16"
+  }
+}

@@ -1,0 +1,5 @@
+import { revalidateTag } from "next/cache";
+
+export function publish(tag: string) {
+  revalidateTag(tag /* "max" */);
+}

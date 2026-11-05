@@ -165,11 +165,16 @@ export interface Check {
   impl: Impl; phase: Phase[]; feedback: { message: string }; languages?: RuleLanguage[];
   when?: { dependency: "typescript"; min: string; otherwise?: "warn" }; // min: hard gate; otherwise warn below it
 }                                               // v1 keys (ir, measures, fingerprint…) are accepted and ignored
+// A declared dependency range selects a severity at evaluation. `skip` means the rule does not run
+// unless every version the manifest can install is inside `range`.
+export interface VersionGate {
+  package: string; range: string; severity: Severity; unmatched: "inherit" | "skip";
+}
 export interface Alias {
   id: string; check: string; defaults: Record<string, unknown>; severity: Severity | "off";
   source: { work: string; locator: string; paraphrase: string };
   why: string; fixHint: string; avoid: string; examples?: { pass: string; fail: string };
-  relations?: RuleRelation[];
+  relations?: RuleRelation[]; versionGate?: VersionGate;
 }
 // `with` names another alias (ns/ALIAS-ID) or, for idiom, a pack namespace whose framework mandates the opposite.
 export type RelationKind = "contradicts" | "duplicates" | "idiom";
@@ -220,6 +225,7 @@ export interface LockRule {
   impl: Impl;
   params: Record<string, unknown>; // resolved; @layers expanded in paths/exclude, files/ignores moved in
   severity: Severity; phases: Phase[];
+  versionGate?: VersionGate;      // absent: severity is unconditional. An override of severity drops the gate.
   enforcement?: Enforcement;       // older locks inherit the preset default
   integrity: boolean;              // builtin core: enforces by default; human-reviewed off is permitted
   origin: Record<string, string>;  // "params.max" → "resolve.fn.size" | "overrides.CC-FN-001" | "alias"

@@ -1,0 +1,145 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-sync-image-id",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.sync-image-id",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "sync-image-id",
+          "files": [
+            "app/**/opengraph-image.*",
+            "app/**/twitter-image.*",
+            "app/**/icon.*",
+            "app/**/apple-icon.*",
+            "src/app/**/opengraph-image.*",
+            "src/app/**/twitter-image.*",
+            "src/app/**/icon.*",
+            "src/app/**/apple-icon.*"
+          ],
+          "utils": {
+            "image-metadata": {
+              "any": [
+                {
+                  "kind": "function_declaration",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                },
+                {
+                  "kind": "variable_declarator",
+                  "has": {
+                    "field": "name",
+                    "regex": "^generateImageMetadata$"
+                  }
+                }
+              ]
+            }
+          },
+          "rule": {
+            "any": [
+              {
+                "kind": "identifier",
+                "regex": "^id$",
+                "all": [
+                  {
+                    "inside": {
+                      "field": "value",
+                      "stopBy": "end",
+                      "kind": "variable_declarator"
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "kind": "await_expression"
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "kind": "call_expression",
+                        "has": {
+                          "field": "function",
+                          "kind": "identifier",
+                          "regex": "^use$"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "image-metadata"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "member_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "object",
+                      "kind": "identifier",
+                      "regex": "^id$"
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "image-metadata"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "subscript_expression",
+                "all": [
+                  {
+                    "has": {
+                      "field": "object",
+                      "kind": "identifier",
+                      "regex": "^id$"
+                    }
+                  },
+                  {
+                    "not": {
+                      "inside": {
+                        "stopBy": "end",
+                        "matches": "image-metadata"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} uses an image id synchronously. Await id, or unwrap it with React's use(), before storing or reading it. https://nextjs.org/docs/app/guides/upgrading/version-16"
+  }
+}

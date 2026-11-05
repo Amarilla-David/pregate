@@ -400,6 +400,7 @@ function describe(lock: Lock, r: LockRule): string {
   const params = Object.entries(r.params).map(([k, v]) => `  ${k} = ${JSON.stringify(v)} (${r.origin[`params.${k}`] ?? "default"})`);
   return [
     `${r.id} · ${r.severity} (${r.origin.severity ?? "alias"}) · ${enforcementOf(lock, r)} (${r.origin.enforcement ?? "preset"}) · ${r.check}${r.integrity ? " · integrity" : ""}${owned}`,
+    ...(r.versionGate ? [`version: ${r.versionGate.severity} when ${r.versionGate.package} ${r.versionGate.range} matches entirely; otherwise ${r.versionGate.unmatched === "skip" ? "the rule does not run" : r.severity}`] : []),
     `aliases: ${r.aliases.join(", ")}`,
     `phases: ${r.phases.join(", ")}`,
     "params:", ...params,

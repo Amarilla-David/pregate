@@ -17,9 +17,9 @@ cannot prove absence, resolve imports across modules, or read file-system conven
   exactly the modules that touch browser APIs and nowhere else. That is a conjunction
   of two directions (directive present AND browser API used; directive absent AND no
   browser API) across module boundaries — needs cross-file import facts.
-- **Middleware matcher.** A `middleware.ts` without a `matcher` config runs on every
-  route, but proving the config is missing (rather than inherited or set elsewhere)
-  needs absence detection plus knowledge of which file is the middleware entry point.
+- **Proxy matcher.** A `proxy.ts` (legacy Edge `middleware.ts`) without a `matcher`
+  config runs on every route, but proving the config is missing (rather than inherited
+  or set elsewhere) needs absence detection plus knowledge of which file is the entry point.
 - **Parallel routes.** Slot props (`@slot/page.tsx`) must be accepted by the parent
   layout, which means correlating directory siblings with layout signatures — a
   cross-file convention the single-file vocabulary cannot see.

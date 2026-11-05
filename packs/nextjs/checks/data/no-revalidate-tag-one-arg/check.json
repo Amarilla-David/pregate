@@ -1,0 +1,110 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "nextjs/data/no-revalidate-tag-one-arg",
+  "version": "1.0.0",
+  "area": "data",
+  "cardinality": "singleton",
+  "dimension": "nextjs.revalidate-tag-one-arg",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "revalidate-tag-missing-profile",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "kind": "identifier",
+                  "pattern": "$API"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "kind": "arguments",
+                  "all": [
+                    {
+                      "not": {
+                        "has": {
+                          "nthChild": {
+                            "position": 2,
+                            "ofRule": { "not": { "kind": "comment" } }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "not": { "has": { "kind": "spread_element" } }
+                    }
+                  ]
+                }
+              },
+              {
+                "inside": {
+                  "kind": "program",
+                  "stopBy": "end",
+                  "has": {
+                    "kind": "import_statement",
+                    "all": [
+                      {
+                        "has": {
+                          "field": "source",
+                          "regex": "^[\"']next/cache[\"']$"
+                        }
+                      },
+                      {
+                        "has": {
+                          "kind": "import_specifier",
+                          "stopBy": "end",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "name",
+                                "regex": "^revalidateTag$"
+                              }
+                            },
+                            {
+                              "any": [
+                                {
+                                  "has": {
+                                    "field": "alias",
+                                    "pattern": "$API"
+                                  }
+                                },
+                                {
+                                  "not": {
+                                    "has": {
+                                      "field": "alias",
+                                      "kind": "identifier"
+                                    }
+                                  },
+                                  "has": {
+                                    "field": "name",
+                                    "pattern": "$API"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "phase": ["pre", "stop", "commit", "ci"],
+  "feedback": {
+    "message": "{symbol} calls revalidateTag without a second argument. Pass a cacheLife profile such as \"max\", or { expire: seconds }. Use updateTag(tag) in a Server Action when the next read must see the write. https://nextjs.org/docs/app/guides/upgrading/version-16"
+  }
+}

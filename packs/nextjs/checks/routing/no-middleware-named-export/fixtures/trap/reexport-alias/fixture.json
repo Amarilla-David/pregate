@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "proxy.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "renamed-specifier",
+    "origin": "forge",
+    "discovered": "2026-11-04",
+    "note": "export { auth as middleware } hides the function's local name, but the name Proxy looks up is still middleware."
+  }
+}

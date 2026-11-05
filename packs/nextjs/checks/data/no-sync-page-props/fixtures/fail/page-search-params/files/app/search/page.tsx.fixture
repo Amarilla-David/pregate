@@ -1,0 +1,4 @@
+export default function Page({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const q = searchParams.q ?? "";
+  return <p>{q}</p>;
+}

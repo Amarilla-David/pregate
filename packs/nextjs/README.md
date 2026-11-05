@@ -1,10 +1,10 @@
 # nextjs
 
-App Router pack for Next.js TypeScript projects. Source version **1.2.0**. Data-only rule pack: every check is a syntax pattern, no executable code.
+App Router pack for Next.js TypeScript projects. Source version **1.3.0**. Data-only rule pack: every check is a syntax pattern, no executable code.
 
 ## Stance
 
-This pack targets the App Router. The Pages Router still supports `next/head`; raw anchors and `img` elements can be intentional. Next.js also documents a default fetch cache behavior. Rules that cannot distinguish a valid option from a mistake are off or advisory. Route-handler contracts, server/client boundaries, and middleware still need stronger analysis and live in [BACKLOG.md](BACKLOG.md).
+This pack targets the App Router. The Pages Router still supports `next/head`; raw anchors and `img` elements can be intentional. Next.js also documents a default fetch cache behavior. Rules that cannot distinguish a valid option from a mistake are off or advisory. Next.js 16 denials run only when the nearest `package.json` declares `next` entirely on 16 or newer, including 16 prereleases. Next.js 15, an older release, and a range that can still install 15 are not denied. Route-handler contracts, server/client boundaries, and middleware matchers still need stronger analysis and live in [BACKLOG.md](BACKLOG.md).
 
 ## User control
 
@@ -32,17 +32,24 @@ The contract is the repository preset, not this pack. Take every pack, some pack
 | `NEXT-NAV-001` | A value import, re-export or runtime load of `next/router` under `app/` or `src/app/`. Type-only imports pass. | The Pages Router hook throws "NextRouter was not mounted" in the App Router. | deny |
 | `NEXT-DIRECTIVE-001` | `'use client'`/`'use server'` after other code, `'use client'` inside a function, `'use server'` after a statement in a function body, or either in backticks. | A misplaced directive is an ordinary string; the boundary silently does not exist. | deny |
 | `NEXT-META-001` | Exported `metadata` or `generateMetadata` (including `export { x as metadata }`) from a page or layout whose leading directive is `'use client'`. | Metadata exports are only supported in Server Components. | deny |
-| `NEXT-ASYNC-001` | A member read directly on `cookies()`, `headers()` or `draftMode()` imported from `next/headers`, aliases included. | These APIs return Promises; Next.js 16 removed synchronous access. | warn |
+| `NEXT-ASYNC-001` | A member read directly on `cookies()`, `headers()` or `draftMode()` imported from `next/headers`, aliases included. | These APIs return Promises. Warning below Next.js 16; denial when `next` is entirely 16 or newer. | warn, deny on Next >= 16 |
+| `NEXT-PARAMS-001` | Synchronous `params` or `searchParams` in a page file. | Next.js 16 makes both props Promises. Does not run below 16. | deny on Next >= 16 |
+| `NEXT-SEGMENT-001` | Synchronous `params` in a layout, route, default, or image file. | The same Promise change. `generateImageMetadata` stays synchronous. Does not run below 16. | deny on Next >= 16 |
+| `NEXT-SITEMAP-001` | A sitemap `id` used in arithmetic without `await`. | Next.js 16 passes `id` as a Promise. Does not run below 16. | deny on Next >= 16 |
+| `NEXT-IMAGE-001` | An image `id` stored or read without `await` or `use()`. | `opengraph-image`, `twitter-image`, `icon`, and `apple-icon` receive `id` as a Promise. Does not run below 16. | deny on Next >= 16 |
+| `NEXT-REVALTAG-001` | `revalidateTag` from `next/cache` with fewer than two arguments. | Next.js 16 requires a cacheLife profile or `{ expire }`. The one-argument form is a TypeScript error. Does not run below 16. | deny on Next >= 16 |
+| `NEXT-PROXY-001` | A named `middleware` export in `proxy.ts`. | Proxy calls `proxy` or the default export. Does not run below 16. | deny on Next >= 16 |
+| `NEXT-PROXY-002` | `middleware.ts` with `export const config = { runtime: "nodejs" }`. | That Node.js file is the deprecated filename; proxy owns Node. Edge middleware, the default, stays. Does not run below 16. | warn on Next >= 16 |
 | `NEXT-SERVER-EXPORT-001` | Exporting route segment config options (`dynamic`, `revalidate`, `runtime`, `preferredRegion`, `maxDuration`) or `generateStaticParams` from a `'use client'` page, layout, or route file. | Route segment options and `generateStaticParams` only take effect in Server Components. | deny |
 
 ## Methodologies
 
-- `nextjs/routing` — NEXT-LINK-001, NEXT-DOC-001, NEXT-ROUTE-001, NEXT-REVAL-001, NEXT-NAV-001, NEXT-SERVER-EXPORT-001
-- `nextjs/rendering` — NEXT-HEAD-001, NEXT-IMG-001, NEXT-FONT-001, NEXT-CACHE-001, NEXT-CONFLICT-001, NEXT-DIRECTIVE-001, NEXT-META-001, NEXT-ASYNC-001
+- `nextjs/routing` — NEXT-LINK-001, NEXT-DOC-001, NEXT-ROUTE-001, NEXT-REVAL-001, NEXT-NAV-001, NEXT-SERVER-EXPORT-001, NEXT-PROXY-001, NEXT-PROXY-002
+- `nextjs/rendering` — NEXT-HEAD-001, NEXT-IMG-001, NEXT-FONT-001, NEXT-CACHE-001, NEXT-CONFLICT-001, NEXT-DIRECTIVE-001, NEXT-META-001, NEXT-ASYNC-001, NEXT-PARAMS-001, NEXT-SEGMENT-001, NEXT-SITEMAP-001, NEXT-IMAGE-001, NEXT-REVALTAG-001
 
 ## Fixture coverage and limits
 
-`pregate rules test packs/nextjs` runs **88** real fixtures. Every check has two passing and two failing cases plus a failing trap with exact lines. Regression cases preserve next/headers, exported module-name notes, import options, CMS HTML strings and unrelated attribute text; an arrow-rendered internal anchor still reports. External anchors, `next/image`, icon and local stylesheet links, explicit cache options, template-literal pushes, and numeric `revalidate` values remain pass guards.
+`pregate rules test packs/nextjs` runs **129** real fixtures. Every check has two passing and two failing cases plus a failing trap with exact lines. Regression cases preserve next/headers, exported module-name notes, import options, CMS HTML strings and unrelated attribute text; an arrow-rendered internal anchor still reports. External anchors, `next/image`, icon and local stylesheet links, explicit cache options, template-literal pushes, and numeric `revalidate` values remain pass guards. Next.js 16 fixtures also keep awaited props, `{ expire }` and a cacheLife profile, Edge middleware, a default export named `middleware`, and synchronous `params` inside `generateImageMetadata`.
 
 Fixtures only prove the sample syntax. The [fetch reference](https://nextjs.org/docs/app/api-reference/functions/fetch) explicitly documents default `auto no cache` behavior; no option is required. NEXT-LINK-001 now identifies actual anchor/attribute structure anywhere in JSX and remains advisory because navigation intent is unknown. Other JSX rules still have their documented expression limits. Open cross-file questions are catalogued in [BACKLOG.md](BACKLOG.md).
 
@@ -60,7 +67,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 
 ## Exact rule contract
 
-Category: **library**. Version: `1.2.0`. 14 distinct check IDs.
+Category: **library**. Version: `1.3.0`. 21 distinct check IDs.
 
 Methodologies: `nextjs/rendering` (complete), `nextjs/routing` (complete).
 

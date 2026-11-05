@@ -30,12 +30,12 @@ For one combined selection, use `guide --preview --packs <ns,ns>` or an edited `
 
 ## Bundled library inventory
 
-45 optional packs; 1066 distinct check IDs. Counts do not measure semantic coverage or precision.
+45 optional packs; 1073 distinct check IDs. Counts do not measure semantic coverage or precision.
 
 | Checker family | Checks | Evidence needed for enforcement |
 | --- | ---: | --- |
 | Project fitness obligations | 577 | Reviewed current project assertions; unbound means UNVERIFIED |
-| Static pattern, import and change checks | 472 | Precise applicability, valid alternatives and passing/failing/trap controls |
+| Static pattern, import and change checks | 479 | Precise applicability, valid alternatives and passing/failing/trap controls |
 | Metrics | 17 | A measured project budget; a threshold is not a universal invariant |
 
 These are implementation counts, not a certified enforce-ready total. Prefer stable conditions to prescribed mechanisms; keep contextual policies optional and heuristics advisory until admitted. See [invariant enforcement criteria](guides/invariant-enforcement.md).
@@ -63,7 +63,7 @@ These are implementation counts, not a certified enforce-ready total. Prefer sta
 | [musk](../packs/musk/REFERENCE.md) | process | 1.0.1 | 5 | `musk/algorithm` (complete) |
 | [nestjs](../packs/nestjs/REFERENCE.md) | library | 1.2.0 | 11 | `nestjs/controllers` (complete), `nestjs/providers` (complete) |
 | [next-website](../packs/next-website/REFERENCE.md) | library | 1.0.0 | 54 | `next-website/readiness` (preview) |
-| [nextjs](../packs/nextjs/REFERENCE.md) | library | 1.2.0 | 14 | `nextjs/rendering` (complete), `nextjs/routing` (complete) |
+| [nextjs](../packs/nextjs/REFERENCE.md) | library | 1.3.0 | 21 | `nextjs/rendering` (complete), `nextjs/routing` (complete) |
 | [node](../packs/node/REFERENCE.md) | library | 1.3.0 | 19 | `node/internals` (complete), `node/runtime` (complete), `node/security` (complete) |
 | [nuxt](../packs/nuxt/REFERENCE.md) | library | 1.2.0 | 12 | `nuxt/data` (complete), `nuxt/server` (complete) |
 | [postgres](../packs/postgres/REFERENCE.md) | library | 1.2.0 | 11 | `postgres/client` (complete), `postgres/safety` (complete) |

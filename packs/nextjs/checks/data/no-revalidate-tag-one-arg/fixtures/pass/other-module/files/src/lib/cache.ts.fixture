@@ -1,0 +1,7 @@
+function revalidateTag(tag: string) {
+  return tag;
+}
+
+export function publish() {
+  revalidateTag("posts");
+}

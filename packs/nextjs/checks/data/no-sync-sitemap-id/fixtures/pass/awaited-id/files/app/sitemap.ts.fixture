@@ -1,0 +1,9 @@
+export default async function sitemap({ id }: { id: Promise<string> }) {
+  const resolved = await id;
+  const start = Number(resolved) * 50000;
+  return [{ url: `https://example.com/${start}` }];
+}
+
+export async function generateSitemaps() {
+  return [{ id: 0 }, { id: 1 }];
+}

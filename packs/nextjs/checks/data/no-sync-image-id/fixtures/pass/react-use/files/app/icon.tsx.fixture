@@ -1,0 +1,6 @@
+import { use } from "react";
+
+export default function Icon({ id }: { id: Promise<string> }) {
+  const imageId = use(id);
+  return new Response(imageId);
+}
