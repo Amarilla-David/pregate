@@ -79,8 +79,18 @@ A package named `svelte` does too, because that package is Svelte and does not
 depend on `svelte`. A `.svelte` file or `svelte.config.*` also recommends
 Svelte; those files do not add a package owner. A similarly named dependency
 does not count as a declaration of Svelte. A `.svelte` file, `svelte.config.*`,
-or Svelte dependency that appears only under a docs site, examples tree, or
-website folder does not recommend Svelte. The same evidence in primary source still does.
+or Svelte dependency that appears only under a docs site, examples tree,
+fixture tree, or website folder does not recommend Svelte. The same evidence in
+primary source still does.
+
+Exact `@tanstack/react-query`, `@tanstack/vue-query`, `@tanstack/solid-query`,
+`@tanstack/svelte-query`, `@tanstack/angular-query`, and
+`@tanstack/angular-query-experimental` dependencies and peer dependencies
+recommend the TanStack Query methodologies in their owning package. A
+devDependency does not. `@tanstack/query-core` and the devtools packages do
+not, on their own. A declaration that appears only under a docs site, examples
+tree, fixture tree, or website folder does not recommend TanStack Query. The
+same dependency in primary source still does.
 
 When nested related and unrelated owners cannot be represented by one include/
 exclude policy, scan reports `scopeProblems`; choose an explicit reviewed scope

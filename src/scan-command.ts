@@ -22,8 +22,11 @@ import { discoverDocumentation } from "./project-discovery.ts";
 // Token, CORS and LLM SDKs make the client-and-agents hardening checks applicable.
 // `svelte` and `@sveltejs/*` use that same shipped-dependency evidence. The package
 // named `svelte`, a `.svelte` file, or `svelte.config.*` also select the Svelte pack.
+// TanStack Query framework adapters select that pack. `@tanstack/query-core`, devtools,
+// and a dependency that exists only under a docs, examples, or fixtures tree do not.
 const CLIENT_SECURITY: [string, string[]] = ["security-audit", ["security-audit/client-and-agents"]];
 const SVELTE: [string, string[]] = ["svelte", ["svelte/runes", "svelte/stores"]];
+const TANSTACK_QUERY: [string, string[]] = ["tanstack-query", ["tanstack-query/keys", "tanstack-query/client"]];
 const DEPENDENCIES: Record<string, [string, string[]]> = {
   next: ["nextjs", ["nextjs/rendering", "nextjs/routing"]],
   react: ["react", ["react/components", "react/hooks"]],
@@ -35,6 +38,12 @@ const DEPENDENCIES: Record<string, [string, string[]]> = {
   express: ["express", ["express/middleware", "express/requests"]],
   "@trpc/server": ["trpc", ["trpc/router"]],
   "@trpc/client": ["trpc", ["trpc/client"]],
+  "@tanstack/react-query": TANSTACK_QUERY,
+  "@tanstack/vue-query": TANSTACK_QUERY,
+  "@tanstack/solid-query": TANSTACK_QUERY,
+  "@tanstack/svelte-query": TANSTACK_QUERY,
+  "@tanstack/angular-query": TANSTACK_QUERY,
+  "@tanstack/angular-query-experimental": TANSTACK_QUERY,
   "@prisma/client": ["prisma", ["prisma/client", "prisma/writes"]],
   "next-auth": ["authjs", ["authjs/config", "authjs/session"]],
   dcouplr: ["dcouplr", ["dcouplr/factories", "dcouplr/managed-components"]],
@@ -117,10 +126,10 @@ function manifestRecommendations(add: Add, manifests: [string, string][], periph
   }
 }
 
-// Docs sites, example trees, and website folders are not the product. The folder name matches at any
-// depth, so packages/docs and website/ are the same kind of signal. GitHub workflows and a scripts/
-// directory of at most three inventoried files are CI or tooling, not a language project.
-const PERIPHERAL_DIR = /^(?:doc|docs|documentation|website|examples?|samples?|demos?|playground)$/;
+// Docs sites, example trees, fixture trees, and website folders are not the product. The folder name
+// matches at any depth, so packages/docs, examples/, and fixtures/ are the same kind of signal.
+// GitHub workflows and a scripts/ directory of at most three inventoried files are CI or tooling, not a language project.
+const PERIPHERAL_DIR = /^(?:doc|docs|documentation|website|examples?|samples?|demos?|playground|fixtures?)$/;
 const TINY_SCRIPT_FILES = 3;
 
 function peripheralPackPath(files: Files): (path: string) => boolean {
