@@ -16,8 +16,9 @@ rule. Scope coverage, rule coverage and verified behavior are different facts.
 
 Coverage also reports `sourceLikeInventoried`, unsupported source-like
 paths and advisory role groups: production candidates, tests, examples, fixtures
-and vendor/generated conventions. Unsupported `.vue`, `.svelte` and other
+and vendor/generated conventions. Unsupported `.astro`, `.vue`, `.svelte` and other
 source-like files remain visible even though their bodies have no parser analysis.
+`.astro` is inventoried and is not parsed.
 Each role reports parser-supported, in-scope, outside-scope, excluded and unsupported
 counts. Role labels come from path conventions; they do not exclude files or
 certify that a file is production code. A monorepo cannot claim whole-project
@@ -79,8 +80,14 @@ A package named `svelte` does too, because that package is Svelte and does not
 depend on `svelte`. A `.svelte` file or `svelte.config.*` also recommends
 Svelte; those files do not add a package owner. A similarly named dependency
 does not count as a declaration of Svelte. A `.svelte` file, `svelte.config.*`,
-or Svelte dependency that appears only under a docs site, examples tree, or
-website folder does not recommend Svelte. The same evidence in primary source still does.
+or Svelte dependency that appears only under a docs site, examples tree,
+fixtures tree, or website folder does not recommend Svelte. The same evidence in primary source still does.
+
+Exact `astro` dependencies and peer dependencies recommend the Astro
+methodologies in their owning package. A devDependency does not. `astro.config.*`
+and `.astro` files do not either: the engine does not parse `.astro` templates.
+An `astro` dependency that appears only under `docs/`, `examples/`, or `fixtures/`
+does not recommend Astro. The same dependency in primary source still does.
 
 When nested related and unrelated owners cannot be represented by one include/
 exclude policy, scan reports `scopeProblems`; choose an explicit reviewed scope

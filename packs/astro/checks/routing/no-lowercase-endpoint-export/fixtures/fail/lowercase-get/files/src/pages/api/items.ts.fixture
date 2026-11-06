@@ -1,0 +1,5 @@
+import type { APIRoute } from "astro";
+
+export const get = (({ request }) => {
+  return new Response(request.method);
+}) satisfies APIRoute;

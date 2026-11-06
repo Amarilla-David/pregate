@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "astro/config",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "ASTRO-ENV-001",
+      "check": "astro/config/no-client-secret",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Astro documentation, environment variables (https://docs.astro.build/en/guides/environment-variables/)",
+        "locator": "Variable types",
+        "paraphrase": "Secret client variables are not supported. A schema cannot set both context: \"client\" and access: \"secret\"."
+      },
+      "why": "A client variable is bundled into the browser. Marking it secret does not keep the value on the server.",
+      "fixHint": "Use context: \"server\" with access: \"secret\", and read the value from astro:env/server. A public client variable uses context: \"client\" and access: \"public\".",
+      "avoid": "A computed context or access is not read. Importing astro:env/server into a module that a client:* island pulls in is a template-graph question and stays out of this check.",
+      "examples": {
+        "pass": "pass/server-secret",
+        "fail": "fail/client-secret"
+      }
+    },
+    {
+      "id": "ASTRO-ADAPTER-001",
+      "check": "astro/config/no-server-output-without-adapter",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Astro documentation, on-demand rendering (https://docs.astro.build/en/guides/on-demand-rendering/) and configuration reference (https://docs.astro.build/en/reference/configuration-reference/#output)",
+        "locator": "output and adapter",
+        "paraphrase": "output: \"server\" renders every page on demand, and on-demand rendering requires an adapter."
+      },
+      "why": "Without an adapter, the server build has no runtime to render those pages.",
+      "fixHint": "Import an adapter such as @astrojs/node and set adapter on the same defineConfig object. Leave output at \"static\" until a page opts out of prerender.",
+      "avoid": "A spread config or a defineConfig argument that is not an object literal is not inspected. output: \"static\" with prerender = false in a page still needs an adapter, and that export lives in the page.",
+      "examples": {
+        "pass": "pass/node-adapter",
+        "fail": "fail/server-output"
+      }
+    }
+  ]
+}

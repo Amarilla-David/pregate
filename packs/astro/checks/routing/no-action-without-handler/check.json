@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "astro/routing/no-action-without-handler",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "astro.action-handler",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-action-without-handler",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^defineAction$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": 1,
+                    "kind": "object",
+                    "not": {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "spread_element"
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^handler$"
+                          },
+                          {
+                            "kind": "method_definition",
+                            "has": {
+                              "field": "name",
+                              "regex": "^handler$"
+                            }
+                          },
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?handler[\"']?$"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "files": [
+            "**/src/actions/**/*.ts",
+            "**/src/actions/**/*.mts",
+            "**/src/actions/**/*.cts",
+            "**/src/actions/**/*.js",
+            "**/src/actions/**/*.mjs",
+            "**/src/actions/**/*.cjs"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} defines an action without a handler. defineAction runs the handler on the server; input validation is optional."
+  }
+}

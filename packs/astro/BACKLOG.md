@@ -1,0 +1,10 @@
+# astro backlog
+
+Candidate rules that are not decidable from TypeScript syntax alone. No `.astro` grammar exists in the engine, the same limit as `.vue` and `.svelte`, so everything below stays out of `checks/` until a template grammar lands.
+
+- **`client:*` islands.** `client:load`, `client:idle`, `client:visible`, `client:media`, and `client:only` are directives on a component in a template. Whether a framework component is shipped to the browser is visible only in the `.astro` file that renders it. See [framework components](https://docs.astro.build/en/guides/framework-components/).
+- **`server:defer`.** A server island is the `server:defer` directive. Using it requires an adapter even when `output` stays `"static"`. The directive is in the template, so ASTRO-ADAPTER-001 cannot see it. See [server islands](https://docs.astro.build/en/guides/server-islands/).
+- **Server-only secrets imported into client code.** `astro:env/server` and `import.meta.env` names without a `PUBLIC_` prefix are server-only ([environment variables](https://docs.astro.build/en/guides/environment-variables/)). The client edge is a `client:*` directive or a `<script>` in `.astro`. A `.ts` module can be rendered only on the server or pulled into an island; that import graph crosses a file this grammar does not parse. ASTRO-ENV-001 is the decidable half: the schema cannot set `context: "client"` and `access: "secret"` together.
+- **`astro:env` inside `astro.config.*`.** The env guide says the virtual module cannot be imported from the config file. Left for a follow-up; the config file is parsed, and the import shape is exact.
+- **`prerender = false` without an adapter.** Endpoints can export `prerender`. Flagging the export without knowing that an adapter exists somewhere in the config would report a legal static site. The adapter may also be added by a spread that ASTRO-ADAPTER-001 does not open.
+- **Actions missing from the `server` export.** Every action must be exported from `server` in `src/actions/index.ts`. A `defineAction` in `src/actions/user.ts` that never reaches that object is a cross-file check.

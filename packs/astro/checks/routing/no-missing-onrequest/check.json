@@ -1,0 +1,90 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "astro/routing/no-missing-onrequest",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "astro.middleware-onrequest",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-missing-onrequest",
+          "rule": {
+            "kind": "program",
+            "not": {
+              "has": {
+                "stopBy": "end",
+                "any": [
+                  {
+                    "kind": "export_statement",
+                    "regex": "export\\s+(async\\s+)?function\\s+onRequest\\b"
+                  },
+                  {
+                    "kind": "export_statement",
+                    "regex": "export\\s+(const|let|var)\\s+onRequest\\b"
+                  },
+                  {
+                    "kind": "export_specifier",
+                    "any": [
+                      {
+                        "has": {
+                          "field": "alias",
+                          "regex": "^onRequest$"
+                        }
+                      },
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "has": {
+                                "field": "alias",
+                                "regex": "."
+                              }
+                            }
+                          },
+                          {
+                            "has": {
+                              "field": "name",
+                              "regex": "^onRequest$"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "files": [
+            "**/src/middleware.ts",
+            "**/src/middleware.mts",
+            "**/src/middleware.cts",
+            "**/src/middleware.js",
+            "**/src/middleware.mjs",
+            "**/src/middleware.cjs",
+            "**/src/middleware/index.ts",
+            "**/src/middleware/index.mts",
+            "**/src/middleware/index.cts",
+            "**/src/middleware/index.js",
+            "**/src/middleware/index.mjs",
+            "**/src/middleware/index.cjs"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} does not export a named onRequest. Astro reads that export from src/middleware; a default export is ignored."
+  }
+}

@@ -22,12 +22,16 @@ import { discoverDocumentation } from "./project-discovery.ts";
 // Token, CORS and LLM SDKs make the client-and-agents hardening checks applicable.
 // `svelte` and `@sveltejs/*` use that same shipped-dependency evidence. The package
 // named `svelte`, a `.svelte` file, or `svelte.config.*` also select the Svelte pack.
+// `astro` is only that shipped dependency. `astro.config.*` and `.astro` files do not
+// select it: the engine does not parse `.astro`.
 const CLIENT_SECURITY: [string, string[]] = ["security-audit", ["security-audit/client-and-agents"]];
 const SVELTE: [string, string[]] = ["svelte", ["svelte/runes", "svelte/stores"]];
+const ASTRO: [string, string[]] = ["astro", ["astro/config", "astro/content", "astro/routing"]];
 const DEPENDENCIES: Record<string, [string, string[]]> = {
   next: ["nextjs", ["nextjs/rendering", "nextjs/routing"]],
   react: ["react", ["react/components", "react/hooks"]],
   vue: ["vue", ["vue/reactivity", "vue/sfc"]],
+  astro: ASTRO,
   svelte: SVELTE,
   "drizzle-orm": ["drizzle", ["drizzle/queries", "drizzle/schema"]],
   "@supabase/supabase-js": ["supabase", ["supabase/client", "supabase/storage"]],
@@ -117,10 +121,11 @@ function manifestRecommendations(add: Add, manifests: [string, string][], periph
   }
 }
 
-// Docs sites, example trees, and website folders are not the product. The folder name matches at any
-// depth, so packages/docs and website/ are the same kind of signal. GitHub workflows and a scripts/
-// directory of at most three inventoried files are CI or tooling, not a language project.
-const PERIPHERAL_DIR = /^(?:doc|docs|documentation|website|examples?|samples?|demos?|playground)$/;
+// Docs sites, example trees, fixture trees, and website folders are not the product. The folder
+// name matches at any depth, so packages/docs, examples/, and fixtures/ are the same kind of signal.
+// GitHub workflows and a scripts/ directory of at most three inventoried files are CI or tooling,
+// not a language project.
+const PERIPHERAL_DIR = /^(?:doc|docs|documentation|website|examples?|samples?|demos?|playground|fixtures?)$/;
 const TINY_SCRIPT_FILES = 3;
 
 function peripheralPackPath(files: Files): (path: string) => boolean {
@@ -169,7 +174,7 @@ function peripheralLanguageOnly(language: string, files: Files, peripheral: (pat
 // File evidence recommends Svelte and does not invent an owning workspace. A manifest
 // owner, when one exists, still confines the recommendation the way a Vue declaration does.
 // A `.svelte` file or `svelte.config.*` that exists only under a docs site, examples tree,
-// website, CI workflow, or tiny scripts/ folder does not select the pack.
+// fixtures tree, website, CI workflow, or tiny scripts/ folder does not select the pack.
 function svelteSourceRecommendations(add: Add, files: Files, peripheral: (path: string) => boolean): void {
   if (Object.keys(files).some((path) => /\.svelte$/i.test(path) && !peripheral(path))) add(SVELTE[0], SVELTE[1], ".svelte source detected");
   for (const path of Object.keys(files).filter((path) => /(^|\/)svelte\.config\.[^/]+$/i.test(path) && !peripheral(path)).sort()) add(SVELTE[0], SVELTE[1], `${path} detected`);

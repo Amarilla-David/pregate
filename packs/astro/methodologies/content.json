@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "astro/content",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "ASTRO-SCHEMA-001",
+      "check": "astro/content/no-collection-without-schema",
+      "defaults": {},
+      "severity": "warn",
+      "source": {
+        "work": "Astro documentation, content collections (https://docs.astro.build/en/guides/content-collections/)",
+        "locator": "Defining the collection schema",
+        "paraphrase": "A collection schema is optional and recommended. When present, it is a Zod schema from astro/zod and validates every entry."
+      },
+      "why": "Without a schema, a missing or mistyped frontmatter field shows up later, at the template that reads it.",
+      "fixHint": "Add schema: z.object({ ... }) and import z from \"astro/zod\". A schema may be a function, as in schema: ({ image }) => z.object({ ... }).",
+      "avoid": "A spread object is not inspected, because the schema may arrive through the spread. A schema value that is not Zod is not distinguished from one that is. defineCollection outside src/content.config.* or src/content/config.* is not read.",
+      "examples": {
+        "pass": "pass/zod-object",
+        "fail": "fail/loader-only"
+      }
+    },
+    {
+      "id": "ASTRO-LOADER-001",
+      "check": "astro/content/no-collection-without-loader",
+      "defaults": {},
+      "severity": "deny",
+      "versionGate": {
+        "package": "astro",
+        "range": ">=5.0.0",
+        "severity": "deny",
+        "unmatched": "skip"
+      },
+      "source": {
+        "work": "Astro documentation, content collections (https://docs.astro.build/en/guides/content-collections/)",
+        "locator": "Defining collections",
+        "paraphrase": "Astro 5 build-time and live collections require a loader. The legacy type: \"content\" config does not supply one."
+      },
+      "why": "Astro cannot load the entries, so the collection is empty or the build fails.",
+      "fixHint": "Pass loader: glob({ pattern, base }) or loader: file(...), or a live loader for defineLiveCollection.",
+      "avoid": "A spread object is not inspected. The rule does not run when the nearest astro declaration can still install Astro 4, or when no astro declaration is readable. Astro 4 keeps type and schema in src/content/config.ts.",
+      "examples": {
+        "pass": "pass/glob-loader",
+        "fail": "fail/legacy-type"
+      }
+    }
+  ]
+}

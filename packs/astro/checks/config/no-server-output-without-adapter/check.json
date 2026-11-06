@@ -1,0 +1,107 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "astro/config/no-server-output-without-adapter",
+  "version": "1.0.0",
+  "area": "config",
+  "cardinality": "singleton",
+  "dimension": "astro.server-adapter",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-server-output-without-adapter",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^defineConfig$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": 1,
+                    "kind": "object",
+                    "all": [
+                      {
+                        "has": {
+                          "kind": "pair",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "key",
+                                "regex": "^[\"']?output[\"']?$"
+                              }
+                            },
+                            {
+                              "has": {
+                                "field": "value",
+                                "regex": "^[\"']server[\"']"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "has": {
+                            "any": [
+                              {
+                                "kind": "spread_element"
+                              },
+                              {
+                                "kind": "shorthand_property_identifier",
+                                "regex": "^adapter$"
+                              },
+                              {
+                                "kind": "method_definition",
+                                "has": {
+                                  "field": "name",
+                                  "regex": "^adapter$"
+                                }
+                              },
+                              {
+                                "kind": "pair",
+                                "has": {
+                                  "field": "key",
+                                  "regex": "^[\"']?adapter[\"']?$"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "files": [
+            "**/astro.config.ts",
+            "**/astro.config.mts",
+            "**/astro.config.cts",
+            "**/astro.config.js",
+            "**/astro.config.mjs",
+            "**/astro.config.cjs"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} sets output to server without an adapter. On-demand rendering needs an adapter such as @astrojs/node."
+  }
+}

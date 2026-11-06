@@ -10,8 +10,8 @@ export interface Stack {
   recommended: "backend-clean-ddd" | "functional-ts" | "legacy-safe" | "integrity-only" | "python-starter" | "go-starter" | "rust-starter" | "mixed-starter";
 }
 interface EngineVersions { engine: string; core: string }
-const LANGUAGES: Record<string, string> = { ts: "TypeScript", tsx: "TypeScript", mts: "TypeScript", cts: "TypeScript", js: "JavaScript", jsx: "JavaScript", mjs: "JavaScript", cjs: "JavaScript", py: "Python", go: "Go", rs: "Rust", java: "Java", rb: "Ruby", vue: "Vue", svelte: "Svelte", c: "C", h: "C", cc: "C++", cpp: "C++", hpp: "C++", cs: "C#", php: "PHP", kt: "Kotlin", swift: "Swift", dart: "Dart" };
-const FRAMEWORKS = ["next", "react", "vue", "svelte", "express", "fastify", "@nestjs/core", "hono"];
+const LANGUAGES: Record<string, string> = { ts: "TypeScript", tsx: "TypeScript", mts: "TypeScript", cts: "TypeScript", js: "JavaScript", jsx: "JavaScript", mjs: "JavaScript", cjs: "JavaScript", py: "Python", go: "Go", rs: "Rust", java: "Java", rb: "Ruby", vue: "Vue", svelte: "Svelte", astro: "Astro", c: "C", h: "C", cc: "C++", cpp: "C++", hpp: "C++", cs: "C#", php: "PHP", kt: "Kotlin", swift: "Swift", dart: "Dart" };
+const FRAMEWORKS = ["next", "react", "vue", "svelte", "astro", "express", "fastify", "@nestjs/core", "hono"];
 const LAYERS = new Set(["core", "domain", "application", "ports", "infra", "infrastructure", "shell", "adapters", "presentation"]);
 // Conventional folder names and the inward direction each may import. `app` counts only beside
 // a domain or core folder, so a framework's app/ router is not mistaken for a layer.

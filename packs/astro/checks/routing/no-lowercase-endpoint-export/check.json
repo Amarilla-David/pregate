@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "astro/routing/no-lowercase-endpoint-export",
+  "version": "1.0.0",
+  "area": "routing",
+  "cardinality": "singleton",
+  "dimension": "astro.lowercase-endpoint",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-lowercase-endpoint-export",
+          "rule": {
+            "any": [
+              {
+                "kind": "export_statement",
+                "regex": "^\\s*export\\s+((async\\s+)?function\\s*\\*?\\s*|(const|let|var)\\s+)(get|post|put|patch|options|head|all)\\b"
+              },
+              {
+                "kind": "export_specifier",
+                "any": [
+                  {
+                    "has": {
+                      "field": "alias",
+                      "regex": "^(get|post|put|patch|options|head|all)$"
+                    }
+                  },
+                  {
+                    "all": [
+                      {
+                        "not": {
+                          "has": {
+                            "field": "alias",
+                            "regex": "."
+                          }
+                        }
+                      },
+                      {
+                        "has": {
+                          "field": "name",
+                          "regex": "^(get|post|put|patch|options|head|all)$"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "files": [
+            "**/src/pages/**/*.ts",
+            "**/src/pages/**/*.mts",
+            "**/src/pages/**/*.cts",
+            "**/src/pages/**/*.js",
+            "**/src/pages/**/*.mjs",
+            "**/src/pages/**/*.cjs"
+          ],
+          "ignores": [
+            "**/_*",
+            "**/_*/**"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} exports a lowercase HTTP handler from src/pages. Astro calls GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, and ALL."
+  }
+}

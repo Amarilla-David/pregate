@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/middleware.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 1
+      }
+    ]
+  },
+  "trap": {
+    "family": "default-export",
+    "origin": "forge",
+    "discovered": "2026-11-06",
+    "note": "Naming the default export onRequest does not make it the named export Astro reads. Write export function onRequest or export const onRequest."
+  }
+}

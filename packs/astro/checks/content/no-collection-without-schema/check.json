@@ -1,0 +1,90 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "astro/content/no-collection-without-schema",
+  "version": "1.0.0",
+  "area": "content",
+  "cardinality": "singleton",
+  "dimension": "astro.collection-schema",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-collection-without-schema",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "^(defineCollection|defineLiveCollection)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": 1,
+                    "kind": "object",
+                    "not": {
+                      "has": {
+                        "any": [
+                          {
+                            "kind": "spread_element"
+                          },
+                          {
+                            "kind": "shorthand_property_identifier",
+                            "regex": "^schema$"
+                          },
+                          {
+                            "kind": "method_definition",
+                            "has": {
+                              "field": "name",
+                              "regex": "^schema$"
+                            }
+                          },
+                          {
+                            "kind": "pair",
+                            "has": {
+                              "field": "key",
+                              "regex": "^[\"']?schema[\"']?$"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "files": [
+            "**/src/content.config.ts",
+            "**/src/content.config.mts",
+            "**/src/content.config.cts",
+            "**/src/content.config.js",
+            "**/src/content.config.mjs",
+            "**/src/content.config.cjs",
+            "**/src/content/config.ts",
+            "**/src/content/config.mts",
+            "**/src/content/config.cts",
+            "**/src/content/config.js",
+            "**/src/content/config.mjs",
+            "**/src/content/config.cjs"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} defines a content collection without a schema. Add schema: z.object(...) and import z from \"astro/zod\" so entry data is validated."
+  }
+}
