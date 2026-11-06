@@ -1,0 +1,5 @@
+import { defineMiddleware } from "astro:middleware";
+
+export default defineMiddleware(async (_context, next) => {
+  return next();
+});

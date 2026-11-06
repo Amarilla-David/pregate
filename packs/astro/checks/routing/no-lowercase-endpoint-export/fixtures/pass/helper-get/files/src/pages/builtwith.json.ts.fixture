@@ -1,0 +1,7 @@
+function get(id: string): string {
+  return id;
+}
+
+export function GET({ params }: { params: { id?: string } }) {
+  return new Response(get(params.id ?? ""));
+}

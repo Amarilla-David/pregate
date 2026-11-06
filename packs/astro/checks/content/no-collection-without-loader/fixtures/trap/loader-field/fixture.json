@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/content.config.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 4
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-key",
+    "origin": "forge",
+    "discovered": "2026-11-06",
+    "note": "A Zod field named loader is not the collection loader. The loader property has to sit on the defineCollection object."
+  }
+}

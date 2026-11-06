@@ -1,0 +1,3 @@
+const read = () => new Response("ok");
+
+export { read as get };

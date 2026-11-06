@@ -1,0 +1,8 @@
+import { defineAction } from "astro:actions";
+import { z } from "astro/zod";
+
+export const server = {
+  like: defineAction({
+    input: z.object({ postId: z.string() }),
+  }),
+};

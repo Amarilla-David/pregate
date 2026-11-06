@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/actions/index.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-key",
+    "origin": "forge",
+    "discovered": "2026-11-06",
+    "note": "A Zod field named handler is not the action handler. The handler property has to sit on the defineAction object."
+  }
+}

@@ -30,12 +30,12 @@ For one combined selection, use `guide --preview --packs <ns,ns>` or an edited `
 
 ## Bundled library inventory
 
-45 optional packs; 1073 distinct check IDs. Counts do not measure semantic coverage or precision.
+46 optional packs; 1080 distinct check IDs. Counts do not measure semantic coverage or precision.
 
 | Checker family | Checks | Evidence needed for enforcement |
 | --- | ---: | --- |
 | Project fitness obligations | 577 | Reviewed current project assertions; unbound means UNVERIFIED |
-| Static pattern, import and change checks | 479 | Precise applicability, valid alternatives and passing/failing/trap controls |
+| Static pattern, import and change checks | 486 | Precise applicability, valid alternatives and passing/failing/trap controls |
 | Metrics | 17 | A measured project budget; a threshold is not a universal invariant |
 
 These are implementation counts, not a certified enforce-ready total. Prefer stable conditions to prescribed mechanisms; keep contextual policies optional and heuristics advisory until admitted. See [invariant enforcement criteria](guides/invariant-enforcement.md).
@@ -45,6 +45,7 @@ These are implementation counts, not a certified enforce-ready total. Prefer sta
 | [agent-practices](../packs/agent-practices/REFERENCE.md) | practice | 1.0.0 | 22 | `agent-practices/behavior-testing` (preview), `agent-practices/domain-ownership` (preview), `agent-practices/launch-safety` (preview), `agent-practices/security-review` (preview) |
 | [angular](../packs/angular/REFERENCE.md) | library | 1.2.0 | 11 | `angular/components` (complete), `angular/rxjs` (complete) |
 | [architecture](../packs/architecture/REFERENCE.md) | pattern | 1.3.0 | 21 | `architecture/anti-corruption` (complete), `architecture/clean-architecture` (complete), `architecture/cqrs` (complete), `architecture/dependency-rule` (complete), `architecture/functional-core-imperative-shell` (preview), `architecture/hexagonal` (complete), `architecture/layered` (complete), `architecture/modular-monolith` (complete), `architecture/repository` (complete), `architecture/vertical-slice` (complete) |
+| [astro](../packs/astro/REFERENCE.md) | library | 1.0.0 | 7 | `astro/config` (complete), `astro/content` (complete), `astro/routing` (complete) |
 | [authjs](../packs/authjs/REFERENCE.md) | library | 1.2.0 | 12 | `authjs/config` (complete), `authjs/session` (complete) |
 | [clean-code](../packs/clean-code/REFERENCE.md) | practice | 1.2.0 | 5 | `clean-code/clean-code` (complete) |
 | [consumer-saas](../packs/consumer-saas/REFERENCE.md) | invariants | 1.0.0 | 39 | `consumer-saas/readiness` (preview) |

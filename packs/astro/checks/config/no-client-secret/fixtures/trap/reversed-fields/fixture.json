@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "astro.config.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 6
+      }
+    ]
+  },
+  "trap": {
+    "family": "property-order",
+    "origin": "forge",
+    "discovered": "2026-11-06",
+    "note": "Property order and which envField helper is used do not make a client secret valid. context and access are still client and secret."
+  }
+}

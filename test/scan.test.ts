@@ -129,7 +129,7 @@ test("layered folders suggest the language's architecture methodology with layer
   expect(Object.keys(python.layers!)).toEqual(["domain", "infra"]);
 });
 
-test("docs sites, examples, websites, CI workflows, and tiny scripts do not recommend a pack on their own", () => {
+test("docs sites, examples, fixtures, websites, CI workflows, and tiny scripts do not recommend a pack on their own", () => {
   const names = (files: Record<string, string>, languages: string[] = []) => recommendPacks(files, languages).map(item => item.ns);
   const docs = {
     "packages/zod/src/index.ts": "export const schema = 1;\n",
@@ -142,8 +142,10 @@ test("docs sites, examples, websites, CI workflows, and tiny scripts do not reco
     "packages/docs/app/page.tsx": docs["packages/docs/app/page.tsx"]!,
     "website/package.json": '{"dependencies":{"next":"15.0.0"}}',
     "examples/demo/package.json": '{"dependencies":{"react":"19.0.0"}}',
+    "fixtures/app/package.json": '{"dependencies":{"astro":"^5.0.0","react":"19.0.0"}}',
     "docs/app/page.tsx": "export const page = 1;\n",
   }, ["TypeScript"])).toEqual([]);
+  expect(names({ "fixtures/App.svelte": "<h1>Hi</h1>\n", "fixtures/svelte.config.js": "export default {};\n" })).toEqual([]);
   expect(names({
     ".github/workflows/release-notes.py": "print('notes')\n",
     "src/lib.rs": "pub fn f() {}\n",
@@ -181,6 +183,38 @@ test("docs sites, examples, websites, CI workflows, and tiny scripts do not reco
   expect(layered.reasons[0]).toContain("src/domain, src/infra");
   expect(layered.layers).toEqual({ domain: { paths: ["src/domain/**"], mayImport: [], kind: "core" },
     infra: { paths: ["src/infra/**"], mayImport: ["domain"], kind: "adapter" } });
+});
+
+test("scan recommends astro only for a real dependency outside docs, examples, and fixtures", () => {
+  const astro = recommendPacks({
+    "package.json": '{"dependencies":{"astro":"^5.0.0"}}',
+    "astro.config.mjs": "export default {};\n",
+    "src/pages/index.astro": "---\n---\n",
+  }, ["TypeScript"]).find(item => item.ns === "astro")!;
+  expect(astro.methodologies).toEqual(["astro/config", "astro/content", "astro/routing"]);
+  expect(astro.reasons).toEqual(["package.json declares astro"]);
+  expect(astro.scope).toEqual({ include: ["**"], exclude: [] });
+  const peer = recommendPacks({
+    "package.json": '{"dependencies":{"left-pad":"1.0.0"}}',
+    "packages/web/package.json": '{"peerDependencies":{"astro":"^5.0.0"}}',
+    "packages/web/src/content.config.ts": "export const collections = {};\n",
+  }, ["TypeScript"]).find(item => item.ns === "astro")!;
+  expect(peer.reasons).toEqual(["packages/web/package.json declares astro"]);
+  expect(peer.scope).toEqual({ include: ["packages/web/**"], exclude: [] });
+  expect(recommendPacks({ "package.json": '{"devDependencies":{"astro":"^5.0.0"}}' }, []).some(item => item.ns === "astro")).toBe(false);
+  expect(recommendPacks({ "package.json": '{"dependencies":{"@astrojs/react":"^4.0.0","eslint-plugin-astro":"1.0.0"}}' }, []).some(item => item.ns === "astro")).toBe(false);
+  expect(recommendPacks({ "package.json": '{"name":"astro"}', "astro.config.ts": "export default {};\n", "src/pages/index.astro": "" }, []).some(item => item.ns === "astro")).toBe(false);
+  for (const path of ["docs/site/package.json", "examples/blog/package.json", "fixtures/app/package.json"]) {
+    expect(recommendPacks({ [path]: '{"dependencies":{"astro":"^5.0.0"}}' }, []).some(item => item.ns === "astro"), path).toBe(false);
+  }
+  const selected = recommendPacks({
+    "package.json": '{"dependencies":{"astro":"^5.0.0"}}',
+    "docs/package.json": '{"dependencies":{"astro":"^5.0.0"}}',
+    "examples/starter/package.json": '{"dependencies":{"astro":"^5.0.0"}}',
+    "fixtures/app/package.json": '{"dependencies":{"astro":"^5.0.0"}}',
+  }, []).find(item => item.ns === "astro")!;
+  expect(selected.reasons).toEqual(["package.json declares astro"]);
+  expect(selected.scope).toEqual({ include: ["**"], exclude: ["docs/**", "examples/starter/**", "fixtures/app/**"] });
 });
 
 test("clean-code and testing are suggested only where their checks read real source", () => {

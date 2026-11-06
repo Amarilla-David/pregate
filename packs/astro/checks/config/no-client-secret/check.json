@@ -1,0 +1,97 @@
+{
+  "$schema": "../../../../../schema/check.v1.json",
+  "id": "astro/config/no-client-secret",
+  "version": "1.0.0",
+  "area": "config",
+  "cardinality": "singleton",
+  "dimension": "astro.client-secret",
+  "minSeverity": null,
+  "params": {},
+  "impl": {
+    "kind": "pattern",
+    "patterns": {
+      "typescript": [
+        {
+          "id": "no-client-secret",
+          "rule": {
+            "kind": "call_expression",
+            "all": [
+              {
+                "has": {
+                  "field": "function",
+                  "regex": "envField\\.(string|number|boolean|enum)$"
+                }
+              },
+              {
+                "has": {
+                  "field": "arguments",
+                  "has": {
+                    "nthChild": 1,
+                    "kind": "object",
+                    "all": [
+                      {
+                        "has": {
+                          "kind": "pair",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "key",
+                                "regex": "^[\"']?context[\"']?$"
+                              }
+                            },
+                            {
+                              "has": {
+                                "field": "value",
+                                "regex": "^[\"']client[\"']"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "has": {
+                          "kind": "pair",
+                          "all": [
+                            {
+                              "has": {
+                                "field": "key",
+                                "regex": "^[\"']?access[\"']?$"
+                              }
+                            },
+                            {
+                              "has": {
+                                "field": "value",
+                                "regex": "^[\"']secret[\"']"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "files": [
+            "**/astro.config.ts",
+            "**/astro.config.mts",
+            "**/astro.config.cts",
+            "**/astro.config.js",
+            "**/astro.config.mjs",
+            "**/astro.config.cjs"
+          ]
+        }
+      ]
+    }
+  },
+  "phase": [
+    "pre",
+    "stop",
+    "commit",
+    "ci"
+  ],
+  "feedback": {
+    "message": "{symbol} marks a client environment variable as secret. Client variables are public; use context: \"server\" for a secret."
+  }
+}

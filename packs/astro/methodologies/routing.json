@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../schema/methodology.v1.json",
+  "id": "astro/routing",
+  "version": "1.0.0",
+  "status": "complete",
+  "conflicts": [],
+  "invariants": [
+    {
+      "id": "ASTRO-MW-001",
+      "check": "astro/routing/no-missing-onrequest",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Astro documentation, middleware (https://docs.astro.build/en/guides/middleware/)",
+        "locator": "Basic usage",
+        "paraphrase": "src/middleware.ts, or src/middleware/index.ts, must export a named onRequest function. It must not be a default export."
+      },
+      "why": "Astro does not call the file, so locals, auth, and rewrites never run.",
+      "fixHint": "Export onRequest as a function, as export const onRequest = defineMiddleware(...), or re-export that name. sequence() is a value you assign to onRequest.",
+      "avoid": "A destructuring export such as export const { onRequest } = handlers is reported. The check reads src/middleware and src/middleware/index only.",
+      "examples": {
+        "pass": "pass/define-middleware",
+        "fail": "fail/default-export"
+      }
+    },
+    {
+      "id": "ASTRO-ROUTE-001",
+      "check": "astro/routing/no-lowercase-endpoint-export",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Astro documentation, endpoints (https://docs.astro.build/en/guides/endpoints/)",
+        "locator": "HTTP methods",
+        "paraphrase": "An endpoint exports a function named for the HTTP method. Astro calls GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, and ALL."
+      },
+      "why": "A lowercase export is not a handler, so the route responds as if that method were missing.",
+      "fixHint": "Rename the export to the uppercase method. A local helper named get can stay unexported.",
+      "avoid": "Files and directories under src/pages whose names start with _ are not routes and are ignored. delete is a reserved word and is not matched as a binding. A non-exported function is not a handler.",
+      "examples": {
+        "pass": "pass/uppercase",
+        "fail": "fail/lowercase-get"
+      }
+    },
+    {
+      "id": "ASTRO-ACTION-001",
+      "check": "astro/routing/no-action-without-handler",
+      "defaults": {},
+      "severity": "deny",
+      "source": {
+        "work": "Astro documentation, actions (https://docs.astro.build/en/guides/actions/)",
+        "locator": "defineAction handler",
+        "paraphrase": "An action's handler is the function Astro runs on the server. input is optional and validates with Zod when you set it."
+      },
+      "why": "An action without a handler has no server function to call.",
+      "fixHint": "Add handler: async (input) => ... or the method form async handler(input) {}. Export the action from the server object in src/actions/index.ts.",
+      "avoid": "A spread object is not inspected. defineAction outside src/actions/ is not read. Whether the action is also exported from the server object is a cross-file check.",
+      "examples": {
+        "pass": "pass/handler-property",
+        "fail": "fail/input-only"
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+import { defineConfig } from "astro/config";
+
+const shared = { adapter: node() };
+
+export default defineConfig({
+  ...shared,
+  output: "server",
+});

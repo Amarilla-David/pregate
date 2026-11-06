@@ -1,0 +1,9 @@
+import { defineConfig, envField } from "astro/config";
+
+export default defineConfig({
+  env: {
+    schema: {
+      MODE: envField.enum({ context: "client", access: "secret", values: ["a", "b"] }),
+    },
+  },
+});

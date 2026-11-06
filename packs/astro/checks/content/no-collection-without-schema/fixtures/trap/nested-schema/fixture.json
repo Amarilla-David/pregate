@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../../schema/fixture.v1.json",
+  "language": "typescript",
+  "params": {},
+  "target": "src/content.config.ts",
+  "before": null,
+  "expect": {
+    "verdict": "fail",
+    "violations": [
+      {
+        "line": 5
+      }
+    ]
+  },
+  "trap": {
+    "family": "nested-key",
+    "origin": "forge",
+    "discovered": "2026-11-06",
+    "note": "A schema key nested under another property is not the collection schema. The schema property has to sit on the defineCollection object."
+  }
+}
