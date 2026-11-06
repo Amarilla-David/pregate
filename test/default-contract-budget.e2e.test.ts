@@ -34,8 +34,9 @@ import { ENGINE_FILE } from "../src/platform.ts";
 //   CC-FN-001        49/24   → 49/24 advisory
 //   EVA-CAST-001     42/11   → 42/11 advisory
 //   CC-ER-002        16/8    → 16/8  still deny (swallowed catch)
-//   JS-AWAIT-001     25/14   → 25/14 already advisory
-//   JS-THROW-001     3/0     → 3/0   still deny
+//   JS-AWAIT-001     25/14   → 25/14 already advisory when javascript/safety is selected
+//   JS-THROW-001     3/0     → 3/0   still deny when javascript/safety is selected
+// got keeps those rules out of the default contract: its only JavaScript is documentation/examples.
 //   TS-EXPORT-ANY-001 2/0   → 0     opt-in
 //   CC-FN-002        1/1     → 1/1   advisory
 //   TS-NS-001        1/0     → 1/0   advisory
@@ -117,9 +118,12 @@ test.skipIf(!ENABLED)("fetched got and zod stay under the default-contract findi
     expect(rules.has("clean-code/CC-NEST-001"), pin.name).toBe(true);
     expect(rules.has("clean-code/CC-ER-002"), pin.name).toBe(true);
     const preset = JSON.parse(readFileSync(join(dir, ".pregate/preset.json"), "utf8")) as { methodologies: string[] };
-    for (const id of ["clean-code/clean-code", "testing/tdd", "core/pregate-integrity", "typescript/strict-types", "typescript/anti-evasion", "javascript/safety"]) {
-      expect(preset.methodologies, pin.name).toContain(id);
+    for (const id of ["clean-code/clean-code", "testing/tdd", "core/pregate-integrity", "typescript/strict-types", "typescript/anti-evasion"]) {
+      expect(preset.methodologies, `${pin.name} ${id}`).toContain(id);
     }
+    // got's only JavaScript is documentation/examples, so it must not select javascript/safety.
+    // zod has primary JavaScript outside that tree and still must.
+    expect(preset.methodologies.includes("javascript/safety"), pin.name).toBe(pin.name !== "got");
     let lines = 0;
     for (const file of report.fileCoverage) {
       for (const line of readFileSync(join(dir, file.path), "utf8").split("\n")) if (line.trim()) lines++;

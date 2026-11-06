@@ -209,6 +209,48 @@ test("scan and guide show proposed source coverage without an active contract an
   expect(preview.text).toContain("registered harness hooks");
 });
 
+test("scan ignores a docs-only Next app and a CI Python script, and still detects a real app", () => {
+  const packs = (name: string, files: Record<string, string>) => {
+    const out = project(name, files).cli(["scan", "--json"]);
+    expect(out.code, out.text).toBe(0);
+    return JSON.parse(out.text).recommendations as { ns: string; reasons: string[] }[];
+  };
+  const docs = packs("docs site next", {
+    "packages/zod/src/index.ts": "export const schema = 1;\n",
+    "packages/docs/package.json": JSON.stringify({ dependencies: { next: "15.0.0", react: "19.0.0" } }),
+    "packages/docs/app/page.tsx": "export const page = 1;\n",
+  });
+  expect(docs.map(item => item.ns)).not.toContain("nextjs");
+  expect(docs.map(item => item.ns)).not.toContain("react");
+  expect(docs.map(item => item.ns)).toContain("typescript");
+  const ci = packs("ci python script", {
+    "src/lib.rs": "pub fn f() {}\n",
+    "Cargo.toml": "[package]\nname = \"clap\"\nversion = \"0.1.0\"\n",
+    ".github/workflows/release-notes.py": "print('notes')\n",
+  });
+  expect(ci.map(item => item.ns)).not.toContain("python");
+  expect(ci.map(item => item.ns)).toContain("rust");
+  const root = packs("root next app", {
+    "package.json": JSON.stringify({ dependencies: { next: "15.0.0", react: "19.0.0" } }),
+    "app/page.tsx": "export const page = 1;\n",
+    "packages/docs/package.json": JSON.stringify({ dependencies: { next: "15.0.0", react: "19.0.0" } }),
+  });
+  expect(root.find(item => item.ns === "nextjs")!.reasons).toEqual(["package.json declares next"]);
+  expect(root.map(item => item.ns)).toEqual(expect.arrayContaining(["nextjs", "react"]));
+  const apps = packs("apps next app", {
+    "apps/web/package.json": JSON.stringify({ dependencies: { next: "15.0.0", react: "19.0.0" } }),
+    "apps/web/app/page.tsx": "export const page = 1;\n",
+  });
+  expect(apps.find(item => item.ns === "nextjs")!.reasons).toEqual(["apps/web/package.json declares next"]);
+  expect(apps.map(item => item.ns)).toEqual(expect.arrayContaining(["nextjs", "react"]));
+  const python = packs("python project", {
+    "pyproject.toml": "[project]\nname = \"demo\"\n",
+    "src/app/__init__.py": "value = 1\n",
+    ".github/workflows/release-notes.py": "print('notes')\n",
+  });
+  expect(python.map(item => item.ns)).toContain("python");
+});
+
 test("a new repo proposes documentation and stack scanning plus a custom pack in the first combined review", () => {
   const p = project("documented onboarding", { ...nextFiles, "README.md": "# Booking\n\nA booking must belong to one tenant.\n\n```ts\nconst example = 'This must not become a requirement.';\n```\n",
     "docs/domain.md": "# Domain\n\n- A cancelled booking must release its capacity.\n" });

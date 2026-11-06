@@ -63,6 +63,12 @@ test("scan recommends svelte for the package named svelte, Svelte sources, confi
   expect(recommendPacks({ "apps/web/svelte.config.mjs": "" }, []).find(item => item.ns === "svelte")!.reasons).toEqual(["apps/web/svelte.config.mjs detected"]);
   expect(recommendPacks({ "package.json": '{"dependencies":{"eslint-plugin-svelte":"3","svelte-check":"4"}}' }, []).some(item => item.ns === "svelte")).toBe(false);
   expect(recommendPacks({ "package.json": '{"name":"svelte-kit","devDependencies":{"svelte":"^5","@sveltejs/kit":"^2"}}' }, []).some(item => item.ns === "svelte")).toBe(false);
+  expect(recommendPacks({ "docs/App.svelte": "<h1>Docs</h1>\n", "examples/Widget.svelte": "" }, []).some(item => item.ns === "svelte")).toBe(false);
+  expect(recommendPacks({ "packages/docs/svelte.config.js": "export default {};\n" }, []).some(item => item.ns === "svelte")).toBe(false);
+  expect(recommendPacks({ "packages/docs/package.json": '{"dependencies":{"svelte":"^5"}}', "docs/App.svelte": "" }, []).some(item => item.ns === "svelte")).toBe(false);
+  const kept = recommendPacks({ "src/App.svelte": "", "docs/Guide.svelte": "", "examples/Widget.svelte": "" }, []);
+  expect(kept.find(item => item.ns === "svelte")).toEqual({
+    ns: "svelte", methodologies: ["svelte/runes", "svelte/stores"], reasons: [".svelte source detected"] });
 });
 
 test("proposed scope uses the initial recipe and detected roots without hiding unsupported files or activating a contract", () => {
@@ -121,6 +127,60 @@ test("layered folders suggest the language's architecture methodology with layer
   const python = recommendPacks({ "app/domain/order.py": "", "app/infra/db.py": "" }, ["Python"]).find(item => item.ns === "python")!;
   expect(python.methodologies).toEqual(["python/quality", "python/architecture"]);
   expect(Object.keys(python.layers!)).toEqual(["domain", "infra"]);
+});
+
+test("docs sites, examples, websites, CI workflows, and tiny scripts do not recommend a pack on their own", () => {
+  const names = (files: Record<string, string>, languages: string[] = []) => recommendPacks(files, languages).map(item => item.ns);
+  const docs = {
+    "packages/zod/src/index.ts": "export const schema = 1;\n",
+    "packages/docs/package.json": '{"dependencies":{"next":"15.0.0","react":"19.0.0"},"devDependencies":{"vitest":"4.0.0"}}',
+    "packages/docs/app/page.tsx": "export const page = 1;\n",
+  };
+  expect(names(docs, ["TypeScript"])).toEqual(["clean-code", "typescript"]);
+  expect(names({
+    "packages/docs/package.json": docs["packages/docs/package.json"]!,
+    "packages/docs/app/page.tsx": docs["packages/docs/app/page.tsx"]!,
+    "website/package.json": '{"dependencies":{"next":"15.0.0"}}',
+    "examples/demo/package.json": '{"dependencies":{"react":"19.0.0"}}',
+    "docs/app/page.tsx": "export const page = 1;\n",
+  }, ["TypeScript"])).toEqual([]);
+  expect(names({
+    ".github/workflows/release-notes.py": "print('notes')\n",
+    "src/lib.rs": "pub fn f() {}\n",
+    "Cargo.toml": "[package]\nname = \"clap\"\nversion = \"0.1.0\"\n",
+  }, ["Python", "Rust"])).toEqual(["rust", "security-audit"]);
+  expect(names({ "scripts/release.py": "print(1)\n", "scripts/notes.py": "" }, ["Python"])).toEqual([]);
+  expect(names({ "scripts/a.py": "", "scripts/b.py": "", "scripts/c.py": "" }, ["Python"])).toEqual([]);
+  expect(names({ "scripts/a.py": "", "scripts/b.py": "", "scripts/c.py": "", "scripts/d.py": "" }, ["Python"])).toContain("python");
+  const app = recommendPacks({
+    "apps/web/package.json": '{"dependencies":{"next":"15.0.0","react":"19.0.0"}}',
+    "apps/web/app/page.tsx": "export const page = 1;\n",
+    "packages/docs/package.json": docs["packages/docs/package.json"]!,
+  }, ["TypeScript"]);
+  expect(app.find(item => item.ns === "nextjs")).toMatchObject({
+    reasons: ["apps/web/package.json declares next"], scope: { include: ["apps/web/**"], exclude: [] } });
+  expect(app.find(item => item.ns === "react")!.reasons).toEqual(["apps/web/package.json declares react"]);
+  const root = recommendPacks({
+    "package.json": '{"dependencies":{"next":"15.0.0","react":"19.0.0"}}',
+    "app/page.tsx": "export const page = 1;\n",
+    "packages/docs/package.json": docs["packages/docs/package.json"]!,
+  }, ["TypeScript"]);
+  expect(root.find(item => item.ns === "nextjs")).toMatchObject({
+    reasons: ["package.json declares next"], scope: { include: ["**"], exclude: ["packages/docs/**"] } });
+  const python = recommendPacks({
+    "pyproject.toml": "[project]\nname = \"demo\"\n",
+    "src/app/__init__.py": "",
+    ".github/workflows/release-notes.py": "print('notes')\n",
+    "scripts/release.py": "print(1)\n",
+  }, ["Python"]);
+  expect(python.map(item => item.ns)).toEqual(["python", "security-audit"]);
+  expect(names({ "docs/domain/order.ts": "", "docs/infra/db.ts": "" }, ["TypeScript"])).not.toContain("architecture");
+  const layered = recommendPacks({
+    "src/domain/order.ts": "", "src/infra/db.ts": "", "docs/domain/page.ts": "", "docs/infra/db.ts": "",
+  }, ["TypeScript"]).find(item => item.ns === "architecture")!;
+  expect(layered.reasons[0]).toContain("src/domain, src/infra");
+  expect(layered.layers).toEqual({ domain: { paths: ["src/domain/**"], mayImport: [], kind: "core" },
+    infra: { paths: ["src/infra/**"], mayImport: ["domain"], kind: "adapter" } });
 });
 
 test("clean-code and testing are suggested only where their checks read real source", () => {

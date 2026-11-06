@@ -58,6 +58,17 @@ test("scan --json recommends svelte for a small Svelte project", () => {
   });
 }, 90_000);
 
+test("scan --json does not recommend svelte from a docs or examples component alone", () => {
+  const result = scan("docs-svelte", {
+    "docs/App.svelte": "<h1>Docs</h1>\n",
+    "examples/Widget.svelte": "<p>Example</p>\n",
+    "packages/docs/svelte.config.js": "export default {};\n",
+    "src/index.ts": "export const value = 1;\n",
+  });
+  expect(result.code, result.stdout + result.stderr).toBe(0);
+  expect(svelteOf(result.stdout).svelte).toBeUndefined();
+}, 90_000);
+
 test("scan --json recommends svelte for the Svelte repository itself", () => {
   const result = scan("svelte-repo", {
     "package.json": '{"name":"svelte-monorepo","devDependencies":{"svelte":"workspace:*"}}\n',
