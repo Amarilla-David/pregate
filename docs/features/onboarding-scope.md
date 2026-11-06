@@ -79,8 +79,14 @@ A package named `svelte` does too, because that package is Svelte and does not
 depend on `svelte`. A `.svelte` file or `svelte.config.*` also recommends
 Svelte; those files do not add a package owner. A similarly named dependency
 does not count as a declaration of Svelte. A `.svelte` file, `svelte.config.*`,
-or Svelte dependency that appears only under a docs site, examples tree, or
-website folder does not recommend Svelte. The same evidence in primary source still does.
+or Svelte dependency that appears only under a docs site, examples tree,
+fixtures folder, or website folder does not recommend Svelte. The same evidence
+in primary source still does.
+
+An exact `hono` dependency or peer dependency recommends `hono/routing` and
+`hono/middleware` in the package that declares it. A devDependency does not.
+A declaration that appears only under `docs/`, `examples/`, or `fixtures/`
+does not recommend Hono. The same dependency in the app still does.
 
 When nested related and unrelated owners cannot be represented by one include/
 exclude policy, scan reports `scopeProblems`; choose an explicit reviewed scope
