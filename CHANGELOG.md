@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- The python pack (1.4.0) adds `PY-EXCEPT-002`, an advisory warning when an `except Exception` or `except BaseException` handler body is only `pass`, `...`, or comments, matching the intent of core `CC-ER-002` for Python. `PY-EXCEPT-001` (bare except) is unchanged.
+
 ## [0.0.4] - 2026-11-07
 
 What changed for people installing or gating a repository. The library has 48 optional packs, including new Astro, TanStack Query, and Hono packs. On Windows, setup warns when Codex has not confirmed hook trust, the demo skips a PATH entry it cannot read, and the verifier keeps a report if the run is killed. Notes: [0.0.4](docs/releases/0.0.4.md). The previous public tag is [v0.0.3](https://github.com/pedroknigge/pregate/releases/tag/v0.0.3).
