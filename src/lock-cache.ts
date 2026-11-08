@@ -30,16 +30,21 @@ let embedded: EmbeddedIdentity | null = null;
 
 export function loadCompiledLock(root: string, presetText: string, lockText: string): { lock: Lock; hash: string } | null {
   const normalized = lockText.replaceAll("\r\n", "\n");
-  const key = compiledLockKey(root, presetText, normalized);
-  if (key === null) return null;
-  const hit: Hit = { root, key, preset: presetText, lock: normalized };
-  lastKey.set(root, hit);
-  const text = readEntry(root, key);
-  if (text === null || text !== normalized) return null;
-  const lock = parseLock(text);
-  if (lock === null) return null;
-  admitted.set(lock, hit);
-  return { lock, hash: sha256(lockText) };
+  const entry = readRawEntry(root);
+  // A digest-valid entry whose text still equals the lock file may reuse admission only when the
+  // cache key still binds preset, packs and build; otherwise the caller recompiles and denies stale.
+  if (entry !== null && entry.text === normalized) {
+    const key = compiledLockKey(root, presetText, normalized);
+    if (key !== null && key === entry.key) {
+      const lock = parseLock(entry.text);
+      if (lock === null) return null;
+      const hit: Hit = { root, key, preset: presetText, lock: normalized };
+      lastKey.set(root, hit);
+      admitted.set(lock, hit);
+      return { lock, hash: sha256(lockText) };
+    }
+  }
+  return null;
 }
 
 export function storeCompiledLock(root: string, presetText: string, compiledText: string): void {
@@ -133,13 +138,13 @@ function cacheFile(root: string): string {
   return join(stateDir(), "locks", `${sha256(root)}.json`);
 }
 
-function readEntry(root: string, key: string): string | null {
+function readRawEntry(root: string): Entry | null {
   try {
     const bytes = readFileSync(cacheFile(root));
     if (bytes.byteLength > MAX_BYTES) return null;
     const parsed: unknown = JSON.parse(bytes.toString("utf8"));
-    if (!isEntry(parsed) || parsed.key !== key || digestOf(parsed) !== parsed.digest) return null;
-    return parsed.text;
+    if (!isEntry(parsed) || digestOf(parsed) !== parsed.digest) return null;
+    return parsed;
   } catch {
     return null;
   }

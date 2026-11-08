@@ -2,7 +2,7 @@
 
 Generated from the current CLI and source manifests by `bun scripts/docs-reference.ts`. Do not edit this section by hand.
 
-Source inventory for engine `0.0.3`. Check [release notes](releases/0.0.1.md) and `pack list --library` on the installed engine before adoption.
+Source inventory for engine `0.0.4`. Check [release notes](releases/0.0.1.md) and `pack list --library` on the installed engine before adoption.
 
 ## Categories
 
@@ -30,12 +30,12 @@ For one combined selection, use `guide --preview --packs <ns,ns>` or an edited `
 
 ## Bundled library inventory
 
-46 optional packs; 1080 distinct check IDs. Counts do not measure semantic coverage or precision.
+48 optional packs; 1087 distinct check IDs. Counts do not measure semantic coverage or precision.
 
 | Checker family | Checks | Evidence needed for enforcement |
 | --- | ---: | --- |
 | Project fitness obligations | 577 | Reviewed current project assertions; unbound means UNVERIFIED |
-| Static pattern, import and change checks | 486 | Precise applicability, valid alternatives and passing/failing/trap controls |
+| Static pattern, import and change checks | 493 | Precise applicability, valid alternatives and passing/failing/trap controls |
 | Metrics | 17 | A measured project budget; a threshold is not a universal invariant |
 
 These are implementation counts, not a certified enforce-ready total. Prefer stable conditions to prescribed mechanisms; keep contextual policies optional and heuristics advisory until admitted. See [invariant enforcement criteria](guides/invariant-enforcement.md).
@@ -57,6 +57,7 @@ These are implementation counts, not a certified enforce-ready total. Prefer sta
 | [express](../packs/express/REFERENCE.md) | library | 1.2.0 | 12 | `express/middleware` (complete), `express/requests` (complete) |
 | [firebase](../packs/firebase/REFERENCE.md) | library | 1.2.0 | 11 | `firebase/auth` (complete), `firebase/firestore` (complete) |
 | [go](../packs/go/REFERENCE.md) | language | 1.2.0 | 10 | `go/architecture` (complete), `go/effects` (complete), `go/quality` (complete) |
+| [hono](../packs/hono/REFERENCE.md) | library | 1.0.0 | 4 | `hono/middleware` (complete), `hono/routing` (complete) |
 | [javascript](../packs/javascript/REFERENCE.md) | language | 1.2.1 | 19 | `javascript/esm` (complete), `javascript/legacy` (complete), `javascript/safety` (complete) |
 | [maintainability](../packs/maintainability/REFERENCE.md) | practice | 1.2.0 | 209 | `maintainability/engineering` (preview), `maintainability/future-humans` (preview), `maintainability/maintainability` (complete) |
 | [mattpocock](../packs/mattpocock/REFERENCE.md) | practice | 1.1.1 | 7 | `mattpocock/design` (preview), `mattpocock/diagnosis` (preview), `mattpocock/testing` (preview) |
@@ -70,7 +71,7 @@ These are implementation counts, not a certified enforce-ready total. Prefer sta
 | [postgres](../packs/postgres/REFERENCE.md) | library | 1.2.0 | 11 | `postgres/client` (complete), `postgres/safety` (complete) |
 | [prisma](../packs/prisma/REFERENCE.md) | library | 1.3.0 | 14 | `prisma/client` (complete), `prisma/writes` (complete) |
 | [pstack](../packs/pstack/REFERENCE.md) | process | 1.1.1 | 97 | `pstack/boundaries` (complete), `pstack/effects` (complete), `pstack/operations` (preview), `pstack/playbooks` (preview), `pstack/principles` (preview), `pstack/proof` (complete), `pstack/reader-load` (complete), `pstack/workspace` (preview) |
-| [python](../packs/python/REFERENCE.md) | language | 1.3.0 | 24 | `python/architecture` (complete), `python/effects` (complete), `python/legacy` (complete), `python/quality` (complete) |
+| [python](../packs/python/REFERENCE.md) | language | 1.4.0 | 25 | `python/architecture` (complete), `python/effects` (complete), `python/legacy` (complete), `python/quality` (complete) |
 | [react](../packs/react/REFERENCE.md) | library | 1.2.0 | 14 | `react/components` (complete), `react/hooks` (complete) |
 | [react-native](../packs/react-native/REFERENCE.md) | library | 1.2.0 | 10 | `react-native/platform` (complete), `react-native/security` (complete) |
 | [redis](../packs/redis/REFERENCE.md) | library | 1.2.0 | 11 | `redis/client` (complete), `redis/keys` (complete) |
@@ -82,6 +83,7 @@ These are implementation counts, not a certified enforce-ready total. Prefer sta
 | [svelte](../packs/svelte/REFERENCE.md) | library | 1.2.0 | 13 | `svelte/runes` (complete), `svelte/stores` (complete) |
 | [sveltekit](../packs/sveltekit/REFERENCE.md) | library | 1.2.0 | 12 | `sveltekit/data` (complete), `sveltekit/routing` (complete) |
 | [tailwind](../packs/tailwind/REFERENCE.md) | library | 1.2.0 | 9 | `tailwind/classes` (complete) |
+| [tanstack-query](../packs/tanstack-query/REFERENCE.md) | library | 1.0.0 | 2 | `tanstack-query/client` (complete), `tanstack-query/keys` (complete) |
 | [testing](../packs/testing/REFERENCE.md) | practice | 1.2.1 | 4 | `testing/tdd` (complete) |
 | [trpc](../packs/trpc/REFERENCE.md) | library | 1.2.0 | 12 | `trpc/client` (complete), `trpc/router` (complete) |
 | [typescript](../packs/typescript/REFERENCE.md) | language | 1.3.0 | 26 | `typescript/anti-evasion` (complete), `typescript/async-results` (complete), `typescript/discipline` (complete), `typescript/framework-entries` (complete), `typescript/legacy` (complete), `typescript/named-exports` (complete), `typescript/strict-types` (complete) |

@@ -19,7 +19,9 @@ function walk(dir: string, out: string[] = []): string[] {
 }
 
 function historical(rel: string): boolean {
-  return rel === "CHANGELOG.md" || rel.startsWith("docs/releases/");
+  // readdir walks with the platform separator. On Windows the same note is docs\releases\...
+  const path = rel.replaceAll("\\", "/");
+  return path === "CHANGELOG.md" || path.startsWith("docs/releases/");
 }
 
 function outsideFences(text: string): string {
@@ -113,6 +115,11 @@ test("install commands and living docs use this release, not a pre-rename versio
     let match: RegExpExecArray | null;
     while ((match = versionRe.exec(text))) {
       const found = match[1] ?? match[2] ?? "";
+      const lineStart = text.lastIndexOf("\n", match.index) + 1;
+      const lineEnd = text.indexOf("\n", match.index);
+      const sourceLine = text.slice(lineStart, lineEnd < 0 ? text.length : lineEnd);
+      // The Windows guide pins Bun with the official installer. That -Version is Bun's, not Pregate's.
+      if (sourceLine.includes("bun.sh/install.ps1")) continue;
       if (found !== pkg.version) {
         const line = text.slice(0, match.index).split("\n").length;
         installHits.push(`${rel}:${line} uses ${found}`);

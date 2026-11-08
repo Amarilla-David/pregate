@@ -138,11 +138,15 @@ test("docs sites, examples, fixtures, websites, CI workflows, and tiny scripts d
   };
   expect(names(docs, ["TypeScript"])).toEqual(["clean-code", "typescript"]);
   expect(names({
+    "fixtures/app/package.json": '{"dependencies":{"hono":"^4.6.0","react":"19.0.0"}}',
+    "fixtures/app/index.ts": "export const page = 1;\n",
+  }, ["TypeScript"])).toEqual([]);
+  expect(names({
     "packages/docs/package.json": docs["packages/docs/package.json"]!,
     "packages/docs/app/page.tsx": docs["packages/docs/app/page.tsx"]!,
     "website/package.json": '{"dependencies":{"next":"15.0.0"}}',
     "examples/demo/package.json": '{"dependencies":{"react":"19.0.0"}}',
-    "fixtures/app/package.json": '{"dependencies":{"astro":"^5.0.0","react":"19.0.0"}}',
+    "fixtures/app/package.json": '{"dependencies":{"astro":"^5.0.0","react":"19.0.0","@tanstack/react-query":"5.0.0"}}',
     "docs/app/page.tsx": "export const page = 1;\n",
   }, ["TypeScript"])).toEqual([]);
   expect(names({ "fixtures/App.svelte": "<h1>Hi</h1>\n", "fixtures/svelte.config.js": "export default {};\n" })).toEqual([]);
@@ -215,6 +219,69 @@ test("scan recommends astro only for a real dependency outside docs, examples, a
   }, []).find(item => item.ns === "astro")!;
   expect(selected.reasons).toEqual(["package.json declares astro"]);
   expect(selected.scope).toEqual({ include: ["**"], exclude: ["docs/**", "examples/starter/**", "fixtures/app/**"] });
+});
+
+test("scan recommends tanstack-query only from a real framework-adapter dependency", () => {
+  const selected = recommendPacks({
+    "package.json": '{"dependencies":{"@tanstack/react-query":"5.59.0"}}',
+    "src/main.tsx": "export const page = 1;\n",
+  }, ["TypeScript"]);
+  expect(selected.find(item => item.ns === "tanstack-query")).toEqual({
+    ns: "tanstack-query",
+    methodologies: ["tanstack-query/keys", "tanstack-query/client"],
+    reasons: ["package.json declares @tanstack/react-query"],
+    scope: { include: ["**"], exclude: [] },
+  });
+  for (const dep of ["@tanstack/vue-query", "@tanstack/solid-query", "@tanstack/svelte-query", "@tanstack/angular-query", "@tanstack/angular-query-experimental"]) {
+    const hit = recommendPacks({ "packages/web/package.json": JSON.stringify({ peerDependencies: { [dep]: "5.0.0" } }) }, []);
+    expect(hit.find(item => item.ns === "tanstack-query")?.reasons, dep).toEqual([`packages/web/package.json declares ${dep}`]);
+  }
+  expect(recommendPacks({ "package.json": '{"devDependencies":{"@tanstack/react-query":"5.0.0"}}' }, []).some(item => item.ns === "tanstack-query")).toBe(false);
+  expect(recommendPacks({ "package.json": '{"dependencies":{"@tanstack/query-core":"5.0.0","@tanstack/react-query-devtools":"5.0.0"}}' }, []).some(item => item.ns === "tanstack-query")).toBe(false);
+  expect(recommendPacks({ "src/main.tsx": 'import { useQuery } from "@tanstack/react-query";\n' }, ["TypeScript"]).some(item => item.ns === "tanstack-query")).toBe(false);
+  for (const path of ["docs/package.json", "examples/demo/package.json", "fixtures/query/package.json", "packages/docs/package.json"]) {
+    expect(recommendPacks({ [path]: '{"dependencies":{"@tanstack/react-query":"5.0.0"}}' }, []).some(item => item.ns === "tanstack-query"), path).toBe(false);
+  }
+  const kept = recommendPacks({
+    "apps/web/package.json": '{"dependencies":{"@tanstack/react-query":"5.0.0"}}',
+    "docs/package.json": '{"dependencies":{"@tanstack/react-query":"5.0.0"}}',
+    "examples/package.json": '{"dependencies":{"@tanstack/vue-query":"5.0.0"}}',
+    "fixtures/package.json": '{"dependencies":{"@tanstack/svelte-query":"5.0.0"}}',
+  }, []);
+  expect(kept.find(item => item.ns === "tanstack-query")).toMatchObject({
+    reasons: ["apps/web/package.json declares @tanstack/react-query"],
+    scope: { include: ["apps/web/**"], exclude: [] },
+  });
+});
+
+test("scan recommends hono only when an app depends on hono", () => {
+  const root = recommendPacks({
+    "package.json": '{"dependencies":{"hono":"^4.6.0"}}',
+    "src/index.ts": "export const app = 1;\n",
+  }, ["TypeScript"]).find(item => item.ns === "hono")!;
+  expect(root.methodologies).toEqual(["hono/routing", "hono/middleware"]);
+  expect(root.reasons).toEqual(["package.json declares hono"]);
+  expect(recommendPacks({
+    "apps/api/package.json": '{"peerDependencies":{"hono":"^4.6.0"}}',
+    "apps/api/src/index.ts": "",
+  }, ["TypeScript"]).find(item => item.ns === "hono")).toMatchObject({
+    reasons: ["apps/api/package.json declares hono"],
+    scope: { include: ["apps/api/**"], exclude: [] },
+  });
+  expect(recommendPacks({ "package.json": '{"devDependencies":{"hono":"^4.6.0"}}' }, []).some(item => item.ns === "hono")).toBe(false);
+  expect(recommendPacks({ "package.json": '{"dependencies":{"@hono/node-server":"^1.0.0","hono-rate-limiter":"1.0.0"}}' }, []).some(item => item.ns === "hono")).toBe(false);
+  expect(recommendPacks({ "package.json": '{"name":"hono"}' }, []).some(item => item.ns === "hono")).toBe(false);
+  for (const path of ["docs/package.json", "examples/demo/package.json", "fixtures/app/package.json", "packages/docs/package.json"]) {
+    expect(recommendPacks({ [path]: '{"dependencies":{"hono":"^4.6.0"}}' }, []).some(item => item.ns === "hono")).toBe(false);
+  }
+  const kept = recommendPacks({
+    "package.json": '{"dependencies":{"hono":"^4.6.0"}}',
+    "docs/package.json": '{"dependencies":{"hono":"^4.6.0"}}',
+    "examples/package.json": '{"dependencies":{"hono":"^4.6.0"}}',
+    "fixtures/package.json": '{"dependencies":{"hono":"^4.6.0"}}',
+  }, []);
+  expect(kept.find(item => item.ns === "hono")!.reasons).toEqual(["package.json declares hono"]);
+  expect(kept.find(item => item.ns === "hono")!.scope).toEqual({ include: ["**"], exclude: ["docs/**", "examples/**", "fixtures/**"] });
 });
 
 test("clean-code and testing are suggested only where their checks read real source", () => {

@@ -1,8 +1,8 @@
 # PREGATE documentation
 
-Use this index for the current product contract. 0.0.3 is the published release.
+Use this index for the current product contract. 0.0.4 is the published release.
 [v0.0.1 release notes](releases/0.0.1.md) record the first public tag, and the
-[changelog](../CHANGELOG.md) records 0.0.3. Historical research is evidence for
+[changelog](../CHANGELOG.md) records 0.0.4. Historical research is evidence for
 its recorded candidate, not proof that a later candidate passes.
 
 ## Start and use the tool
@@ -58,8 +58,9 @@ its recorded candidate, not proof that a later candidate passes.
 ## Documentation maintenance
 
 `bun scripts/docs-reference.ts` generates the command synopsis, pack/category/preset
-inventory, every manifest rule's defaults/provenance/repair/limits and the installed
-skill's command/category section. `bun scripts/docs-reference.ts --check` fails
+inventory, every manifest rule's defaults/provenance/repair/limits, the installed
+skill's command/category section, and the README facts block (engine version,
+harnesses, parsed languages, and pack inventory). `bun scripts/docs-reference.ts --check` fails
 when those references differ from the CLI or manifests. CI and release builds run
 this check. Change behavior, its feature guide and its verification evidence
 together; regenerate after changing options or pack data.
@@ -78,6 +79,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 | --- | --- |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Product/reference |
 | [benchmarks/false-positives.md](benchmarks/false-positives.md) | Measurement record |
+| [benchmarks/hook-latency.md](benchmarks/hook-latency.md) | Measurement record |
 | [CLI.md](CLI.md) | Product/reference |
 | [core-catalog.md](core-catalog.md) | Product/reference |
 | [examples/dcouplr-delivery/README.md](examples/dcouplr-delivery/README.md) | Executable example |
@@ -139,6 +141,7 @@ Generated from the current CLI and source manifests by `bun scripts/docs-referen
 | [releases/0.0.1.md](releases/0.0.1.md) | Product/reference |
 | [releases/0.0.3-windows-report-2026-11-03.md](releases/0.0.3-windows-report-2026-11-03.md) | Product/reference |
 | [releases/0.0.3.md](releases/0.0.3.md) | Product/reference |
+| [releases/0.0.4.md](releases/0.0.4.md) | Product/reference |
 | [ROADMAP.md](ROADMAP.md) | Product/reference |
 | [SPEC.md](SPEC.md) | Product/reference |
 <!-- END generated reference -->

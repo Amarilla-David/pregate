@@ -77,7 +77,7 @@ application code there or edit lock bytes.
 
 ## Start and compose a project
 
-The guided coordinator is included in 0.0.3.
+The guided coordinator is included in 0.0.4.
 Check installed help before relying on a flag. The human
 can run `pregate` in an interactive terminal or `! pregate guide` where the harness
 provides one. Bare no-argument input redirected by a hook retains hook-auto;
@@ -516,7 +516,7 @@ never type. Full library coverage remains incomplete.
 
 For an existing project, inspect installed versus project/lock versions rather
 than assuming `--version` identifies the engine used by every hook. Unified
-migration forms are in 0.0.3; check `--help` when the installed engine is older.
+migration forms are in 0.0.4; check `--help` when the installed engine is older.
 Prepare `update --project --preview` or
 `pack update --all --preview`: engine, core and every registered pack enter one
 candidate and one digest-bound human approval. A single-pack update uses the
@@ -726,6 +726,7 @@ Categories: `invariants`, `language`, `pattern`, `library`, `practice`, `process
 - `express@1.2.0` — library: `express/middleware` (complete), `express/requests` (complete)
 - `firebase@1.2.0` — library: `firebase/auth` (complete), `firebase/firestore` (complete)
 - `go@1.2.0` — language: `go/architecture` (complete), `go/effects` (complete), `go/quality` (complete)
+- `hono@1.0.0` — library: `hono/middleware` (complete), `hono/routing` (complete)
 - `javascript@1.2.1` — language: `javascript/esm` (complete), `javascript/legacy` (complete), `javascript/safety` (complete)
 - `maintainability@1.2.0` — practice: `maintainability/engineering` (preview), `maintainability/future-humans` (preview), `maintainability/maintainability` (complete)
 - `mattpocock@1.1.1` — practice: `mattpocock/design` (preview), `mattpocock/diagnosis` (preview), `mattpocock/testing` (preview)
@@ -739,7 +740,7 @@ Categories: `invariants`, `language`, `pattern`, `library`, `practice`, `process
 - `postgres@1.2.0` — library: `postgres/client` (complete), `postgres/safety` (complete)
 - `prisma@1.3.0` — library: `prisma/client` (complete), `prisma/writes` (complete)
 - `pstack@1.1.1` — process: `pstack/boundaries` (complete), `pstack/effects` (complete), `pstack/operations` (preview), `pstack/playbooks` (preview), `pstack/principles` (preview), `pstack/proof` (complete), `pstack/reader-load` (complete), `pstack/workspace` (preview)
-- `python@1.3.0` — language: `python/architecture` (complete), `python/effects` (complete), `python/legacy` (complete), `python/quality` (complete)
+- `python@1.4.0` — language: `python/architecture` (complete), `python/effects` (complete), `python/legacy` (complete), `python/quality` (complete)
 - `react@1.2.0` — library: `react/components` (complete), `react/hooks` (complete)
 - `react-native@1.2.0` — library: `react-native/platform` (complete), `react-native/security` (complete)
 - `redis@1.2.0` — library: `redis/client` (complete), `redis/keys` (complete)
@@ -751,6 +752,7 @@ Categories: `invariants`, `language`, `pattern`, `library`, `practice`, `process
 - `svelte@1.2.0` — library: `svelte/runes` (complete), `svelte/stores` (complete)
 - `sveltekit@1.2.0` — library: `sveltekit/data` (complete), `sveltekit/routing` (complete)
 - `tailwind@1.2.0` — library: `tailwind/classes` (complete)
+- `tanstack-query@1.0.0` — library: `tanstack-query/client` (complete), `tanstack-query/keys` (complete)
 - `testing@1.2.1` — practice: `testing/tdd` (complete)
 - `trpc@1.2.0` — library: `trpc/client` (complete), `trpc/router` (complete)
 - `typescript@1.3.0` — language: `typescript/anti-evasion` (complete), `typescript/async-results` (complete), `typescript/discipline` (complete), `typescript/framework-entries` (complete), `typescript/legacy` (complete), `typescript/named-exports` (complete), `typescript/strict-types` (complete)

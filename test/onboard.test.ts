@@ -17,6 +17,7 @@ import pkg from "../package.json" with { type: "json" };
 import { readProposal } from "../src/proposal.ts";
 import { sha256 } from "../src/state.ts";
 import { canonical } from "../src/disk.ts";
+import { pathWithoutHarnesses } from "./host-path.ts";
 import { removeReleased, removeTree } from "./remove-tree.ts";
 
 // The scenarios isolate project/home state; they can share the unchanged executable.
@@ -406,9 +407,11 @@ function previewProject() {
     const git = Bun.spawnSync(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], { cwd: root, stderr: "pipe" });
     if (git.exitCode !== 0) throw new Error(git.stderr.toString());
   }
+  const path = process.platform === "win32" ? pathWithoutHarnesses() : "/usr/bin:/bin";
+  mkdirSync(join(dir, "home", ".claude"), { recursive: true });
   const env = { ...process.env, HOME: join(dir, "home"), XDG_DATA_HOME: join(dir, "data"), XDG_STATE_HOME: join(dir, "state"),
     TMPDIR: dir, CODEX_HOME: join(dir, "codex"), GROK_HOME: join(dir, "grok"), CI: "1", PREGATE_UNATTENDED_APPROVAL: "1",
-    PATH: process.platform === "win32" ? process.env.PATH : "/usr/bin:/bin", CLAUDE_CONFIG_DIR: "" };
+    PATH: path, ...(process.platform === "win32" ? { Path: path } : {}), CLAUDE_CONFIG_DIR: "" };
   const cli = (cwd: string, ...command: string[]) => Bun.spawnSync([binary, ...command], { cwd, env, stdout: "pipe", stderr: "pipe" });
   return { dir, root, cli, env };
 }
@@ -604,8 +607,9 @@ test("language metadata recommends starters and mixed projects select only their
   const stack = detectStack({ "app.py": "pass\n", "index.ts": "export const a = 1;", "old.rb": "" });
   expect(stack.recommended).toBe("mixed-starter");
   const preset = onboardingPreset(stack.recommended, BUILTIN, VERSIONS, stack, librarySources())!;
+  const bundled = Object.fromEntries(librarySources().map((source) => [source.ns, source]));
   expect(preset.sources.filter((s) => s.kind === "library")).toEqual([
-    { ns: "python", kind: "library", version: "1.3.0" }, { ns: "clean-code", kind: "library", version: "1.2.0" },
+    bundled.python!, bundled["clean-code"]!,
   ]);
   expect(preset.methodologies).toEqual(["core/pregate-integrity", "python/quality", "clean-code/clean-code"]);
   expect(preset.enforcement).toBe("shadow");

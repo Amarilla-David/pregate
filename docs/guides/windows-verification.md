@@ -1,21 +1,31 @@
-# Verify 0.0.3 on Windows
+# Verify 0.0.4 on Windows
 
 This is the manual check for David, or for anyone else confirming the published
-[v0.0.3](https://github.com/pedroknigge/pregate/releases/tag/v0.0.3) release on a
+[v0.0.4](https://github.com/pedroknigge/pregate/releases/tag/v0.0.4) release on a
 Windows machine. The repository is public. The procedure uses that tag, the
 Windows archive from that release, and the committed verifier
 `scripts/verify-windows.ts`. A passing report is evidence for that commit and
 those files. It does not by itself change the platform status in the README.
 
-Do not run PowerShell as Administrator. The installer writes the current user's
-PATH under `HKCU`.
+Do this in a plain PowerShell window, not as Administrator and not inside a
+coding agent's background job. The installer writes the current user's PATH
+under `HKCU`. The commands below install and check the published GitHub release
+for this tag. They use the `v0.0.4` assets, not a zip rebuilt from the checkout.
+
+## Before you start
+
+> Close heavy applications and other coding-agent sessions. Expect about one hour.
+>
+> Disable sleep for the run (`powercfg /change standby-timeout-ac 0` and `powercfg /change standby-timeout-dc 0`), then restore the previous timeouts afterwards (30 minutes is a common default).
+>
+> Run the verifier in a plain PowerShell window. A coding agent's background job can be killed by the host when memory is short.
 
 ## Prerequisites
 
 - 64-bit Windows 10 or Windows 11 (x64). `install.ps1` stops on 32-bit Windows and on ARM64.
 - Windows PowerShell 5.1 or newer. PowerShell 7 can run the Git and Bun commands below.
 - [Git for Windows](https://git-scm.com/).
-- [Bun](https://bun.sh) **1.4.4**, the version in `.bun-version`. `bun --version` must print `1.4.4`. Bun 1.4.2 can segfault while leaving `bun test --isolate` after the tests have passed ([oven-sh/bun#43056](https://github.com/oven-sh/bun/issues/43056)); that crash is fixed in 1.4.3 and later, and the Windows suite runs with `--isolate`.
+- [Bun](https://bun.sh) **1.4.4**, the version in `.bun-version`. `bun --version` must print `1.4.4`. `bun upgrade` installs the latest Bun, not this pin. Install the pinned version with `powershell -c "& ([scriptblock]::Create((irm https://bun.sh/install.ps1))) -Version 1.4.4"`. Bun 1.4.2 can segfault while leaving `bun test --isolate` after the tests have passed ([oven-sh/bun#43056](https://github.com/oven-sh/bun/issues/43056)); that crash is fixed in 1.4.3 and later, and the Windows suite runs with `--isolate`.
 - [GitHub CLI](https://cli.github.com/) (`gh`). The release is public, so a private-repository grant is not required. `gh auth login` is only needed if `gh` itself asks for it.
 
 ## Checkout the tag
@@ -27,18 +37,18 @@ long paths stops with "Filename too long".
 git clone -c core.longpaths=true https://github.com/pedroknigge/pregate.git
 if ($LASTEXITCODE -ne 0) { throw 'Clone failed' }
 Set-Location pregate
-git checkout --detach v0.0.3
+git checkout --detach v0.0.4
 if ($LASTEXITCODE -ne 0) { throw 'Checkout failed' }
 $head = (git rev-parse HEAD).Trim()
-$tag = (git rev-parse 'v0.0.3^{commit}').Trim()
-if ($head -ne $tag) { throw "HEAD is $head, not the v0.0.3 tag" }
+$tag = (git rev-parse 'v0.0.4^{commit}').Trim()
+if ($head -ne $tag) { throw "HEAD is $head, not the v0.0.4 tag" }
 git status --porcelain
 bun --version
 ```
 
-`v0.0.3` is an annotated tag. The commit to verify is the v0.0.3 tag.
-`git rev-parse HEAD` must equal `git rev-parse 'v0.0.3^{commit}'`.
-`git rev-parse v0.0.3` prints the tag object, not that commit, so do not compare
+`v0.0.4` is an annotated tag. The commit to verify is the v0.0.4 tag.
+`git rev-parse HEAD` must equal `git rev-parse 'v0.0.4^{commit}'`.
+`git rev-parse v0.0.4` prints the tag object, not that commit, so do not compare
 HEAD to that other hash. `git status --porcelain` must print nothing.
 `bun --version` must print `1.4.4`.
 
@@ -48,35 +58,35 @@ dirty checkout.
 
 ## Download the release files
 
-Create an empty directory and download three assets from the v0.0.3 release:
-`install.ps1`, `SHA256SUMS`, and `pregate-0.0.3-windows-x64.zip`. Use these
+Create an empty directory and download three assets from the v0.0.4 release:
+`install.ps1`, `SHA256SUMS`, and `pregate-0.0.4-windows-x64.zip`. Use these
 downloaded files. Do not substitute `install.ps1` from a later commit, and do
 not rebuild the zip.
 
 ```powershell
-$candidate = 'C:\pregate-0.0.3'
+$candidate = 'C:\pregate-0.0.4'
 New-Item -ItemType Directory -Path $candidate | Out-Null
-gh release download v0.0.3 --repo pedroknigge/pregate --pattern install.ps1 --pattern SHA256SUMS --pattern pregate-0.0.3-windows-x64.zip --dir $candidate
+gh release download v0.0.4 --repo pedroknigge/pregate --pattern install.ps1 --pattern SHA256SUMS --pattern pregate-0.0.4-windows-x64.zip --dir $candidate
 if ($LASTEXITCODE -ne 0) { throw 'Download failed' }
 ```
 
 ## Check the hashes
 
 `SHA256SUMS` lists each file as 64 lowercase hex digits, two spaces, then the
-file name. The hashes to trust are the ones published with the v0.0.3 tag.
+file name. The hashes to trust are the ones published with the v0.0.4 tag.
 This guide does not copy them from an older release: `SHA256SUMS` downloaded
 with that tag is the list. The script below fails if a file's hash disagrees
 with that list, or if the list has no unique entry for the file.
 
 ```powershell
 $expected = @(
-  'pregate-0.0.3-windows-x64.zip',
+  'pregate-0.0.4-windows-x64.zip',
   'install.ps1'
 )
 $sums = Get-Content -LiteralPath (Join-Path $candidate 'SHA256SUMS')
 foreach ($name in $expected) {
   $line = @($sums | Where-Object { $_ -cmatch ('^[0-9a-f]{64}  ' + [regex]::Escape($name) + '$') })
-  if ($line.Count -ne 1) { throw "SHA256SUMS has no unique entry for $name on the v0.0.3 tag" }
+  if ($line.Count -ne 1) { throw "SHA256SUMS has no unique entry for $name on the v0.0.4 tag" }
   $listed = $line[0].Substring(0, 64)
   $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $candidate $name)).Hash.ToLowerInvariant()
   if ($actual -ne $listed) { throw "Incorrect hash: $name" }
@@ -85,20 +95,23 @@ foreach ($name in $expected) {
 
 ## Install dependencies and run the verifier
 
-From the repository root, still on the v0.0.3 tag:
+From the repository root, still on the v0.0.4 tag:
 
 ```powershell
 bun install --frozen-lockfile
 if ($LASTEXITCODE -ne 0) { throw 'Dependency install failed' }
-$report = 'C:\pregate-0.0.3-report'
+$report = 'C:\pregate-0.0.4-report'
 bun scripts/verify-windows.ts --artifacts $candidate --report $report
 ```
 
 `--artifacts` is the directory that contains the zip, `install.ps1`, and
-`SHA256SUMS`. `--report` must be a directory that does not exist yet; the
-verifier creates it. Omit `--report` and the verifier chooses a new directory
-under the Windows temp folder and prints its path. The only other accepted
-form is `--help`, which prints usage and does not start a run.
+`SHA256SUMS`. `--report` must be a new directory on every run. The verifier
+creates it and refuses a path that already exists. A rerun needs a new name,
+for example `C:\pregate-0.0.4-report-2`. Do not delete and reuse the old
+directory: a viewer or real-time antivirus can lock it, and then it cannot be
+deleted. Omit `--report` and the verifier chooses a new directory under the
+Windows temp folder and prints its path. The only other accepted form is
+`--help`, which prints usage and does not start a run.
 
 `bun scripts/verify-windows.ts --help` prints:
 
@@ -109,7 +122,7 @@ Requires native Windows x64, Git and the Bun version in .bun-version. Reports st
 
 The run refuses anything other than native Windows x64. It checks that HEAD is
 a clean commit and that `bun --version` matches `.bun-version`. It then hashes
-`pregate-0.0.3-windows-x64.zip`, `install.ps1`, and `SHA256SUMS`, and runs, in
+`pregate-0.0.4-windows-x64.zip`, `install.ps1`, and `SHA256SUMS`, and runs, in
 order: `bun install --frozen-lockfile`, `bun run typecheck`, the core,
 readiness, and documentation reference checks, the runtime and onboarding
 tests, the Windows distribution test, the Windows suite (`bun test --isolate`,
@@ -117,15 +130,25 @@ excluding the four POSIX fixture suites), the pinned dcouplr source probe, the
 packaged-candidate smoke for `windows-x64`, and `bun src/main.ts check
 --ratchet --base <HEAD>`. A failed dependency install stops the later steps.
 Other failures stay in the report. Each step's limit is 20 minutes, except the
-Windows suite, which gets 60 minutes.
+Windows suite, which gets 60 minutes. A step that reaches its limit is recorded
+with `timedOut: true`, and the verifier kills that step's process tree
+(`taskkill /T /F /PID` on Windows) so the limit still holds when the step has
+spawned children.
 
 The verifier sets `HOME`, `USERPROFILE`, `LOCALAPPDATA`, and the other runtime
 homes to a temporary directory, and sets `PSModuleAnalysisCachePath` there so
 Windows PowerShell 5.1 does not write `ModuleAnalysisCache` into the checkout.
 It does not install Pregate into your user profile, and it does not upload the
-report or open a GitHub issue. When it finishes it writes `report.json` and
-prints `PASS` or `FAIL` plus that file's path. Exit 0 means every step exited
-0 and the temporary home was removed.
+report or open a GitHub issue. It creates `report.json` as soon as the report
+directory exists and rewrites that file after each step. `finished` is null
+until the run ends. A killed run still leaves the steps that completed, plus
+each step's stdout and stderr log. It prints that the run takes about one hour,
+and warns, without stopping, when less than 2 GB of memory is free. On Windows
+it asks the system to stay awake until the process exits. If that request
+fails, it prints the `powercfg` commands from [Before you start](#before-you-start).
+Disable sleep yourself as well. When the run ends it sets `finished` and prints
+`PASS` or `FAIL` plus the report path. Exit 0 means every step exited 0, none
+timed out, and the temporary home was removed.
 
 ## Manual checks
 
@@ -135,12 +158,14 @@ Administrator. They use your real profile. The automated run does not.
 ### Install as the current user
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\pregate-0.0.3\install.ps1 -Version 0.0.3
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\pregate-0.0.4\install.ps1 -Version 0.0.4
 ```
 
 The script checks the zip against `SHA256SUMS`, runs `pregate setup`, and adds
 `%LOCALAPPDATA%\pregate\bin` to your user PATH. Open a new terminal so that
 PATH is visible. `pregate` from cmd or PowerShell is `pregate.cmd`.
+
+Setup exits 0 when at least one installed harness was wired. A harness that could not be wired, such as Codex whose hook trust was not confirmed, is a warning with the next step and does not fail the install when another harness was wired. The install fails when setup exits non-zero: no harness was wired, or setup hit a real error. The same contract is in the [installation guide](installation.md).
 
 ### Version, doctor, and demo
 
@@ -150,12 +175,17 @@ pregate doctor
 pregate demo
 ```
 
-`--version` prints `pregate 0.0.3 (core 0.0.1)`. `doctor` takes no arguments.
+`--version` prints `pregate 0.0.4 (core 0.0.1)`. `doctor` takes no arguments.
 A harness whose program is not on `PATH` is reported as INFO. `demo` needs
 Git. It creates and deletes its own temporary projects and does not accept a
 project path. The default language is `all` (`python`, `go`, and `rust`). A
-missing `python`, `go`, or `rustc` is reported as not verified. A tool that is
-installed and fails the sample fails the demo. Real-time antivirus scanning of
+missing `python`, `go`, or `rustc` is reported as not verified. A PATH entry
+that `stat` or `realpath` cannot read is skipped, and the next entry is tried.
+The Microsoft Store App Execution Alias for `python3`
+(`%LOCALAPPDATA%\Microsoft\WindowsApps\python3.exe`) is one of those entries.
+When no entry resolves, that language's native checks are not verified
+(`permission denied`), and the Python, Go, and Rust demos still run. A tool
+that resolves and fails the sample fails the demo. Real-time antivirus scanning of
 new binaries can make the Go sample slow; keep that output with the report.
 `pregate demo --language python` repeats only the Python sample.
 
@@ -243,5 +273,7 @@ Send the report directory (`report.json` plus each step's stdout and stderr
 log) to the maintainer. Read it first. Do not include private application
 code, credentials, or unrelated logs. The verifier does not upload anything
 and does not open an issue. A `FAIL` report is still the result to return.
+If the run was killed, send the report anyway: `finished` is null and `steps`
+lists only the steps that completed.
 Include `git rev-parse HEAD`, `bun --version`, and the manual command output
 with it. A different commit or a rebuilt zip needs a new run.
